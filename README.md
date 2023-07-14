@@ -1,4 +1,4 @@
-# FosterFlow
+# [FosterFlow.com](https://fosterflow.com)
 
 Our project is a startup that leverages the power of the GPT4 and LLM/ML models. The main objective is to create a
 unified application that combines the comprehensive functionality offered ML models with our UI mechanics.
