@@ -1,0 +1,57 @@
+//
+// accordion.scss
+//
+
+.custom-accordion {
+    .card {
+        + .card {
+            margin-top: 0.5rem;
+        }
+    }
+
+    a {
+        i.accor-plus-icon {
+            font-size: 16px;
+        }
+        &.collapsed {
+            i.accor-plus-icon {
+                &:before {
+                    content: "\F0142";
+                }
+            }
+        }
+    }
+}
+
+.accordion-button {
+    &:after {
+        margin-left: auto /*rtl:0*/;
+        margin-right: 0 /*rtl:auto*/;
+    }
+}
+
+.accordion-item {
+    background-color: $white;
+}
+
+[data-bs-theme="dark"] {
+    .accordion-item {
+        background-color: transparent;
+    }
+    .accordion-button {
+        &:not(.collapsed) {
+            color: var(--#{$prefix}accordion-button-active-color);
+            &:after {
+                background-image: escape-svg(
+                    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$white}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>")
+                );
+            }
+        }
+
+        &:after {
+            background-image: escape-svg(
+                url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$gray-500}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>")
+            );
+        }
+    }
+}

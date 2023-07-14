@@ -1,0 +1,187 @@
+//Import Icon css
+@import "./icons.scss";
+
+//light mode
+@import "./bootstrap.scss";
+@import "./app.scss";
+
+// rtl mode
+
+// @import "./custom/rtl/bootstrap-rtl";
+// @import "./custom/rtl/components-rtl";
+// @import "./custom/rtl/float-rtl";
+// @import "./custom/rtl/general-rtl.scss";
+// @import "./custom/rtl/pages-rtl";
+// @import "./custom/rtl/spacing-rtl";
+// @import "./custom/rtl/text-rtl";
+
+.nav-item {
+  cursor: pointer;
+}
+
+.dropdown {
+  cursor: pointer;
+}
+
+.slick-slide {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.slick-arrow {
+  display: none;
+}
+
+.emoji-mart {
+  border: none !important;
+}
+
+.emoji-mart-preview {
+  display: none !important;
+}
+
+.emoji-mart-bar {
+  border: none !important;
+}
+
+.alice-carousel__stage-item {
+  // margin-left: 8px;
+  margin-right: 16px !important;
+  width: 71px !important;
+}
+
+.input-file {
+  label {
+    margin-bottom: 0;
+  }
+  input[type="file"] {
+    display: none;
+  }
+}
+
+.emoji-mart-light {
+  background-color: $card-bg !important;
+}
+
+.emoji-mart-search {
+  input {
+    background-color: $card-bg !important;
+    border-color: $card-border-color !important;
+  }
+}
+
+.emoji-mart-category-label {
+  span {
+    background-color: $card-bg !important;
+    color: $gray-700;
+  }
+}
+
+.emoji-mart-category {
+  .emoji-mart-emoji {
+    &:hover {
+      background-color: $gray-300 !important;
+    }
+
+    &::before {
+      background-color: $gray-300 !important;
+      border-radius: 100% !important;
+    }
+  }
+}
+.w-70 {
+  width: 73% !important;
+}
+
+.ctext-wrap-content {
+  animation: flyIn 0.6s ease-in-out;
+}
+
+.blank-div {
+  width: 36px;
+  height: 36px;
+}
+
+.profile-user-dropdown {
+  .dropdown-item {
+    &.active {
+      color: $white;
+      text-decoration: none;
+      background-color: $primary;
+    }
+  }
+}
+.dot_remove {
+  .alice-carousel__dots,
+  .alice-carousel__prev-btn,
+  .alice-carousel__next-btn {
+    display: none !important;
+  }
+}
+.close {
+  background: transparent;
+  border: 0;
+  font-size: 30px;
+  margin: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.5;
+  width: 1em;
+  height: 1em;
+  z-index: 2;
+}
+
+//emoji dropdown menu
+.emoji-dropdown{
+  .dropdown-menu {
+    animation: none;
+  }
+}
+
+.input-group-text {
+  background-color: var(--#{$variable-prefix}gray-200);
+}
+
+.bg-soft-light {
+  background-color: var(--#{$variable-prefix}light-rgb) !important;
+}
+
+[data-layout-mode="dark"] {
+  .auth-logo {
+    .logo-dark {
+      display: none;
+    }
+    .logo-light {
+      display: block;
+    }
+  }
+  .emoji-categories{
+    background-color: $white;
+  }
+  .emoji-picker-react{
+    background-color: var(--#{$variable-prefix}gray-200) !important;
+    border-color: var(--#{$variable-prefix}gray-200) !important;
+    box-shadow: 0 5px 10px var(--#{$variable-prefix}gray-200) !important;;
+  }
+  .emoji-search{
+    background-color: var(--#{$variable-prefix}input-bg) !important;
+    border-color: var(--#{$variable-prefix}input-bg) !important;
+    color: $input-color;
+  }
+  .emoji-picker-react .emoji-group:before{
+    background-color: var(--#{$variable-prefix}gray-200) !important;
+  }
+}
+
+.profile-user-dropdown{
+  &.dropup {
+    .dropdown-menu{
+      bottom: 51px;
+      top: auto !important;
+      &.show {
+        top: auto !important;
+      }
+    }
+  }
+}

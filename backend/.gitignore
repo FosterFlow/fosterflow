@@ -1,0 +1,15 @@
+#backend
+/static
+/env
+/venv
+/chat_app/__pycache__
+/chat_app/migrations/__pycache__
+/project/__pycache__
+/auth_app/__pycache__
+/auth_app/migrations/__pycache__
+/user_app/__pycache__
+/user_app/migrations/__pycache__
+.idea
+/db.sqlite3
+.env
+/media

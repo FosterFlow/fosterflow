@@ -1,0 +1,1192 @@
+swagger: '2.0'
+info:
+  title: Chat - Django REST framework
+  description: Authorization must take place via token. Enter the token with the `Bearer` prefix, e.g. "Bearer abcde12345".
+  termsOfService: https://www.google.com/policies/terms/
+  version: v1
+host: 127.0.0.1:8000
+basePath: /api
+consumes:
+  - application/json
+  - multipart/form-data
+produces:
+  - application/json
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: >-
+      Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
+tags:
+  - name: dialogues
+    description: The dialog is needed for grouping messages
+  - name: messages
+    description: This is what the user sends and receives a response
+  - name: users
+    description: The model for User
+  - name: profiles
+    description: Information containing user data
+  - name: register
+    description: Registering a new user
+  - name: token
+    description: JWT for authorization
+  - name: change password
+    description: Change Password
+  - name: logout
+    description: An endpoint to logout users.
+  - name: password-reset
+    description: An Api View which provides a method to request a password reset token based on an e-mail address
+  - name: confirmation-email
+    description: An Api View which provides send and confirm email
+paths:
+  /dialogues/:
+    get:
+      summary: Get all the dialogs
+      description: 'Get all the dialogs. The dialogs will be filtered by user, who make request.'
+      security:
+        - Bearer: [ ]
+      responses:
+        '200':
+          description: 'The answer will be all the users dialogs'
+          schema:
+            $ref: '#/definitions/DialogModel'
+          examples:
+            application/json:
+              [
+                {
+                  "id": 18,
+                  "latest_message": null,
+                  "name": "DialogName",
+                  "created_at": "2023-06-23T09:15:34.562981Z",
+                  "updated_at": "2023-06-23T09:15:34.562998Z",
+                  "user_id": 1
+                },
+                {
+                  "id": 19,
+                  "latest_message": "I am ... ",
+                  "name": "DialogName",
+                  "created_at": "2023-06-23T09:21:32.283418Z",
+                  "updated_at": "2023-06-23T09:21:32.283434Z",
+                  "user_id": 1
+                },
+                {
+                  "id": 20,
+                  "latest_message": "Hello",
+                  "name": "DialogName",
+                  "created_at": "2023-06-23T09:21:34.937211Z",
+                  "updated_at": "2023-06-23T09:21:34.937226Z",
+                  "user_id": 1
+                },
+              ]
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+      tags:
+        - dialogues
+    post:
+      security:
+        - Bearer: [ ]
+      operationId: dialogues_create
+      summary: Add a new dialog
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: 'Dialog object that needs to be added:'
+          type: object
+          properties:
+            user_id:
+              title: User_id
+              type: integer
+              example: 1
+            name:
+              title: Name
+              type: string
+              maxLength: 200
+              minLength: 1
+              example: 'DialogName'
+      responses:
+        '201':
+          description: 'Successful operation'
+          schema:
+            $ref: '#/definitions/DialogModel'
+
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - dialogues
+    parameters: [ ]
+  /dialogues/{id}/:
+    delete:
+      security:
+        - Bearer: [ ]
+      operationId: dialogues_delete
+      summary: 'Deletes a dialog'
+      responses:
+        '200':
+          description: 'successful operation'
+          examples:
+            application/json:
+              {
+                "message": "Dialog delete successfully"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - dialogues
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this dialog.
+        required: true
+        type: integer
+  /messages/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: messages_list
+      summary: Get all the messages
+      description: 'Get all the messages. The messages will be filtered by user, who make request.'
+      parameters:
+        - name: dialog_id
+          in: query
+          description: 'Get all the messages by dialog. Only the owner of the dialog will receive the messages'
+          required: false
+          type: string
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MessageModel'
+          examples:
+            application/json:
+              [
+                {
+                  "id": 1,
+                  "message_text": "Hello Message",
+                  "answer_text": "Hello Answer",
+                  "dialog": 1
+                },
+                {
+                  "id": 2,
+                  "message_text": "Hello Message2",
+                  "answer_text": "Hello Answer2",
+                  "dialog": 1
+                },
+                {
+                  "id": 4,
+                  "message_text": "3",
+                  "answer_text": "work there",
+                  "dialog": 1
+                },
+              ]
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - messages
+    post:
+      operationId: messages_create
+      summary: Create new message
+      description: 'The user creates a message, and then receives a response from nlp.'
+      security:
+        - Bearer: [ ]
+      parameters:
+        - name: body
+          description: 'Message object that needs to be added'
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              message_text:
+                title: Message text
+                type: string
+                maxLength: 200
+                minLength: 1
+                example: Hello, how are you?
+              dialog_id:
+                title: Dialog_id
+                type: integer
+                example: 1
+      responses:
+        '201':
+          description: 'The message will return with a ready answer to the question'
+          schema:
+            $ref: '#/definitions/MessageModel'
+          examples:
+            application/json:
+              {
+                "id": 5,
+                "message_text": "Hello, how are you?",
+                "answer_text": "I'm doing well, thank you. How about you?",
+                "dialog_id": 1
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - messages
+    parameters: [ ]
+  /messages/{id}/:
+    get:
+      operationId: messages_read
+      summary: Get message by ID
+      description: 'You will receive information about this message'
+      security:
+        - Bearer: [ ]
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/MessageModel'
+          examples:
+            application/json:
+              {
+                "id": 5,
+                "message_text": "Hello, how are you?",
+                "answer_text": "I'm doing well, thank you. How about you?",
+                "dialog_id": 1
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - messages
+    delete:
+      security:
+        - Bearer: [ ]
+      operationId: messages_delete
+      summary: 'Deletes a message'
+      responses:
+        '200':
+          description: 'successful operation'
+          examples:
+            application/json:
+              {
+                "message": "Message deletes successfully"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - messages
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this message.
+        required: true
+        type: integer
+  /register/:
+    post:
+      operationId: register_create
+      description: ''
+      summary: 'To register a user'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: 'To register a user, you need the following information. username becomes the same as the user id.'
+          schema:
+            $ref: '#/definitions/Register'
+      responses:
+        '201':
+          description: 'User Created Successfully'
+          schema:
+            $ref: '#/definitions/TokenRefresh'
+          examples:
+            application/json:
+              {
+                "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4NjkxOTA4NiwiaWF0IjoxNjg2ODMyNjg2LCJqdGkiOiIxYmVhOGVmY2YwYjc0NTVkODY0NTU3MDg4MGI5ZWIxZCIsInVzZXJfaWQiOjR9.Jn667YJy4p0Y958TmW9zIcj2BCS-_E_APRvi_fI2axk",
+                "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg2ODM2Mjg2LCJpYXQiOjE2ODY4MzI2ODYsImp0aSI6ImI0OWQyZDE5NzgwZTQ3Y2M5MzJjZmJlMzZmN2UyMjI2IiwidXNlcl9pZCI6NH0.VQjwSsOuBD8UDlu966e-N3RlBZEJpWVt3rvSqg_oQGU"
+              }
+
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+      tags:
+        - register
+  /token/:
+    post:
+      operationId: token_create
+      summary: 'Create a pair of tokens (access, refresh)'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: To create tokens, you need an email and password
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: 'user@user.ru'
+                pattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+              password:
+                type: string
+                example: 'user'
+      responses:
+        '200':
+          description: 'The answer will be new refresh and access tokens'
+          schema:
+            type: object
+            properties:
+              refresh:
+                type: string
+              access:
+                type: string
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+      tags:
+        - token
+    parameters: [ ]
+  /token/refresh/:
+    post:
+      operationId: token_refresh_create
+      summary: Refresh JWT
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              refresh:
+                type: string
+      responses:
+        '200':
+          description: 'The answer will be refresh access and refresh tokens'
+          schema:
+            type: object
+            properties:
+              refresh:
+                type: string
+              access:
+                type: string
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+      tags:
+        - token
+    parameters: [ ]
+  /profiles/:
+    get:
+      summary: Get all the profiles
+      security:
+        - Bearer: [ ]
+      operationId: profiles_list
+      description: Get, Update user profile
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Profile'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+      tags:
+        - profiles
+    parameters: [ ]
+  /profile/:
+    get:
+      summary: Get user profiles
+      security:
+        - Bearer: [ ]
+      description: Get user profiles
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Profile'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - profiles
+    parameters: [ ]
+  /profiles/{id}/:
+    get:
+      summary: Get profile by ID
+      security:
+        - Bearer: [ ]
+      operationId: profiles_read
+      description: Get, Update user profile
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Profile'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - profiles
+    patch:
+      security:
+        - Bearer: [ ]
+      summary: Edit profile by ID
+      operationId: profiles_update
+      description: Get, Update user profile
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+                example: 'FirstLorem'
+                pattern: '^[a-zA-Z_.-][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$'
+              last_name:
+                type: string
+                example: 'SecondLorem'
+                pattern: '^[a-zA-Z_.-][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$'
+        - in: formData
+          name: avatar
+          type: file
+          description: The Picture to upload.
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Profile'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - profiles
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this profile.
+        required: true
+        type: integer
+  /users/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: users_list
+      summary: Get all the users
+      description: Get users information
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/UserModel'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+      tags:
+        - users
+    parameters: [ ]
+  /user/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: user
+      summary: 'Get information about this user'
+      description: 'Get information by token auth'
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              {
+                "id": 1,
+                "last_login": "2023-06-20T09:42:29.574365Z",
+                "username": "Id[]102",
+                "email": "user@user.ru",
+                "is_email_confirmed": true,
+                "created_at": "2023-06-15T05:49:49.249000Z",
+                "updated_at": "2023-06-19T13:51:45.871000Z"
+              }
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+      tags:
+        - users
+    parameters: [ ]
+  /users/{id}/:
+    get:
+      summary: Get user by ID
+      security:
+        - Bearer: [ ]
+      operationId: users_read
+      description: Get, Update user information
+      parameters: [ ]
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserModel'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - users
+    patch:
+      security:
+        - Bearer: [ ]
+      operationId: users_update
+      description: Get, Update user information
+      summary: Edit user by ID
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserModel'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserModel'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - users
+    delete:
+      security:
+        - Bearer: [ ]
+      summary: Delete user by ID
+      operationId: users_delete
+      description: Get, Update user information
+      parameters: [ ]
+      responses:
+        '200':
+          description: 'Successful'
+          examples:
+            application/json:
+              'message': 'User inactive successfully'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - users
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this user.
+        required: true
+        type: integer
+  /change-password/:
+    put:
+      operationId: change-password_update
+      description: An endpoint for changing password.
+      summary: To change password
+      security:
+        - Bearer: [ ]
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ChangePassword'
+      responses:
+        '200':
+          description: 'Successful password change'
+          examples:
+            application/json:
+              {
+                "message": "Password updated successfully"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+      tags:
+        - change password
+    parameters: [ ]
+  /logout/:
+    post:
+      security:
+        - Bearer: [ ]
+      operationId: logout
+      summary: An endpoint to logout users.
+      description: |-
+        Add JWT to blacklist
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              refresh:
+                type: string
+      responses:
+        200:
+          description: Successful operation
+          examples:
+            application/json:
+              {
+                'message': 'Logout successfully',
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+      tags:
+        - logout
+    parameters: [ ]
+  /password-reset/:
+    post:
+      operationId: password_reset_create
+      summary: Creates a Password Reset Token
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Email'
+      responses:
+        '200':
+          description: 'Successful operations'
+          examples:
+            application/json:
+              {
+                "status": "OK"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+      tags:
+        - password-reset
+    parameters: [ ]
+  /password-reset/confirm/:
+    post:
+      operationId: password_reset_confirm_create
+      summary: An Api View which provides a method to reset a password based on a unique token
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PasswordToken'
+      responses:
+        '200':
+          description: 'Successful operations'
+          examples:
+            application/json:
+              {
+                "status": "OK"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        404:
+          description: Not found.
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - password-reset
+    parameters: [ ]
+  /password-reset/validate_token/:
+    post:
+      operationId: password-reset_validate_token_create
+      summary: An Api View which provides a method to verify that a token is valid
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ResetToken'
+      responses:
+        '200':
+          description: 'Successful operations'
+          examples:
+            application/json:
+              {
+                "status": "OK"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        404:
+          description: Not found.
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - password-reset
+    parameters: [ ]
+  /confirmation-email/confirm/:
+    post:
+      operationId: confirmation-email_confirm_create
+      summary: 'Email Confirmation'
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ConfirmEmail'
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              {
+                "status": "OK"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        404:
+          description: Not found.
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - confirmation-email
+    parameters: [ ]
+  /confirmation-email/send/:
+    post:
+      security:
+        - Bearer: [ ]
+      operationId: confirmation-email_send_create
+      summary: 'Sending a confirmation email. Creating a token in the database'
+      description: 'You dont need any parameters, only authorization'
+      responses:
+        '201':
+          description: ''
+          examples:
+            application/json:
+              {
+                "status": "OK"
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+      tags:
+        - confirmation-email
+    parameters: [ ]
+definitions:
+  DialogModel:
+    required:
+      - user_id
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+        example: 1
+      latest_message:
+        title: Last Message
+        type: string
+        maxLength: 1000
+        minLength: 1
+        example: 'This is message'
+      user_id:
+        title: User_id
+        type: integer
+        example: 1
+      name:
+        title: Name
+        type: string
+        maxLength: 200
+        minLength: 1
+        example: 'DialogName'
+      created_at:
+        title: Created at
+        type: date
+        example: "2023-06-23T09:15:34.562981Z"
+      updated_at:
+        title: Created at
+        type: date
+        example: "2023-06-23T09:15:34.562981Z"
+  MessageModel:
+    required:
+      - message_text
+      - dialog_id
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+        example: 1
+      message_text:
+        title: Message text
+        type: string
+        maxLength: 200
+        minLength: 1
+        example: message_text
+      answer_text:
+        title: Answer text
+        type: string
+        maxLength: 200
+        example: answer_text
+      dialog_id:
+        title: Dialog_id
+        type: integer
+        example: 1
+  Register:
+    required:
+      - email
+      - password
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      email:
+        title: Email
+        type: string
+        format: email
+        minLength: 1
+        pattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+        description: >-
+          Password parameters: <br>
+          Validate whether the password is of a minimum length 8. <br>
+          Checks whether the password occurs in a list of common passwords. By default, it compares to an included list of 20,000 common passwords. <br>
+          Checks whether the password isn’t entirely numeric.
+  CustomTokenObtainPair:
+    required:
+      - email
+      - password
+    type: object
+    properties:
+      email:
+        title: Email
+        type: string
+        minLength: 1
+      password:
+        title: Password
+        type: string
+        minLength: 1
+        description: >-
+          Password parameters: <br>
+          Validate whether the password is of a minimum length 8. <br>
+          Checks whether the password occurs in a list of common passwords. By default, it compares to an included list of 20,000 common passwords. <br>
+          Checks whether the password isn’t entirely numeric.
+  TokenRefresh:
+    required:
+      - refresh
+    type: object
+    properties:
+      refresh:
+        title: Refresh
+        type: string
+        minLength: 1
+      access:
+        title: Access
+        type: string
+        readOnly: true
+        minLength: 1
+  ChangePassword:
+    required:
+      - old_password
+      - new_password
+    type: object
+    properties:
+      old_password:
+        title: Old password
+        type: string
+        minLength: 1
+        example: 'old_pas'
+      new_password:
+        title: New password
+        type: string
+        minLength: 1
+        example: 'new_pas'
+        description: >-
+          Password parameters: <br>
+          Validate whether the password is of a minimum length 8. <br>
+          Checks whether the password occurs in a list of common passwords. By default, it compares to an included list of 20,000 common passwords. <br>
+          Checks whether the password isn’t entirely numeric.
+  TokenNotValid:
+    type: object
+    properties:
+      errors:
+        title: Details
+        type: string
+        minLength: 1
+        example:
+          "details": [ "Given token not valid for any token type" ]
+  Forbidden:
+    type: object
+    properties:
+      errors:
+        title: Details
+        type: string
+        minLength: 1
+        example:
+          "details": [ "Available only for the owner" ]
+  NotFound:
+    required:
+      - errors
+    type: object
+    properties:
+      errors:
+        title: errors
+        type: array
+        items:
+          type: object
+        example:
+          "details": [ "Not found." ]
+  BadRequest:
+    required:
+      - errors
+    type: object
+    properties:
+      errors:
+        title: errors
+        type: array
+        items:
+          type: object
+        example:
+          "details": [ "Bad Request." ]
+  UserModel:
+    required:
+      - username
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+        example: 1
+      username:
+        title: Username
+        type: string
+        maxLength: 255
+        minLength: 1
+        example: 'user'
+        pattern: '^(?!_$)(?![-.])(?!.*[_.-]{2})[a-zA-Z0-9_.-]+(?<![.-])$'
+  Profile:
+    type: object
+    properties:
+      user_id:
+        title: User_id
+        type: integer
+        example: 1
+      first_name:
+        title: First name
+        type: string
+        maxLength: 32
+        minLength: 1
+        example: 'LoremName'
+        pattern: '^[a-zA-Z_.-][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$'
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 32
+        minLength: 1
+        example: 'LoremSName'
+        pattern: '^[a-zA-Z_.-][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$'
+      avatar:
+        title: Avatar
+        type: file
+        example: 'http://127:0:0:1:8000/media/avatars/id102-:bird.jpeg'
+  Email:
+    required:
+      - email
+    type: object
+    properties:
+      email:
+        title: Email
+        type: string
+        format: email
+        minLength: 1
+        pattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+  PasswordToken:
+    required:
+      - password
+      - token
+    type: object
+    properties:
+      password:
+        title: Password
+        type: string
+        minLength: 1
+        description: >-
+          Password parameters: <br>
+          Validate whether the password is of a minimum length 8. <br>
+          Checks whether the password occurs in a list of common passwords. By default, it compares to an included list of 20,000 common passwords. <br>
+          Checks whether the password isn’t entirely numeric.
+      token:
+        title: Token
+        type: string
+        minLength: 1
+  ResetToken:
+    required:
+      - token
+    type: object
+    properties:
+      token:
+        title: Token
+        type: string
+        minLength: 1
+  ConfirmEmail:
+    required:
+      - email_confirm_token
+    type: object
+    properties:
+      email_confirm_token:
+        title: Email confirm token
+        type: string
+        minLength: 1
+        example: 'bcf576eeeaa48a5811cebc88'

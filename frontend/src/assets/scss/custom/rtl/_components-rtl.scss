@@ -1,0 +1,13 @@
+//
+// components-rtl.scss
+//
+
+// accordion
+
+.custom-accordion{
+    a.collapsed{
+        i.accor-plus-icon:before{
+            content: "\F0141";
+        }
+    }
+}
