@@ -55,4 +55,4 @@ our project:
   repository. Our team will review your pull request and provide feedback or merge it if it aligns with the project's
   goals.
 * Feedback and Ideas: We value your feedback and ideas for improving the project. If you have suggestions, feature
-  request, or any other input, please don't hesitate to reach out to us via email at hello@soshace.com
+  request, or any other input, please don't hesitate to reach out to us via email at hello@fosterflow.com
