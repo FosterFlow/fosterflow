@@ -55,9 +55,9 @@ function UserChat(props) {
                                                     <div className="user-chat-content">
                                                         <div className="ctext-wrap">
                                                             <div className="ctext-wrap-content">
-                                                                <ReactMarkdown className="mb-0">
+                                                                <pre>
                                                                     {chat.message_text}
-                                                                </ReactMarkdown>
+                                                                </pre>
                                                             </div>
                                                         </div>
                                                     </div>
