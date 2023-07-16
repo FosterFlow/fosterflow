@@ -56,3 +56,8 @@ our project:
   goals.
 * Feedback and Ideas: We value your feedback and ideas for improving the project. If you have suggestions, feature
   request, or any other input, please don't hesitate to reach out to us via email at hello@fosterflow.com
+
+## We are in social media
+* [Twitter](https://twitter.com/fosterflow_com)
+* [Linkedin](https://www.linkedin.com/company/fosterflow/)
+* [Facebook](https://www.facebook.com/fosterflowcom)
