@@ -9,7 +9,6 @@ import {
 
 //Import components
 import CustomCollapse from "../../../components/CustomCollapse";
-import AttachedFiles from "../../../components/AttachedFiles";
 
 //Import Images
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
@@ -21,12 +20,6 @@ function Profile(props) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(false);
-  const [files] = useState([
-    { name: "Admin-A.zip", size: "12.5 MB", thumbnail: "ri-file-text-fill" },
-    { name: "Image-1.jpg", size: "4.2 MB", thumbnail: "ri-image-fill" },
-    { name: "Image-2.jpg", size: "3.1 MB", thumbnail: "ri-image-fill" },
-    { name: "Landing-A.zip", size: "6.7 MB", thumbnail: "ri-file-text-fill" },
-  ]);
 
   /* intilize t variable for multi language implementation */
   const { t } = useTranslation();
@@ -124,19 +117,6 @@ function Profile(props) {
             </Card>
             {/* End About card  */}
 
-            <Card className="mb-1 shadow-none border">
-              {/* import collaps */}
-              <CustomCollapse
-                title="Attached Files"
-                iconClass="ri-attachment-line"
-                isOpen={isOpen2}
-                toggleCollapse={toggleCollapse2}
-              >
-                {/* attached files */}
-                <AttachedFiles files={files} />
-              </CustomCollapse>
-            </Card>
-            {/* End Attached Files card  */}
           </div>
           {/* end profile-user-accordion  */}
         </div>

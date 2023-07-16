@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Card, Button, UncontrolledDropdown, Input, Label } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Card, Button } from "reactstrap";
 
 import SimpleBar from "simplebar-react";
 
@@ -16,39 +15,12 @@ import { useTranslation } from 'react-i18next';
 function Settings(props) {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isOpen1, setIsOpen1] = useState(true);
-    const [isOpen2, setIsOpen2] = useState(false);
-    const [isOpen3, setIsOpen3] = useState(false);
-    const [isOpen4, setIsOpen4] = useState(false);
 
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
 
     const toggleCollapse1 = () => {
         setIsOpen1(!isOpen1);
-        setIsOpen2(false);
-        setIsOpen3(false);
-        setIsOpen4(false);
-    };
-
-    const toggleCollapse2 = () => {
-        setIsOpen2(!isOpen2);
-        setIsOpen1(false);
-        setIsOpen3(false);
-        setIsOpen4(false);
-    };
-
-    const toggleCollapse3 = () => {
-        setIsOpen3(!isOpen3);
-        setIsOpen1(false);
-        setIsOpen2(false);
-        setIsOpen4(false);
-    };
-
-    const toggleCollapse4 = () => {
-        setIsOpen4(!isOpen4);
-        setIsOpen1(false);
-        setIsOpen3(false);
-        setIsOpen2(false);
     };
 
     const toggle = () => setDropdownOpen(!dropdownOpen);
@@ -122,147 +94,6 @@ function Settings(props) {
                         </Card>
                         {/* end profile card */}
 
-                        <Card className="accordion-item border mb-2">
-                            <CustomCollapse
-                                title="Privacy"
-                                isOpen={isOpen2}
-                                toggleCollapse={toggleCollapse2}
-                            >
-
-                                <div className="py-3">
-                                    <div className="d-flex align-items-center">
-                                        <div className="flex-grow-1 overflow-hidden">
-                                            <h5 className="font-size-13 mb-0 text-truncate">{t('Profile photo')}</h5>
-                                        </div>
-                                        <UncontrolledDropdown className="ms-2">
-                                            <DropdownToggle className="btn btn-light btn-sm w-sm" tag="button">
-                                                {t('Everyone')} <i className="mdi mdi-chevron-down"></i>
-                                            </DropdownToggle>
-                                            <DropdownMenu className="dropdown-menu-end">
-                                                <DropdownItem>{t('Everyone')}</DropdownItem>
-                                                <DropdownItem>{t('selected')}</DropdownItem>
-                                                <DropdownItem>{t('Nobody')}</DropdownItem>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
-                                    </div>
-                                </div>
-                                <div className="py-3 border-top">
-                                    <div className="d-flex align-items-center">
-                                        <div className="flex-grow-1 overflow-hidden">
-                                            <h5 className="font-size-13 mb-0 text-truncate">{t('Last seen')}</h5>
-
-                                        </div>
-                                        <div className="ms-2">
-                                            <div className="form-check form-switch">
-                                                <Input type="checkbox" className="form-check-input" id="privacy-lastseenSwitch" defaultChecked />
-                                                <Label className="form-check-label" htmlFor="privacy-lastseenSwitch"></Label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="py-3 border-top">
-                                    <div className="d-flex align-items-center">
-                                        <div className="flex-grow-1 overflow-hidden">
-                                            <h5 className="font-size-13 mb-0 text-truncate">{t('Status')}</h5>
-
-                                        </div>
-                                        <UncontrolledDropdown className="ms-2">
-                                            <DropdownToggle className="btn btn-light btn-sm w-sm" tag="button">
-                                                {t('Everyone')} <i className="mdi mdi-chevron-down"></i>
-                                            </DropdownToggle>
-                                            <DropdownMenu className="dropdown-menu-end">
-                                                <DropdownItem>{t('Everyone')}</DropdownItem>
-                                                <DropdownItem>{t('selected')}</DropdownItem>
-                                                <DropdownItem>{t('Nobody')}</DropdownItem>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
-                                    </div>
-                                </div>
-
-                                <div className="py-3 border-top">
-                                    <div className="d-flex align-items-center">
-                                        <div className="flex-grow-1 overflow-hidden">
-                                            <h5 className="font-size-13 mb-0 text-truncate">{t('Read receipts')}</h5>
-
-                                        </div>
-                                        <div className="ms-2">
-                                            <div className="form-check form-switch">
-                                                <Input type="checkbox" className="form-check-input" id="privacy-readreceiptSwitch" defaultChecked />
-                                                <Label className="form-check-label" htmlFor="privacy-readreceiptSwitch"></Label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="py-3 border-top">
-                                    <div className="d-flex align-items-center">
-                                        <div className="flex-grow-1 overflow-hidden">
-                                            <h5 className="font-size-13 mb-0 text-truncate">{t('Groups')}</h5>
-
-                                        </div>
-                                        <UncontrolledDropdown className="ms-2">
-                                            <DropdownToggle className="btn btn-light btn-sm w-sm" tag="button">
-                                                {t('Everyone')} <i className="mdi mdi-chevron-down"></i>
-                                            </DropdownToggle>
-                                            <DropdownMenu className="dropdown-menu-end">
-                                                <DropdownItem>{t('Everyone')}</DropdownItem>
-                                                <DropdownItem>{t('selected')}</DropdownItem>
-                                                <DropdownItem>{t('Nobody')}</DropdownItem>
-                                            </DropdownMenu>
-                                        </UncontrolledDropdown>
-                                    </div>
-                                </div>
-                            </CustomCollapse>
-                        </Card>
-                        {/* end Privacy card */}
-
-                        <Card className="accordion-item border mb-2">
-                            <CustomCollapse
-                                title="Security"
-                                isOpen={isOpen3}
-                                toggleCollapse={toggleCollapse3}
-                            >
-
-                                <div>
-                                    <div className="d-flex align-items-center">
-                                        <div className="flex-grow-1 overflow-hidden">
-                                            <h5 className="font-size-13 mb-0 text-truncate">{t('Show security notification')}</h5>
-
-                                        </div>
-                                        <div className="ms-2 me-0">
-                                            <div className="form-check form-switch">
-                                                <Input type="checkbox" className="form-check-input" id="security-notificationswitch" />
-                                                <Label className="form-check-label" htmlFor="security-notificationswitch"></Label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CustomCollapse>
-                        </Card>
-                        {/* end Security card */}
-
-                        <Card className="accordion-item  border mb-2">
-                            <CustomCollapse
-                                title="Help"
-                                isOpen={isOpen4}
-                                toggleCollapse={toggleCollapse4}
-                            >
-
-                                <div>
-                                    <div className="py-3">
-                                        <h5 className="font-size-13 mb-0"><Link to="#" className="text-body d-block">{t('FAQs')}</Link></h5>
-                                    </div>
-                                    <div className="py-3 border-top">
-                                        <h5 className="font-size-13 mb-0"><Link to="#" className="text-body d-block">{t('Contact')}</Link></h5>
-                                    </div>
-                                    <div className="py-3 border-top">
-                                        <h5 className="font-size-13 mb-0"><Link to="#" className="text-body d-block">{t('Terms & Privacy policy')}</Link></h5>
-                                    </div>
-                                </div>
-                            </CustomCollapse>
-                        </Card>
-                        {/* end Help card */}
                     </div>
                     {/* end profile-setting-accordion */}
                 </SimpleBar>
