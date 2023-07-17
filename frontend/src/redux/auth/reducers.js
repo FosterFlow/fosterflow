@@ -20,7 +20,6 @@ import { getTokens } from '../../helpers/authUtils';
 const INIT_STATE = {
     tokens: getTokens(),
     loading: false,
-    isUserLogout : false,
     error: null
 };
 
@@ -40,7 +39,7 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, tokens: action.payload.tokens, loading: false, error: null };
 
         case LOGOUT_USER_SUCCESS:
-            return { ...state, user: null, tokens: null, isUserLogout : true };
+            return { ...state, user: null, tokens: null };
 
         case FORGET_PASSWORD:
             return { ...state, loading: true };
@@ -50,7 +49,7 @@ const Auth = (state = INIT_STATE, action) => {
 
         case AUTH_FAILED:
             console.log("Reducer AUTH_FAILED Setting error to ", action.payload);
-            return { ...state, loading: false, error: action.payload, isUserLogout : false };
+            return { ...state, loading: false, error: action.payload };
         
         case CONFIRM_EMAIL:
             return { ...state, loading: true, emailConfirmed: false }; // Set loading to true

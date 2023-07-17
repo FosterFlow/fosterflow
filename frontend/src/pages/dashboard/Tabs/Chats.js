@@ -11,6 +11,7 @@ import { fetchDialogues, fetchMessages, getAuthorizedUser, setActiveDialogue, se
 import { useTranslation } from 'react-i18next';
 
 const Chats = (props) => {
+    console.log("Chats, props", JSON.stringify(props));
     const id = Number(props.router.params.id) || 0;
     const [searchChat, setSearchChat] = useState("");
     const [recentChatList, setRecentChatList] = useState([]);
