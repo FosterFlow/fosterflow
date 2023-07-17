@@ -1,8 +1,8 @@
-# FosterFlow
+# [FosterFlow.com](https://fosterflow.com)
 
-Our project is a startup that leverages the power of the Chat-GPT language model. The main objective is to create a
-unified application that combines the comprehensive functionality offered by OpenAI with our own innovative solutions.
-By harnessing the capabilities of the Chat-GPT model, we aim to provide users with a seamless and intelligent
+Our project is a startup that leverages the power of the GPT4 and LLM/ML models. The main objective is to create a
+unified application that combines the comprehensive functionality offered ML models with our UI mechanics.
+By harnessing the capabilities of the GPT like models, we aim to provide users with a seamless and intelligent
 conversational experience within a single application.
 
 ## Overview
@@ -28,15 +28,11 @@ There are the upcoming tasks and features on our todo list that we plan to imple
 
 * **Single sign-on**: Enable users to authenticate and log in to the application using their social media accounts such
   as Facebook, Twitter, or Google. This will provide a convenient and streamlined login experience for our users.
-* **Real-time Response Generation**: Implement a continuous stream of generated responses within the application. This
+* **Real-time response generation**: Implement a continuous stream of generated responses within the application. This
   will enhance the conversational experience by allowing users to receive dynamic and immediate responses as they
   interact with the system.
-* **User-to-User Communication**: Develop functionality that enables users to communicate and interact with each other
-  within the application. This feature will facilitate seamless conversations and collaboration between users, creating
-  a vibrant and engaging community.
-* **Offline Response using Language Model**: We are developing a feature that allows users to receive response from the
-  language model even when they are offline or have a poor internet connection. This ensures uninterrupted interaction
-  and helpful responses from the language model, regardless of whether the user is online.
+* **Access to different types of LLM/ML models**: Allow users to smoothly switch to the best model for solving an exact
+  task using model name @model_name like we do with real users into chats.
 
 ## Installation and use
 
@@ -59,4 +55,9 @@ our project:
   repository. Our team will review your pull request and provide feedback or merge it if it aligns with the project's
   goals.
 * Feedback and Ideas: We value your feedback and ideas for improving the project. If you have suggestions, feature
-  request, or any other input, please don't hesitate to reach out to us via email at example@gmail.com
+  request, or any other input, please don't hesitate to reach out to us via email at hello@fosterflow.com
+
+## We are in social media
+* [Twitter](https://twitter.com/fosterflow_com)
+* [Linkedin](https://www.linkedin.com/company/fosterflow/)
+* [Facebook](https://www.facebook.com/fosterflowcom)
