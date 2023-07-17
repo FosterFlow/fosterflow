@@ -30,6 +30,7 @@ function LeftSidebarMenu(props) {
         let layoutMode = props.layoutMode; 
         layoutMode === "dark" ? layoutMode = "light" : layoutMode = "dark";
 
+        //TODO: move it to saga
         localStorage.setItem("layoutMode", layoutMode);
         props.changeLayoutMode(layoutMode);
     }

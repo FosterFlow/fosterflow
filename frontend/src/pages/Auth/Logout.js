@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import withRouter from "../../components/withRouter";
 
 //redux store
 import { logoutUser } from '../../redux/actions';
@@ -8,9 +7,9 @@ import { logoutUser } from '../../redux/actions';
  * Logouts the user
  * @param {*} props 
  */
-const Logout = () => {
+const Logout = (props) => {
         console.log("Pages Auth Logout");
-        localStorage.removeItem("tokens");
+        props.logoutUser();
 }
 
-export default withRouter(connect(null, { logoutUser })(Logout));
+export default connect(null, { logoutUser })(Logout);

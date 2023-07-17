@@ -31,6 +31,7 @@ const setTokens = (tokens) => {
  * Returns the logged in user
  */
 const getTokens = () => {
+    //TODO we have to check the state by state param, not by localStorage
     const tokens = localStorage.getItem('tokens');
     return tokens ? (typeof (tokens) == 'object' ? tokens : JSON.parse(tokens)) : null;
 }
@@ -59,6 +60,7 @@ const refreshAccessToken = async () => {
         }
     } catch (error) {
         console.error('Error refreshing access token:', error);
+        //TODO: to cause logout we have to invoke action logoutUser of Auth Redux
         localStorage.removeItem("tokens");
         throw error;
     }

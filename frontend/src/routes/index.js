@@ -4,6 +4,7 @@ import { isUserAuthenticated } from '../helpers/authUtils';
 
 //import routes
 import { authProtectedRoutes, authRoutes, publicRoutes } from './routes';
+import { connect } from "react-redux";
 
 //import layouts
 import NonAuthLayout from "../layouts/NonAuth";
@@ -90,4 +91,12 @@ const Routes = () => {
     );
 }
 
-export default Routes;
+const mapStateToProps = (state) => {
+    const areAuthTokensNull = state.Auth.tokens === null;
+    return {
+        //cause re-render of the router if user was authentificated or logout
+        areAuthTokensNull: areAuthTokensNull
+    }
+  };
+  
+  export default connect(mapStateToProps)(Routes);
