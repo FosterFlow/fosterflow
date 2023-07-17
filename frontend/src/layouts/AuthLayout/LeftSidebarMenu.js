@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { Nav, NavItem, NavLink, UncontrolledTooltip, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 
 import { changeLayoutMode } from "../../redux/actions";
 
@@ -22,24 +22,16 @@ import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
 function LeftSidebarMenu(props) {
-    const dispatch = useDispatch();
-    //TODO: cause unnecessary renders. Need to redevelop it
-    const { layoutMode } = useSelector(state => ({
-        layoutMode: state.Layout.layoutMode,
-      }));
-
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
 
-      const mode =
-      layoutMode === "dark"
-        ? "light"
-        : "dark";
+    const onChangeLayoutMode = (event) => { 
+        event.preventDefault();
+        let layoutMode = props.layoutMode; 
+        layoutMode === "dark" ? layoutMode = "light" : layoutMode = "dark";
 
-    const onChangeLayoutMode = (value) => { 
-        if (changeLayoutMode) {
-            dispatch(changeLayoutMode(value));
-        }
+        localStorage.setItem("layoutMode", layoutMode);
+        props.changeLayoutMode(layoutMode);
     }
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -144,7 +136,7 @@ function LeftSidebarMenu(props) {
                             </DropdownMenu>
                         </Dropdown>
                         <li className="nav-item">
-                            <NavLink id="light-dark"  onClick={() => onChangeLayoutMode(mode)}>
+                            <NavLink id="light-dark"  onClick={onChangeLayoutMode}>
                                 <i className="ri-sun-line theme-mode-icon"></i>
                             </NavLink>
                             <UncontrolledTooltip target="light-dark" placement="right">
@@ -172,8 +164,8 @@ function LeftSidebarMenu(props) {
 
 const mapStatetoProps = state => {
     return {
-        ...state.Layout
+        layoutMode: state.Layout.layoutMode
     };
 };
 
-export default connect(mapStatetoProps)(LeftSidebarMenu);
+export default connect(mapStatetoProps, {changeLayoutMode})(LeftSidebarMenu);
