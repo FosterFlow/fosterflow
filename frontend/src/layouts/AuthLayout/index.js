@@ -42,7 +42,7 @@ const Index = ({layoutMode, authorizedUser, changeLayoutMode, confirmEmail, chil
         <React.Fragment>
             {authorizedUser && !authorizedUser.is_email_confirmed &&
                 <Alert color="info">
-                    {t('tWe have sent you an email to confirm your account. Please check your inbox')}. 
+                    {t('We have sent you an email to confirm your account. Please check your inbox')}. 
                     <button onClick={sendConfirmationEmailAgain}>{t('Click here')}</button> {t('to send again')}.
                 </Alert>}
             <div className="layout-wrapper d-lg-flex">
