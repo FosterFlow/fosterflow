@@ -1,7 +1,7 @@
 // @flow
 import { all, call, fork, takeEvery } from "redux-saga/effects";
 
-import { SET_LAYOUT_MODE, GET_LAYOUT_MODE } from "./constants";
+import { SET_LAYOUT_MODE } from "./constants";
 
 /**
  * TODO: move to component attribute
@@ -10,10 +10,6 @@ import { SET_LAYOUT_MODE, GET_LAYOUT_MODE } from "./constants";
 function changeBodyAttribute(attribute, value) {
   if (document.body) document.body.setAttribute(attribute, value);
   return true;
-}
-
-function* getLayoutMode() {
-  return localStorage.getItem("layoutMode");
 }
 
 /**
@@ -39,14 +35,9 @@ export function* watchSetLayoutMode() {
   yield takeEvery(SET_LAYOUT_MODE, setLayoutMode);
 }
 
-export function* watchGetLayoutMode() {
-  yield takeEvery(GET_LAYOUT_MODE, getLayoutMode);
-}
-
 function* LayoutSaga() {
   yield all([
-    fork(watchSetLayoutMode),
-    fork(watchGetLayoutMode)
+    fork(watchSetLayoutMode)
   ]);
 }
 

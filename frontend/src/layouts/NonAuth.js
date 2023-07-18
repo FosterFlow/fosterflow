@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import withRouter from '../components/withRouter';
-import { getLayoutMode } from '../redux/layout/actions';
 
 const NonAuth = (props) => {
-    const layoutMode = getLayoutMode();
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
-    document.body.setAttribute("data-bs-theme", layoutMode);
+    if (props.layoutMode){
+        //TODO: move to jsx template
+        document.body.setAttribute("data-bs-theme", props.layoutMode);
+    }
 
     useEffect(() => {
         let currentPage = capitalizeFirstLetter(props.router.location.pathname);
@@ -22,4 +24,10 @@ const NonAuth = (props) => {
     );
 };
 
-export default withRouter(NonAuth);
+const mapStateToProps = state => {
+    return { 
+        layoutMode: state.Layout.layoutMode
+    };
+};
+
+export default withRouter(connect(mapStateToProps)(NonAuth));

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
 import withRouter from '../../components/withRouter';
-import { getLayoutMode } from '../../redux/layout/actions';
 
 //i18n
 import { useTranslation } from 'react-i18next';
@@ -10,12 +9,15 @@ import { useTranslation } from 'react-i18next';
 //Import Components
 import LeftSidebarMenu from "./LeftSidebarMenu";
 
-const Index = ({authorizedUser, confirmEmail, children }) => {
-    const layoutMode = getLayoutMode();
+const Index = (props) => {
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
 
-    document.body.setAttribute("data-bs-theme", layoutMode);
+    if (props.layoutMode){
+        //TODO: move to jsx template
+        document.body.setAttribute("data-bs-theme", props.layoutMode);
+    }
+    
     useEffect(() => {
         //set document title according to page path name
         document.title = "FosterFlow Chat";
@@ -23,12 +25,12 @@ const Index = ({authorizedUser, confirmEmail, children }) => {
 
     const sendConfirmationEmailAgain = () => {
         // Dispatch an action to send the confirmation email again
-        confirmEmail();
+        props.confirmEmail();
     };
     
     return (
         <React.Fragment>
-            {authorizedUser && !authorizedUser.is_email_confirmed &&
+            {props.authorizedUser && !props.authorizedUser.is_email_confirmed &&
                 <Alert color="info">
                     {t('We have sent you an email to confirm your account. Please check your inbox')}. 
                     <button onClick={sendConfirmationEmailAgain}>{t('Click here')}</button> {t('to send again')}.
@@ -37,16 +39,17 @@ const Index = ({authorizedUser, confirmEmail, children }) => {
                 {/* left sidebar menu */}
                 <LeftSidebarMenu />
                     {/* render page content */}
-                    {children}
+                    {props.children}
             </div>
         </React.Fragment>
     );
 }
 
 const mapStateToProps = state => {
-    const { dialogues, messages } = state.Chat;
-    const { authorizedUser } = state.User;
-    return { dialogues, messages, authorizedUser };
+    return { 
+        authorizedUser: state.User.authorizedUser,
+        layoutMode: state.Layout.layoutMode
+    };
 };
 
 export default withRouter(connect(mapStateToProps)(Index));
