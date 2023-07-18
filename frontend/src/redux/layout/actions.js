@@ -2,7 +2,8 @@ import {
 	OPEN_USER_PROFILE_SIDEBAR,
 	CLOSE_USER_PROFILE_SIDEBAR,
 	SET_CONVERSATION_NAME_IN_OPEN_CHAT,
-	SET_LAYOUT_MODE
+	SET_LAYOUT_MODE,
+	GET_LAYOUT_MODE
 } from "./constants";
 
 export const openUserSidebar = () => ({
@@ -18,7 +19,11 @@ export const setconversationNameInOpenChat = (conversationName) => ({
 	payload: conversationName
 });
 
-export const changeLayoutMode = layoutMode => ({
+export const setLayoutMode = layoutMode => ({
 	type: SET_LAYOUT_MODE,
 	payload: layoutMode,
+  });
+
+  export const getLayoutMode = () => ({
+	type: GET_LAYOUT_MODE,
   });

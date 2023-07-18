@@ -9,7 +9,7 @@ import {
 const INIT_STATE = {
 	userSidebar : false,
 	conversationName : "Doris Brown",
-	layoutMode : "light"
+	layoutMode : localStorage.getItem("layoutMode") || "light"
 };
 
 const Layout = (state = INIT_STATE, action) => {

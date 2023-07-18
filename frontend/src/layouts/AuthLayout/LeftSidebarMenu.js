@@ -3,7 +3,7 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 import { Nav, NavItem, NavLink, UncontrolledTooltip, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
 
-import { changeLayoutMode } from "../../redux/actions";
+import { setLayoutMode } from "../../redux/actions";
 
 
 //Import Images
@@ -30,9 +30,7 @@ function LeftSidebarMenu(props) {
         let layoutMode = props.layoutMode; 
         layoutMode === "dark" ? layoutMode = "light" : layoutMode = "dark";
 
-        //TODO: move it to saga
-        localStorage.setItem("layoutMode", layoutMode);
-        props.changeLayoutMode(layoutMode);
+        props.setLayoutMode(layoutMode);
     }
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -169,4 +167,4 @@ const mapStatetoProps = state => {
     };
 };
 
-export default connect(mapStatetoProps, {changeLayoutMode})(LeftSidebarMenu);
+export default connect(mapStatetoProps, {setLayoutMode})(LeftSidebarMenu);

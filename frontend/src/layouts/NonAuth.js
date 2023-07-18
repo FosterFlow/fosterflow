@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { changeLayoutMode } from '../redux/actions';
+import React, { useEffect } from 'react';
 import withRouter from '../components/withRouter';
+import { getLayoutMode } from '../redux/layout/actions';
 
 const NonAuth = (props) => {
+    const layoutMode = getLayoutMode();
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
+    document.body.setAttribute("data-bs-theme", layoutMode);
+
     useEffect(() => {
-        let getLayoutMode = localStorage.getItem('layoutMode');
-        if (getLayoutMode) {
-            props.changeLayoutMode(getLayoutMode);
-        } else {
-            props.changeLayoutMode(props.layoutMode);
-        }
         let currentPage = capitalizeFirstLetter(props.router.location.pathname);
         document.title = currentPage;
     }, []);
@@ -27,13 +22,4 @@ const NonAuth = (props) => {
     );
 };
 
-NonAuth.propTypes = {
-    layoutMode: PropTypes.any,
-};
-
-const mapStateToProps = (state) => {
-    const { layoutMode } = state.Layout;
-    return { layoutMode };
-};
-
-export default withRouter(connect(mapStateToProps, { changeLayoutMode })(NonAuth));
+export default withRouter(NonAuth);
