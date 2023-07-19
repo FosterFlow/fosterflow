@@ -14,7 +14,8 @@ import {
 const INIT_STATE = {
     user: null,
     loading: false,
-    error: null
+    error: null,
+    authorizedUser: null
 };
 
 const User = (state = INIT_STATE, action) => {

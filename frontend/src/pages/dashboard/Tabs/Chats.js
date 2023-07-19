@@ -20,8 +20,19 @@ const Chats = (props) => {
 
     useEffect(() => {
         props.getAuthorizedUser();
-        props.fetchDialogues();
     }, []);
+
+    useEffect(() => {
+        if (props.authorizedUser === null){
+            return;
+        }
+
+        if (props.authorizedUser.is_email_confirmed === false){
+            return;
+        }
+
+        props.fetchDialogues();
+    }, [props.authorizedUser]);
 
     useEffect(() => {
         const dialogues = props.dialogues; 
@@ -138,7 +149,9 @@ const mapStateToProps = (state) => ({
     dialogues: state.Chat.dialogues,
     activeDialogueId: state.Chat.activeDialogueId,
     activeChatWindow: state.Chat.activeChatWindow,
-    activeNewChat: state.Chat.activeNewChat
+    activeNewChat: state.Chat.activeNewChat,
+    //TODO: cause redundun re-render
+    authorizedUser: state.User.authorizedUser
 });
 
 const mapDispatchToProps = {

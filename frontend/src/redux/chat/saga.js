@@ -6,16 +6,12 @@ import {
   FETCH_DIALOGUES_SUCCESS, ADD_DIALOGUE_SUCCESS, DELETE_DIALOGUE_SUCCESS,
   FETCH_MESSAGES_SUCCESS, ADD_MESSAGE_SUCCESS, DELETE_MESSAGE_SUCCESS
 } from './constants';
-import { GET_AUTHORIZED_USER_SUCCESS } from '../user/constants';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 const api = apiAuthorizedClient;
 
 
 function* fetchDialogues() {
   try {
-    // Wait for the users to be loaded
-    yield take(GET_AUTHORIZED_USER_SUCCESS);
-
     const dialogues = yield api.get('/dialogues/');
     yield put({ type: FETCH_DIALOGUES_SUCCESS, payload: dialogues });
   } catch (error) {

@@ -25,6 +25,14 @@ function ChatInput(props) {
 
     //function for send data to onaddMessage function(in userChat/index.js component)
     const addMessage = (textMessage) => {
+        if (props.authorizedUser === null){
+            return;
+        }
+
+        if (props.authorizedUser.is_email_confirmed === false){
+            return;
+        }
+
         //if text value is not empty then call onaddMessage function
         if (textMessage !== "") {
             if (props.activeNewChat){
