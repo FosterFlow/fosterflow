@@ -25,7 +25,7 @@ function UserChat(props) {
                             style={{ maxHeight: "100%" }}
                             className="chat-conversation"
                             id="messages">
-                                <h1>{t('Start the Chat with GPT Model')}</h1>        
+                                <h1>{t('Start the Chat with GPT-4 Model')}</h1>        
                         </SimpleBar>
                         <ChatInput/>
                     </div>

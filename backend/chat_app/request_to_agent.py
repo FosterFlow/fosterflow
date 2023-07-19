@@ -41,7 +41,7 @@ def take_answer(prompt, dialog_id):
     messages.append(user_prompt)
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=messages
     )
 
