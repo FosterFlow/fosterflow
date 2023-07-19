@@ -50,6 +50,7 @@ const Chats = (props) => {
             return;
         }
         
+        //Opened specific chat by id in url
         props.showChatWindow(true);
         props.setActiveDialogue(id);
         props.setActiveNewChat(false);

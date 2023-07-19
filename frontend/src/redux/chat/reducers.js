@@ -10,8 +10,8 @@ const INIT_STATE = {
   messages: [],
   dialoguesLoading: true,
   activeDialogueId: 0,
-  newChatPageActive: false,
-  showChatPage: false  
+  showChatPage: false,
+  activeNewChat: false
 };
 
 const Chat = (state = INIT_STATE, action) => {
@@ -46,7 +46,9 @@ const Chat = (state = INIT_STATE, action) => {
         return { 
             ...state,
             dialogues: [...state.dialogues, action.payload],
-            activeDialogueId: Number(action.payload.id)
+            activeDialogueId: Number(action.payload.id),
+            showChatPage: true,
+            activeNewChat: false
         };
     case DELETE_DIALOGUE_SUCCESS:
         return { 
