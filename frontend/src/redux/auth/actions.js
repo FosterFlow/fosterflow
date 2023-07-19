@@ -10,6 +10,8 @@ import {
     AUTH_FAILED,
     CONFIRM_EMAIL,
     CONFIRM_EMAIL_SUCCESS,
+    SEND_CONFIRMATION_EMAIL,
+    SEND_CONFIRMATION_EMAIL_SUCCESS,
     RESET_PASSWORD_CONFIRM,
     RESET_PASSWORD_CONFIRM_SUCCESS,
     VALIDATE_RESET_TOKEN,
@@ -78,13 +80,21 @@ export const authError = (error) => {
 export const confirmEmail = (token) => ({
     type: CONFIRM_EMAIL,
     payload: { token }
-  });
+});
   
-  export const confirmEmailSuccess = () => ({
+export const confirmEmailSuccess = () => ({
     type: CONFIRM_EMAIL_SUCCESS
-  });
+});
 
-  export const resetPasswordConfirm = (password, token) => ({
+export const sendConfirmationEmail = () => ({
+    type: SEND_CONFIRMATION_EMAIL,
+});
+  
+export const sendConfirmationEmailSuccess = () => ({
+    type: SEND_CONFIRMATION_EMAIL_SUCCESS
+});
+
+export const resetPasswordConfirm = (password, token) => ({
     type: RESET_PASSWORD_CONFIRM,
     payload: { password, token }
 });

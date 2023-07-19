@@ -1,6 +1,7 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 
 import apiClient from '../../helpers/apiClient';
+import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import { setTokens } from '../../helpers/authUtils';
 
 import {
@@ -10,7 +11,8 @@ import {
     FORGET_PASSWORD,
     CONFIRM_EMAIL,
     RESET_PASSWORD_CONFIRM,
-    VALIDATE_RESET_TOKEN
+    VALIDATE_RESET_TOKEN,
+    SEND_CONFIRMATION_EMAIL
 } from './constants';
 
 
@@ -22,7 +24,8 @@ import {
     logoutUserSuccess,
     confirmEmailSuccess,
     resetPasswordConfirmSuccess,
-    validateResetTokenSuccess
+    validateResetTokenSuccess,
+    sendConfirmationEmailSuccess
 } from './actions';
 
 /**
@@ -115,6 +118,22 @@ function* confirmEmail({ payload: { token } }) {
     }
   }
 
+  /**
+ * Send a link with confirmation email
+ */
+function* sendConfirmationEmail() {
+    try {
+      yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
+      yield put(sendConfirmationEmailSuccess());
+    } catch (error) {
+      if (error.data) {
+        yield put(authError(error.data));
+      } else {
+        yield put(authError(error));
+      }
+    }
+  }
+
 
   function* resetPasswordConfirm({ payload: { password, token } }) {
     try {
@@ -172,7 +191,11 @@ export function* watchForgetPassword() {
 
 export function* watchConfirmEmail() {
     yield takeEvery(CONFIRM_EMAIL, confirmEmail);
-  }
+}
+
+  export function* watchSendConfirmationEmail() {
+    yield takeEvery(SEND_CONFIRMATION_EMAIL, sendConfirmationEmail);
+}
 
 function* authSaga() {
     yield all([
@@ -181,6 +204,7 @@ function* authSaga() {
         fork(watchRegisterUser),
         fork(watchForgetPassword),
         fork(watchConfirmEmail),
+        fork(watchSendConfirmationEmail),
         fork(watchResetPasswordConfirm), 
         fork(watchValidateResetToken), 
     ]);

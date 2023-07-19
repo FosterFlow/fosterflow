@@ -12,7 +12,9 @@ import {
     RESET_PASSWORD_CONFIRM,
     RESET_PASSWORD_CONFIRM_SUCCESS,
     VALIDATE_RESET_TOKEN,
-    VALIDATE_RESET_TOKEN_SUCCESS
+    VALIDATE_RESET_TOKEN_SUCCESS,
+    SEND_CONFIRMATION_EMAIL,
+    SEND_CONFIRMATION_EMAIL_SUCCESS
 } from './constants';
 
 import { getTokens } from '../../helpers/authUtils';
@@ -20,7 +22,8 @@ import { getTokens } from '../../helpers/authUtils';
 const INIT_STATE = {
     tokens: getTokens(),
     loading: false,
-    error: null
+    error: null,
+    confirmationEmailSent: false
 };
 
 
@@ -52,12 +55,16 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, loading: false, error: action.payload };
         
         case CONFIRM_EMAIL:
-            return { ...state, loading: true, emailConfirmed: false }; // Set loading to true
+            return { ...state, loading: true, emailConfirmed: false }; 
 
         case CONFIRM_EMAIL_SUCCESS:
-            return { ...state, loading: false, emailConfirmed: true }; // Email confirmation was successful
+            return { ...state, loading: false, emailConfirmed: true }; 
 
-        default: return { ...state };
+        case SEND_CONFIRMATION_EMAIL:
+            return { ...state, loading: true, confirmationEmailSent: false }; 
+
+        case SEND_CONFIRMATION_EMAIL_SUCCESS:
+            return { ...state, loading: false, confirmationEmailSent: true }; 
 
         case RESET_PASSWORD_CONFIRM:
             return { ...state, loading: true, resetPasswordConfirmed: false };
@@ -71,6 +78,7 @@ const Auth = (state = INIT_STATE, action) => {
         case VALIDATE_RESET_TOKEN_SUCCESS:
             return { ...state, loading: false, resetTokenValidationStatus: true };
 
+        default: return { ...state };
     }
 }
 

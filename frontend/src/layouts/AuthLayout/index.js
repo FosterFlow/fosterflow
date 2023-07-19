@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
 import withRouter from '../../components/withRouter';
+import { sendConfirmationEmail } from '../../redux/actions';
 
 //i18n
 import { useTranslation } from 'react-i18next';
@@ -24,8 +25,7 @@ const Index = (props) => {
     }, []);
 
     const sendConfirmationEmailAgain = () => {
-        // Dispatch an action to send the confirmation email again
-        props.confirmEmail();
+        props.sendConfirmationEmail();
     };
     
     return (
@@ -33,7 +33,7 @@ const Index = (props) => {
             {props.authorizedUser && !props.authorizedUser.is_email_confirmed &&
                 <Alert color="info">
                     {t('We have sent you an email to confirm your account. Please check your inbox')}. 
-                    <button onClick={sendConfirmationEmailAgain}>{t('Click here')}</button> {t('to send again')}.
+                     <a href="#" onClick={sendConfirmationEmailAgain}> {t('Click here')}</a> {t('to send again')}.
                 </Alert>}
             <div className="layout-wrapper d-lg-flex">
                 {/* left sidebar menu */}
@@ -52,4 +52,8 @@ const mapStateToProps = state => {
     };
 };
 
-export default withRouter(connect(mapStateToProps)(Index));
+const mapDispatchToProps = {
+    sendConfirmationEmail
+  };
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));
