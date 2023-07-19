@@ -36,8 +36,8 @@ function UserChat(props) {
     return (
         <React.Fragment>
             <div className={`user-chat w-100 overflow-hidden ${props.activeChatWindow ? 'user-chat-show' : ''}`}>
-                <div className="d-lg-flex">
-                    <div className={props.userSidebar ? "w-70" : "w-100"}>
+                <div className="d-lg-flex h-100">
+                    <div className={`${props.userSidebar ? "w-70" : "w-100"} position-relative h-100`}>
                         {/* render user head */}
                         <UserHead />
 

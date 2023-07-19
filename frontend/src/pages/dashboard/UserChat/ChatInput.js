@@ -63,7 +63,7 @@ function ChatInput(props) {
 
     return (
         <React.Fragment>
-            <div className="p-3 p-lg-3 border-top mb-0">
+            <div className="p-3 p-lg-3 border-top position-absolute bottom-0 w-100">
                 <Form onSubmit={(e) => formSubmit(e, textMessage)} >
                     <Row className='g-0'>
                         <Col>
