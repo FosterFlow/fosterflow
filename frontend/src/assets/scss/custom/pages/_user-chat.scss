@@ -22,6 +22,10 @@
             visibility: visible;
             transform: translateX(0);
         }
+    }    
+
+    &-content-wrapper{
+        height: 100vh;
     }
 
 }
@@ -274,22 +278,27 @@
     }
 }
 
-.chat-input-section{
-    background-color: $card-bg;
-    @media (max-width: 991.98px) {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 1;
+.chat-input {
+    background-color: var(--#{$prefix}white);
+    &-section{
+        background-color: $card-bg;
+        @media (max-width: 991.98px) {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+        }
+    }
+    
+    &-links{
+        .list-inline-item:not(:last-child){
+            margin: 0;
+        }
     }
 }
 
-.chat-input-links{
-    .list-inline-item:not(:last-child){
-        margin: 0;
-    }
-}
+
 
 .animate-typing {
 	.dot {
