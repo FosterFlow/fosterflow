@@ -79,7 +79,7 @@ function ChatInput(props) {
                             </div>
                         </Col>
                         <Col xs="auto">
-                            <div className="chat-input-links ms-md-2">
+                            <div className="chat-input-links ms-2">
                                 <ul className="list-inline mb-0 ms-0">
                                     <li className="list-inline-item">
                                         <Button type="submit" color="primary" className="font-size-16 btn-lg chat-send waves-effect waves-light">
