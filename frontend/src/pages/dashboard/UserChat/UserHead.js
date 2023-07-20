@@ -42,7 +42,7 @@ function UserHead(props) {
                         <ul className="list-inline user-chat-nav text-end mb-0">
                             
                                 <li className="list-inline-item">
-                                {!props.activeNewChat && (
+                                {!props.newChat && (
                                     <a href="#" onClick={(event) => deleteDialogue(event)} className="ri-delete-bin-line"></a>
                                 )}
                                 </li>
@@ -61,7 +61,7 @@ const mapStateToProps = (state) => {
     console.log("Dashabord Tabs UserHead mapStateToProps state", state);
     return { 
         activeDialogueId: state.Chat.activeDialogueId,
-        activeNewChat: state.Chat.activeNewChat,
+        newChat: state.Chat.newChat,
     };
 };
 

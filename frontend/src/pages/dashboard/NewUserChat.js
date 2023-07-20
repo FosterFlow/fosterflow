@@ -15,9 +15,9 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat w-100 overflow-hidden ${props.activeNewChat ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat w-100 overflow-hidden ${props.newChat ? 'user-chat-show' : ''}`}>
                 <div className="d-lg-flex">
-                    <div className={props.userSidebar ? "w-70" : "w-100"}>
+                    <div className={`${props.userSidebar ? "w-70" : "w-100"} position-relative user-chat-content-wrapper`}>
                         {/* render user head */}
                         <UserHead />
 
@@ -39,7 +39,7 @@ const mapStateToProps = (state) => {
     return { 
         messages: state.Chat.messages,
         userSidebar: state.Layout.userSidebar,
-        activeNewChat: state.Chat.activeNewChat
+        newChat: state.Chat.newChat
 }
     
 };

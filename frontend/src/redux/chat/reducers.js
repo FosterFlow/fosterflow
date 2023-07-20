@@ -10,8 +10,8 @@ const INIT_STATE = {
   messages: [],
   dialoguesLoading: true,
   activeDialogueId: 0,
-  showChatPage: false,
-  activeNewChat: false
+  chatWindow: false,
+  newChat: false
 };
 
 const Chat = (state = INIT_STATE, action) => {
@@ -24,12 +24,12 @@ const Chat = (state = INIT_STATE, action) => {
     case SHOW_CHAT_WINDOW:
         return { 
             ...state,
-            activeChatWindow: action.payload
+            chatWindow: action.payload
         };
     case SET_ACTIVE_NEW_CHAT:
         return { 
             ...state,
-            activeNewChat: action.payload
+            newChat: action.payload
         };
     case FETCH_DIALOGUES_REQUEST:
     return { 
@@ -47,8 +47,8 @@ const Chat = (state = INIT_STATE, action) => {
             ...state,
             dialogues: [...state.dialogues, action.payload],
             activeDialogueId: Number(action.payload.id),
-            showChatPage: true,
-            activeNewChat: false
+            chatWindow: true,
+            newChat: false
         };
     case DELETE_DIALOGUE_SUCCESS:
         return { 

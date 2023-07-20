@@ -82,7 +82,7 @@ const Chats = (props) => {
 
     const newChatHandleLinkClick = useCallback(() => {
         //TODO: do we need to make check that param is not already the same?
-        if (props.activeNewChat){
+        if (props.newChat){
             return;
         }
 
@@ -91,7 +91,7 @@ const Chats = (props) => {
 
     const chatHandleLinkClick = useCallback(() => {
         //TODO: do we need to make check that param is not already the same?
-        if (props.activeChatWindow){
+        if (props.chatWindow){
             return;
         }
         props.showChatWindow(true);
@@ -148,8 +148,8 @@ const Chats = (props) => {
 const mapStateToProps = (state) => ({
     dialogues: state.Chat.dialogues,
     activeDialogueId: state.Chat.activeDialogueId,
-    activeChatWindow: state.Chat.activeChatWindow,
-    activeNewChat: state.Chat.activeNewChat,
+    chatWindow: state.Chat.chatWindow,
+    newChat: state.Chat.newChat,
     //TODO: cause redundun re-render
     authorizedUser: state.User.authorizedUser
 });

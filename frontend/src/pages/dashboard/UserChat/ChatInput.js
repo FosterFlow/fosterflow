@@ -35,7 +35,7 @@ function ChatInput(props) {
 
         //if text value is not empty then call onaddMessage function
         if (textMessage !== "") {
-            if (props.activeNewChat){
+            if (props.newChat){
                 props.addDialogue({
                     "user_id": props.authorizedUser.id,
                     "name": textMessage.substring(0, 32),
@@ -101,7 +101,7 @@ const mapStateToProps = (state) => {
     return { 
         activeDialogueId: state.Chat.activeDialogueId,
         authorizedUser: state.User.authorizedUser,
-        activeNewChat: state.Chat.activeNewChat
+        newChat: state.Chat.newChat
     }
 };
 
