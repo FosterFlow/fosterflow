@@ -2,9 +2,16 @@
    General
 ============= */
 
-html {
-  position: relative;
-  min-height: 100%;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  position: fixed;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .h1,.h2,.h3,.h4,.h5,.h6,
