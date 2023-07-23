@@ -15,20 +15,17 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat user-chat-new w-100 overflow-hidden ${props.newChat ? 'user-chat-show' : ''}`}>
-                <div className="d-lg-flex">
-                    <div className={`${props.userSidebar ? "w-70" : "w-100"} position-relative user-chat-content-wrapper`}>
-                        {/* render user head */}
+            <div className={`user-chat user-chat-new ${props.userSidebar ? "w-70" : "w-100"} ${props.newChat ? 'user-chat-show' : ''}`}>
+                <div className="user-chat-content-wrapper">
+                    <div>
                         <UserHead />
-
                         <SimpleBar
-                            style={{ maxHeight: "100%" }}
                             className="chat-conversation"
                             id="messages">
-                                <h1>{t('Start the Chat with GPT-4 Model')}</h1>        
+                            <h1>{t('Start the Chat with GPT-4 Model')}</h1>        
                         </SimpleBar>
-                        <ChatInput/>
                     </div>
+                    <ChatInput/>
                 </div>
             </div>
         </React.Fragment>
@@ -40,8 +37,7 @@ const mapStateToProps = (state) => {
         messages: state.Chat.messages,
         userSidebar: state.Layout.userSidebar,
         newChat: state.Chat.newChat
-}
-    
+    }
 };
 
 export default withRouter(connect(mapStateToProps)(UserChat));

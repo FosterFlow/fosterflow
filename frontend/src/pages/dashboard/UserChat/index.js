@@ -35,14 +35,11 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat w-100 overflow-hidden ${props.chatWindow ? 'user-chat-show' : ''}`}>
-                <div className="d-lg-flex">
-                    <div className={`${props.userSidebar ? "w-70" : "w-100"} position-relative user-chat-content-wrapper`}>
-                        {/* render user head */}
+            <div className={`user-chat ${props.userSidebar ? "w-70" : "w-100"} ${props.chatWindow ? 'user-chat-show' : ''}`}>
+                <div className="user-chat-content-wrapper">
+                    <div>
                         <UserHead />
-
                         <SimpleBar
-                            style={{ maxHeight: "100%" }}
                             ref={ref}
                             className="chat-conversation p-3 p-lg-3"
                             id="messages">
@@ -77,13 +74,12 @@ function UserChat(props) {
                                                 </div>
                                             </li>
                                         </React.Fragment>
-                                    )
-                                }
-                            </ul>
+                                        )
+                                    }
+                                </ul>
                         </SimpleBar>
-
-                        <ChatInput/>
                     </div>
+                    <ChatInput/>
                 </div>
             </div>
         </React.Fragment>

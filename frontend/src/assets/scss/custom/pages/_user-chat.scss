@@ -23,19 +23,6 @@
             transform: translateX(0);
         }
     }    
-
-    &-content-wrapper{
-        height: 100dvh;
-    }
-
-    &-new{
-        .chat-conversation{
-            position: absolute;
-            top: 40%;
-            width: 100%;
-        }
-    }
-
 }
 
 .user-chat-topbar{
