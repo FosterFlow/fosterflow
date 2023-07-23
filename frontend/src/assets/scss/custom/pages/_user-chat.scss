@@ -10,6 +10,7 @@
     transition: all 0.4s;
     display: flex;
     flex-direction: column;
+    height: 100%;
     @media (max-width: 991.98px) {
         position: fixed;
         left: 0;
@@ -263,6 +264,7 @@
 }
 
 .chat-conversation {
+    flex-grow: 1;
     .simplebar-content {
         height: 100%;
         padding-bottom: 130px!important;;

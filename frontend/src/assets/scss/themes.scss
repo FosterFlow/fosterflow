@@ -5,6 +5,14 @@
 @import "./bootstrap.scss";
 @import "./app.scss";
 
+#root {
+  height: 100%
+}
+
+.layout-wrapper { 
+  height: 100%;
+}
+
 .nav-item {
   cursor: pointer;
 }
