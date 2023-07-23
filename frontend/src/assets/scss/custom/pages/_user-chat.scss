@@ -16,7 +16,7 @@
         height: 100%;
         visibility: hidden;
         transform: translateX(100%);
-        z-index: 99;
+        z-index: 3;
 
         &.user-chat-show{
             visibility: visible;
