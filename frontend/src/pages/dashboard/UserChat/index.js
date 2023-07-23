@@ -37,12 +37,11 @@ function UserChat(props) {
         <React.Fragment>
             <div className={`user-chat ${props.userSidebar ? "w-70" : "w-100"} ${props.chatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-content-wrapper">
-                    <div>
-                        <UserHead />
-                        <SimpleBar
-                            ref={ref}
-                            className="chat-conversation p-3 p-lg-3"
-                            id="messages">
+                    <UserHead />
+                    <SimpleBar
+                        ref={ref}
+                        className="chat-conversation p-3 p-lg-3"
+                        id="messages">
                             <ul className="list-unstyled mb-0">
                                 {
                                     relevantMessages.map((chat, key) =>
@@ -74,13 +73,12 @@ function UserChat(props) {
                                                 </div>
                                             </li>
                                         </React.Fragment>
-                                        )
-                                    }
-                                </ul>
+                                    )
+                                }
+                            </ul>
                         </SimpleBar>
                     </div>
-                    <ChatInput/>
-                </div>
+                <ChatInput/>
             </div>
         </React.Fragment>
     );

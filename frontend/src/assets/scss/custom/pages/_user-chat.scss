@@ -8,6 +8,8 @@
     background-color: var(--#{$prefix}white);
     box-shadow: 0 2px 4px rgba(15,34,58,.12);
     transition: all 0.4s;
+    display: flex;
+    flex-direction: column;
     @media (max-width: 991.98px) {
         position: fixed;
         left: 0;
@@ -23,6 +25,12 @@
             transform: translateX(0);
         }
     }    
+}
+
+.user-chat-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .user-chat-topbar{
