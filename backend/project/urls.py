@@ -13,7 +13,7 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
     ConfirmEmailGenericAPIView, SendEmailConfirmationTokenAPIView, \
     ChangePasswordView
 from chat_app.views import ChatModelViewSet, MessageModelViewSet
-from user_app.views import UserModelViewSet, UserProfileModelViewSet, SelfUserAPIView, SelfProfileAPIView
+from user_app.views import UserModelViewSet, UserAgentModelViewSet, SelfUserAPIView, SelfAgentAPIView
 
 from auth_app.views import CustomTokenRefreshView
 
@@ -21,7 +21,7 @@ router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
 router.register('users', UserModelViewSet, basename='users')
-router.register('profiles', UserProfileModelViewSet, basename='profiles')
+router.register('agent', UserAgentModelViewSet, basename='profiles')
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -46,7 +46,7 @@ urlpatterns = [
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterApi.as_view()),
     path('api/user/', SelfUserAPIView.as_view(), name='user'),
-    path('api/profile/', SelfProfileAPIView.as_view(), name='profile'),
+    path('api/agent/', SelfAgentAPIView.as_view(), name='agent'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/logout/', UserLogoutAPIView.as_view(), name='logout'),

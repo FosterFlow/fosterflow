@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from .models import Agent
-from .permissions import IsOwnerProfile, IsOwnerUser
-from .serializers import CustomUserSerializer, ProfileSerializer, SelfUserSerializer
+from .permissions import IsOwnerAgent, IsOwnerUser
+from .serializers import CustomUserSerializer, AgentSerializer, SelfUserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
@@ -57,14 +57,14 @@ class SelfUserAPIView(APIView):
         return Response(user_serializer.data, status.HTTP_200_OK)
 
 
-class UserProfileModelViewSet(ModelViewSet):
+class UserAgentModelViewSet(ModelViewSet):
     """
     Get, Update user profile
     """
 
     queryset = Agent.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = (IsAuthenticated, IsOwnerProfile)
+    serializer_class = AgentSerializer
+    permission_classes = (IsAuthenticated, IsOwnerAgent)
     http_method_names = ['get', 'patch', ]
 
     def partial_update(self, request, *args, **kwargs):
@@ -77,19 +77,17 @@ class UserProfileModelViewSet(ModelViewSet):
         return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
 
 
-class SelfProfileAPIView(APIView):
+class SelfAgentAPIView(APIView):
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated, IsOwnerProfile)
-    serializer_class = ProfileSerializer
+    permission_classes = (IsAuthenticated, IsOwnerAgent)
+    serializer_class = AgentSerializer
     http_method_names = ['get']
 
     def get(self, request):
         user_id = User.objects.get(id=request.user.id)
-        profile = Agent.objects.get(user_id=user_id)
-        profile_serializer = ProfileSerializer(
-            instance=profile,
+        agent = Agent.objects.get(user_id=user_id)
+        agent_serializer = AgentSerializer(
+            instance=agent,
             many=False
         )
-
-        print(profile_serializer)
-        return Response(profile_serializer.data, status.HTTP_200_OK)
+        return Response(agent_serializer.data, status.HTTP_200_OK)

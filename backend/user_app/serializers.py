@@ -29,7 +29,7 @@ class SelfUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'last_login', 'username', 'email', 'is_email_confirmed', 'created_at', 'updated_at']
 
 
-class ProfileSerializer(CustomUserSerializer):
+class AgentSerializer(CustomUserSerializer):
     """
     Serializer class to serialize the user Profile model
     """
