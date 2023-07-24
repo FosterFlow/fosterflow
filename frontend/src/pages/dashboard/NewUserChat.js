@@ -15,7 +15,7 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat user-chat-new ${props.userSidebar ? "w-70" : "w-100"} ${props.newChat ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat user-chat-new ${props.newChat ? 'user-chat-show' : ''}`}>
                 <UserHead />
                 <div className="user-chat-content-wrapper">
                      <SimpleBar
@@ -33,7 +33,6 @@ function UserChat(props) {
 const mapStateToProps = (state) => {
     return { 
         messages: state.Chat.messages,
-        userSidebar: state.Layout.userSidebar,
         newChat: state.Chat.newChat
     }
 };
