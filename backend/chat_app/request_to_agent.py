@@ -9,7 +9,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 openai.api_key = env('OPENAI_API_KEY')
 
 
-def take_answer(prompt, dialog_id):
+def take_answer(prompt, chat_id):
     """
     Generate an AI-generated answer based on the prompt and previous dialog messages.
 
@@ -27,7 +27,7 @@ def take_answer(prompt, dialog_id):
     """
 
     # Retrieve the most recent 5 messages from the dialog
-    previous_messages = Message.objects.filter(dialog_id=dialog_id).order_by('-id')[:5]
+    previous_messages = Message.objects.filter(chat_id=chat_id).order_by('-id')[:5]
     messages = [
         {"role": "system", "content": "You are a helpful assistant."}
     ]

@@ -3,8 +3,8 @@ import rest_framework.exceptions
 from django.contrib.auth import get_user_model
 from .filters import MessageFilter
 from .models import Chat, Message
-from .permissions import IsOwnerDialog, IsOwnerMessage
-from .serializers import DialogModelSerializer, MessageModelSerializer
+from .permissions import IsOwnerChat, IsOwnerMessage
+from .serializers import ChatModelSerializer, MessageModelSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
@@ -17,7 +17,7 @@ environ.Env.read_env()
 FRONTEND_URL = env('FRONTEND_URL')
 
 
-class DialogModelViewSet(ModelViewSet):
+class ChatModelViewSet(ModelViewSet):
     """
     ViewSet class for the Dialog model.
 
@@ -31,8 +31,8 @@ class DialogModelViewSet(ModelViewSet):
     """
 
     queryset = Chat.objects.all()
-    serializer_class = DialogModelSerializer
-    permission_classes = [IsOwnerDialog, IsEmailConfirm]
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsOwnerChat, IsEmailConfirm]
     http_method_names = ['get', 'post', 'delete']
 
     def get_queryset(self):

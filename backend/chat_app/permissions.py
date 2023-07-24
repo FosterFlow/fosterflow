@@ -2,7 +2,7 @@ from rest_framework import permissions
 from .models import Chat
 
 
-class IsOwnerDialog(permissions.BasePermission):
+class IsOwnerChat(permissions.BasePermission):
     message = {"errors": {"details": "Available only for the owner"}}
 
     def has_permission(self, request, view):
@@ -67,9 +67,9 @@ class IsOwnerMessage(permissions.BasePermission):
 
         if request.method == 'POST':
             try:
-                dialog_id = request.data['dialog_id']
-                user_dialogs = Chat.objects.filter(user_id=request.user).values_list('id', flat=True)
-                return dialog_id in user_dialogs
+                chat_id = request.data['chat_id']
+                user_chats = Chat.objects.filter(user_id=request.user).values_list('id', flat=True)
+                return chat_id in user_chats
             except Exception as e:
                 return False
         if request.user.is_authenticated:
@@ -91,6 +91,6 @@ class IsOwnerMessage(permissions.BasePermission):
             bool: True if the user has permission, False otherwise.
         """
 
-        user_dialogs = Chat.objects.filter(user_id=request.user)
-        if obj.dialog_id in user_dialogs:
+        user_chats = Chat.objects.filter(user_id=request.user)
+        if obj.chat_id in user_chats:
             return True

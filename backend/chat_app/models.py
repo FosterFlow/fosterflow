@@ -4,7 +4,7 @@ from user_app.models import Agent
 
 class Chat(models.Model):
     """
-    Model representing a dialog.
+    Model representing a chat.
 
     Attributes:
         user_id (ForeignKey): The user associated with the dialog.

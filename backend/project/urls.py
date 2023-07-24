@@ -12,13 +12,13 @@ from drf_yasg import openapi  # new
 from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
     ConfirmEmailGenericAPIView, SendEmailConfirmationTokenAPIView, \
     ChangePasswordView
-from chat_app.views import DialogModelViewSet, MessageModelViewSet
+from chat_app.views import ChatModelViewSet, MessageModelViewSet
 from user_app.views import UserModelViewSet, UserProfileModelViewSet, SelfUserAPIView, SelfProfileAPIView
 
 from auth_app.views import CustomTokenRefreshView
 
 router = DefaultRouter()
-router.register('dialogues', DialogModelViewSet, basename='dialogues')
+router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
 router.register('users', UserModelViewSet, basename='users')
 router.register('profiles', UserProfileModelViewSet, basename='profiles')

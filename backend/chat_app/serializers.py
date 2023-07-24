@@ -7,7 +7,7 @@ from .request_to_agent import take_answer
 User = get_user_model()
 
 
-class DialogModelSerializer(ModelSerializer):
+class ChatModelSerializer(ModelSerializer):
     """
     Serializer class for the Dialog model.
 
@@ -41,7 +41,7 @@ class DialogModelSerializer(ModelSerializer):
 
         try:
             customer_account_query = Message.objects.filter(
-                dialog_id=obj.id
+                chat_id=obj.id
             ).latest('id')
 
             return customer_account_query.answer_text
@@ -79,6 +79,6 @@ class MessageModelSerializer(ModelSerializer):
 
         if 'answer_text' in validated_data:
             validated_data.pop('answer_text')
-        answer_text = take_answer(validated_data['message_text'], validated_data['dialog_id'])
+        answer_text = take_answer(validated_data['message_text'], validated_data['chat_id'])
         message = Message.objects.create(answer_text=answer_text, **validated_data)
         return message

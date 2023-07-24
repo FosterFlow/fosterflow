@@ -291,7 +291,7 @@
     "model": "auth.permission",
     "pk": 33,
     "fields": {
-      "name": "Can add dialog",
+      "name": "Can add chat",
       "content_type": 9,
       "codename": "add_dialog"
     }
