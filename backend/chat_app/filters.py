@@ -15,4 +15,4 @@ class MessageFilter(filters.FilterSet):
 
     class Meta:
         model = Message
-        fields = ['dialog_id']
+        fields = ['chat_id']

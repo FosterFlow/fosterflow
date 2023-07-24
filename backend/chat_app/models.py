@@ -1,5 +1,5 @@
 from django.db import models
-from django.conf import settings
+from user_app.models import Agent
 
 
 class Chat(models.Model):
@@ -13,8 +13,8 @@ class Chat(models.Model):
         updated_at (DateTimeField): The date and time of dialog update.
     """
 
-    user_id = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+    owner_id = models.ForeignKey(
+        Agent,
         on_delete=models.CASCADE,
     )
     name = models.TextField(max_length=32)
@@ -35,12 +35,15 @@ class Message(models.Model):
         answer_text (TextField): The text of the answer (optional).
     """
 
-    dialog_id = models.ForeignKey(
+    chat_id = models.ForeignKey(
         Chat,
         on_delete=models.CASCADE,
     )
     message_text = models.TextField()
-    answer_text = models.TextField(blank=True)
+    owner_id = models.ForeignKey(
+        Agent,
+        on_delete=models.CASCADE,
+    )
 
     def __str__(self):
-        return f'{self.id} {self.dialog_id.user_id}'
+        return f'{self.id} {self.chat_id.owner_id}'
