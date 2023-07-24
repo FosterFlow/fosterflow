@@ -27,10 +27,10 @@ function UserHead(props) {
 
     return (
         <React.Fragment>
-            <div className="container-fluid border-bottom">
+            <div className="container-fluid border-bottom user-chat-header">
                 <Row className="m-0">
                     <Col sm={11} xs={10}>
-                        <Link to="#" onClick={(event) => closeUserChat(event)} className="user-chat-back text-muted font-size-16 p-2">
+                        <Link to="#" onClick={(event) => closeUserChat(event)} className="user-chat-back text-muted p-2">
                             <i className="ri-arrow-left-s-line"></i>
                         </Link>
                     </Col>
