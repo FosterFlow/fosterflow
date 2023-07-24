@@ -86,7 +86,6 @@ function UserChat(props) {
 const mapStateToProps = (state) => {
     return {
         messages: state.Chat.messages,
-        userSidebar: state.Layout.userSidebar,
         activeDialogueId: state.Chat.activeDialogueId,
         chatWindow: state.Chat.chatWindow,
     }

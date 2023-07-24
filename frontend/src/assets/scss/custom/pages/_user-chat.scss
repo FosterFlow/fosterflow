@@ -63,6 +63,14 @@
     }
 }
 
+.user-chat-back {
+    display: block;
+}
+
+.user-chat-delete {
+    display: block;
+}
+
 .chat-conversation {
     flex-grow: 1;
     overflow-y: auto;
@@ -276,13 +284,18 @@
         }
     }
 
-    h1 {
-        display: flex; 
-        justify-content: center; 
-        text-align: center; 
-        height: 100%;
-        align-items: center;  
-    }
+    
+}
+
+.user-chat-new .chat-conversation {
+    position: relative;
+}
+
+.user-chat-new .chat-conversation h1 {
+    text-align: center; 
+    position: absolute;
+    top: 40%;
+    width: 100%;
 }
 
 .chat-input {

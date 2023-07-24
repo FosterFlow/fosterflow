@@ -29,24 +29,16 @@ function UserHead(props) {
         <React.Fragment>
             <div className="container-fluid border-bottom">
                 <Row className="m-0">
-                    <Col sm={4} xs={8}>
-                        <div className="d-flex align-items-center">
-                            <div className="d-block d-lg-none me-2 ms-0">
-                                <Link to="#" onClick={(event) => closeUserChat(event)} className="user-chat-remove text-muted font-size-16 p-2">
-                                    <i className="ri-arrow-left-s-line"></i></Link>
-                            </div>
-                        </div>
+                    <Col sm={11} xs={10}>
+                        <Link to="#" onClick={(event) => closeUserChat(event)} className="user-chat-back text-muted font-size-16 p-2">
+                            <i className="ri-arrow-left-s-line"></i>
+                        </Link>
                     </Col>
                     {/* TODO: don't show on intial "/chats" page */}
-                    <Col sm={8} xs={4} >
-                        <ul className="list-inline user-chat-nav text-end mb-0">
-                            
-                                <li className="list-inline-item">
-                                {!props.newChat && (
-                                    <a href="#" onClick={(event) => deleteDialogue(event)} className="ri-delete-bin-line"></a>
-                                )}
-                                </li>
-                        </ul>
+                    <Col sm={1} xs={2} >
+                        {!props.newChat && (
+                            <a href="#" onClick={(event) => deleteDialogue(event)} className="user-chat-delete p-2 ri-delete-bin-line"></a>
+                        )}
                     </Col>
                 </Row>
             </div>
