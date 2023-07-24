@@ -2,7 +2,7 @@ import environ
 import rest_framework.exceptions
 from django.contrib.auth import get_user_model
 from .filters import MessageFilter
-from .models import Dialog, Message
+from .models import Chat, Message
 from .permissions import IsOwnerDialog, IsOwnerMessage
 from .serializers import DialogModelSerializer, MessageModelSerializer
 from rest_framework.viewsets import ModelViewSet
@@ -30,7 +30,7 @@ class DialogModelViewSet(ModelViewSet):
         http_method_names (list): The list of allowed HTTP methods.
     """
 
-    queryset = Dialog.objects.all()
+    queryset = Chat.objects.all()
     serializer_class = DialogModelSerializer
     permission_classes = [IsOwnerDialog, IsEmailConfirm]
     http_method_names = ['get', 'post', 'delete']
@@ -100,7 +100,7 @@ class MessageModelViewSet(ModelViewSet):
             QuerySet: The filtered queryset of Message objects.
         """
 
-        user_dialogs = Dialog.objects.filter(user_id=self.request.user)
+        user_dialogs = Chat.objects.filter(user_id=self.request.user)
         owner_queryset = self.queryset.filter(dialog_id__in=user_dialogs)
 
         dialog_id = self.request.query_params.get('dialog_id')

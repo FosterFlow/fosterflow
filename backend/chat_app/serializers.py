@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
-from .models import Dialog, Message
+from .models import Chat, Message
 from rest_framework import serializers
 from .request_to_agent import take_answer
 
@@ -20,7 +20,7 @@ class DialogModelSerializer(ModelSerializer):
     latest_message = serializers.SerializerMethodField()
 
     class Meta:
-        model = Dialog
+        model = Chat
         fields = '__all__'
 
     def get_latest_message(self, obj):
@@ -33,7 +33,7 @@ class DialogModelSerializer(ModelSerializer):
         or None if no messages are found.
 
         Args:
-            obj (Dialog): The Dialog object.
+            obj (Chat): The Dialog object.
 
         Returns:
             str or None: The answer text of the latest message or None.

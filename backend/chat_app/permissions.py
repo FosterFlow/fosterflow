@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from .models import Dialog
+from .models import Chat
 
 
 class IsOwnerDialog(permissions.BasePermission):
@@ -68,7 +68,7 @@ class IsOwnerMessage(permissions.BasePermission):
         if request.method == 'POST':
             try:
                 dialog_id = request.data['dialog_id']
-                user_dialogs = Dialog.objects.filter(user_id=request.user).values_list('id', flat=True)
+                user_dialogs = Chat.objects.filter(user_id=request.user).values_list('id', flat=True)
                 return dialog_id in user_dialogs
             except Exception as e:
                 return False
@@ -91,6 +91,6 @@ class IsOwnerMessage(permissions.BasePermission):
             bool: True if the user has permission, False otherwise.
         """
 
-        user_dialogs = Dialog.objects.filter(user_id=request.user)
+        user_dialogs = Chat.objects.filter(user_id=request.user)
         if obj.dialog_id in user_dialogs:
             return True

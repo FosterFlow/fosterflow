@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 
 
-class Dialog(models.Model):
+class Chat(models.Model):
     """
     Model representing a dialog.
 
@@ -36,7 +36,7 @@ class Message(models.Model):
     """
 
     dialog_id = models.ForeignKey(
-        Dialog,
+        Chat,
         on_delete=models.CASCADE,
     )
     message_text = models.TextField()
