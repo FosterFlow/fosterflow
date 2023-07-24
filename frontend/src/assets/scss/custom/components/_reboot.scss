@@ -11,7 +11,7 @@ html, body {
 body {
   //start --- fix for mobile browsers to prevent url bar hiding
   position: fixed;
-  overflow-y: scroll;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   width: 100%;
   //end --- fix for mobile browsers to prevent url bar hiding

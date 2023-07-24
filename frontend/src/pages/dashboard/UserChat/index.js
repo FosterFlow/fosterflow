@@ -35,11 +35,10 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat ${props.userSidebar ? "w-70" : "w-100"} ${props.chatWindow ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-content-wrapper">
                     <UserHead />
-                    <SimpleBar
-                        ref={ref}
+                    <div
                         className="chat-conversation p-3 p-lg-3"
                         id="messages">
                             <ul className="list-unstyled mb-0">
@@ -76,7 +75,7 @@ function UserChat(props) {
                                     )
                                 }
                             </ul>
-                        </SimpleBar>
+                        </div>
                     </div>
                 <ChatInput/>
             </div>

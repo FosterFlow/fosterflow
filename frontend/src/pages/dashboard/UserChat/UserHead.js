@@ -27,8 +27,8 @@ function UserHead(props) {
 
     return (
         <React.Fragment>
-            <div className="p-2 p-lg-2 border-bottom">
-                <Row className="align-items-center">
+            <div className="container-fluid border-bottom">
+                <Row className="m-0">
                     <Col sm={4} xs={8}>
                         <div className="d-flex align-items-center">
                             <div className="d-block d-lg-none me-2 ms-0">

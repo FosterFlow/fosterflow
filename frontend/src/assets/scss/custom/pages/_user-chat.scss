@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    flex-grow: 1;
     @media (max-width: 991.98px) {
         position: fixed;
         left: 0;
@@ -63,6 +64,9 @@
 }
 
 .chat-conversation {
+    flex-grow: 1;
+    overflow-y: auto;
+
     li {
         clear: both;
     }
@@ -262,10 +266,7 @@
             background-color: $dark;
         }
     }
-}
 
-.chat-conversation {
-    flex-grow: 1;
     .simplebar-content {
         height: 100%;
         padding-bottom: 130px!important;;
