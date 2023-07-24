@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from .models import Profile
+from .models import Agent
 from .permissions import IsOwnerProfile, IsOwnerUser
 from .serializers import CustomUserSerializer, ProfileSerializer, SelfUserSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -62,7 +62,7 @@ class UserProfileModelViewSet(ModelViewSet):
     Get, Update user profile
     """
 
-    queryset = Profile.objects.all()
+    queryset = Agent.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (IsAuthenticated, IsOwnerProfile)
     http_method_names = ['get', 'patch', ]
@@ -85,7 +85,7 @@ class SelfProfileAPIView(APIView):
 
     def get(self, request):
         user_id = User.objects.get(id=request.user.id)
-        profile = Profile.objects.get(user_id=user_id)
+        profile = Agent.objects.get(user_id=user_id)
         profile_serializer = ProfileSerializer(
             instance=profile,
             many=False
