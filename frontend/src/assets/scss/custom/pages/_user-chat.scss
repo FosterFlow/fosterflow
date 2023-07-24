@@ -63,6 +63,14 @@
     }
 }
 
+.user-chat-back {
+    display: block;
+}
+
+.user-chat-delete {
+    display: block;
+}
+
 .chat-conversation {
     flex-grow: 1;
     overflow-y: auto;
