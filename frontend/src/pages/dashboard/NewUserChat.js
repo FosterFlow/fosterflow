@@ -16,15 +16,15 @@ function UserChat(props) {
     return (
         <React.Fragment>
             <div className={`user-chat user-chat-new ${props.newChat ? 'user-chat-show' : ''}`}>
-                <UserHead />
                 <div className="user-chat-content-wrapper">
-                     <SimpleBar
+                    <UserHead />
+                    <div
                         className="chat-conversation"
                         id="messages">
-                        <h1>{t('Start the Chat with GPT-4 Model')}</h1>        
-                    </SimpleBar>
-                    <ChatInput/>
+                            <h1>{t('Start the Chat with GPT-4 Model')}</h1>
+                    </div>
                 </div>
+                <ChatInput/>
             </div>
         </React.Fragment>
     );
