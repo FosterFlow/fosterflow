@@ -5,20 +5,20 @@
 
 
 
-.side-menu{
+.side-menu {
     min-width: 75px;
     max-width: 75px;
-    min-height: 570px;
     background-color: var(--#{$prefix}sidebar-bg);
-    display: flex;
-    z-index: 2;
     box-shadow: 0 2px 4px rgba(15,34,58,.12);
+    
+    @media (min-width: 992px) {
+        height: 100%;
+    }
+    
 
-    @media (max-width: 991.98px) {
+    @media (max-width: 991.99px) {
         height: 60px;
         min-width: 100%;
-        min-height: auto;
-        display: block;
         border-top: 1px solid var(--#{$prefix}border-color);
     }
 
@@ -52,6 +52,11 @@
 }
 
 .side-menu-nav{
+    @media (min-width: 992px) {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
     .nav-item{
         margin: 7px 0;

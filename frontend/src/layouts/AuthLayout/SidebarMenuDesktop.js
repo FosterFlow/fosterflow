@@ -64,8 +64,7 @@ function LeftSidebarMenu(props) {
     return (
         <React.Fragment>
             {/* Desktop version start */}
-            <div className="side-menu flex-lg-column me-lg-1 d-none d-lg-block">
-                <div className="flex-lg-column">
+            <div className="side-menu me-lg-1 d-none d-lg-block">
                     <Nav pills className="side-menu-nav justify-content-center" role="tablist">
                         <NavItem id="Chats">
                             <RouterNavLink to="/chats" id="pills-chat-tab" className="nav-link" activeclassname="active">
@@ -75,6 +74,7 @@ function LeftSidebarMenu(props) {
                         <UncontrolledTooltip target="Chats" placement="top">
                             {t('Chats')}
                         </UncontrolledTooltip>
+                        <li className='flex-grow-1'></li>
                         <NavItem id="Settings">
                             <RouterNavLink to="/settings" id="pills-setting-tab" className="nav-link" activeclassname="active">
                                 <i className="ri-settings-2-line"></i>
@@ -136,7 +136,6 @@ function LeftSidebarMenu(props) {
                             </DropdownMenu>
                         </Dropdown>
                     </Nav>
-                </div>
             </div>
            {/* Desktop version end */}
             
