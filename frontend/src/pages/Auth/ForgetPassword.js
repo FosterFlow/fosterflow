@@ -92,7 +92,7 @@ const ForgetPassword = (props) => {
                                             </FormGroup>
 
                                             <div className="d-grid">
-                                                <Button color="primary" block className="waves-effect waves-light" type="submit">{t('Reset')}</Button>
+                                                <Button color="primary" block type="submit">{t('Reset')}</Button>
                                             </div>
 
                                         </Form>

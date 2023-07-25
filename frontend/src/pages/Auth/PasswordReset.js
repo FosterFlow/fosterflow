@@ -125,7 +125,7 @@ const ResetPassword = (props) => {
                                             </FormGroup>
 
                                             <div className="d-grid">
-                                                <Button color="primary" block className="waves-effect waves-light" type="submit">{t('Reset Password')}</Button>
+                                                <Button color="primary" block type="submit">{t('Reset Password')}</Button>
                                             </div>
 
                                         </Form>

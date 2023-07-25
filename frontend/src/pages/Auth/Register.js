@@ -124,7 +124,7 @@ const Register = (props) => {
 
 
                                             <div className="d-grid">
-                                                <Button color="primary" block className=" waves-effect waves-light" type="submit">{t('Sign up')}</Button>
+                                                <Button color="primary" block type="submit">{t('Sign up')}</Button>
                                             </div>
                                         </Form>
                                     </div>
