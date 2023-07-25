@@ -9,6 +9,7 @@ import NewUserChat from "../NewUserChat";
 import { fetchDialogues, fetchMessages, getAuthorizedUser, setActiveDialogue, setActiveNewChat, showChatWindow } from "../../../redux/actions";
 //i18n
 import { useTranslation } from 'react-i18next';
+import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 const Chats = (props) => {
     console.log("Chats, props", JSON.stringify(props));
@@ -141,6 +142,7 @@ const Chats = (props) => {
                         </ul>
                     </div>
                 </div>
+                <SideBarMenuMobile />
             </div>
             {id ? <UserChat/> : <NewUserChat />}
         </React.Fragment>

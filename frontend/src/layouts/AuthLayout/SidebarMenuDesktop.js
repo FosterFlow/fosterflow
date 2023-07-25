@@ -139,67 +139,6 @@ function LeftSidebarMenu(props) {
                 </div>
             </div>
            {/* Desktop version end */}
-
-            {/* Mobile version start */}
-            <div className="side-menu flex-lg-column me-lg-1 d-lg-none">
-                <div className="flex-lg-column my-auto">
-                    <Nav pills className="side-menu-nav justify-content-center" role="tablist">
-                        <NavItem id="Chats">
-                            <RouterNavLink to="/chats" id="pills-chat-tab" className="nav-link" activeclassname="active">
-                                <i className="ri-message-3-line"></i>
-                            </RouterNavLink>
-                        </NavItem>
-                        <UncontrolledTooltip target="Chats" placement="top">
-                            {t('Chats')}
-                        </UncontrolledTooltip>
-
-                        {/* TODO: Languages move to settings */}
-                        <Dropdown nav isOpen={dropdownOpen2} className="btn-group dropup profile-user-dropdown" toggle={toggle2}>
-                            <DropdownToggle nav>
-                                <i className="ri-global-line"></i>
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem onClick={() => changeLanguageAction('eng')} active={lng === "English"}>
-                                    <img src={usFlag} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('English')}</span>
-                                </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('sp')} active={lng === "Spanish"}>
-                                    <img src={spain} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Spanish')}</span>
-                                </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('gr')} active={lng === "German"}>
-                                    <img src={germany} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('German')}</span>
-                                </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('it')} active={lng === "Italian"}>
-                                    <img src={italy} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Italian')}</span>
-                                </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('rs')} active={lng === "Russian"}>
-                                    <img src={russia} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Russian')}</span>
-                                </DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                        {/* TODO: Dark/Light move to settings */}
-                        <NavItem>
-                            <NavLink id="light-dark"  onClick={onChangeLayoutMode}>
-                                <i className="ri-sun-line theme-mode-icon"></i>
-                            </NavLink>
-                            <UncontrolledTooltip target="light-dark" placement="right">
-                                {t('Dark / Light Mode')}
-                            </UncontrolledTooltip>
-                        </NavItem>
-                        <Dropdown nav isOpen={dropdownOpen} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggle}>
-                            <DropdownToggle className="nav-link" tag="a">
-                                <img src={avatar1} alt="" className="profile-user rounded-circle" />
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem href="/profile">{t('Profile')} <i className="ri-profile-line float-end text-muted"></i></DropdownItem>
-                                <DropdownItem href="/settings">{t('Setting')} <i className="ri-settings-3-line float-end text-muted"></i></DropdownItem>
-                                <DropdownItem divider />
-                                <DropdownItem href="/logout">{t('Log out')} <i className="ri-logout-circle-r-line float-end text-muted"></i></DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </Nav>
-                </div>
-            </div>
-            {/* Mobile version end */}
             
         </React.Fragment>
     );

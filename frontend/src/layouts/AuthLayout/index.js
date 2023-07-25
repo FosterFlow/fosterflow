@@ -8,7 +8,7 @@ import { sendConfirmationEmail } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
 
 //Import Components
-import LeftSidebarMenu from "./LeftSidebarMenu";
+import SidebarMenuDesktop from "./SidebarMenuDesktop";
 
 const Index = (props) => {
     /* intilize t variable for multi language implementation */
@@ -37,7 +37,7 @@ const Index = (props) => {
                 </Alert>}
             <div className="layout-wrapper d-lg-flex">
                 {/* left sidebar menu */}
-                <LeftSidebarMenu />
+                <SidebarMenuDesktop />
                     {/* render page content */}
                     {props.children}
             </div>
