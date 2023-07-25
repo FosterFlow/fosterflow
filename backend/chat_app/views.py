@@ -35,18 +35,19 @@ class ChatModelViewSet(ModelViewSet):
     permission_classes = [IsOwnerChat, IsEmailConfirm]
     http_method_names = ['get', 'post', 'delete']
 
-    def get_queryset(self):
-        """
-        Get the queryset of Dialog objects.
-
-        This method filters the queryset based on the user's ownership.
-
-        Returns:
-            QuerySet: The filtered queryset of Dialog objects.
-        """
-
-        owner_queryset = self.queryset.filter(user_id=self.request.user)
-        return owner_queryset
+    #TODO change it
+    # def get_queryset(self):
+    #     """
+    #     Get the queryset of Dialog objects.
+    #
+    #     This method filters the queryset based on the user's ownership.
+    #
+    #     Returns:
+    #         QuerySet: The filtered queryset of Dialog objects.
+    #     """
+    #
+    #     owner_queryset = self.queryset.filter(owner_id=self.request.user.id)
+    #     return owner_queryset
 
     def destroy(self, request, *args, **kwargs):
         """
@@ -100,11 +101,11 @@ class MessageModelViewSet(ModelViewSet):
             QuerySet: The filtered queryset of Message objects.
         """
 
-        user_dialogs = Chat.objects.filter(user_id=self.request.user)
-        owner_queryset = self.queryset.filter(dialog_id__in=user_dialogs)
+        user_dialogs = Chat.objects.filter(owner_id_id=self.request.user.id)
+        owner_queryset = self.queryset.filter(chat_id__in=user_dialogs)
 
-        dialog_id = self.request.query_params.get('dialog_id')
-        if not user_dialogs.filter(id=dialog_id).exists() and dialog_id:
+        chat_id = self.request.query_params.get('chat_id')
+        if not user_dialogs.filter(id=chat_id).exists() and chat_id:
             raise rest_framework.exceptions.PermissionDenied(
                 {
                     "errors": {
