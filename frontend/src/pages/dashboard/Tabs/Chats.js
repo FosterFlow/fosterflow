@@ -100,22 +100,24 @@ const Chats = (props) => {
     return (
         <React.Fragment>
             <div className="chat-leftsidebar me-lg-1">
-                <div className="px-2 pt-2">
-                    <Link to="/chats" className="btn btn-primary w-100 text-start" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
-                </div>
-                <div className="px-2 pt-2">
-                    <div className="search-box chat-search-box">
-                        <InputGroup className="mb-3 rounded-3">
-                            <span className="input-group-text text-muted bg-light pe-1 ps-3" id="basic-addon1">
-                                <i className="ri-search-line search-icon font-size-18"></i>
-                            </span>
-                            <Input type="text" value={searchChat} onChange={handleSearchChange} className="form-control bg-light" placeholder={t('Search in chats')} />
-                        </InputGroup>
+                <div>
+                    <div className="px-2 pt-2">
+                        <Link to="/chats" className="btn btn-primary w-100 text-start" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
+                    </div>
+                    <div className="px-2 pt-2">
+                        <div className="search-box chat-search-box">
+                            <InputGroup className="mb-3 rounded-3">
+                                <span className="input-group-text text-muted bg-light pe-1 ps-3" id="basic-addon1">
+                                    <i className="ri-search-line search-icon font-size-18"></i>
+                                </span>
+                                <Input type="text" value={searchChat} onChange={handleSearchChange} className="form-control bg-light" placeholder={t('Search in chats')} />
+                            </InputGroup>
+                        </div>
                     </div>
                 </div>
 
-                <div>
-                    <SimpleBar className="chat-message-list">
+                <div className="chat-message-list-wrapper">
+                    <div className="chat-message-list">
                         <ul className="list-unstyled chat-list chat-user-list" id="chat-list">
                             {
                                 recentChatList.map((dialogue, key) =>
@@ -137,7 +139,7 @@ const Chats = (props) => {
                                 )
                             }
                         </ul>
-                    </SimpleBar>
+                    </div>
                 </div>
             </div>
             {id ? <UserChat/> : <NewUserChat />}

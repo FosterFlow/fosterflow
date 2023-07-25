@@ -65,7 +65,7 @@ function LeftSidebarMenu(props) {
         <React.Fragment>
             {/* Desktop version start */}
             <div className="side-menu flex-lg-column me-lg-1 d-none d-lg-block">
-                <div className="flex-lg-column my-auto">
+                <div className="flex-lg-column">
                     <Nav pills className="side-menu-nav justify-content-center" role="tablist">
                         <NavItem id="Chats">
                             <RouterNavLink to="/chats" id="pills-chat-tab" className="nav-link" activeclassname="active">

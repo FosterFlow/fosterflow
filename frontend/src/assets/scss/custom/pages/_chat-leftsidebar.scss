@@ -4,8 +4,9 @@
 
 
 .chat-leftsidebar {
-    height: 100vh;
     background-color: $sidebar-sub-bg;
+    display: flex;
+    flex-direction: column;
 
     @media (min-width: 992px) {
         min-width: 380px;
@@ -42,10 +43,15 @@
     }
 }
 
+.chat-message-list-wrapper {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
 .chat-message-list {
-    height: calc(100vh - 120px);
+    flex-grow: 1;
     @media (max-width: 991.98px) {
-        height: calc(100vh - 180px);
     }
 }
 
