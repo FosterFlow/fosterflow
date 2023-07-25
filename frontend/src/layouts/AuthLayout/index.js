@@ -30,16 +30,20 @@ const Index = (props) => {
     
     return (
         <React.Fragment>
-            {props.authorizedUser && !props.authorizedUser.is_email_confirmed &&
-                <Alert color="info">
-                    {t('We have sent you an email to confirm your account. Please check your inbox')}. 
-                     <a href="#" onClick={sendConfirmationEmailAgain}> {t('Click here')}</a> {t('to send again')}.
-                </Alert>}
-            <div className="layout-wrapper d-lg-flex">
-                {/* left sidebar menu */}
-                <SidebarMenuDesktop />
+            
+            <div className="auth-layout">
+                
+                {props.authorizedUser && !props.authorizedUser.is_email_confirmed &&
+                    <Alert className="auth-layout-alert" color="info">
+                        {t('We have sent you an email to confirm your account. Please check your inbox')}. 
+                        <a href="#" onClick={sendConfirmationEmailAgain}> {t('Click here')}</a> {t('to send again')}.
+                    </Alert>}
+                <div className="auth-layout-content">
+                    {/* left sidebar menu */}
+                        <SidebarMenuDesktop />
                     {/* render page content */}
                     {props.children}
+                </div>
             </div>
         </React.Fragment>
     );
