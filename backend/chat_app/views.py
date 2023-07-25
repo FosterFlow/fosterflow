@@ -19,13 +19,13 @@ FRONTEND_URL = env('FRONTEND_URL')
 
 class ChatModelViewSet(ModelViewSet):
     """
-    ViewSet class for the Dialog model.
+    ViewSet class for the Chats model.
 
-    This ViewSet provides CRUD functionality for Dialog objects.
+    This ViewSet provides CRUD functionality for Chats objects.
 
     Attributes:
-        queryset (QuerySet): The queryset of Dialog objects.
-        serializer_class (Serializer): The serializer class for Dialog objects.
+        queryset (QuerySet): The queryset of Chats objects.
+        serializer_class (Serializer): The serializer class for Chats objects.
         permission_classes (list): The list of permission classes.
         http_method_names (list): The list of allowed HTTP methods.
     """
@@ -38,12 +38,12 @@ class ChatModelViewSet(ModelViewSet):
     #TODO change it
     # def get_queryset(self):
     #     """
-    #     Get the queryset of Dialog objects.
+    #     Get the queryset of Chats objects.
     #
     #     This method filters the queryset based on the user's ownership.
     #
     #     Returns:
-    #         QuerySet: The filtered queryset of Dialog objects.
+    #         QuerySet: The filtered queryset of Chats objects.
     #     """
     #
     #     owner_queryset = self.queryset.filter(owner_id=self.request.user.id)
@@ -51,9 +51,9 @@ class ChatModelViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         """
-        Destroy a Dialog object.
+        Destroy a Chats object.
 
-        This method deletes the specified Dialog object and returns a success message.
+        This method deletes the specified Chats object and returns a success message.
 
         Args:
             request (HttpRequest): The HTTP request object.
@@ -65,7 +65,7 @@ class ChatModelViewSet(ModelViewSet):
         item = self.get_object()
         item.delete()
         response = {
-            'message': 'Dialog deletes successfully',
+            'message': 'Chats deletes successfully',
         }
 
         return Response(response, status=status.HTTP_200_OK)
@@ -95,7 +95,7 @@ class MessageModelViewSet(ModelViewSet):
         """
         Get the queryset of Message objects.
 
-        This method filters the queryset based on the user's ownership and dialog ID.
+        This method filters the queryset based on the user's ownership and chat ID.
 
         Returns:
             QuerySet: The filtered queryset of Message objects.

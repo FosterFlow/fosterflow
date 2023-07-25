@@ -22,7 +22,7 @@ class IsOwnerChat(permissions.BasePermission):
 
         if request.method == 'POST':
             try:
-                return request.user.id == request.data['user_id']
+                return request.user.id == request.data['owner_id']
             except Exception as e:
                 return False
         if request.user.is_authenticated:
@@ -43,7 +43,7 @@ class IsOwnerChat(permissions.BasePermission):
             bool: True if the user has permission, False otherwise.
         """
 
-        return obj.user_id == request.user
+        return obj.owner_id.id == request.user.id
 
 
 class IsOwnerMessage(permissions.BasePermission):
@@ -54,7 +54,7 @@ class IsOwnerMessage(permissions.BasePermission):
         Check if the user has permission to access the view.
 
         For POST requests, the user must provide a 'dialog_id' field in the request data
-        that corresponds to a dialog associated with the authenticated user. For other methods,
+        that corresponds to a chat associated with the authenticated user. For other methods,
         the user must be authenticated.
 
         Args:
@@ -79,7 +79,7 @@ class IsOwnerMessage(permissions.BasePermission):
         """
         Check if the user has permission to access the object.
 
-        The user must be the owner of the dialog associated with the object (obj)
+        The user must be the owner of the chat associated with the object (obj)
         in order to have permission.
 
         Args:

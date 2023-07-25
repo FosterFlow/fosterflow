@@ -9,12 +9,12 @@ User = get_user_model()
 
 class ChatModelSerializer(ModelSerializer):
     """
-    Serializer class for the Dialog model.
+    Serializer class for the Chats model.
 
-    This serializer is used to serialize and deserialize Dialog objects.
+    This serializer is used to serialize and deserialize Chats objects.
 
     Fields:
-        latest_message (SerializerMethodField): The latest message associated with the dialog.
+        latest_message (SerializerMethodField): The latest message associated with the chat.
     """
 
     latest_message = serializers.SerializerMethodField()
@@ -25,15 +25,15 @@ class ChatModelSerializer(ModelSerializer):
 
     def get_latest_message(self, obj):
         """
-        Get the latest message associated with the dialog.
+        Get the latest message associated with the chat.
 
-        This method retrieves the latest message associated with the dialog
-        by filtering the messages based on the dialog ID and ordering them
+        This method retrieves the latest message associated with the chat
+        by filtering the messages based on the chat ID and ordering them
         by descending ID. It returns the answer text of the latest message
         or None if no messages are found.
 
         Args:
-            obj (Chat): The Dialog object.
+            obj (Chat): The Chats object.
 
         Returns:
             str or None: The answer text of the latest message or None.

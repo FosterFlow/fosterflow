@@ -300,7 +300,7 @@
     "model": "auth.permission",
     "pk": 34,
     "fields": {
-      "name": "Can change dialog",
+      "name": "Can change chat",
       "content_type": 9,
       "codename": "change_dialog"
     }
@@ -309,7 +309,7 @@
     "model": "auth.permission",
     "pk": 35,
     "fields": {
-      "name": "Can delete dialog",
+      "name": "Can delete chat",
       "content_type": 9,
       "codename": "delete_dialog"
     }
@@ -318,7 +318,7 @@
     "model": "auth.permission",
     "pk": 36,
     "fields": {
-      "name": "Can view dialog",
+      "name": "Can view chat",
       "content_type": 9,
       "codename": "view_dialog"
     }
@@ -536,7 +536,7 @@
     "pk": 9,
     "fields": {
       "app_label": "chat_app",
-      "model": "dialog"
+      "model": "chat"
     }
   },
   {
@@ -698,7 +698,7 @@
     }
   },
   {
-    "model": "chat_app.dialog",
+    "model": "chat_app.chat",
     "pk": 1,
     "fields": {
       "user_id": 1,
@@ -708,37 +708,37 @@
     }
   },
   {
-    "model": "chat_app.dialog",
+    "model": "chat_app.chat",
     "pk": 2,
     "fields": {
       "user_id": 1,
-      "name": "Dialog",
+      "name": "Chats",
       "created_at": "2023-06-19T16:28:47.904Z",
       "updated_at": "2023-06-19T16:28:47.955Z"
     }
   },
   {
-    "model": "chat_app.dialog",
+    "model": "chat_app.chat",
     "pk": 3,
     "fields": {
       "user_id": 1,
-      "name": "Dialog",
+      "name": "Chats",
       "created_at": "2023-06-19T16:28:47.904Z",
       "updated_at": "2023-06-19T16:28:47.955Z"
     }
   },
   {
-    "model": "chat_app.dialog",
+    "model": "chat_app.chat",
     "pk": 4,
     "fields": {
       "user_id": 2,
-      "name": "Dialog",
+      "name": "Chats",
       "created_at": "2023-06-19T16:28:47.904Z",
       "updated_at": "2023-06-19T16:28:47.955Z"
     }
   },
   {
-    "model": "chat_app.dialog",
+    "model": "chat_app.chat",
     "pk": 5,
     "fields": {
       "user_id": 2,
@@ -748,11 +748,11 @@
     }
   },
   {
-    "model": "chat_app.dialog",
+    "model": "chat_app.chat",
     "pk": 6,
     "fields": {
       "user_id": 3,
-      "name": "Dialog",
+      "name": "Chats",
       "created_at": "2023-06-19T16:28:47.904Z",
       "updated_at": "2023-06-19T16:28:47.955Z"
     }

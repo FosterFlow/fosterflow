@@ -7,10 +7,10 @@ class Chat(models.Model):
     Model representing a chat.
 
     Attributes:
-        user_id (ForeignKey): The user associated with the dialog.
-        name (TextField): The name of the dialog.
-        created_at (DateTimeField): The date and time of dialog creation.
-        updated_at (DateTimeField): The date and time of dialog update.
+        user_id (ForeignKey): The user associated with the chat.
+        name (TextField): The name of the chat.
+        created_at (DateTimeField): The date and time of chat creation.
+        updated_at (DateTimeField): The date and time of chat update.
     """
 
     owner_id = models.ForeignKey(
@@ -30,7 +30,7 @@ class Message(models.Model):
     Model representing a message.
 
     Attributes:
-        dialog_id (ForeignKey): The dialog associated with the message.
+        dialog_id (ForeignKey): The chat associated with the message.
         message_text (TextField): The text of the message.
         answer_text (TextField): The text of the answer (optional).
     """

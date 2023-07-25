@@ -19,8 +19,8 @@ securityDefinitions:
     description: >-
       Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
 tags:
-  - name: dialogues
-    description: The dialog is needed for grouping messages
+  - name: chats
+    description: The chat is needed for grouping messages
   - name: messages
     description: This is what the user sends and receives a response
   - name: users
@@ -40,7 +40,7 @@ tags:
   - name: confirmation-email
     description: An Api View which provides send and confirm email
 paths:
-  /dialogues/:
+  /chats/:
     get:
       summary: Get all the dialogs
       description: 'Get all the dialogs. The dialogs will be filtered by user, who make request.'
@@ -84,17 +84,17 @@ paths:
           schema:
             $ref: '#/definitions/TokenNotValid'
       tags:
-        - dialogues
+        - chats
     post:
       security:
         - Bearer: [ ]
       operationId: dialogues_create
-      summary: Add a new dialog
+      summary: Add a new chat
       parameters:
         - name: body
           in: body
           required: true
-          description: 'Dialog object that needs to be added:'
+          description: 'Chats object that needs to be added:'
           type: object
           properties:
             user_id:
@@ -126,21 +126,21 @@ paths:
           schema:
             $ref: '#/definitions/Forbidden'
       tags:
-        - dialogues
+        - chats
     parameters: [ ]
-  /dialogues/{id}/:
+  /chats/{id}/:
     delete:
       security:
         - Bearer: [ ]
       operationId: dialogues_delete
-      summary: 'Deletes a dialog'
+      summary: 'Deletes a chat'
       responses:
         '200':
           description: 'successful operation'
           examples:
             application/json:
               {
-                "message": "Dialog delete successfully"
+                "message": "Chats delete successfully"
               }
         400:
           description: Bad request.
@@ -155,11 +155,11 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - dialogues
+        - chats
     parameters:
       - name: id
         in: path
-        description: A unique integer value identifying this dialog.
+        description: A unique integer value identifying this chat.
         required: true
         type: integer
   /messages/:
@@ -172,7 +172,7 @@ paths:
       parameters:
         - name: dialog_id
           in: query
-          description: 'Get all the messages by dialog. Only the owner of the dialog will receive the messages'
+          description: 'Get all the messages by chat. Only the owner of the chat will receive the messages'
           required: false
           type: string
       responses:
@@ -189,19 +189,19 @@ paths:
                   "id": 1,
                   "message_text": "Hello Message",
                   "answer_text": "Hello Answer",
-                  "dialog": 1
+                  "chat": 1
                 },
                 {
                   "id": 2,
                   "message_text": "Hello Message2",
                   "answer_text": "Hello Answer2",
-                  "dialog": 1
+                  "chat": 1
                 },
                 {
                   "id": 4,
                   "message_text": "3",
                   "answer_text": "work there",
-                  "dialog": 1
+                  "chat": 1
                 },
               ]
         400:
