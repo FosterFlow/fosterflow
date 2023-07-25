@@ -68,8 +68,8 @@ class IsOwnerMessage(permissions.BasePermission):
         if request.method == 'POST':
             try:
                 chat_id = request.data['chat_id']
-                user_chats = Chat.objects.filter(user_id=request.user).values_list('id', flat=True)
-                return chat_id in user_chats
+                agent_chats = Chat.objects.filter(owner_id_id=request.user.id).values_list('id', flat=True)
+                return chat_id in agent_chats
             except Exception as e:
                 return False
         if request.user.is_authenticated:
@@ -91,6 +91,6 @@ class IsOwnerMessage(permissions.BasePermission):
             bool: True if the user has permission, False otherwise.
         """
 
-        user_chats = Chat.objects.filter(user_id=request.user)
+        user_chats = Chat.objects.filter(owner_id_id=request.user.id)
         if obj.chat_id in user_chats:
             return True

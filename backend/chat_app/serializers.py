@@ -77,8 +77,6 @@ class MessageModelSerializer(ModelSerializer):
             Message: The created message instance.
         """
 
-        if 'answer_text' in validated_data:
-            validated_data.pop('answer_text')
-        answer_text = take_answer(validated_data['message_text'], validated_data['chat_id'])
-        message = Message.objects.create(answer_text=answer_text, **validated_data)
+        answer_text = "take_answer(validated_data['message_text'], validated_data['chat_id'])"
+        message = Message.objects.create(**validated_data)
         return message
