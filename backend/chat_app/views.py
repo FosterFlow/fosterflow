@@ -36,19 +36,20 @@ class ChatModelViewSet(ModelViewSet):
     permission_classes = [IsOwnerChat, IsEmailConfirm]
     http_method_names = ['get', 'post', 'delete']
 
-    #TODO change it
-    # def get_queryset(self):
-    #     """
-    #     Get the queryset of Chats objects.
-    #
-    #     This method filters the queryset based on the user's ownership.
-    #
-    #     Returns:
-    #         QuerySet: The filtered queryset of Chats objects.
-    #     """
-    #
-    #     owner_queryset = self.queryset.filter(owner_id=self.request.user.id)
-    #     return owner_queryset
+
+    def get_queryset(self):
+        """
+        Get the queryset of Chats objects.
+
+        This method filters the queryset based on the user's ownership.
+
+        Returns:
+            QuerySet: The filtered queryset of Chats objects.
+        """
+
+        owner_queryset = self.queryset.filter(Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
+        print(owner_queryset)
+        return owner_queryset
 
     def destroy(self, request, *args, **kwargs):
         """
