@@ -5,6 +5,35 @@
 @import "./bootstrap.scss";
 @import "./app.scss";
 
+#root {
+  height: 100%
+}
+
+.auth-layout { 
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.auth-layout-alert {
+  margin-bottom: 0;
+  @media (min-width: 992px) {
+    text-align: center;
+  }
+}
+
+.auth-layout-content {
+  flex-grow: 1;
+  height: 1px;
+
+  @media (min-width: 992px) {
+    flex-direction: row;
+    display: flex;
+  }
+  
+  position: relative;
+}
+
 .nav-item {
   cursor: pointer;
 }

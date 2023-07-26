@@ -2,9 +2,20 @@
    General
 ============= */
 
-html {
-  position: relative;
-  min-height: 100%;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overscroll-behavior-y: none;
+}
+
+body {
+  //start --- fix for mobile browsers to prevent url bar hiding
+  position: fixed;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  //end --- fix for mobile browsers to prevent url bar hiding
 }
 
 .h1,.h2,.h3,.h4,.h5,.h6,

@@ -35,17 +35,12 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat w-100 overflow-hidden ${props.chatWindow ? 'user-chat-show' : ''}`}>
-                <div className="d-lg-flex">
-                    <div className={`${props.userSidebar ? "w-70" : "w-100"} position-relative user-chat-content-wrapper`}>
-                        {/* render user head */}
-                        <UserHead />
-
-                        <SimpleBar
-                            style={{ maxHeight: "100%" }}
-                            ref={ref}
-                            className="chat-conversation p-3 p-lg-3"
-                            id="messages">
+            <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
+                <div className="user-chat-content-wrapper">
+                    <UserHead />
+                    <div
+                        className="chat-conversation p-3 p-lg-3"
+                        id="messages">
                             <ul className="list-unstyled mb-0">
                                 {
                                     relevantMessages.map((chat, key) =>
@@ -80,11 +75,9 @@ function UserChat(props) {
                                     )
                                 }
                             </ul>
-                        </SimpleBar>
-
-                        <ChatInput/>
+                        </div>
                     </div>
-                </div>
+                <ChatInput/>
             </div>
         </React.Fragment>
     );
@@ -93,7 +86,6 @@ function UserChat(props) {
 const mapStateToProps = (state) => {
     return {
         messages: state.Chat.messages,
-        userSidebar: state.Layout.userSidebar,
         activeDialogueId: state.Chat.activeDialogueId,
         chatWindow: state.Chat.chatWindow,
     }

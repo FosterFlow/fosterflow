@@ -21,19 +21,18 @@
     "react-alice-carousel": "^2.7.1",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.3.1",
-    "react-perfect-scrollbar": "^1.5.8",
+    "react-markdown": "^8.0.7",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.2",
     "react-scripts": "^5.0.1",
     "react-slick": "^0.29.0",
+    "react-syntax-highlighter": "^15.5.0",
     "reactstrap": "^9.1.10",
     "redux": "^4.2.1",
     "redux-saga": "^1.2.3",
     "simplebar-react": "^3.2.4",
     "slick-carousel": "^1.8.1",
-    "yup": "^1.1.1",
-    "react-markdown": "^8.0.7",
-    "react-syntax-highlighter": "^15.5.0"
+    "yup": "^1.1.1"
   },
   "scripts": {
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-scripts start",

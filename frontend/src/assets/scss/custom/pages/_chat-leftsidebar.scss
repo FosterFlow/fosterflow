@@ -4,8 +4,10 @@
 
 
 .chat-leftsidebar {
-    height: 100vh;
     background-color: $sidebar-sub-bg;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     @media (min-width: 992px) {
         min-width: 380px;
@@ -42,20 +44,19 @@
     }
 }
 
+.chat-message-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
 .chat-message-list {
-    height: calc(100vh - 120px);
+    flex-grow: 1;
+    padding-bottom: 10px;
     @media (max-width: 991.98px) {
-        height: calc(100vh - 180px);
     }
 }
-
-.chat-group-list {
-    height: calc(100vh - 160px);
-    @media (max-width: 991.98px) {
-        height: calc(100vh - 194px);
-    }
-}
-
 
 .chat-list {
     margin: 0;

@@ -63,7 +63,7 @@ function ChatInput(props) {
 
     return (
         <React.Fragment>
-            <div className="chat-input p-3 p-lg-3 border-top position-absolute bottom-0 w-100">
+            <div className="chat-input p-3 p-lg-3">
                 <Form onSubmit={(e) => formSubmit(e, textMessage)} >
                     <Row className='g-0'>
                         <Col>
@@ -82,7 +82,7 @@ function ChatInput(props) {
                             <div className="chat-input-links ms-2">
                                 <ul className="list-inline mb-0 ms-0">
                                     <li className="list-inline-item">
-                                        <Button type="submit" color="primary" className="font-size-16 btn-lg chat-send waves-effect waves-light">
+                                        <Button type="submit" color="primary" className="font-size-16 btn-lg chat-send">
                                             <i className="ri-send-plane-2-fill"></i>
                                         </Button>
                                     </li>

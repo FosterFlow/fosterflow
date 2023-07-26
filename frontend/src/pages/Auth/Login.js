@@ -130,7 +130,7 @@ const Login = (props) => {
                                             </div> */}
 
                                             <div className="d-grid">
-                                                <Button color="primary" block className=" waves-effect waves-light" type="submit">{t('Sign in')}</Button>
+                                                <Button color="primary" block type="submit">{t('Sign in')}</Button>
                                             </div>
 
                                         </Form>

@@ -5,7 +5,6 @@
 // User profile details
 
 .user-profile-sidebar {
-    height: 100vh;
     background-color: $card-bg;
     display: none;
     min-width: 380px;
@@ -19,7 +18,7 @@
         position: fixed;
         right: 0;
         top: 0;
-        z-index: 99;
+        z-index: 3;
     }
 
     @media (max-width: 575.98px) {
