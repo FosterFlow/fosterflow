@@ -9,6 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
 from auth_app.permissions import IsEmailConfirm
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -101,7 +102,7 @@ class MessageModelViewSet(ModelViewSet):
             QuerySet: The filtered queryset of Message objects.
         """
 
-        user_dialogs = Chat.objects.filter(owner_id_id=self.request.user.id)
+        user_dialogs = Chat.objects.filter(Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
         owner_queryset = self.queryset.filter(chat_id__in=user_dialogs)
 
         chat_id = self.request.query_params.get('chat_id')

@@ -18,7 +18,7 @@ class Chat(models.Model):
         on_delete=models.CASCADE,
         related_name='owner_id',
     )
-    addressee = models.ForeignKey(
+    addressee_id = models.ForeignKey(
         Agent,
         on_delete=models.CASCADE,
         related_name='addressee',

@@ -25,7 +25,7 @@ tags:
     description: This is what the user sends and receives a response
   - name: users
     description: The model for User
-  - name: profiles
+  - name: agents
     description: Information containing user data
   - name: register
     description: Registering a new user
@@ -170,7 +170,7 @@ paths:
       summary: Get all the messages
       description: 'Get all the messages. The messages will be filtered by user, who make request.'
       parameters:
-        - name: dialog_id
+        - name: chat_id
           in: query
           description: 'Get all the messages by chat. Only the owner of the chat will receive the messages'
           required: false
@@ -238,8 +238,8 @@ paths:
                 maxLength: 200
                 minLength: 1
                 example: Hello, how are you?
-              dialog_id:
-                title: Dialog_id
+              chat_id:
+                title: chat_id
                 type: integer
                 example: 1
       responses:
@@ -253,7 +253,7 @@ paths:
                 "id": 5,
                 "message_text": "Hello, how are you?",
                 "answer_text": "I'm doing well, thank you. How about you?",
-                "dialog_id": 1
+                "chat_id": 1
               }
         400:
           description: Bad request.
@@ -288,7 +288,7 @@ paths:
                 "id": 5,
                 "message_text": "Hello, how are you?",
                 "answer_text": "I'm doing well, thank you. How about you?",
-                "dialog_id": 1
+                "chat_id": 1
               }
         400:
           description: Bad request.
@@ -436,13 +436,13 @@ paths:
       tags:
         - token
     parameters: [ ]
-  /profiles/:
+  /agents/:
     get:
-      summary: Get all the profiles
+      summary: Get all the agents
       security:
         - Bearer: [ ]
-      operationId: profiles_list
-      description: Get, Update user profile
+      operationId: agents_list
+      description: Get, Update user agent
       parameters: [ ]
       responses:
         '200':
@@ -450,7 +450,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Profile'
+              $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -460,21 +460,21 @@ paths:
           schema:
             $ref: '#/definitions/TokenNotValid'
       tags:
-        - profiles
+        - agents
     parameters: [ ]
-  /profile/:
+  /agent/:
     get:
-      summary: Get user profiles
+      summary: Get user agents
       security:
         - Bearer: [ ]
-      description: Get user profiles
+      description: Get user agents
       responses:
         '200':
           description: ''
           schema:
             type: array
             items:
-              $ref: '#/definitions/Profile'
+              $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -488,21 +488,21 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - profiles
+        - agents
     parameters: [ ]
-  /profiles/{id}/:
+  /agents/{id}/:
     get:
-      summary: Get profile by ID
+      summary: Get agent by ID
       security:
         - Bearer: [ ]
-      operationId: profiles_read
-      description: Get, Update user profile
+      operationId: agents_read
+      description: Get, Update user agent
       parameters: [ ]
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Profile'
+            $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -516,13 +516,13 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - profiles
+        - agents
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit profile by ID
-      operationId: profiles_update
-      description: Get, Update user profile
+      summary: Edit agent by ID
+      operationId: agents_update
+      description: Get, Update user agent
       parameters:
         - name: data
           in: body
@@ -546,7 +546,7 @@ paths:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Profile'
+            $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -560,11 +560,11 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - profiles
+        - agents
     parameters:
       - name: id
         in: path
-        description: A unique integer value identifying this profile.
+        description: A unique integer value identifying this agent.
         required: true
         type: integer
   /users/:
@@ -954,7 +954,7 @@ definitions:
   MessageModel:
     required:
       - message_text
-      - dialog_id
+      - chat_id
     type: object
     properties:
       id:
@@ -973,8 +973,8 @@ definitions:
         type: string
         maxLength: 200
         example: answer_text
-      dialog_id:
-        title: Dialog_id
+      chat_id:
+        title: chat_id
         type: integer
         example: 1
   Register:

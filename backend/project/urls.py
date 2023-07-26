@@ -21,7 +21,7 @@ router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
 router.register('users', UserModelViewSet, basename='users')
-router.register('agent', UserAgentModelViewSet, basename='profiles')
+router.register('agents', UserAgentModelViewSet, basename='agents')
 
 schema_view = get_schema_view(
     openapi.Info(

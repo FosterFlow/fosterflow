@@ -42,8 +42,8 @@ class IsOwnerChat(permissions.BasePermission):
         Returns:
             bool: True if the user has permission, False otherwise.
         """
-
-        return obj.owner_id.id == request.user.id
+        if obj.owner_id.id == request.user.id or obj.addressee_id.id == request.user.id:
+            return True
 
 
 class IsOwnerMessage(permissions.BasePermission):
@@ -69,8 +69,10 @@ class IsOwnerMessage(permissions.BasePermission):
             try:
                 chat_id = request.data['chat_id']
                 agent_chats = Chat.objects.filter(owner_id_id=request.user.id).values_list('id', flat=True)
+
                 return chat_id in agent_chats
             except Exception as e:
+                print(e)
                 return False
         if request.user.is_authenticated:
             return True
@@ -91,6 +93,10 @@ class IsOwnerMessage(permissions.BasePermission):
             bool: True if the user has permission, False otherwise.
         """
 
-        user_chats = Chat.objects.filter(owner_id_id=request.user.id)
-        if obj.chat_id in user_chats:
+        owner_chats = Chat.objects.filter(owner_id_id=request.user.id)
+        if obj.chat_id in owner_chats:
+            return True
+
+        addressee_chats = Chat.objects.filter(addressee_id_id=request.user.id)
+        if obj.chat_id in addressee_chats:
             return True
