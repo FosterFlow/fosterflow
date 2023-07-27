@@ -144,17 +144,17 @@
 
         .ctext-wrap-content {
             padding: 12px 20px;
-            background-color: $chat-primary-bg;
+            background-color: $chat-secondary-bg;
             border-radius: 8px 8px 8px 0;
-            color: $white;
+            color: var(--#{$prefix}dark);
             position: relative;
 
             &:before {
                 content: "";
                 position: absolute;
                 border: 5px solid transparent;
-                border-left-color: $chat-primary-bg;
-                border-top-color: $chat-primary-bg;                
+                border-left-color: $chat-secondary-bg;
+                border-top-color: $chat-secondary-bg;                
                 left: 0/*rtl:auto*/;                
                 right: auto/*rtl:0*/;
                 bottom: -10px;
@@ -255,14 +255,14 @@
 
                 .ctext-wrap-content {
                     order: 2;
-                    background-color: $chat-secondary-bg;
-                    color: var(--#{$prefix}dark);
+                    background-color: $chat-primary-bg;
+                    color: $white;
                     border-radius: 8px 8px 0px 8px;
 
                     &:before {
                         border: 5px solid transparent;
-                        border-top-color: $chat-secondary-bg;
-                        border-right-color: $chat-secondary-bg;
+                        border-top-color: $chat-primary-bg;
+                        border-right-color: $chat-primary-bg;
                         left: auto;
                         right: 0px;
                     }
