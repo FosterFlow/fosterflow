@@ -63,7 +63,7 @@ function UserChat(props) {
                                                     <div className="user-chat-content">
                                                         <div className="ctext-wrap">
                                                             <div className="ctext-wrap-content">
-                                                                <ReactMarkdown components={{code: CodeBlock}} className="mb-0">
+                                                                <ReactMarkdown components={{code: CodeBlock}}>
                                                                     {chat.answer_text}
                                                                 </ReactMarkdown>
                                                             </div>
