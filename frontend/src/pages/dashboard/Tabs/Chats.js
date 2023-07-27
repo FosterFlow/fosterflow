@@ -41,7 +41,7 @@ const Chats = (props) => {
             return;
         }
 
-        setRecentChatList(dialogues);
+        setRecentChatList(dialogues.reverse());
         
         const activeDialogueId = props.activeDialogueId;
         if (id === 0 && activeDialogueId > 0) {
