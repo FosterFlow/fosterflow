@@ -12,3 +12,7 @@ yarn.lock
 
 # idea
 /.idea/
+
+#Django
+backend/static_django/
+venv/
