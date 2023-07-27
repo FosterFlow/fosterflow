@@ -36,6 +36,12 @@
     overflow: auto;
 }
 
+.user-chat-content-formatting {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    overflow-x: auto;
+}
+
 .user-chat-topbar{
     @media (max-width: 991.98px) {
         position: fixed;
