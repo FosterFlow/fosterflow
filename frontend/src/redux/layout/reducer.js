@@ -21,7 +21,7 @@ const Layout = (state = INIT_STATE, action) => {
 		case SET_LANGUAGE:
 		return {
 			...state,
-			layoutMode: action.payload
+			language: action.payload
 		};
 		default:
 			return state;
