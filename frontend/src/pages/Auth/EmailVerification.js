@@ -37,7 +37,7 @@ function EmailVerification(props) {
                                         {t('Confirmation failed')}.
                                     </Alert>
                                 )}
-                                <Link to="/login" className="font-weight-medium text-primary"> {t('Signin now')} </Link>
+                                <Link to="/login" className="font-weight-medium text-primary"> {t('Sign in now')} </Link>
                             </CardBody>
                         </Col>
                     </Row>
