@@ -90,5 +90,10 @@
     "Reset Password": "Restablecer contraseña",
     "Remember your password": "Recuerda tu contraseña",
     "Enter proper email": "Introducir correo electrónico válido",
-    "We provided confirmation link to your email address": "Hemos enviado un enlace de confirmación a tu dirección de correo electrónico"
+    "We provided confirmation link to your email address": "Hemos enviado un enlace de confirmación a tu dirección de correo electrónico",
+    "English": "Inglés",
+    "Spanish": "Español",
+    "German": "Alemán",
+    "Italian": "Italiano",
+    "Russian": "Ruso"
 }

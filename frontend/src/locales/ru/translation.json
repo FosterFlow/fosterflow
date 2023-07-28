@@ -90,5 +90,10 @@
     "Reset Password": "Сбросить пароль",
     "Remember your password": "Запомните ваш пароль",
     "Enter proper email": "Введите правильный электронный адрес",
-    "We provided confirmation link to your email address": "Мы предоставили ссылку для подтверждения на ваш электронный адрес"
+    "We provided confirmation link to your email address": "Мы предоставили ссылку для подтверждения на ваш электронный адрес",
+    "English": "Английский",
+    "Spanish": "Испанский",
+    "German": "Немецкий",
+    "Italian": "Итальянский",
+    "Russian": "Русский"
 }
