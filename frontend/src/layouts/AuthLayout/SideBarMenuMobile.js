@@ -33,13 +33,13 @@ function LeftSidebarMenu(props) {
         props.setLayoutMode(layoutMode);
     }
 
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [dropdownOpen2, setDropdownOpen2] = useState(false);
+    const [dropdownProfile, setDropdownProfile] = useState(false);
+    const [dropdownChangeLanguge, setDropdownChangeLanguge] = useState(false);
     const [lng, setlng] = useState("English");
 
 
-    const toggle = () => setDropdownOpen(!dropdownOpen);
-    const toggle2 = () => setDropdownOpen2(!dropdownOpen2);
+    const toggleProfile = () => setDropdownProfile(!dropdownProfile);
+    const toggleChangeLanguge = () => setDropdownChangeLanguge(!dropdownChangeLanguge);
 
     /* changes language according to clicked language menu item */
     const changeLanguageAction = (lng) => {
@@ -74,7 +74,7 @@ function LeftSidebarMenu(props) {
                     </UncontrolledTooltip>
 
                     {/* TODO: Languages move to settings */}
-                    <Dropdown nav isOpen={dropdownOpen2} className="btn-group dropup profile-user-dropdown" toggle={toggle2}>
+                    <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup profile-user-dropdown" toggle={toggleChangeLanguge}>
                         <DropdownToggle nav>
                             <i className="ri-global-line"></i>
                         </DropdownToggle>
@@ -105,7 +105,7 @@ function LeftSidebarMenu(props) {
                             {t('Dark / Light Mode')}
                         </UncontrolledTooltip>
                     </NavItem>
-                    <Dropdown nav isOpen={dropdownOpen} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggle}>
+                    <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
                         <DropdownToggle className="nav-link" tag="a">
                             <img src={avatar1} alt="" className="profile-user rounded-circle" />
                         </DropdownToggle>

@@ -50,7 +50,7 @@ function UserChat(props) {
                                                     <div className="user-chat-content">
                                                         <div className="ctext-wrap">
                                                             <div className="ctext-wrap-content">
-                                                                <div class="user-chat-content-formatting">
+                                                                <div className="user-chat-content-formatting">
                                                                     {chat.message_text}
                                                                 </div>
                                                             </div>
