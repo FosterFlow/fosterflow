@@ -12,12 +12,6 @@ const INIT_STATE = {
 
 const Layout = (state = INIT_STATE, action) => {
 	switch (action.type) {
-		case SET_CONVERSATION_NAME_IN_OPEN_CHAT:
-			return {
-				...state,
-				conversationName: action.payload
-			};
-
 		case SET_LAYOUT_MODE:
 		return {
 			...state,
