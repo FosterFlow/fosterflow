@@ -3,14 +3,10 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 import { Nav, NavItem, NavLink, UncontrolledTooltip, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
 
-import { setLayoutMode } from "../../redux/actions";
-
+import { setLayoutMode, setLanguage } from "../../redux/actions";
 
 //Import Images
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
-
-//i18n
-import i18n from '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 // falgs
@@ -34,29 +30,9 @@ function LeftSidebarMenu(props) {
 
     const [dropdownProfile, setDropdownProfile] = useState(false);
     const [dropdownChangeLanguge, setDropdownChangeLanguge] = useState(false);
-    const [lng, setlng] = useState("English");
-
 
     const toggleProfile = () => setDropdownProfile(!dropdownProfile);
     const toggleChangeLanguge = () => setDropdownChangeLanguge(!dropdownChangeLanguge);
-
-    /* changes language according to clicked language menu item */
-    const changeLanguageAction = (lng) => {
-
-        /* set the selected language to i18n */
-        i18n.changeLanguage(lng);
-
-        if (lng === "es")
-            setlng("Spanish");
-        else if (lng === "de")
-            setlng("German");
-        else if (lng === "ru")
-            setlng("Russian");
-        else if (lng === "it")
-            setlng("Italian");
-        else if (lng === "en")
-            setlng("English");
-    }
 
     return (
         <React.Fragment>
@@ -85,19 +61,19 @@ function LeftSidebarMenu(props) {
                                 <i className="ri-global-line"></i>
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem onClick={() => changeLanguageAction('en')} active={lng === "English"}>
+                                <DropdownItem onClick={() => props.setLanguage('en')} active={props.language === "en"}>
                                     <img src={usFlag} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('English')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('es')} active={lng === "Spanish"}>
+                                <DropdownItem onClick={() => props.setLanguage('es')} active={props.language === "es"}>
                                     <img src={spain} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Spanish')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('de')} active={lng === "German"}>
+                                <DropdownItem onClick={() => props.setLanguage('de')} active={props.language === "de"}>
                                     <img src={germany} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('German')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('it')} active={lng === "Italian"}>
+                                <DropdownItem onClick={() => props.setLanguage('it')} active={props.language === "it"}>
                                     <img src={italy} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Italian')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => changeLanguageAction('ru')} active={lng === "Russian"}>
+                                <DropdownItem onClick={() => props.setLanguage('ru')} active={props.language === "ru"}>
                                     <img src={russia} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Russian')}</span>
                                 </DropdownItem>
                             </DropdownMenu>
@@ -131,8 +107,14 @@ function LeftSidebarMenu(props) {
 
 const mapStatetoProps = state => {
     return {
-        layoutMode: state.Layout.layoutMode
+        layoutMode: state.Layout.layoutMode,
+        language: state.Layout.language
     };
 };
 
-export default connect(mapStatetoProps, {setLayoutMode})(LeftSidebarMenu);
+const mapDispatchToProps = {
+    setLayoutMode,
+    setLanguage
+  };
+
+export default connect(mapStatetoProps, mapDispatchToProps)(LeftSidebarMenu);

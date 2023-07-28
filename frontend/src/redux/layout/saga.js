@@ -1,7 +1,6 @@
-// @flow
 import { all, call, fork, takeEvery } from "redux-saga/effects";
-
 import { SET_LAYOUT_MODE, SET_LANGUAGE } from "./constants";
+import i18n from '../../i18n';
 
 /**
  * TODO: move to component attribute
@@ -35,6 +34,7 @@ function* setLayoutMode({ payload:  layoutMode  }) {
  */
 function* setLanguage({ payload:  language  }) {
   try {
+      i18n.changeLanguage(language);
       localStorage.setItem("language", language);
     } catch (error) { 
       //TODO: add error handler
