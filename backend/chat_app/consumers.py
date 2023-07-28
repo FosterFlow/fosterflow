@@ -1,6 +1,8 @@
-import asyncio
+import asyncio, datetime
 import json
-from channels.generic.websocket import AsyncWebsocketConsumer
+
+from asgiref.sync import async_to_sync
+from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
 from project.settings import BASE_DIR
 import os
 import openai
@@ -11,65 +13,90 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 openai.api_key = env('OPENAI_API_KEY')
 
 
-class ChatConsumer(AsyncWebsocketConsumer):
-    async def connect(self):
+class ChatConsumer(WebsocketConsumer):
+    def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
 
         # Join room group
-        await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-        await self.accept()
+        self.accept()
 
-    async def disconnect(self, close_code):
+    def disconnect(self, close_code):
         # Leave room group
-        await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
+        self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     # Receive message from WebSocket
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+    def receive(self, text_data):
 
+        text_data_json = json.loads(text_data)
+        prompt = text_data_json['message']
+        if prompt:
+            # Log input
+
+            # Send prompt to Websocket immediately
+            self.chat_prompt(prompt)
+
+            response = self.ask_gpt_stream(prompt)
+
+            # Update the conversation history
+
+    # Receive message from room group
+    def ask_gpt_stream(self, prompt):
+        current_time = datetime.datetime.now()
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}
         ]
-
-        user_prompt = {"role": "user", "content": message}
+        user_prompt = {"role": "user", "content": prompt}
         messages.append(user_prompt)
+        print(prompt, user_prompt, messages)
 
-        response_stream = openai.ChatCompletion.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=messages,
             stream=True
         )
 
-        queue = asyncio.Queue()
-        asyncio.ensure_future(self.process_chunks(response_stream, queue))
+        compelete = ""
 
-        while True:
-            data_chunk = await queue.get()
-            if data_chunk is None:
-                break
-
+        # iterate through the stream of events
+        for event in response:
             try:
-                message_content = data_chunk["choices"][0]["message"]["content"]
-                await self.channel_layer.group_send(
-                    self.room_group_name, {"type": "chat.message", "message": message_content}
-                )
-            except KeyError:
+                event_text = event['choices'][0]['delta']['content']  # extract the text
+                self.chat_partial(event_text, current_time)
+                compelete += event_text
+            except:
                 pass
 
-    async def process_chunks(self, response_stream, queue):
-        async for data_chunk in response_stream:
-            await queue.put(data_chunk)
+        # Print empty lines
+        # self.chat_emptylines()
+        async_to_sync(self.channel_layer.send)(
+            self.channel_name,
+            {
+                'type': 'chat_message',
+                'prompt': None,
+                'response': '\n',
+            }
+        )
 
-        # Signal the end of the data to the main consumer
-        await queue.put(None)
+        return compelete
 
+    # Send prompt to WebSocket
+    def chat_prompt(self, prompt):
+        self.send(text_data=json.dumps({"message": prompt}))
 
-    # Receive message from room group
-    async def chat_message(self, event):
-        message = event["message"]
+    # Send partial responses to WebSocket
+    def chat_partial(self, partial, current_time):
+        self.send(text_data=json.dumps({"message": partial}))
 
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({"message": message}))
+    # Send response to WebSocket
+    def chat_message(self, event):
+        response = event['response']
+        self.send(text_data=json.dumps({"message": response}))
+
+    # Send response to WebSocket
+    def chat_emptylines(self):
+        self.send(text_data=json.dumps({
+            'response': f"\n\n"
+        }))

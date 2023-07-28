@@ -34,8 +34,8 @@ def take_answer(prompt, chat_id):
 
     for message in previous_messages:
         user_message = {"role": "user", "content": message.message_text}
-        ai_message = {"role": "assistant", "content": message.answer_text}
-        messages.extend([user_message, ai_message])
+        # ai_message = {"role": "assistant", "content": message.answer_text}
+        # messages.extend([user_message, ai_message])
 
     user_prompt = {"role": "user", "content": prompt}
     messages.append(user_prompt)
