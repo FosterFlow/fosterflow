@@ -36,7 +36,6 @@ class ChatModelViewSet(ModelViewSet):
     permission_classes = [IsOwnerChat, IsEmailConfirm]
     http_method_names = ['get', 'post', 'delete']
 
-
     def get_queryset(self):
         """
         Get the queryset of Chats objects.
@@ -47,7 +46,8 @@ class ChatModelViewSet(ModelViewSet):
             QuerySet: The filtered queryset of Chats objects.
         """
 
-        owner_queryset = self.queryset.filter(Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
+        owner_queryset = self.queryset.filter(
+            Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
         print(owner_queryset)
         return owner_queryset
 
@@ -103,7 +103,8 @@ class MessageModelViewSet(ModelViewSet):
             QuerySet: The filtered queryset of Message objects.
         """
 
-        user_dialogs = Chat.objects.filter(Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
+        user_dialogs = Chat.objects.filter(
+            Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
         owner_queryset = self.queryset.filter(chat_id__in=user_dialogs)
 
         chat_id = self.request.query_params.get('chat_id')
@@ -137,3 +138,14 @@ class MessageModelViewSet(ModelViewSet):
         }
 
         return Response(response, status=status.HTTP_200_OK)
+
+
+from django.shortcuts import render
+
+
+def index(request):
+    return render(request, "chat/index.html")
+
+
+def room(request, room_name):
+    return render(request, "chat/room.html", {"room_name": room_name})

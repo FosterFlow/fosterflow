@@ -17,6 +17,8 @@ from user_app.views import UserModelViewSet, UserAgentModelViewSet, SelfUserAPIV
 
 from auth_app.views import CustomTokenRefreshView
 
+from chat_app.views import index, room
+
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
@@ -40,6 +42,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
+
+    path("chat/", index, name="index"),
+    path("chat/<str:room_name>/", room, name="index"),
 
 
     path('api/token/', UserLoginAPIView.as_view(), name='token_obtain_pair'),
