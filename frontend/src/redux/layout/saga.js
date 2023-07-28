@@ -1,7 +1,7 @@
 // @flow
 import { all, call, fork, takeEvery } from "redux-saga/effects";
 
-import { SET_LAYOUT_MODE } from "./constants";
+import { SET_LAYOUT_MODE, SET_LANGUAGE } from "./constants";
 
 /**
  * TODO: move to component attribute
@@ -14,7 +14,6 @@ function changeBodyAttribute(attribute, value) {
 
 /**
  * Changes the layout mode
- * @param {*} param0
  */
 function* setLayoutMode({ payload:  layoutMode  }) {
   try {
@@ -25,19 +24,35 @@ function* setLayoutMode({ payload:  layoutMode  }) {
       yield call(changeBodyAttribute, "data-bs-theme", layoutMode);
       localStorage.setItem("layoutMode", layoutMode);
     }
-  } catch (error) { }
+  } catch (error) { 
+    //TODO: add error handler
+    console.log ("saga setLayoutMode error", error);
+  }
+}
+
+/**
+ * Changes the language
+ */
+function* setLanguage({ payload:  language  }) {
+  try {
+      localStorage.setItem("language", language);
+    } catch (error) { 
+      //TODO: add error handler
+      console.log ("saga setLanguage error", error);
+    }
 }
 
 /**
  * Watchers
  */
-export function* watchSetLayoutMode() {
+export function* watchLayoutParams() {
   yield takeEvery(SET_LAYOUT_MODE, setLayoutMode);
+  yield takeEvery(SET_LANGUAGE, setLanguage);
 }
 
 function* LayoutSaga() {
   yield all([
-    fork(watchSetLayoutMode)
+    fork(watchLayoutParams)
   ]);
 }
 

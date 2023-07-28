@@ -47,15 +47,15 @@ function LeftSidebarMenu(props) {
         /* set the selected language to i18n */
         i18n.changeLanguage(lng);
 
-        if (lng === "sp")
+        if (lng === "es")
             setlng("Spanish");
-        else if (lng === "gr")
+        else if (lng === "de")
             setlng("German");
-        else if (lng === "rs")
+        else if (lng === "ru")
             setlng("Russian");
         else if (lng === "it")
             setlng("Italian");
-        else if (lng === "eng")
+        else if (lng === "en")
             setlng("English");
     }
 
@@ -79,19 +79,19 @@ function LeftSidebarMenu(props) {
                             <i className="ri-global-line"></i>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={() => changeLanguageAction('eng')} active={lng === "English"}>
+                            <DropdownItem onClick={() => changeLanguageAction('en')} active={lng === "English"}>
                                 <img src={usFlag} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('English')}</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => changeLanguageAction('sp')} active={lng === "Spanish"}>
+                            <DropdownItem onClick={() => changeLanguageAction('es')} active={lng === "Spanish"}>
                                 <img src={spain} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Spanish')}</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => changeLanguageAction('gr')} active={lng === "German"}>
+                            <DropdownItem onClick={() => changeLanguageAction('de')} active={lng === "German"}>
                                 <img src={germany} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('German')}</span>
                             </DropdownItem>
                             <DropdownItem onClick={() => changeLanguageAction('it')} active={lng === "Italian"}>
                                 <img src={italy} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Italian')}</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => changeLanguageAction('rs')} active={lng === "Russian"}>
+                            <DropdownItem onClick={() => changeLanguageAction('ru')} active={lng === "Russian"}>
                                 <img src={russia} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Russian')}</span>
                             </DropdownItem>
                         </DropdownMenu>
