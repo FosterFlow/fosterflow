@@ -32,7 +32,8 @@
     "redux-saga": "^1.2.3",
     "simplebar-react": "^3.2.4",
     "slick-carousel": "^1.8.1",
-    "yup": "^1.1.1"
+    "yup": "^1.1.1",
+    "react-scroll-to-bottom": "^4.2.0"
   },
   "scripts": {
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-scripts start",

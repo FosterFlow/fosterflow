@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
 import { connect } from "react-redux";
-import SimpleBar from "simplebar-react";
 import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'; 
+import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import ScrollToBottom from 'react-scroll-to-bottom'; 
+
 
 // Import Components
 import UserHead from "./UserHead";
@@ -38,7 +39,7 @@ function UserChat(props) {
             <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-content-wrapper">
                     <UserHead />
-                    <div
+                    <ScrollToBottom
                         className="chat-conversation p-3 p-lg-3"
                         id="messages">
                             <ul className="list-unstyled mb-0">
@@ -75,8 +76,8 @@ function UserChat(props) {
                                     )
                                 }
                             </ul>
-                        </div>
-                    </div>
+                    </ScrollToBottom>
+                </div>
                 <ChatInput/>
             </div>
         </React.Fragment>
