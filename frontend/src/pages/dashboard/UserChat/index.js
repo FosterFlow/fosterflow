@@ -1,11 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import ScrollToBottom from 'react-scroll-to-bottom'; 
-
 
 // Import Components
 import UserHead from "./UserHead";
@@ -30,16 +28,24 @@ function CodeBlock({node, inline, className, children, ...props}) {
 }
 
 function UserChat(props) {
-    const ref = useRef();
+    const chatWindowRef = useRef();
     const { messages, activeDialogueId } = props;
     const relevantMessages = messages.filter(message => message.dialog_id === activeDialogueId);
+
+    // Add useEffect to auto scroll to bottom when messages update
+     useEffect(() => {
+        if (chatWindowRef.current) {
+            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+        }
+    }, [relevantMessages]);
 
     return (
         <React.Fragment>
             <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-content-wrapper">
                     <UserHead />
-                    <ScrollToBottom
+                    <div
+                        ref={chatWindowRef}
                         className="chat-conversation p-3 p-lg-3"
                         id="messages">
                             <ul className="list-unstyled mb-0">
@@ -76,7 +82,7 @@ function UserChat(props) {
                                     )
                                 }
                             </ul>
-                    </ScrollToBottom>
+                    </div>
                 </div>
                 <ChatInput/>
             </div>
