@@ -4,6 +4,7 @@ import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import _ from 'lodash';
 
 // Import Components
 import UserHead from "./UserHead";
@@ -29,15 +30,25 @@ function CodeBlock({node, inline, className, children, ...props}) {
 
 function UserChat(props) {
     const chatWindowRef = useRef();
+    const userWasAtBottomRef = useRef(true);
     const { messages, activeDialogueId } = props;
     const relevantMessages = messages.filter(message => message.dialog_id === activeDialogueId);
+    const debouncedHandleChatScroll = _.debounce(handleChatScroll, 100);
+
+    function handleChatScroll() {
+        const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
+        userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+    };
 
     // Add useEffect to auto scroll to bottom when messages update
-     useEffect(() => {
-        if (chatWindowRef.current) {
-            chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+    useEffect(() => {
+        if (Array.isArray(messages) && messages.length > 0){
+            const { scrollHeight } = chatWindowRef.current;
+            if (userWasAtBottomRef.current){
+                chatWindowRef.current.scrollTop = scrollHeight;
+            }
         }
-    }, [relevantMessages]);
+    }, [messages]);
 
     return (
         <React.Fragment>
@@ -46,6 +57,7 @@ function UserChat(props) {
                     <UserHead />
                     <div
                         ref={chatWindowRef}
+                        onScroll={debouncedHandleChatScroll} 
                         className="chat-conversation p-3 p-lg-3"
                         id="messages">
                             <ul className="list-unstyled mb-0">
