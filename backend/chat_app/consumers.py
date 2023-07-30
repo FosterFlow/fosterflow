@@ -67,9 +67,18 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from room group
     def ask_gpt_stream(self, prompt):
+        previous_messages = Message.objects.filter(chat_id=self.chat_id).order_by('-id')[:5]
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}
         ]
+
+        for message in previous_messages:
+            if message.owner_id == self.owner_chat:
+                mes = {"role": "user", "content": message.message_text}
+            else:
+                mes = {"role": "assistant", "content": message.answer_text}
+            messages.append(mes)
+
         user_prompt = {"role": "user", "content": prompt}
         messages.append(user_prompt)
 
