@@ -40,18 +40,38 @@
     flex-grow: 1;
     overflow-y: auto;
     height: 1px;
+}
 
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+.user-chat-conversation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-        li {
-            display: block;
-            padding: 0;
-            margin: 0; 
-        }
-    }
+.user-chat-conversation-list-item {
+    display: block;
+    padding: 0 0 24px 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.user-chat-conversation-list-item.right{
+    justify-content: flex-end;
+}
+
+.user-chat-message {
+    padding: 12px 20px;
+    background-color: $chat-secondary-bg;
+    border-radius: 8px 8px 8px 0;
+    color: var(--#{$prefix}dark);
+}
+
+.right .user-chat-message {
+    background-color: $chat-primary-bg;
+    color: $white;
+    border-radius: 8px 8px 0px 8px;
+    justify-content: flex-end;
 }
 
 .user-chat-message-formatting {

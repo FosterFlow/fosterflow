@@ -60,19 +60,21 @@ function UserChat(props) {
                         onScroll={debouncedHandleChatScroll} 
                         className="user-chat-conversation p-3 p-lg-3"
                         id="messages">
-                                <ul>
+                                <ul className="user-chat-conversation-list">
                                     {
                                         relevantMessages.map((chat, key) =>
                                             <React.Fragment key={key}>
-                                                <li className="right">
-                                                    <div className="user-chat-message-formatting">
+                                                <li className="user-chat-conversation-list-item right">
+                                                    <div className="user-chat-message user-chat-message-formatting">
                                                         {chat.message_text}
                                                     </div>
                                                 </li>
-                                                <li>
-                                                    <ReactMarkdown components={{code: CodeBlock}}>
-                                                        {chat.answer_text}
-                                                    </ReactMarkdown>
+                                                <li className="user-chat-conversation-list-item"> 
+                                                    <div className="user-chat-message">
+                                                        <ReactMarkdown components={{code: CodeBlock}}>
+                                                            {chat.answer_text}
+                                                        </ReactMarkdown>
+                                                    </div>
                                                 </li>
                                             </React.Fragment>
                                         )
