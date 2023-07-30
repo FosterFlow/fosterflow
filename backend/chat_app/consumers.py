@@ -7,6 +7,9 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth.models import AnonymousUser
 from project.settings import BASE_DIR
+from django.db.models import Q
+from chat_app.models import Chat
+from user_app.models import Agent
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -15,14 +18,23 @@ openai.api_key = env('OPENAI_API_KEY')
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
-        self.room_group_name = f"chat_{self.room_name}"
+        self.room_name = self.scope["url_route"]["kwargs"]["chat_id"]
+        self.chat_id = int(self.room_name)
+
+        agents = Agent.objects.filter(user_id=self.scope["user"])
+        available_chats = list(
+            Chat.objects.filter(Q(owner_id__in=agents) | Q(addressee_id__in=agents))
+            .values_list('id', flat=True))
+
+        if self.chat_id not in available_chats:
+            self.close()
+
         if self.scope["user"] == AnonymousUser():
             self.close()
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name, self.channel_name
+            self.room_name, self.channel_name
         )
 
         self.accept()
@@ -30,7 +42,7 @@ class ChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name, self.channel_name
+            self.room_name, self.channel_name
         )
 
     # Receive message from WebSocket
