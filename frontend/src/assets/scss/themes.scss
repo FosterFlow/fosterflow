@@ -24,14 +24,11 @@
 
 .auth-layout-content {
   flex-grow: 1;
-  height: 1px;
 
   @media (min-width: 992px) {
     flex-direction: row;
     display: flex;
   }
-  
-  position: relative;
 }
 
 .nav-item {
@@ -44,10 +41,6 @@
 
 .w-70 {
   width: 73% !important;
-}
-
-.ctext-wrap-content {
-  animation: flyIn 0.6s ease-in-out;
 }
 
 .blank-div {

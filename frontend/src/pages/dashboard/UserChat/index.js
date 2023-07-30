@@ -53,47 +53,31 @@ function UserChat(props) {
     return (
         <React.Fragment>
             <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
-                <div className="user-chat-content-wrapper">
+                <div className="user-chat-wrapper">
                     <UserHead />
                     <div
                         ref={chatWindowRef}
                         onScroll={debouncedHandleChatScroll} 
-                        className="chat-conversation p-3 p-lg-3"
+                        className="user-chat-conversation p-3 p-lg-3"
                         id="messages">
-                            <ul className="list-unstyled mb-0">
-                                {
-                                    relevantMessages.map((chat, key) =>
-                                        <React.Fragment key={key}>
-                                            <li className="right">
-                                                <div className="conversation-list">
-                                                    <div className="user-chat-content">
-                                                        <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content">
-                                                                <div className="user-chat-content-formatting">
-                                                                    {chat.message_text}
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                <ul>
+                                    {
+                                        relevantMessages.map((chat, key) =>
+                                            <React.Fragment key={key}>
+                                                <li className="right">
+                                                    <div className="user-chat-message-formatting">
+                                                        {chat.message_text}
                                                     </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="conversation-list">
-                                                    <div className="user-chat-content">
-                                                        <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content">
-                                                                <ReactMarkdown components={{code: CodeBlock}}>
-                                                                    {chat.answer_text}
-                                                                </ReactMarkdown>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </React.Fragment>
-                                    )
-                                }
-                            </ul>
+                                                </li>
+                                                <li>
+                                                    <ReactMarkdown components={{code: CodeBlock}}>
+                                                        {chat.answer_text}
+                                                    </ReactMarkdown>
+                                                </li>
+                                            </React.Fragment>
+                                        )
+                                    }
+                                </ul>
                     </div>
                 </div>
                 <ChatInput/>

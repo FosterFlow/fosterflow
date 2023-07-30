@@ -44,22 +44,15 @@
     }
 }
 
-.chat-message-list-wrapper {
-    display: flex;
-    flex-direction: column;
+.chats-list-wrapper {
     flex-grow: 1;
     overflow-y: auto;
+    height: 1px;
 }
 
-.chat-message-list {
-    flex-grow: 1;
-    padding-bottom: 10px;
-    @media (max-width: 991.98px) {
-    }
-}
-
-.chat-list {
+.chats-list {
     margin: 0;
+    padding-bottom: 10px;
 
     li {
         &.active {
@@ -84,63 +77,6 @@
 
         .chat-user-message {
             font-size: 14px;
-        }
-
-
-        &.typing {
-            .chat-user-message {
-                color: $primary;
-                font-weight: $font-weight-medium;
-
-                .dot {
-                    background-color: $primary;
-                }
-            }
-        }
-
-        .unread-message {
-            position: absolute;
-            display: inline-block;  
-            right: 24px/*rtl:auto*/;
-            left: auto/*rtl:0*/;
-            top: 33px;
-
-            .badge {
-                line-height: 16px;
-                font-weight: $font-weight-semibold;
-                font-size: 10px;
-            }
-        }
-    }
-}
-
-.chat-user-img {
-    position: relative;
-
-    .user-status {
-        width: 10px;
-        height: 10px;
-        background-color: $gray-500;
-        border-radius: 50%;
-        border: 2px solid $card-bg;
-        position: absolute;
-        right: 0/*rtl:auto*/;
-        left: auto/*rtl:0*/;
-        
-        bottom: 0;
-
-
-    }
-
-    &.online {
-        .user-status {
-            background-color: $success;
-        }
-    }
-
-    &.away {
-        .user-status {
-            background-color: $warning;
         }
     }
 }
@@ -168,4 +104,3 @@
         bottom: 0;
     }
 }
-
