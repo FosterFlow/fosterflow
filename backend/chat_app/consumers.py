@@ -1,12 +1,12 @@
-import asyncio, datetime
 import json
-
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
-from project.settings import BASE_DIR
 import os
 import openai
 import environ
+
+from asgiref.sync import async_to_sync
+from channels.generic.websocket import WebsocketConsumer
+from django.contrib.auth.models import AnonymousUser
+from project.settings import BASE_DIR
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -17,6 +17,8 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
+        if self.scope["user"] == AnonymousUser():
+            self.close()
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
@@ -33,18 +35,15 @@ class ChatConsumer(WebsocketConsumer):
 
     # Receive message from WebSocket
     def receive(self, text_data):
-
         text_data_json = json.loads(text_data)
         prompt = text_data_json['message']
-        if prompt:
-            # Log input
+        self.send(text_data=json.dumps({"message": prompt}))
 
-            # Send prompt to Websocket immediately
-            response = self.ask_gpt_stream(prompt)
+        if prompt:
+            self.ask_gpt_stream(prompt)
 
     # Receive message from room group
     def ask_gpt_stream(self, prompt):
-        current_time = datetime.datetime.now()
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}
         ]
@@ -57,41 +56,17 @@ class ChatConsumer(WebsocketConsumer):
             stream=True
         )
 
-        compelete = ""
-
         # iterate through the stream of events
         for event in response:
             try:
                 event_text = event['choices'][0]['delta']['content']  # extract the text
-                self.chat_partial(event_text, current_time)
-                compelete += event_text
+                self.send(text_data=json.dumps({"message": event_text}))
             except:
                 pass
 
-        # Print empty lines
-        # self.chat_emptylines()
-
-
-        return compelete
-
-    # Send prompt to WebSocket
-    def chat_prompt(self, prompt):
-        self.send(text_data=json.dumps({"message": prompt}))
-
-    # Send partial responses to WebSocket
-    def chat_partial(self, partial, current_time):
-        self.send(text_data=json.dumps({"message": partial}))
-        # async_to_sync(self.channel_layer.group_send)(
-        #     self.room_group_name, {"type": "chat.message", "message": partial}
-        # )
-
-    # Send response to WebSocket
+    # Receive message from room group
     def chat_message(self, event):
-        response = event['response']
-        self.send(text_data=json.dumps({"message": response}))
+        message = event["message"]
 
-    # Send response to WebSocket
-    def chat_emptylines(self):
-        self.send(text_data=json.dumps({
-            'response': f"\n\n"
-        }))
+        # Send message to WebSocket
+        self.send(text_data=json.dumps({"message": message}))
