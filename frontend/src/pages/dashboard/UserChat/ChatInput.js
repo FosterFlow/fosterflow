@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Row, Col, Form } from "reactstrap";
 import { connect } from "react-redux";
 import { addMessage as actionAddMessage, addDialogue} from "../../../redux/chat/actions";
 import { bindActionCreators } from "redux";
-//i18n
 import { useTranslation } from 'react-i18next';
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
-    /* intilize t variable for multi language implementation */
+    const textAreaRef = useRef(null);
     const { t } = useTranslation();
 
-    //function for text input value change
+    useEffect(() => {
+        textAreaRef.current.style.height = "auto";
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+    }, [textMessage]);
+
     const handleChange = event => {
         settextMessage(event.target.value);
     }
 
-    //function that handles submitting a form
     const formSubmit = (event, textMessage) => {
         event.preventDefault();
-        addMessage (textMessage);
+        addMessage(textMessage);
     }
-    
 
     //function for send data to onaddMessage function(in userChat/index.js component)
     const addMessage = (textMessage) => {
@@ -68,7 +69,8 @@ function ChatInput(props) {
                     <Row className='g-0'>
                         <Col>
                             <div>
-                                <textarea 
+                                <textarea
+                                    ref={textAreaRef} 
                                     value={textMessage} 
                                     onChange={handleChange} 
                                     onKeyDown={handleKeyDown}
