@@ -12,7 +12,7 @@ function ChatInput(props) {
 
     useEffect(() => {
         textAreaRef.current.style.height = "auto";
-        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 3}px`;
     }, [textMessage]);
 
     const handleChange = event => {
