@@ -28,7 +28,8 @@ class ChatConsumer(WebsocketConsumer):
 
         self.agents = Agent.objects.filter(user_id=self.scope["user"])
         available_chats = list(
-            Chat.objects.filter(Q(owner_id__in=self.agents) | Q(addressee_id__in=self.agents))
+            # Chat.objects.filter(Q(owner_id__in=self.agents) | Q(addressee_id__in=self.agents)) # To feature
+            Chat.objects.filter(owner_id__in=self.agents)
             .values_list('id', flat=True)
         )
 
@@ -59,11 +60,13 @@ class ChatConsumer(WebsocketConsumer):
 
         if prompt:
             complete = self.ask_gpt_stream(prompt)
-
-            # TODO Change owner_id correctly
+            Message.objects.create(chat_id=self.chat,
+                                   message_text=prompt,
+                                   owner_id=self.owner_chat)
             Message.objects.create(chat_id=self.chat,
                                    message_text=complete,
-                                   owner_id=self.owner_chat)
+                                   owner_id=self.addressee)
+
 
     # Receive message from room group
     def ask_gpt_stream(self, prompt):
@@ -76,7 +79,7 @@ class ChatConsumer(WebsocketConsumer):
             if message.owner_id == self.owner_chat:
                 mes = {"role": "user", "content": message.message_text}
             else:
-                mes = {"role": "assistant", "content": message.answer_text}
+                mes = {"role": "assistant", "content": message.message_text}
             messages.append(mes)
 
         user_prompt = {"role": "user", "content": prompt}
