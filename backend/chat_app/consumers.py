@@ -94,10 +94,14 @@ class ChatConsumer(WebsocketConsumer):
         complete = ""
         # iterate through the stream of events
         for event in response:
+            print(event)
             try:
-                event_text = event['choices'][0]['delta']['content']  # extract the text
-                self.send(text_data=json.dumps({"message": event_text}))
-                complete += event_text
+                if event['choices'][0]['finish_reason'] != 'stop':
+                    event_text = event['choices'][0]['delta']['content']  # extract the text
+                    self.send(text_data=json.dumps({"message": event_text, "finish_reason": "null"}))
+                    complete += event_text
+                else:
+                    self.send(text_data=json.dumps({"message": '', "finish_reason": "stop"}))
             except:
                 pass
 
