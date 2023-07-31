@@ -134,6 +134,20 @@
 
 .chat-input {
     background-color: var(--#{$prefix}white);
+    padding-top: 16px;
+    position: relative;
+    
+    textarea {
+        border-radius: 0;
+        padding-right: 53px;
+    }
+
+    button {
+        position: absolute;
+        right: 20px;
+        bottom: 10px;
+    }
+
     &-section{
         background-color: $card-bg;
         @media (max-width: 991.98px) {
@@ -151,8 +165,6 @@
         }
     }
 }
-
-
 
 .animate-typing {
 	.dot {

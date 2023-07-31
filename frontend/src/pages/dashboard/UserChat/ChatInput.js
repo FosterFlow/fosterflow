@@ -64,11 +64,8 @@ function ChatInput(props) {
 
     return (
         <React.Fragment>
-            <div className="chat-input p-3 p-lg-3">
+            <div className="chat-input">
                 <Form onSubmit={(e) => formSubmit(e, textMessage)} >
-                    <Row className='g-0'>
-                        <Col>
-                            <div>
                                 <textarea
                                     ref={textAreaRef} 
                                     value={textMessage} 
@@ -78,20 +75,9 @@ function ChatInput(props) {
                                     placeholder={t('Enter Message') + '...'} 
                                     style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
                                 />
-                            </div>
-                        </Col>
-                        <Col xs="auto">
-                            <div className="chat-input-links ms-2">
-                                <ul className="list-inline mb-0 ms-0">
-                                    <li className="list-inline-item">
-                                        <Button type="submit" color="primary" className="font-size-16 btn-lg chat-send">
+                                        <Button type="submit" color="primary" className="font-size-16 btn-sm chat-send">
                                             <i className="ri-send-plane-2-fill"></i>
                                         </Button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </Col>
-                    </Row>
                 </Form>
             </div>
         </React.Fragment>
