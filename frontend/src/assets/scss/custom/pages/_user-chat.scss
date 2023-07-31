@@ -140,12 +140,20 @@
     textarea {
         border-radius: 0;
         padding-right: 53px;
+
+        @media (max-width: 991.98px) {
+            padding-right: 43px;
+        }
     }
 
     button {
         position: absolute;
         right: 20px;
         bottom: 10px;
+
+        @media (max-width: 991.98px) {
+            right: 15px;
+        }
     }
 
     &-section{

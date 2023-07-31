@@ -10,6 +10,10 @@ function ChatInput(props) {
     const textAreaRef = useRef(null);
     const { t } = useTranslation();
 
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    
     useEffect(() => {
         textAreaRef.current.style.height = "auto";
         textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 3}px`;
@@ -20,8 +24,20 @@ function ChatInput(props) {
     }
 
     const formSubmit = (event, textMessage) => {
-        event.preventDefault();
+        if (isMobileDevice()) {
+            event.preventDefault();
+            return;
+        }
+         
         addMessage(textMessage);
+    }
+    
+
+    const handleButtonClick = (event, textMessage) => {
+        if (isMobileDevice()) {
+            event.preventDefault();
+            addMessage(textMessage);
+        }
     }
 
     //function for send data to onaddMessage function(in userChat/index.js component)
@@ -75,7 +91,7 @@ function ChatInput(props) {
                                     placeholder={t('Enter Message') + '...'} 
                                     style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
                                 />
-                                        <Button type="submit" color="primary" className="font-size-16 btn-sm chat-send">
+                                        <Button onClick={(e) => handleButtonClick(e, textMessage)} type="submit" color="primary" className="font-size-16 btn-sm chat-send">
                                             <i className="ri-send-plane-2-fill"></i>
                                         </Button>
                 </Form>
