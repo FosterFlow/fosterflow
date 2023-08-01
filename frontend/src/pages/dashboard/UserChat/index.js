@@ -34,13 +34,31 @@ function UserChat(props) {
     const userWasAtBottomRef = useRef(true);
     const { messages, activeDialogueId } = props;
     const relevantMessages = messages.filter(message => message.dialog_id === activeDialogueId);
-    const debouncedHandleChatScroll = _.debounce(handleChatScroll, 100);
+    const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
+    const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
 
     function handleChatScroll() {
         const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
         userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
     };
+
+    function handleWindowResize () {
+        messageMaxMidthUpdate(true);
+    }
+
+    /**
+     * Hack, didn't find working CSS solution
+     * Need to specidy maximum width for the messages, because of possible long code blocks
+     * 
+     * param rerender {boolean}
+     */
+    function messageMaxMidthUpdate (rerender) {
+        if (rerender || (messageMaxWidth === 0 && chatWindowRef.current)) {
+            const width = chatWindowRef.current.clientWidth - 32;
+            setMessageMaxWidth(width);
+        }
+    }
 
     // Add useEffect to auto scroll to bottom when messages update
     useEffect(() => {
@@ -53,12 +71,13 @@ function UserChat(props) {
     }, [messages]);
 
     useEffect(() => {
-        if (messageMaxWidth === 0 && chatWindowRef.current) {
-            //need to specidy maximum width for the messages, because of possible long code blocks
-            const width = chatWindowRef.current.getBoundingClientRect().width - 32;
-            setMessageMaxWidth(width);
-        }
+        window.addEventListener('resize', debounceHandleWindowResize);
+        messageMaxMidthUpdate ();
+        return () => {
+          window.removeEventListener('resize', debounceHandleWindowResize);
+        };
     }, []);
+    
 
     return (
         <React.Fragment>
