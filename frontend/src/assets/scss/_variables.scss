@@ -660,15 +660,16 @@ $aspect-ratios: (
 // scss-docs-start font-variables
 // stylelint-disable value-keyword-case
 $font-family-sans-serif: "Public Sans", sans-serif;
+$font-family-arial: Arial, Helvetica, sans-serif; 
 $font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 // stylelint-enable value-keyword-case
-$font-family-base: $font-family-sans-serif;
+$font-family-base: $font-family-arial;
 $font-family-code: var(--#{$prefix}font-monospace);
 
 // $font-size-root effects the value of `rem`, which is used for as well font sizes, paddings and margins
 // $font-size-base effects the font size of the body text
 $font-size-root: null;
-$font-size-base: 0.9375rem; // Assumes the browser default, typically `16px`
+$font-size-base: 1rem; // Assumes the browser default, typically `16px`
 $font-size-sm: $font-size-base * 0.875;
 $font-size-lg: $font-size-base * 1.25;
 

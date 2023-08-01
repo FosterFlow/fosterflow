@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gfm from 'remark-gfm';
 import _ from 'lodash';
 
@@ -19,8 +19,15 @@ import { getUser } from "../../../redux/user/actions";
 function CodeBlock({node, inline, className, children, ...props}) {
   const match = /language-(\w+)/.exec(className || '')
   return !inline && match ? (
-    <SyntaxHighlighter style={solarizedlight} language={match[1]} PreTag="div" {...props}>
-      {String(children).replace(/\n$/, '')}
+    <SyntaxHighlighter 
+        style={materialDark} 
+        customStyle={{
+            fontSize: "0.875rem",
+        }} 
+        language={match[1]} 
+        {...props}
+    >
+        {String(children).replace(/\n$/, '')}
     </SyntaxHighlighter>
   ) : (
     <code className={className} {...props}>
