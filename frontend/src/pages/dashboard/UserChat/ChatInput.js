@@ -72,6 +72,10 @@ function ChatInput(props) {
 
     //function for handling 'Enter' key press
     const handleKeyDown = (event) => {
+        if (isMobileDevice()) {
+            return;
+        }
+
         if (event.keyCode === 13 && event.shiftKey === false) {
             event.preventDefault();
             addMessage(textMessage);
