@@ -26,7 +26,8 @@
     "redux-saga": "^1.2.3",
     "simplebar-react": "^3.2.4",
     "yup": "^1.1.1",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "remark-gfm": "^3.0.1"
   },
   "scripts": {
     "start": "set \"GENERATE_SOURCEMAP=false\" && react-scripts start",

@@ -4,6 +4,7 @@ import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import gfm from 'remark-gfm';
 import _ from 'lodash';
 
 // Import Components
@@ -71,8 +72,10 @@ function UserChat(props) {
                                                 </li>
                                                 <li className="user-chat-conversation-list-item"> 
                                                     <div className="user-chat-message">
-                                                        <ReactMarkdown components={{code: CodeBlock}}>
-                                                            {chat.answer_text}
+                                                        <ReactMarkdown 
+                                                            remarkPlugins={[gfm]} 
+                                                            components={{code: CodeBlock}}>
+                                                                {chat.answer_text}
                                                         </ReactMarkdown>
                                                     </div>
                                                 </li>
