@@ -66,11 +66,15 @@
     border-radius: 8px 8px 8px 0;
     color: var(--#{$prefix}dark);
 
+    ul {
+        margin-bottom: 0.5rem; 
+    }
+
     table {
          width: 100%;
          border-collapse: collapse;
          background-color: $table-bg;
-         margin-bottom: $table-cell-padding-y;
+         margin-bottom: 0.5rem;
     }
 
     thead {
