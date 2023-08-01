@@ -65,6 +65,23 @@
     background-color: $chat-secondary-bg;
     border-radius: 8px 8px 8px 0;
     color: var(--#{$prefix}dark);
+
+    table {
+         width: 100%;
+         border-collapse: collapse;
+         background-color: $table-bg;
+         margin-bottom: $table-cell-padding-y;
+    }
+
+    thead {
+        font-weight: bold;
+    }
+
+    th,td {
+        padding: 5px;
+        border: $table-border-width solid $table-border-color;
+        text-align: center;
+    }
 }
 
 .right .user-chat-message {
