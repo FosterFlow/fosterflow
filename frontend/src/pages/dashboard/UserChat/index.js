@@ -87,7 +87,7 @@ function UserChat(props) {
                     <div
                         ref={chatWindowRef}
                         onScroll={debouncedHandleChatScroll} 
-                        className="user-chat-conversation p-3 p-lg-3"
+                        className="user-chat-conversation"
                         id="messages">
                                 <ul className="user-chat-conversation-list">
                                     {
