@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
@@ -35,6 +35,7 @@ function UserChat(props) {
     const { messages, activeDialogueId } = props;
     const relevantMessages = messages.filter(message => message.dialog_id === activeDialogueId);
     const debouncedHandleChatScroll = _.debounce(handleChatScroll, 100);
+    const [messageMaxWidth, setMessageMaxWidth] = useState(0);
 
     function handleChatScroll() {
         const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
@@ -50,6 +51,14 @@ function UserChat(props) {
             }
         }
     }, [messages]);
+
+    useEffect(() => {
+        if (messageMaxWidth === 0 && chatWindowRef.current) {
+            //need to specidy maximum width for the messages, because of possible long code blocks
+            const width = chatWindowRef.current.getBoundingClientRect().width - 32;
+            setMessageMaxWidth(width);
+        }
+    }, []);
 
     return (
         <React.Fragment>
@@ -71,12 +80,15 @@ function UserChat(props) {
                                                     </div>
                                                 </li>
                                                 <li className="user-chat-conversation-list-item"> 
-                                                    <div className="user-chat-message">
-                                                        <ReactMarkdown 
-                                                            remarkPlugins={[gfm]} 
-                                                            components={{code: CodeBlock}}>
-                                                                {chat.answer_text}
-                                                        </ReactMarkdown>
+                                                    <div 
+                                                        className="user-chat-message" 
+                                                        style={{maxWidth: `${messageMaxWidth}px`}}
+                                                        >
+                                                            <ReactMarkdown 
+                                                                remarkPlugins={[gfm]} 
+                                                                components={{code: CodeBlock}}>
+                                                                    {chat.answer_text}
+                                                            </ReactMarkdown>
                                                     </div>
                                                 </li>
                                             </React.Fragment>
