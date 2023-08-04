@@ -1,94 +1,36 @@
 import jwtDecode from 'jwt-decode';
-import axios from 'axios';
 import config from './../config';
+import { configureStore } from '../redux/store';
 
 const API_URL = config.API_URL;
 
 /**
  * Checks if user is authenticated. 
- * 
- * Middleware apiAuthorizedClient uses checkAndRefreshToken with each API request. 
- * So if tokens are existing, it means, that user is still authentifcated, if not in method
- * refreshAccessToken we remove them
  */
 const isUserAuthenticated = () => {
-    const tokens = getTokens();
-    if (!tokens) {
-        return false;
-    }
-    
-    return true;
-}
+    const state = configureStore.getState();
+    const accessToken = state.Auth.accessToken;
 
-/**
- * Sets the logged in user
- */
-const setTokens = (tokens) => {
-    localStorage.setItem('tokens', JSON.stringify(tokens));
-}
-
-/**
- * Returns the logged in user
- */
-const getTokens = () => {
-    //TODO we have to check the state by state param, not by localStorage
-    const tokens = localStorage.getItem('tokens');
-    return tokens ? (typeof (tokens) == 'object' ? tokens : JSON.parse(tokens)) : null;
-}
-
-/**
- * Refresh the access token
- * We use API here, because we use it in middleware in ApiAuthorizedClient
- */
-const refreshAccessToken = async () => {
-    let tokens = getTokens();
-    if (tokens && tokens.access) {
-        const decoded = jwtDecode(tokens.access);
-        const currentTime = Date.now() / 1000;
-        if (decoded.exp > currentTime) {
-            // Token is still valid, return it
-            return tokens.access;
-        }
+    if (accessToken && !isTokenExpired(accessToken)) {
+        return true;
     }
 
-    // Token is not in localStorage or is expired, refresh it
-    try {
-        const response = await axios.post(`${API_URL}/token/refresh/`, { refresh: tokens.refresh });
-        if (response.data && response.data.access) {
-            setTokens(response.data); // Save the new token to localStorage
-            return response.data.access;
-        }
-    } catch (error) {
-        console.error('Error refreshing access token:', error);
-        //TODO: to cause logout we have to invoke action logoutUser of Auth Redux
-        localStorage.removeItem("tokens");
-        throw error;
-    }
-}
+    return false;
+};
 
 /**
- * Checks if access token is expired and refreshes it if necessary
+ * Checks if access token is expired
  */
-const checkAndRefreshToken = async () => {
-    const tokens = getTokens();
-    if (!tokens) {
-        throw new Error('User not authenticated');
-    }
-
-    try {
-        const decoded = jwtDecode(tokens.access);
+const isTokenExpired = (accessToken) => {
+    if (accessToken) {
+        const decoded = jwtDecode(accessToken);
         const currentTime = Date.now() / 1000;
         if (decoded.exp < currentTime) {
-            console.warn('Access token expired. Refreshing...');
-            const newAccessToken = await refreshAccessToken();
-            return newAccessToken;
-        } else {
-            return tokens.access;
+            return true;
         }
-    } catch(error) {
-        console.warn('Error decoding token:', error);
-        throw error;
     }
-}
 
-export { isUserAuthenticated, setTokens, getTokens, refreshAccessToken, checkAndRefreshToken };
+    return false;
+};
+
+export { isUserAuthenticated, isTokenExpired };

@@ -1,7 +1,7 @@
-// helpers/apiAuthorizedClient.js
-
 import axios from 'axios';
-import { checkAndRefreshToken } from './authUtils';
+import { configureStore } from '../redux/store';
+import { setAccessToken, logoutUser } from '../redux/auth/actions';
+import { isTokenExpired } from './authUtils';
 import config from './../config';
 
 // Create an authorized instance
@@ -15,13 +15,25 @@ const apiAuthorizedClient = axios.create({
 // This interceptor updates the Authorization header before a request is sent
 apiAuthorizedClient.interceptors.request.use(async config => {
     try {
-        const accessToken = await checkAndRefreshToken();
-        config.headers.Authorization = `Bearer ${accessToken}`;
-      } catch (error) {
+        const state = configureStore.getState();
+        const accessToken = state.Auth.accessToken;
+
+        if (!accessToken || isTokenExpired(accessToken)) {
+            // refresh the token
+            const response = await axios.post(`${API_URL}/token/refresh/`);
+            if (response.data && response.data.access) {
+                store.dispatch(setAccessToken(response.data.access));
+                config.headers.Authorization = `Bearer ${response.data.access}`;
+            }
+        } else {
+            config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+    } catch (error) {
         // handle the error
-        console.error('An error occurred:', error);        
-      }
-      return config;
+        console.error('An error occurred:', error);
+        logoutUser();
+    }
+    return config;
 });
 
 // Response interceptor remains the same as your original code

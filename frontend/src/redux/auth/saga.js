@@ -41,29 +41,21 @@ function* login({ payload: { email, password } }) {
         setTokens(response); // Save the user data to localStorage using setLoggedInUser
         yield put(loginUserSuccess(response));            
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error.data ? error.data : error));
     }
 }
 
 
 /**
  * Logout the user
- * @param {*} param0 
  */
 function* logout() {
     try {
-        localStorage.removeItem("tokens");
+        const refreshToken = yield select(state => state.auth.refreshToken);
+        yield call(apiClient.post, '/logout/', { refresh: refreshToken });
         yield put(logoutUserSuccess(true));
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error.message));
     }
 }
 
@@ -161,6 +153,24 @@ function* validateResetToken({ payload: { token } }) {
             yield put(authError(error.data));
         } else {
             yield put(authError(error));
+        }
+    }
+}
+
+// This single method will both check if the access token is expired and refresh it if necessary
+export function* checkAndRefreshToken() {
+    const accessToken = yield select(state => state.auth.token);
+    const decodedToken = jwtDecode(accessToken);
+
+    const currentTime = Date.now() / 1000;
+    if (decodedToken.exp < currentTime) {
+        // Access token has expired, refresh it
+        const refreshToken = yield select(state => state.auth.refreshToken);
+        try {
+            const response = yield call(apiClient.post, '/token/refresh/', { refreshToken });
+            yield put(refreshTokenSuccess(response.data.access));
+        } catch (error) {
+            yield put(refreshTokenError(error.message));
         }
     }
 }
