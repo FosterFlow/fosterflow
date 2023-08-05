@@ -1,10 +1,26 @@
 import axios from 'axios';
 import { store } from '../redux/store';
 import { setAccessToken, logoutUser } from '../redux/auth/actions';
-import { isTokenExpired } from './authUtils';
 import config from './../config';
+import jwtDecode from 'jwt-decode';
 
 const API_URL = config.API_URL;
+
+
+/**
+ * Checks if access token is expired
+ */
+function isTokenExpired (accessToken) {
+  if (accessToken) {
+      const decoded = jwtDecode(accessToken);
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+          return true;
+      }
+  }
+
+  return false;
+};
 
 // Create an authorized instance
 const apiAuthorizedClient = axios.create({
@@ -21,7 +37,8 @@ apiAuthorizedClient.interceptors.request.use(async config => {
         const accessToken = state.Auth.accessToken;
 
         if (!accessToken || isTokenExpired(accessToken)) {
-            // refresh the token
+            //we keep post request here, implementing updating access token through
+            //redux, actions, saga might be too complicated
             const response = await axios.post(`${API_URL}/token/refresh/`);
             if (response.data && response.data.access) {
                 state.dispatch(setAccessToken(response.data.access));

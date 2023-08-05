@@ -23,7 +23,8 @@ const INIT_STATE = {
     accessToken: undefined,
     loading: false,
     error: null,
-    confirmationEmailSent: false
+    confirmationEmailSent: false,
+    isAuthenticated: localStorage.getItem("isAuthenticated") || false
 };
 
 
@@ -33,20 +34,20 @@ const Auth = (state = INIT_STATE, action) => {
         case SET_ACCESS_TOKEN:
             return { ...state, accessToken: action.payload };
         case DELETE_ACCESS_TOKEN:
-            return { ...state, accessToken: undefined };
+            return { ...state, isAuthenticated: false, accessToken: undefined };
         case LOGIN_USER:
             return { ...state, loading: true };
         case LOGIN_USER_SUCCESS:
-            return { ...state, accessToken: action.payload, loading: false, error: null };
+            return { ...state, isAuthenticated: true, accessToken: action.payload, loading: false, error: null };
 
         case REGISTER_USER:
             return { ...state, loading: true };
 
         case REGISTER_USER_SUCCESS:
-            return { ...state, accessToken: action.payload, loading: false, error: null };
+            return { ...state, isAuthenticated: true, accessToken: action.payload, loading: false, error: null };
 
         case LOGOUT_USER_SUCCESS:
-            return { ...state, user: null, accessToken: undefined };
+            return { ...state, isAuthenticated: false, user: null, accessToken: undefined };
 
         case FORGET_PASSWORD:
             return { ...state, loading: true };
@@ -56,7 +57,7 @@ const Auth = (state = INIT_STATE, action) => {
 
         case AUTH_FAILED:
             console.log("Reducer AUTH_FAILED Setting error to ", action.payload);
-            return { ...state, loading: false, error: action.payload };
+            return { ...state, isAuthenticated: false, accessToken: undefined, user: null, loading: false, error: action.payload };
         
         case CONFIRM_EMAIL:
             return { ...state, loading: true, emailConfirmed: false }; 

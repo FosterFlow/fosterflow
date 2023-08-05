@@ -37,7 +37,8 @@ function* login({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
         console.log("redux aux saga", "login response", response );
-
+        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
+        localStorage.setItem("isAuthenticated", true);
         yield put(loginUserSuccess(response.access));            
     } catch (error) {
         yield put(authError(error.data ? error.data : error));
@@ -50,6 +51,8 @@ function* login({ payload: { email, password } }) {
  */
 function* logout() {
     try {
+        //we use isAuthorized param for the case if user reloaded the page
+        localStorage.setItem("isAuthenticated", false);
         yield call(apiClient.post, '/logout/');
         yield put(logoutUserSuccess());
     } catch (error) {
@@ -63,6 +66,8 @@ function* logout() {
 function* register({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/register/', { email, password });
+        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
+        localStorage.setItem("isAuthenticated", true);
         yield put(registerUserSuccess(response.access));
     } catch (error) {
         if (error.data) {

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Routes as SwitchRoute, Route, Navigate } from 'react-router-dom';
-import { isUserAuthenticated } from '../helpers/authUtils';
+import { store } from '../redux/store';
 
 //import routes
 import { authProtectedRoutes, authRoutes, publicRoutes } from './routes';
@@ -13,7 +13,7 @@ import AuthLayout from "../layouts/AuthLayout/";
 const AuthProtected = (props) => {
   
       //TODO: check number of invokes
-      if (!isUserAuthenticated() ) {
+      if (!store.isAuthenticated ) {
             return (
                 <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
             );
@@ -25,7 +25,7 @@ const AuthProtected = (props) => {
 const AuthRoutes = (props) => {
   
       //TODO: check number of invokes
-      if (isUserAuthenticated() ) {
+      if (store.isAuthenticated ) {
             return (
                 <Navigate to={{ pathname: "/chats", state: { from: props.location } }} />
             );
@@ -92,10 +92,10 @@ const Routes = () => {
 }
 
 const mapStateToProps = (state) => {
-    const isAccessTokenUndefined = state.Auth.accessToken === undefined;
     return {
         //cause re-render of the router if user was authentificated or logout
-        isAccessTokenUndefined: isAccessTokenUndefined
+        isAuthenticated: state.Auth.isAuthenticated
+
     }
   };
   
