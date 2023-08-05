@@ -37,16 +37,16 @@ const Auth = (state = INIT_STATE, action) => {
         case LOGIN_USER:
             return { ...state, loading: true };
         case LOGIN_USER_SUCCESS:
-            return { ...state, tokens: action.payload, loading: false, error: null };
+            return { ...state, accessToken: action.payload, loading: false, error: null };
 
         case REGISTER_USER:
             return { ...state, loading: true };
 
         case REGISTER_USER_SUCCESS:
-            return { ...state, tokens: action.payload.tokens, loading: false, error: null };
+            return { ...state, accessToken: action.payload, loading: false, error: null };
 
         case LOGOUT_USER_SUCCESS:
-            return { ...state, user: null, tokens: null };
+            return { ...state, user: null, accessToken: undefined };
 
         case FORGET_PASSWORD:
             return { ...state, loading: true };

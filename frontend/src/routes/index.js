@@ -92,10 +92,10 @@ const Routes = () => {
 }
 
 const mapStateToProps = (state) => {
-    const areAuthTokensNull = state.Auth.tokens === null;
+    const isAccessTokenUndefined = state.Auth.accessToken === undefined;
     return {
         //cause re-render of the router if user was authentificated or logout
-        areAuthTokensNull: areAuthTokensNull
+        isAccessTokenUndefined: isAccessTokenUndefined
     }
   };
   

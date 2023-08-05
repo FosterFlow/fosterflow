@@ -41,11 +41,11 @@ export const loginUser = (email, password ) => {
     }
 };
 
-export const loginUserSuccess = (user) => {
-    console.log('Actions', 'loginUserSuccess', 'user', user);   
+export const loginUserSuccess = (accessToken) => {
+    console.log('Actions', 'loginUserSuccess', 'accessToken', accessToken);   
     return {
         type: LOGIN_USER_SUCCESS,
-        payload: user
+        payload: accessToken
     }
 };
 
