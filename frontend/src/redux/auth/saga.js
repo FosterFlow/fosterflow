@@ -1,8 +1,7 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
-
+import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects';
+import jwtDecode from 'jwt-decode';
 import apiClient from '../../helpers/apiClient';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { setTokens } from '../../helpers/authUtils';
 
 import {
     LOGIN_USER,
@@ -25,7 +24,9 @@ import {
     confirmEmailSuccess,
     resetPasswordConfirmSuccess,
     validateResetTokenSuccess,
-    sendConfirmationEmailSuccess
+    sendConfirmationEmailSuccess,
+    setAccessToken,
+    deleteAccessToken
 } from './actions';
 
 /**
@@ -38,7 +39,7 @@ function* login({ payload: { email, password } }) {
         const response = yield call(apiClient.post, '/token/', { email, password });
         console.log("redux aux saga", "login response", response );
 
-        setTokens(response); // Save the user data to localStorage using setLoggedInUser
+        setAccessToken(response.access); // Save the user data to localStorage using setLoggedInUser
         yield put(loginUserSuccess(response));            
     } catch (error) {
         yield put(authError(error.data ? error.data : error));
@@ -65,7 +66,7 @@ function* logout() {
 function* register({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/register/', { email, password });
-        setTokens(response); 
+        setAccessToken(response.access); 
         yield put(registerUserSuccess(response));
     } catch (error) {
         if (error.data) {
@@ -157,7 +158,10 @@ function* validateResetToken({ payload: { token } }) {
     }
 }
 
-// This single method will both check if the access token is expired and refresh it if necessary
+/**
+ * This single method will both check if the access token is expired and refresh it if necessary
+ *  
+ * */ 
 export function* checkAndRefreshToken() {
     const accessToken = yield select(state => state.auth.token);
     const decodedToken = jwtDecode(accessToken);
@@ -168,9 +172,10 @@ export function* checkAndRefreshToken() {
         const refreshToken = yield select(state => state.auth.refreshToken);
         try {
             const response = yield call(apiClient.post, '/token/refresh/', { refreshToken });
-            yield put(refreshTokenSuccess(response.data.access));
+            yield put(setAccessToken(response.access));
         } catch (error) {
-            yield put(refreshTokenError(error.message));
+            console.log("checkAndRefreshToken error", error);
+            yield put(deleteAccessToken());
         }
     }
 }

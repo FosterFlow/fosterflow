@@ -4,9 +4,11 @@ import { setAccessToken, logoutUser } from '../redux/auth/actions';
 import { isTokenExpired } from './authUtils';
 import config from './../config';
 
+const API_URL = config.API_URL;
+
 // Create an authorized instance
 const apiAuthorizedClient = axios.create({
-  baseURL: config.API_URL,
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -22,7 +24,7 @@ apiAuthorizedClient.interceptors.request.use(async config => {
             // refresh the token
             const response = await axios.post(`${API_URL}/token/refresh/`);
             if (response.data && response.data.access) {
-                store.dispatch(setAccessToken(response.data.access));
+                state.dispatch(setAccessToken(response.data.access));
                 config.headers.Authorization = `Bearer ${response.data.access}`;
             }
         } else {
