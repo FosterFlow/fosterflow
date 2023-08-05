@@ -14,13 +14,13 @@ import {
     VALIDATE_RESET_TOKEN,
     VALIDATE_RESET_TOKEN_SUCCESS,
     SEND_CONFIRMATION_EMAIL,
-    SEND_CONFIRMATION_EMAIL_SUCCESS
+    SEND_CONFIRMATION_EMAIL_SUCCESS,
+    SET_ACCESS_TOKEN,
+    DELETE_ACCESS_TOKEN
 } from './constants';
 
-import { getTokens } from '../../helpers/authUtils';
-
 const INIT_STATE = {
-    tokens: getTokens(),
+    accessToken: undefined,
     loading: false,
     error: null,
     confirmationEmailSent: false
@@ -30,6 +30,10 @@ const INIT_STATE = {
 const Auth = (state = INIT_STATE, action) => {
     console.log("reducers", "Auth", "action", action);
     switch (action.type) {
+        case SET_ACCESS_TOKEN:
+            return { ...state, accessToken: action.payload };
+        case DELETE_ACCESS_TOKEN:
+            return { ...state, accessToken: undefined };
         case LOGIN_USER:
             return { ...state, loading: true };
         case LOGIN_USER_SUCCESS:

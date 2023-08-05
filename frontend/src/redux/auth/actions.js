@@ -15,8 +15,23 @@ import {
     RESET_PASSWORD_CONFIRM,
     RESET_PASSWORD_CONFIRM_SUCCESS,
     VALIDATE_RESET_TOKEN,
-    VALIDATE_RESET_TOKEN_SUCCESS
+    VALIDATE_RESET_TOKEN_SUCCESS,
+    SET_ACCESS_TOKEN,
+    DELETE_ACCESS_TOKEN
 } from './constants';
+
+export const setAccessToken = (accessToken) => {
+    return {
+        type: SET_ACCESS_TOKEN,
+        payload: { accessToken }
+    }
+};
+
+export const deleteAccessToken = () => {
+    return {
+        type: DELETE_ACCESS_TOKEN,
+    }
+};
 
 export const loginUser = (email, password ) => {
     console.log('Actions', 'loginUser', 'email, password ', email, password );
