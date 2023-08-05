@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { configureStore } from '../redux/store';
+import { store } from '../redux/store';
 import { setAccessToken, logoutUser } from '../redux/auth/actions';
 import { isTokenExpired } from './authUtils';
 import config from './../config';
@@ -17,7 +17,7 @@ const apiAuthorizedClient = axios.create({
 // This interceptor updates the Authorization header before a request is sent
 apiAuthorizedClient.interceptors.request.use(async config => {
     try {
-        const state = configureStore.getState();
+        const state = store.getState();
         const accessToken = state.Auth.accessToken;
 
         if (!accessToken || isTokenExpired(accessToken)) {

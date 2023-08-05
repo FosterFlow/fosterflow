@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 import config from './../config';
-import { configureStore } from '../redux/store';
+import { store } from '../redux/store';
 
 const API_URL = config.API_URL;
 
@@ -8,7 +8,7 @@ const API_URL = config.API_URL;
  * Checks if user is authenticated. 
  */
 const isUserAuthenticated = () => {
-    const state = configureStore.getState();
+    const state = store.getState();
     const accessToken = state.Auth.accessToken;
 
     if (accessToken && !isTokenExpired(accessToken)) {
