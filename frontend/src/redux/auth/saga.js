@@ -165,6 +165,7 @@ function* refreshTokenUpdate() {
         const response = yield call(apiClient.post, '/token/refresh');
         if(response.status === "OK") {
             yield put(refreshTokenUpdateSuccess(response.access));
+            yield call(apiClient.resolve);
         }
     } catch (error) {
         if (error.data) {

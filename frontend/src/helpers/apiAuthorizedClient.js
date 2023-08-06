@@ -7,7 +7,6 @@ import jwtDecode from 'jwt-decode';
 const API_URL = config.API_URL;
 const apiRequestsQueue = [];
 
-
 /**
  * Checks if access token is expired
  */
@@ -18,9 +17,11 @@ function isTokenExpired (accessToken) {
       if (decoded.exp < currentTime) {
           return true;
       }
+
+      return false;
   }
 
-  return false;
+  return true;
 };
 
 // Create an Axios instance
@@ -62,7 +63,7 @@ function resolveRequestsQueue() {
   }
 
   if (isTokenExpired(accessToken)) {
-    refreshTokenUpdate();
+    store.dispatch(refreshTokenUpdate());
     return;
   }
 
@@ -97,6 +98,13 @@ function resolveRequestsQueue() {
 function apiRequestsManager (method, url, data) {
   let resolve, reject;
   
+  //  We use "resolve" method when we get updated access Token.
+  //  Listening store seems to be more complex into helper.
+  if (method === "resolve") {
+    resolveRequestsQueue();
+    return;
+  }
+
   const requestPromise = new Promise ((_resolve, _reject) =>{
     resolve = _resolve;
     reject = _reject;
@@ -121,5 +129,8 @@ export default {
   head: (url, data) => apiRequestsManager("head", url, data),
   options: (url, data) => apiRequestsManager("options", url, data),
   put: (url, data) => apiRequestsManager("put", url, data),
-  patch: (url, data) => apiRequestsManager("patch", url, data)
+  patch: (url, data) => apiRequestsManager("patch", url, data),
+  //  We use "resolve" method when we get updated access Token.
+  //  Listening store seems to be more complex into helper.
+  resolve: () => apiRequestsManager("resolve")
 };

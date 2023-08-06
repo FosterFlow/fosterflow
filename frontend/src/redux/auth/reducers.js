@@ -16,8 +16,6 @@ import {
     VALIDATE_RESET_TOKEN_SUCCESS,
     SEND_CONFIRMATION_EMAIL,
     SEND_CONFIRMATION_EMAIL_SUCCESS,
-    SET_ACCESS_TOKEN,
-    DELETE_ACCESS_TOKEN,
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
 } from './constants';
@@ -27,7 +25,8 @@ const INIT_STATE = {
     loading: false,
     error: null,
     confirmationEmailSent: false,
-    isAuthenticated: localStorage.getItem("isAuthenticated") || false
+    isAuthenticated: localStorage.getItem("isAuthenticated") || false,
+    refreshTokenLoading: false
 };
 
 
@@ -37,13 +36,13 @@ const Auth = (state = INIT_STATE, action) => {
         case REFRESH_TOKEN_UPDATE:
             return { ...state, refreshTokenLoading: true };
         
-            case REFRESH_TOKEN_UPDATE_SUCCESS:
+        case REFRESH_TOKEN_UPDATE_SUCCESS:
             return { ...state, refreshTokenLoading: false, accessToken: action.payload };
         
         case LOGIN_USER:
             return { ...state, loading: true };
         
-            case LOGIN_USER_SUCCESS:
+        case LOGIN_USER_SUCCESS:
             return { ...state, isAuthenticated: true, accessToken: action.payload, loading: false, error: null };
 
         case REGISTER_USER:
