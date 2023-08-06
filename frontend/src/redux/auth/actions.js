@@ -16,20 +16,20 @@ import {
     RESET_PASSWORD_CONFIRM_SUCCESS,
     VALIDATE_RESET_TOKEN,
     VALIDATE_RESET_TOKEN_SUCCESS,
-    SET_ACCESS_TOKEN,
-    DELETE_ACCESS_TOKEN
+    REFRESH_TOKEN_UPDATE,
+    REFRESH_TOKEN_UPDATE_SUCCESS,
 } from './constants';
 
-export const setAccessToken = (accessToken) => {
+export const refreshTokenUpdate = () => {
     return {
-        type: SET_ACCESS_TOKEN,
-        payload: { accessToken }
+        type: REFRESH_TOKEN_UPDATE,
     }
 };
 
-export const deleteAccessToken = () => {
+export const refreshTokenUpdateSuccess = (accessToken) => {
     return {
-        type: DELETE_ACCESS_TOKEN,
+        type: REFRESH_TOKEN_UPDATE_SUCCESS,
+        payload: accessToken
     }
 };
 

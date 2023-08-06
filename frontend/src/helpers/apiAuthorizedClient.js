@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { store } from '../redux/store';
-import { setAccessToken, logoutUser } from '../redux/auth/actions';
+import { refreshTokenUpdate } from '../redux/auth/actions';
 import config from './../config';
 import jwtDecode from 'jwt-decode';
 
 const API_URL = config.API_URL;
+const apiRequestsQueue = [];
 
 
 /**
@@ -22,42 +23,18 @@ function isTokenExpired (accessToken) {
   return false;
 };
 
-// Create an authorized instance
-const apiAuthorizedClient = axios.create({
+// Create an Axios instance
+const apiAxios = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// This interceptor updates the Authorization header before a request is sent
-apiAuthorizedClient.interceptors.request.use(async config => {
-    try {
-        const state = store.getState();
-        let accessToken = state.Auth.accessToken;
-
-        if (!accessToken || isTokenExpired(accessToken)) {
-            //we keep post request here, implementing updating access token through
-            //redux, actions, saga might be too complicated
-            const response = await axios.post(`${API_URL}/token/refresh/`);
-            if (response && response.access) {
-              accessToken = response.access;
-              state.dispatch(setAccessToken(accessToken));
-            }
-        } 
-        
-        config.headers.Authorization = `Bearer ${accessToken}`;
-    } catch (error) {
-        // handle the error
-        console.error('An error occurred:', error);
-        logoutUser();
-    }
-    return config;
-});
-
-// Response interceptor remains the same as your original code
-apiAuthorizedClient.interceptors.response.use(
-  response => response.data ? response.data : response,
+// Handling errors
+//TODO show errors on the screen
+apiAxios.interceptors.response.use(
+  response => response,
   async error => {
     let message = '';
     
@@ -71,4 +48,78 @@ apiAuthorizedClient.interceptors.response.use(
   }
 );
 
-export default apiAuthorizedClient;
+
+/**
+ * Function checks that accesss token is valid and resolve the queue of requests
+ */
+function resolveRequestsQueue() {
+  const state = store.getState();
+  const refreshTokenLoading = state.Auth.refreshTokenLoading; 
+  const accessToken = state.Auth.accessToken;
+
+  if (refreshTokenLoading){
+    return;
+  }
+
+  if (isTokenExpired(accessToken)) {
+    refreshTokenUpdate();
+    return;
+  }
+
+  //Specify valid accessToken
+  apiAxios.interceptors.request.use(async config => {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+    return config;
+  });
+
+  if (apiRequestsQueue.length > 0 ) {
+    apiRequestsQueue.forEach(({ method, url, data, resolve, reject }) => {
+      apiAxios.request({ method, url, data })
+        .then(resolve)
+        .catch(reject);
+    });
+  }
+}
+
+/**
+ * Using this method I'm trying to solve an issue when app makes a few requests 
+ * same time and access token was already expired.
+ * 
+ * Solution: add all incoming reuqets to a queue. Check access token, if it was expired - 
+ * request an update, one token is  updated - resolve all reuests from the queue. * 
+ * 
+ * @param {string} method post,get, delete, update ...
+ * @param {string} url  
+ * @param {Object} data
+ * 
+ * @returns {Object} returns promise 
+ */
+function apiRequestsManager (method, url, data) {
+  let resolve, reject;
+  
+  const requestPromise = new Promise ((_resolve, _reject) =>{
+    resolve = _resolve;
+    reject = _reject;
+  });
+
+  requestPromise.resolve = resolve;
+  requestPromise.reject = reject;
+  requestPromise.method = method;
+  requestPromise.url = url;
+  requestPromise.data = data;
+
+  apiRequestsQueue.push(requestPromise);
+  resolveRequestsQueue();
+
+  return requestPromise;
+}
+
+export default {
+  post: (url, data) => apiRequestsManager("post", url, data),
+  get: (url, data) => apiRequestsManager("get", url, data),
+  delete: (url, data) => apiRequestsManager("delete", url, data),
+  head: (url, data) => apiRequestsManager("head", url, data),
+  options: (url, data) => apiRequestsManager("options", url, data),
+  put: (url, data) => apiRequestsManager("put", url, data),
+  patch: (url, data) => apiRequestsManager("patch", url, data)
+};

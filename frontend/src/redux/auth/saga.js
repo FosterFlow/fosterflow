@@ -10,7 +10,8 @@ import {
     CONFIRM_EMAIL,
     RESET_PASSWORD_CONFIRM,
     VALIDATE_RESET_TOKEN,
-    SEND_CONFIRMATION_EMAIL
+    SEND_CONFIRMATION_EMAIL,
+    REFRESH_TOKEN_UPDATE
 } from './constants';
 
 
@@ -24,6 +25,7 @@ import {
     resetPasswordConfirmSuccess,
     validateResetTokenSuccess,
     sendConfirmationEmailSuccess,
+    refreshTokenUpdateSuccess
 } from './actions';
 
 /**
@@ -158,6 +160,25 @@ function* validateResetToken({ payload: { token } }) {
     }
 }
 
+function* refreshTokenUpdate() {
+    try {
+        const response = yield call(apiClient.post, '/token/refresh');
+        if(response.status === "OK") {
+            yield put(refreshTokenUpdateSuccess(response.access));
+        }
+    } catch (error) {
+        if (error.data) {
+            yield put(authError(error.data));
+        } else {
+            yield put(authError(error));
+        }
+    }
+}
+
+export function* watchRefreshTokenUpdate() {
+    yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdate);
+}
+
 export function* watchResetPasswordConfirm() {
     yield takeEvery(RESET_PASSWORD_CONFIRM, resetPasswordConfirm);
 }
@@ -199,7 +220,8 @@ function* authSaga() {
         fork(watchConfirmEmail),
         fork(watchSendConfirmationEmail),
         fork(watchResetPasswordConfirm), 
-        fork(watchValidateResetToken), 
+        fork(watchValidateResetToken),
+        fork(watchRefreshTokenUpdate)  
     ]);
 }
 
