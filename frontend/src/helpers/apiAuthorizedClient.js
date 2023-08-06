@@ -35,7 +35,7 @@ const apiAxios = axios.create({
 // Handling errors
 //TODO show errors on the screen
 apiAxios.interceptors.response.use(
-  response => response,
+  response => response.data ? response.data : response,
   async error => {
     let message = '';
     
