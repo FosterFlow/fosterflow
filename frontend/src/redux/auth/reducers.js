@@ -1,6 +1,7 @@
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
+    LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
@@ -46,8 +47,11 @@ const Auth = (state = INIT_STATE, action) => {
         case REGISTER_USER_SUCCESS:
             return { ...state, isAuthenticated: true, accessToken: action.payload, loading: false, error: null };
 
+        case LOGOUT_USER:
+            return { ...state, loading: true };
+
         case LOGOUT_USER_SUCCESS:
-            return { ...state, isAuthenticated: false, user: null, accessToken: undefined };
+            return { ...state, isAuthenticated: false, user: null, accessToken: undefined, loading: false };
 
         case FORGET_PASSWORD:
             return { ...state, loading: true };
@@ -56,7 +60,6 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, passwordResetStatus: action.payload, loading: false, error: null };
 
         case AUTH_FAILED:
-            console.log("Reducer AUTH_FAILED Setting error to ", action.payload);
             return { ...state, isAuthenticated: false, accessToken: undefined, user: null, loading: false, error: action.payload };
         
         case CONFIRM_EMAIL:

@@ -24,8 +24,6 @@ import {
     resetPasswordConfirmSuccess,
     validateResetTokenSuccess,
     sendConfirmationEmailSuccess,
-    setAccessToken,
-    deleteAccessToken
 } from './actions';
 
 /**
@@ -50,6 +48,7 @@ function* login({ payload: { email, password } }) {
  * Logout the user
  */
 function* logout() {
+    console.log ("Auth saga logout");
     try {
         //we use isAuthorized param for the case if user reloaded the page
         localStorage.setItem("isAuthenticated", false);

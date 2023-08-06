@@ -62,15 +62,16 @@ export const registerUserSuccess = (user) => ({
     payload: user
 });
 
-export const logoutUser = (history) => ({
-    type: LOGOUT_USER,
-    payload: { history }
-});
+export const logoutUser = (history) => {
+    return {
+        type: LOGOUT_USER,
+        payload: { history }
+    }
+};
 
 export const logoutUserSuccess = () => {
     return {
-      type: LOGOUT_USER_SUCCESS,
-      payload: {},
+      type: LOGOUT_USER_SUCCESS
     };
   };
 
