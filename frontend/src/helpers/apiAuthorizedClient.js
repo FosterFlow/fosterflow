@@ -34,19 +34,19 @@ const apiAuthorizedClient = axios.create({
 apiAuthorizedClient.interceptors.request.use(async config => {
     try {
         const state = store.getState();
-        const accessToken = state.Auth.accessToken;
+        let accessToken = state.Auth.accessToken;
 
         if (!accessToken || isTokenExpired(accessToken)) {
             //we keep post request here, implementing updating access token through
             //redux, actions, saga might be too complicated
             const response = await axios.post(`${API_URL}/token/refresh/`);
-            if (response.data && response.data.access) {
-                state.dispatch(setAccessToken(response.data.access));
-                config.headers.Authorization = `Bearer ${response.data.access}`;
+            if (response && response.access) {
+              accessToken = response.access;
+              state.dispatch(setAccessToken(accessToken));
             }
-        } else {
-            config.headers.Authorization = `Bearer ${accessToken}`;
-        }
+        } 
+        
+        config.headers.Authorization = `Bearer ${accessToken}`;
     } catch (error) {
         // handle the error
         console.error('An error occurred:', error);
