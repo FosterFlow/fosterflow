@@ -162,7 +162,7 @@ function* validateResetToken({ payload: { token } }) {
 
 function* refreshTokenUpdate() {
     try {
-        const response = yield call(apiClient.post, '/token/refresh');
+        const response = yield call(apiClient.post, '/token/refresh/');
         if(response.status === "OK") {
             yield put(refreshTokenUpdateSuccess(response.access));
             yield call(apiClient.resolve);
