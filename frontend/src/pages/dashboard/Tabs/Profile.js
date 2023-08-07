@@ -9,10 +9,6 @@ import {
   Card,
 } from "reactstrap";
 
-import { 
-  getProfile
-} from "../../../redux/profile/actions";
-
 //Import components
 import CustomCollapse from "../../../components/CustomCollapse";
 
@@ -37,11 +33,6 @@ function Profile(props) {
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
-  useEffect(() => {
-    props.getProfile();
-  }, []);
-  
-  
   return (
     <React.Fragment>
       <div className="chat-leftsidebar me-lg-1">
@@ -71,7 +62,7 @@ function Profile(props) {
           </div>
 
           <h5 className="font-size-16 mb-1 text-truncate">
-            {t("Patricia Smith")}
+            {props.profile.first_name} {props.profile.last_name}
           </h5>
         </div>
         {/* End profile user  */}
@@ -117,7 +108,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-  getProfile
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile));
