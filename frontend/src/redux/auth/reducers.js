@@ -20,12 +20,13 @@ import {
     REFRESH_TOKEN_UPDATE_SUCCESS,
 } from './constants';
 
+const isAuthenticated = localStorage.getItem("isAuthenticated");
 const INIT_STATE = {
     accessToken: undefined,
     loading: false,
     error: null,
     confirmationEmailSent: false,
-    isAuthenticated: localStorage.getItem("isAuthenticated") || false,
+    isAuthenticated: JSON.parse(isAuthenticated ) || false,
     refreshTokenLoading: false
 };
 
