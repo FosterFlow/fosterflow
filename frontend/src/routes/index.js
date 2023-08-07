@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 import { Routes as SwitchRoute, Route, Navigate, useLocation } from 'react-router-dom';
-import { store } from '../redux/store';
 import { authProtectedRoutes, authRoutes, publicRoutes } from './routes';
 import { connect } from "react-redux";
 import NonAuthLayout from "../layouts/NonAuth";

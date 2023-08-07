@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeEvery, select } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import apiClient from '../../helpers/apiClient';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 

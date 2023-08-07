@@ -123,7 +123,7 @@ function apiRequestsManager (method, url, data) {
   return requestPromise;
 }
 
-export default {
+const apiAuthorizedClient = {
   post: (url, data) => apiRequestsManager("post", url, data),
   get: (url, data) => apiRequestsManager("get", url, data),
   delete: (url, data) => apiRequestsManager("delete", url, data),
@@ -135,3 +135,5 @@ export default {
   //  Listening store seems to be more complex into helper.
   resolve: () => apiRequestsManager("resolve")
 };
+
+export default apiAuthorizedClient;
