@@ -29,11 +29,6 @@ function Profile(props) {
     setIsOpen2(false);
   };
 
-  const toggleCollapse2 = () => {
-    setIsOpen2(!isOpen2);
-    setIsOpen1(false);
-  };
-
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
   return (
@@ -70,10 +65,6 @@ function Profile(props) {
           <h5 className="font-size-16 mb-1 text-truncate">
             {t("Patricia Smith")}
           </h5>
-          <p className="text-muted text-truncate mb-1">
-            <i className="ri-record-circle-fill font-size-10 text-success me-1 d-inline-block"></i>{" "}
-            {t("Active")}
-          </p>
         </div>
         {/* End profile user  */}
         
@@ -104,15 +95,6 @@ function Profile(props) {
                   <h5 className="font-size-14">{t("adc@123.com")}</h5>
                 </div>
 
-                <div className="mt-4">
-                  <p className="text-muted mb-1">{t("Time")}</p>
-                  <h5 className="font-size-14">{t("11:40 AM")}</h5>
-                </div>
-
-                <div className="mt-4">
-                  <p className="text-muted mb-1">{t("Location")}</p>
-                  <h5 className="font-size-14 mb-0">{t("California, USA")}</h5>
-                </div>
               </CustomCollapse>
             </Card>
             {/* End About card  */}

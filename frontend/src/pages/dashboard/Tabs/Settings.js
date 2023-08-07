@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Card, Button } from "reactstrap";
+import { Card, Button } from "reactstrap";
 
 import SimpleBar from "simplebar-react";
 
@@ -13,7 +13,6 @@ import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import { useTranslation } from 'react-i18next';
 
 function Settings(props) {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [isOpen1, setIsOpen1] = useState(true);
 
     /* intilize t variable for multi language implementation */
@@ -22,8 +21,6 @@ function Settings(props) {
     const toggleCollapse1 = () => {
         setIsOpen1(!isOpen1);
     };
-
-    const toggle = () => setDropdownOpen(!dropdownOpen);
 
     return (
         <React.Fragment>
@@ -42,16 +39,6 @@ function Settings(props) {
                     </div>
 
                     <h5 className="font-size-16 mb-1 text-truncate">{t('Patricia Smith')}</h5>
-                    <Dropdown isOpen={dropdownOpen} toggle={toggle} className="d-inline-block mb-1">
-                        <DropdownToggle tag="a" className="text-muted pb-1 d-block" >
-                            {t('Available')} <i className="mdi mdi-chevron-down"></i>
-                        </DropdownToggle>
-
-                        <DropdownMenu>
-                            <DropdownItem>{t('Available')}</DropdownItem>
-                            <DropdownItem>{t('Busy')}</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
                 </div>
                 {/* End profile user */}
 
@@ -65,7 +52,6 @@ function Settings(props) {
                                 isOpen={isOpen1}
                                 toggleCollapse={toggleCollapse1}
                             >
-
                                 <div className="float-end">
                                     <Button color="light" size="sm" type="button" ><i className="ri-edit-fill me-1 align-middle"></i> {t('Edit')}</Button>
                                 </div>
@@ -80,15 +66,6 @@ function Settings(props) {
                                     <h5 className="font-size-14">'adc@123.com'</h5>
                                 </div>
 
-                                <div className="mt-4">
-                                    <p className="text-muted mb-1">{t('Time')}</p>
-                                    <h5 className="font-size-14">'11:40 AM'</h5>
-                                </div>
-
-                                <div className="mt-4">
-                                    <p className="text-muted mb-1">{t('Location')}</p>
-                                    <h5 className="font-size-14 mb-0">{t('California')}, {t('USA')}</h5>
-                                </div>
                             </CustomCollapse>
                             
                         </Card>

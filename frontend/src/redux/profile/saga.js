@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { GET_PROFILE, UPDATE_PROFILE, DELETE_PROFILE } from './constants';
+import { GET_PROFILE, UPDATE_PROFILE } from './constants';
 import { getProfileSuccess, updateProfileSuccess, profileError } from './actions';
 const api = apiAuthorizedClient;
 
@@ -23,14 +23,6 @@ function* updateProfile({ payload: { id, data } }) {
     }
 }
 
-function* deleteProfile({ payload: { id } }) {
-    try {
-        yield call(api.post, `/profiles/${id}/`);
-    } catch (error) {
-        yield put(profileError(error));
-    }
-}
-
 export function* watchGetProfile() {
     yield takeEvery(GET_PROFILE, getProfile);
 }
@@ -39,15 +31,10 @@ export function* watchUpdateProfile() {
     yield takeEvery(UPDATE_PROFILE, updateProfile);
 }
 
-export function* watchDeleteProfile() {
-    yield takeEvery(DELETE_PROFILE, deleteProfile);
-}
-
 function* profileSaga() {
     yield all([
         fork(watchGetProfile),
         fork(watchUpdateProfile),
-        fork(watchDeleteProfile),
     ]);
 }
 
