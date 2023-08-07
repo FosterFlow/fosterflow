@@ -13,6 +13,7 @@ import SidebarMenuDesktop from "./SidebarMenuDesktop";
 const Index = (props) => {
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+    const authorizedUser = props.authorizedUser;
 
     if (props.layoutMode){
         //TODO: move to jsx template
@@ -20,11 +21,16 @@ const Index = (props) => {
     }
     
     useEffect(() => {
-        //set document title according to page path name
         document.title = "FosterFlow Chat";
         props.getAuthorizedUser();
-        props.getProfile();
     }, []);
+
+
+    useEffect(() => {
+        if (authorizedUser && authorizedUser.id){
+            props.getProfile(authorizedUser.id);
+        }
+    }, [authorizedUser]);
 
     const sendConfirmationEmailAgain = () => {
         props.sendConfirmationEmail();
