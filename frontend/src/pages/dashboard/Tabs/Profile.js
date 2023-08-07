@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import withRouter from "../../../components/withRouter";
 import {
   Dropdown,
   DropdownMenu,
@@ -6,6 +8,10 @@ import {
   DropdownToggle,
   Card,
 } from "reactstrap";
+
+import { 
+  getProfile
+} from "../../../redux/profile/actions";
 
 //Import components
 import CustomCollapse from "../../../components/CustomCollapse";
@@ -31,6 +37,11 @@ function Profile(props) {
 
   const toggle = () => setDropdownOpen(!dropdownOpen);
 
+  useEffect(() => {
+    props.getProfile();
+  }, []);
+  
+  
   return (
     <React.Fragment>
       <div className="chat-leftsidebar me-lg-1">
@@ -45,9 +56,6 @@ function Profile(props) {
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-end">
                 <DropdownItem>{t("Edit")}</DropdownItem>
-                <DropdownItem>{t("Action")}</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>{t("Another action")}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -70,11 +78,6 @@ function Profile(props) {
         
         {/* Start user-profile-desc */}
         <div className="p-4 user-profile-desc">
-          <div className="text-muted">
-            <p className="mb-4">
-              {t('If several languages coalesce, the grammar of the resulting language is more simple and regular than that of the individual.')}
-            </p>
-          </div>
 
           <div id="profile-user-accordion-1" className="custom-accordion">
             <Card className="shadow-none border mb-2">
@@ -86,7 +89,7 @@ function Profile(props) {
                 toggleCollapse={toggleCollapse1}
               >
                 <div>
-                  <p className="text-muted mb-1">{t("Name")}</p>
+                  <p className="text-muted mb-1">{t("Name")} {t("Surname")}</p>
                   <h5 className="font-size-14">{t("Patricia Smith")}</h5>
                 </div>
 
@@ -108,4 +111,13 @@ function Profile(props) {
   );
 }
 
-export default Profile;
+const mapStateToProps = (state) => ({
+  profile: state.Profile,
+  user: state.User
+});
+
+const mapDispatchToProps = {
+  getProfile
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile));

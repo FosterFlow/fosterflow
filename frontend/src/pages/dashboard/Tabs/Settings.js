@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
 import { Card, Button } from "reactstrap";
-
+import { connect } from "react-redux";
+import withRouter from "../../../components/withRouter";
 import SimpleBar from "simplebar-react";
-
-//Import components
 import CustomCollapse from "../../../components/CustomCollapse";
-
-//Import Images
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
-
-//i18n
 import { useTranslation } from 'react-i18next';
 
 function Settings(props) {
@@ -57,7 +52,7 @@ function Settings(props) {
                                 </div>
 
                                 <div>
-                                    <p className="text-muted mb-1">{t('Name')}</p>
+                                    <p className="text-muted mb-1">{t('Full Name')}</p>
                                     <h5 className="font-size-14">{t('Patricia Smith')}</h5>
                                 </div>
 
@@ -80,4 +75,12 @@ function Settings(props) {
     );
 }
 
-export default Settings;
+const mapStateToProps = (state) => ({
+    profile: state.Profile,
+    user: state.User
+});
+
+const mapDispatchToProps = {
+}
+  
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));

@@ -3,10 +3,15 @@ import { Input, InputGroup } from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import SimpleBar from "simplebar-react";
 import UserChat from "../UserChat/";
 import NewUserChat from "../NewUserChat";
-import { fetchDialogues, fetchMessages, getAuthorizedUser, setActiveDialogue, setActiveNewChat, showChatWindow } from "../../../redux/actions";
+import { 
+    fetchDialogues,
+    fetchMessages,
+    setActiveDialogue,
+    setActiveNewChat,
+    showChatWindow 
+} from "../../../redux/actions";
 //i18n
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
@@ -18,10 +23,6 @@ const Chats = (props) => {
     const [recentChatList, setRecentChatList] = useState([]);
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
-
-    useEffect(() => {
-        props.getAuthorizedUser();
-    }, []);
 
     useEffect(() => {
         if (props.authorizedUser === null){
@@ -154,7 +155,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    getAuthorizedUser,
     fetchDialogues,
     fetchMessages,
     setActiveDialogue,

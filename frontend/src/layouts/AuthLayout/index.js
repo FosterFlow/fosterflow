@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
 import withRouter from '../../components/withRouter';
-import { sendConfirmationEmail } from '../../redux/actions';
+import { sendConfirmationEmail, getAuthorizedUser, getProfile } from '../../redux/actions';
 
 //i18n
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,8 @@ const Index = (props) => {
     useEffect(() => {
         //set document title according to page path name
         document.title = "FosterFlow Chat";
+        props.getAuthorizedUser();
+        props.getProfile();
     }, []);
 
     const sendConfirmationEmailAgain = () => {
@@ -57,7 +59,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    sendConfirmationEmail
+    sendConfirmationEmail,
+    getAuthorizedUser,
+    getProfile
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));
