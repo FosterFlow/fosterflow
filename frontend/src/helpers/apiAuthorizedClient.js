@@ -79,6 +79,7 @@ function resolveRequestsQueue() {
         .then(resolve)
         .catch(reject);
     });
+    apiRequestsQueue.length = 0;
   }
 }
 
