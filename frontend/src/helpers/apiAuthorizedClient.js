@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { store } from '../redux/store';
-import { refreshTokenUpdate } from '../redux/auth/actions';
+import { 
+  refreshTokenUpdate,
+  addAuthenticatedApiRequest,
+  clearAuthenticatedApiRequestsQueue
+} from '../redux/auth/actions';
 import config from './../config';
 import jwtDecode from 'jwt-decode';
 
 const API_URL = config.API_URL;
-const apiRequestsQueue = [];
 
 /**
  * Checks if access token is expired
@@ -56,12 +59,12 @@ apiAxios.interceptors.response.use(
 function resolveRequestsQueue() {
   const state = store.getState();
   const refreshTokenLoading = state.Auth.refreshTokenLoading; 
-  const accessToken = state.Auth.accessToken;
-
+  
   if (refreshTokenLoading){
     return;
   }
 
+  const accessToken = state.Auth.accessToken;
   if (isTokenExpired(accessToken)) {
     store.dispatch(refreshTokenUpdate());
     return;
@@ -73,13 +76,14 @@ function resolveRequestsQueue() {
     return config;
   });
 
+  const apiRequestsQueue = state.Auth.authenticatedApiRequestsQueue;
   if (apiRequestsQueue.length > 0 ) {
     apiRequestsQueue.forEach(({ method, url, data, resolve, reject }) => {
       apiAxios.request({ method, url, data })
         .then(resolve)
         .catch(reject);
     });
-    apiRequestsQueue.length = 0;
+    store.dispatch(clearAuthenticatedApiRequestsQueue());
   }
 }
 
@@ -117,7 +121,7 @@ function apiRequestsManager (method, url, data) {
   requestPromise.url = url;
   requestPromise.data = data;
 
-  apiRequestsQueue.push(requestPromise);
+  store.dispatch(addAuthenticatedApiRequest(requestPromise));
   resolveRequestsQueue();
 
   return requestPromise;

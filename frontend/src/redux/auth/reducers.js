@@ -18,7 +18,9 @@ import {
     SEND_CONFIRMATION_EMAIL_SUCCESS,
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
-    REFRESH_TOKEN_UPDATE_FAILURE
+    REFRESH_TOKEN_UPDATE_FAILURE,
+    ADD_AUTHENTICATED_API_REQUEST,
+    CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
 } from './constants';
 
 const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -28,7 +30,8 @@ const INIT_STATE = {
     error: null,
     confirmationEmailSent: false,
     isAuthenticated: JSON.parse(isAuthenticated ) || false,
-    refreshTokenLoading: false
+    refreshTokenLoading: false,
+    authenticatedApiRequestsQueue: []
 };
 
 
@@ -42,7 +45,21 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, refreshTokenLoading: false, accessToken: action.payload };
 
         case REFRESH_TOKEN_UPDATE_FAILURE:
-            return { ...state, refreshTokenLoading: false, error: action.payload };
+            return { 
+                ...state,
+                refreshTokenLoading: false,
+                error: action.payload,
+                authenticatedApiRequestsQueue: []
+            };
+
+        case ADD_AUTHENTICATED_API_REQUEST:
+            return { 
+                ...state,
+                authenticatedApiRequestsQueue : [...state.authenticatedApiRequestsQueue, action.payload]
+            };
+
+        case CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE:
+            return { ...state, authenticatedApiRequestsQueue: [] };
         
         case LOGIN_USER:
             return { ...state, loading: true };
@@ -60,7 +77,15 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, loading: true };
 
         case LOGOUT_USER_SUCCESS:
-            return { ...state, isAuthenticated: false, user: null, accessToken: undefined, refreshTokenLoading: false, loading: false,  };
+            return { 
+                ...state,
+                isAuthenticated: false,
+                user: null,
+                accessToken: undefined,
+                refreshTokenLoading: false,
+                loading: false,
+                authenticatedApiRequestsQueue: []
+            };
 
         case FORGET_PASSWORD:
             return { ...state, loading: true };

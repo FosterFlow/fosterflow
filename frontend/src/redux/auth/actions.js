@@ -18,7 +18,9 @@ import {
     VALIDATE_RESET_TOKEN_SUCCESS,
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
-    REFRESH_TOKEN_UPDATE_FAILURE
+    REFRESH_TOKEN_UPDATE_FAILURE,
+    ADD_AUTHENTICATED_API_REQUEST,
+    CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
 } from './constants';
 
 export const refreshTokenUpdate = () => {
@@ -40,7 +42,6 @@ export const refreshTokenUpdateFailure = (error) => {
         payload: error
     }
 };
-
 
 export const loginUser = (email, password ) => {
     console.log('Actions', 'loginUser', 'email, password ', email, password );
@@ -135,4 +136,13 @@ export const validateResetToken = (token) => ({
 
 export const validateResetTokenSuccess = () => ({
     type: VALIDATE_RESET_TOKEN_SUCCESS
+});
+
+export const addAuthenticatedApiRequest = (requestPromise) => ({
+    type: ADD_AUTHENTICATED_API_REQUEST,
+    payload: requestPromise
+});
+
+export const clearAuthenticatedApiRequestsQueue = () => ({
+    type: CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
 });
