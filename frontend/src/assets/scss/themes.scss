@@ -48,16 +48,6 @@
   height: 36px;
 }
 
-.profile-user-dropdown {
-  .dropdown-item {
-    &.active {
-      color: $white;
-      text-decoration: none;
-      background-color: $primary;
-    }
-  }
-}
-
 .close {
   background: transparent;
   border: 0;
@@ -87,18 +77,6 @@
     }
     .logo-light {
       display: block;
-    }
-  }
-}
-
-.profile-user-dropdown{
-  &.dropup {
-    .dropdown-menu{
-      bottom: 51px;
-      top: auto !important;
-      &.show {
-        top: auto !important;
-      }
     }
   }
 }
