@@ -89,10 +89,10 @@ function resolveRequestsQueue() {
 
 /**
  * Using this method I'm trying to solve an issue when app makes a few requests 
- * same time and access token was already expired.
+ * same time, but access token was already expired. And axios makes a few requests for refresh token update.
  * 
  * Solution: add all incoming reuqets to a queue. Check access token, if it was expired - 
- * request an update, one token is  updated - resolve all reuests from the queue. * 
+ * request an update, once token is  updated - resolve all reuests from the queue. 
  * 
  * @param {string} method post,get, delete, update ...
  * @param {string} url  
