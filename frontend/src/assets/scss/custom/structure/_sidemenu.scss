@@ -106,6 +106,8 @@
 
 .profile-user-dropdown{
     .dropdown-item {
+        padding: 0;
+
         &.active {
           color: $white;
           text-decoration: none;
@@ -114,6 +116,8 @@
 
         a {
             color: $secondary;
+            display: block;
+            padding: var(--#{$prefix}dropdown-item-padding-y) var(--#{$prefix}dropdown-item-padding-x);
         }
       }
 
