@@ -57,10 +57,13 @@ function LeftSidebarMenu(props) {
                         <UncontrolledTooltip target="Settings" placement="top">
                             {t('Settings')}
                         </UncontrolledTooltip>
-                        <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup profile-user-dropdown" toggle={toggleChangeLanguge}>
-                            <DropdownToggle nav>
+                        <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup" toggle={toggleChangeLanguge}>
+                            <DropdownToggle nav id="languages">
                                 <i className="ri-global-line"></i>
                             </DropdownToggle>
+                            <UncontrolledTooltip target="languages" placement="top">
+                                {t('Change Language')}
+                            </UncontrolledTooltip>
                             <DropdownMenu>
                                 <DropdownItem onClick={() => props.setLanguage('en')} active={props.language === "en"}>
                                     <img src={usFlag} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('English')}</span>
@@ -79,14 +82,14 @@ function LeftSidebarMenu(props) {
                                 </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
-                        <NavItem>
-                            <NavLink id="light-dark"  onClick={onChangeLayoutMode}>
+                        <NavItem id="light-dark">
+                            <NavLink onClick={onChangeLayoutMode}>
                                 <i className="ri-sun-line theme-mode-icon"></i>
                             </NavLink>
-                            <UncontrolledTooltip target="light-dark" placement="right">
-                                {t('Dark / Light Mode')}
-                            </UncontrolledTooltip>
                         </NavItem>
+                        <UncontrolledTooltip target="light-dark" placement="right">
+                            {t('Dark / Light Mode')}
+                        </UncontrolledTooltip>
                         <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
                             <DropdownToggle className="nav-link" tag="a">
                                 <img src={avatar1} alt="" className="profile-user rounded-circle" />
