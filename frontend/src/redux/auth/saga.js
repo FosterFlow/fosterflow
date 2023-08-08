@@ -25,7 +25,8 @@ import {
     resetPasswordConfirmSuccess,
     validateResetTokenSuccess,
     sendConfirmationEmailSuccess,
-    refreshTokenUpdateSuccess
+    refreshTokenUpdateSuccess,
+    refreshTokenUpdateFailure
 } from './actions';
 
 /**
@@ -169,9 +170,9 @@ function* refreshTokenUpdate() {
         }
     } catch (error) {
         if (error.data) {
-            yield put(authError(error.data));
+            yield put(refreshTokenUpdateFailure(error.data));
         } else {
-            yield put(authError(error));
+            yield put(refreshTokenUpdateFailure(error));
         }
     }
 }

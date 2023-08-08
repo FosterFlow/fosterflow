@@ -18,6 +18,7 @@ import {
     SEND_CONFIRMATION_EMAIL_SUCCESS,
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
+    REFRESH_TOKEN_UPDATE_FAILURE
 } from './constants';
 
 const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -39,6 +40,9 @@ const Auth = (state = INIT_STATE, action) => {
         
         case REFRESH_TOKEN_UPDATE_SUCCESS:
             return { ...state, refreshTokenLoading: false, accessToken: action.payload };
+
+        case REFRESH_TOKEN_UPDATE_FAILURE:
+            return { ...state, refreshTokenLoading: false, error: action.payload };
         
         case LOGIN_USER:
             return { ...state, loading: true };
@@ -56,7 +60,7 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, loading: true };
 
         case LOGOUT_USER_SUCCESS:
-            return { ...state, isAuthenticated: false, user: null, accessToken: undefined, loading: false };
+            return { ...state, isAuthenticated: false, user: null, accessToken: undefined, refreshTokenLoading: false, loading: false,  };
 
         case FORGET_PASSWORD:
             return { ...state, loading: true };

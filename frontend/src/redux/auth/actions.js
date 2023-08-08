@@ -18,6 +18,7 @@ import {
     VALIDATE_RESET_TOKEN_SUCCESS,
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
+    REFRESH_TOKEN_UPDATE_FAILURE
 } from './constants';
 
 export const refreshTokenUpdate = () => {
@@ -32,6 +33,14 @@ export const refreshTokenUpdateSuccess = (accessToken) => {
         payload: accessToken
     }
 };
+
+export const refreshTokenUpdateFailure = (error) => {
+    return {
+        type: REFRESH_TOKEN_UPDATE_FAILURE,
+        payload: error
+    }
+};
+
 
 export const loginUser = (email, password ) => {
     console.log('Actions', 'loginUser', 'email, password ', email, password );
