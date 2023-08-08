@@ -99,7 +99,7 @@ function LeftSidebarMenu(props) {
                                 </DropdownItem>
                                 <DropdownItem>
                                     <RouterNavLink to="/settings">
-                                        {t('Setting')} <i className="ri-settings-3-line float-end text-muted"></i>
+                                        {t('Settings')} <i className="ri-settings-3-line float-end text-muted"></i>
                                     </RouterNavLink>
                                 </DropdownItem>
                                 <DropdownItem divider />

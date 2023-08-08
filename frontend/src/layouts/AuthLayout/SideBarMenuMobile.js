@@ -86,10 +86,22 @@ function LeftSidebarMenu(props) {
                             <img src={avatar1} alt="" className="profile-user rounded-circle" />
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem href="/profile">{t('Profile')} <i className="ri-profile-line float-end text-muted"></i></DropdownItem>
-                            <DropdownItem href="/settings">{t('Setting')} <i className="ri-settings-3-line float-end text-muted"></i></DropdownItem>
+                            <DropdownItem>
+                                <RouterNavLink to="/profile">
+                                    {t('Profile')} <i className="ri-profile-line float-end text-muted"></i>
+                                </RouterNavLink>
+                            </DropdownItem>
+                            <DropdownItem>
+                                <RouterNavLink to="/settings">
+                                    {t('Setting')} <i className="ri-settings-3-line float-end text-muted"></i>
+                                </RouterNavLink>
+                            </DropdownItem>
                             <DropdownItem divider />
-                            <DropdownItem href="/logout">{t('Log out')} <i className="ri-logout-circle-r-line float-end text-muted"></i></DropdownItem>
+                            <DropdownItem>
+                                <RouterNavLink to="/logout">
+                                    {t('Log out')} <i className="ri-logout-circle-r-line float-end text-muted"></i>
+                                </RouterNavLink>
+                            </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </Nav>
