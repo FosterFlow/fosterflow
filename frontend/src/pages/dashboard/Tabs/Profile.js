@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { NavLink as RouterNavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import {
@@ -46,7 +47,11 @@ function Profile(props) {
                 <i className="ri-more-2-fill"></i>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-end">
-                <DropdownItem>{t("Edit")}</DropdownItem>
+                <DropdownItem>
+                  <RouterNavLink to="/settings">
+                    {t("Edit")}
+                  </RouterNavLink>
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -81,14 +86,10 @@ function Profile(props) {
               >
                 <div>
                   <p className="text-muted mb-1">{t("Name")} {t("Surname")}</p>
-                  <h5 className="font-size-14">{t("Patricia Smith")}</h5>
+                  <h5 className="font-size-14">
+                    {props.profile.first_name} {props.profile.last_name}
+                  </h5>
                 </div>
-
-                <div className="mt-4">
-                  <p className="text-muted mb-1">{t("Email")}</p>
-                  <h5 className="font-size-14">{t("adc@123.com")}</h5>
-                </div>
-
               </CustomCollapse>
             </Card>
             {/* End About card  */}
