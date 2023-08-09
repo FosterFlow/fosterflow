@@ -3,6 +3,7 @@ import {
     LOGIN_USER_SUCCESS,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
+    LOGOUT_USER_FAILED,
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
     FORGET_PASSWORD,
@@ -83,7 +84,13 @@ export const logoutUserSuccess = () => {
     return {
       type: LOGOUT_USER_SUCCESS
     };
-  };
+};
+
+export const logoutUserFailed = () => {
+    return {
+      type: LOGOUT_USER_FAILED
+    };
+};
 
 export const forgetPassword = (email) => ({
     type: FORGET_PASSWORD,

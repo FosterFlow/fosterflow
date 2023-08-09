@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 const Chats = (props) => {
-    console.log("Chats, props", JSON.stringify(props));
     const id = Number(props.router.params.id) || 0;
     const [searchChat, setSearchChat] = useState("");
     const [recentChatList, setRecentChatList] = useState([]);

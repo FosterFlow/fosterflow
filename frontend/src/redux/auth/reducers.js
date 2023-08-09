@@ -3,6 +3,7 @@ import {
     LOGIN_USER_SUCCESS,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
+    LOGOUT_USER_FAILED,
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
     FORGET_PASSWORD,
@@ -74,17 +75,29 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, isAuthenticated: true, accessToken: action.payload, loading: false, error: null };
 
         case LOGOUT_USER:
-            return { ...state, loading: true };
-
-        case LOGOUT_USER_SUCCESS:
             return { 
                 ...state,
                 isAuthenticated: false,
                 user: null,
+                loading: true
+            };
+
+        case LOGOUT_USER_SUCCESS:
+            return { 
+                ...state,
                 accessToken: undefined,
                 refreshTokenLoading: false,
+                authenticatedApiRequestsQueue: [],
                 loading: false,
-                authenticatedApiRequestsQueue: []
+            };
+
+        case LOGOUT_USER_FAILED:
+            return { 
+                accessToken: undefined,
+                refreshTokenLoading: false,
+                authenticatedApiRequestsQueue: [],
+                loading: false,
+                error: action.payload
             };
 
         case FORGET_PASSWORD:

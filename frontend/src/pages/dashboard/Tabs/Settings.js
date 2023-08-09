@@ -63,7 +63,7 @@ function Settings(props) {
                                 <div className="mt-4">
                                     <p className="text-muted mb-1">{t('Email')}</p>
                                     <h5 className="font-size-14">
-                                        {props.user.email}
+                                        {props.user.authorizedUser.email}
                                     </h5>
                                 </div>
 

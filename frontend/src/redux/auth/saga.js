@@ -21,6 +21,7 @@ import {
     forgetPasswordSuccess,
     authError,
     logoutUserSuccess,
+    logoutUserFailed,
     confirmEmailSuccess,
     resetPasswordConfirmSuccess,
     validateResetTokenSuccess,
@@ -58,7 +59,7 @@ function* logout() {
         yield call(apiClient.post, '/logout/');
         yield put(logoutUserSuccess());
     } catch (error) {
-        yield put(authError(error.message));
+        yield put(logoutUserFailed(error.message));
     }
 }
 
