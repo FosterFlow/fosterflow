@@ -10,7 +10,6 @@ import avatar1 from "../../assets/images/users/avatar-1.jpg";
 import { useTranslation } from 'react-i18next';
 
 //TODO move to css sprite
-// falgs
 import usFlag from "../../assets/images/flags/us.jpg";
 import spain from "../../assets/images/flags/spain.jpg";
 import germany from "../../assets/images/flags/germany.jpg";
