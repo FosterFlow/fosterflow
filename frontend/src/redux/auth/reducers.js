@@ -66,13 +66,25 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, loading: true };
         
         case LOGIN_USER_SUCCESS:
-            return { ...state, isAuthenticated: true, accessToken: action.payload, loading: false, error: null };
+            return { 
+                ...state,
+                isAuthenticated: true,
+                accessToken: action.payload,
+                loading: false,
+                error: null
+            };
 
         case REGISTER_USER:
             return { ...state, loading: true };
 
         case REGISTER_USER_SUCCESS:
-            return { ...state, isAuthenticated: true, accessToken: action.payload, loading: false, error: null };
+            return { 
+                ...state,
+                isAuthenticated: true,
+                accessToken: action.payload,
+                loading: false,
+                error: null
+            };
 
         case LOGOUT_USER:
             return { 

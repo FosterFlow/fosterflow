@@ -27,6 +27,14 @@ function isTokenExpired (accessToken) {
   return true;
 };
 
+function getAccessTokenFromAxios() {
+  const authHeader = apiAxios.defaults.headers['Authorization'];
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+      return authHeader.split(' ')[1];
+  }
+  return ""; 
+}
+
 // Create an Axios instance
 const apiAxios = axios.create({
   baseURL: API_URL,
@@ -70,11 +78,10 @@ function resolveRequestsQueue() {
     return;
   }
 
-  //Specify valid accessToken
-  apiAxios.interceptors.request.use(async config => {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-    return config;
-  });
+  const axiosAccessToken = getAccessTokenFromAxios();
+  if (accessToken !== axiosAccessToken) {
+    apiAxios.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+  }
 
   const apiRequestsQueue = state.Auth.authenticatedApiRequestsQueue;
   if (apiRequestsQueue.length > 0 ) {
