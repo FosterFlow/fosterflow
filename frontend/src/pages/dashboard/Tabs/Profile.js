@@ -15,6 +15,17 @@ function Profile(props) {
   /* intilize t variable for multi language implementation */
   const { t } = useTranslation();
 
+  function fullName (){
+    if (props.profile) {
+      const firstName = props.profile.first_name;
+      const lastName = props.profile.last_name;
+      if (firstName || lastName) {
+          return firstName + " " + lastName; 
+      }
+    }
+    return t("Name not specified");
+  }
+
   return (
     <React.Fragment>
       <div className="user-profile me-lg-1">
@@ -38,7 +49,7 @@ function Profile(props) {
               </div>
 
               <h5 className="font-size-16 mb-1 text-truncate">
-                {props.profile.first_name} {props.profile.last_name}
+                {fullName()}
               </h5>
             </div>
             {/* End profile user  */}
@@ -48,10 +59,8 @@ function Profile(props) {
               <Card className="border">
                   <CardHeader>{t("About")}</CardHeader>
                   <CardBody>
-                    <p className="text-muted mb-1">{t("Name")} {t("Surname")}</p>
-                    <h5 className="font-size-14">
-                      {props.profile.first_name} {props.profile.last_name}
-                    </h5>
+                    <p className="text-muted mb-1">{t("Full Name")}</p>
+                    <h5 className="font-size-14">{fullName()}</h5>
                   </CardBody>
               </Card>
               {/* End About card  */}

@@ -98,5 +98,6 @@
     "Russian": "Русский",
     "Surname": "Фамилия",
     "Full Name": "Полное Имя",
-    "Change Language": "Изменить язык"
+    "Change Language": "Изменить язык",
+    "Name not specified": "Имя не указано"
 }
