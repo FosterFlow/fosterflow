@@ -1,13 +1,32 @@
-import React from 'react';
-import { Card, Button, CardHeader, CardBody } from "reactstrap";
+import React, { useState } from 'react';
+import { Card, CardBody, CardHeader, Button, Form, FormGroup, Input, FormFeedback, InputGroup, Label } from "reactstrap";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
-import { useTranslation } from 'react-i18next';
-import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 function Settings(props) {
     const { t } = useTranslation();
+    const [errors, setErrors] = useState(null);
+
+    const formik = useFormik({
+        initialValues: {
+            first_name: props.profile.first_name || '',
+            last_name: props.profile.last_name || '',
+            email: (props.user.authorizedUser && props.user.authorizedUser.email) || ''
+        },
+        validationSchema: Yup.object({
+            first_name: Yup.string().required('Please Enter Your First Name'),
+            last_name: Yup.string().required('Please Enter Your Second Name'),
+            email: Yup.string().email('Invalid email address').required('Please Enter Your Email')
+        }),
+        onSubmit: values => {
+            // Submit the form values to your backend or a Redux action
+            console.log('Settings page', 'onSubmit', values);
+        },
+    });
 
     return (
         <React.Fragment>
@@ -21,14 +40,7 @@ function Settings(props) {
                         <div className="border-bottom px-4">
                             <div className="mb-4 profile-user">
                                 <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail"/>
-                                <Button type="button" color="light" className="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                    <i className="ri-pencil-fill"></i>
-                                </Button>
                             </div>
-
-                            <h5 className="font-size-16 mb-1 text-truncate">
-                                {props.profile.first_name} {props.profile.last_name}
-                            </h5>
                         </div>
                         {/* End profile user */}
 
@@ -39,25 +51,54 @@ function Settings(props) {
                                     {t('Personal Info')}
                                 </CardHeader>
                                 <CardBody>
-                                    <div className="float-end">
-                                        <Button color="light" size="sm" type="button" >
-                                            <i className="ri-edit-fill me-1 align-middle"></i> {t('Edit')}
-                                        </Button>
-                                    </div>
+                                    <Form onSubmit={formik.handleSubmit}>
+                                        <FormGroup>
+                                            <Label>{t('First Name')}</Label>
+                                            <Input 
+                                                type="text" 
+                                                name="first_name" 
+                                                value={formik.values.first_name}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                invalid={formik.touched.first_name && formik.errors.first_name ? true : false}
+                                            />
+                                            {formik.touched.first_name && formik.errors.first_name && (
+                                                <FormFeedback>{formik.errors.first_name}</FormFeedback>
+                                            )}
+                                        </FormGroup>
 
-                                    <div>
-                                        <p className="text-muted mb-1">{t('Full Name')}</p>
-                                        <h5 className="font-size-14">
-                                            {props.profile.first_name} {props.profile.last_name}
-                                        </h5>
-                                    </div>
+                                        <FormGroup>
+                                            <Label>{t('Second Name')}</Label>
+                                            <Input 
+                                                type="text" 
+                                                name="last_name" 
+                                                value={formik.values.last_name}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                invalid={formik.touched.last_name && formik.errors.last_name ? true : false}
+                                            />
+                                            {formik.touched.last_name && formik.errors.last_name && (
+                                                <FormFeedback>{formik.errors.last_name}</FormFeedback>
+                                            )}
+                                        </FormGroup>
 
-                                    <div className="mt-4">
-                                        <p className="text-muted mb-1">{t('Email')}</p>
-                                        <h5 className="font-size-14">
-                                            {props.user.authorizedUser.email}
-                                        </h5>
-                                    </div>
+                                        <FormGroup>
+                                            <Label>{t('Email')}</Label>
+                                            <Input 
+                                                type="email" 
+                                                name="email" 
+                                                value={formik.values.email}
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                invalid={formik.touched.email && formik.errors.email ? true : false}
+                                            />
+                                            {formik.touched.email && formik.errors.email && (
+                                                <FormFeedback>{formik.errors.email}</FormFeedback>
+                                            )}
+                                        </FormGroup>
+
+                                        <Button type="submit">{t('Update')}</Button>
+                                    </Form>
                                 </CardBody>
                             </Card>
                             {/* end profile card */}
@@ -66,7 +107,6 @@ function Settings(props) {
                     </div>
                     {/* End scroll areaa */}     
                 </div>
-                <SideBarMenuMobile />
             </div>
         </React.Fragment>
     );
@@ -77,7 +117,4 @@ const mapStateToProps = (state) => ({
     user: state.User
 });
 
-const mapDispatchToProps = {
-}
-  
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));
+export default withRouter(connect(mapStateToProps)(Settings));
