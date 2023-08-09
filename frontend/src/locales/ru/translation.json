@@ -99,5 +99,6 @@
     "Surname": "Фамилия",
     "Full Name": "Полное Имя",
     "Change Language": "Изменить язык",
-    "Name not specified": "Имя не указано"
+    "Name not specified": "Имя не указано",
+    "Edit": "Редактировать"
 }
