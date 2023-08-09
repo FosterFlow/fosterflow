@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
-import { Nav, NavItem, NavLink, UncontrolledTooltip, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
+import { Nav, NavItem, NavLink, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
 
 import { setLayoutMode, setLanguage } from "../../redux/actions";
@@ -40,30 +40,25 @@ function LeftSidebarMenu(props) {
             {/* Desktop version start */}
             <div className="side-menu me-lg-1 d-none d-lg-block">
                     <Nav pills className="side-menu-nav justify-content-center" role="tablist">
-                        <NavItem id="Chats">
+                        <NavItem id="Chats" title={t('Chats')}>
                             <RouterNavLink to="/chats" id="pills-chat-tab" className="nav-link" activeclassname="active">
                                 <i className="ri-message-3-line"></i>
                             </RouterNavLink>
                         </NavItem>
-                        <UncontrolledTooltip target="Chats" placement="top">
-                            {t('Chats')}
-                        </UncontrolledTooltip>
                         <li className='flex-grow-1'></li>
-                        <NavItem id="Settings">
-                            <RouterNavLink to="/settings" id="pills-setting-tab" className="nav-link" activeclassname="active">
-                                <i className="ri-settings-2-line"></i>
+                        <NavItem id="Settings" title={t('Settings')}>
+                            <RouterNavLink 
+                                to="/settings" 
+                                id="pills-setting-tab" 
+                                className="nav-link" 
+                                activeclassname="active">
+                                    <i className="ri-settings-2-line"></i>
                             </RouterNavLink>
                         </NavItem>
-                        <UncontrolledTooltip target="Settings" placement="top">
-                            {t('Settings')}
-                        </UncontrolledTooltip>
                         <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup" toggle={toggleChangeLanguge}>
-                            <DropdownToggle nav id="languages">
+                            <DropdownToggle nav id="languages" title={t('Change Language')}>
                                 <i className="ri-global-line"></i>
                             </DropdownToggle>
-                            <UncontrolledTooltip target="languages" placement="top">
-                                {t('Change Language')}
-                            </UncontrolledTooltip>
                             <DropdownMenu>
                                 <DropdownItem onClick={() => props.setLanguage('en')} active={props.language === "en"}>
                                     <img src={usFlag} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('English')}</span>
@@ -82,16 +77,13 @@ function LeftSidebarMenu(props) {
                                 </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
-                        <NavItem id="light-dark">
+                        <NavItem id="light-dark" title={t('Dark / Light Mode')}>
                             <NavLink onClick={onChangeLayoutMode}>
                                 <i className="ri-sun-line theme-mode-icon"></i>
                             </NavLink>
                         </NavItem>
-                        <UncontrolledTooltip target="light-dark" placement="right">
-                            {t('Dark / Light Mode')}
-                        </UncontrolledTooltip>
                         <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
-                            <DropdownToggle className="nav-link" tag="a">
+                            <DropdownToggle title={t('Profile')} className="nav-link" tag="a">
                                 <img src={avatar1} alt="" className="profile-user rounded-circle" />
                             </DropdownToggle>
                             <DropdownMenu>

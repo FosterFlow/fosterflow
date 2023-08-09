@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
-import { Nav, NavItem, NavLink, UncontrolledTooltip, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
+import { Nav, NavItem, NavLink, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
 
 import { setLayoutMode, setLanguage } from "../../redux/actions";
@@ -40,18 +40,15 @@ function LeftSidebarMenu(props) {
             {/* Mobile version start */}
             <div className="side-menu d-lg-none">
                 <Nav pills className="side-menu-nav justify-content-center" role="tablist">
-                    <NavItem id="Chats">
+                    <NavItem id="Chats" title={t('Chats')}>
                         <RouterNavLink to="/chats" id="pills-chat-tab" className="nav-link" activeclassname="active">
                             <i className="ri-message-3-line"></i>
                         </RouterNavLink>
                     </NavItem>
-                    <UncontrolledTooltip target="Chats" placement="top">
-                        {t('Chats')}
-                    </UncontrolledTooltip>
 
                     {/* TODO: Languages move to settings */}
                     <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup profile-user-dropdown" toggle={toggleChangeLanguge}>
-                        <DropdownToggle nav>
+                        <DropdownToggle nav title={t('Change Language')}>
                             <i className="ri-global-line"></i>
                         </DropdownToggle>
                         <DropdownMenu>
@@ -73,16 +70,13 @@ function LeftSidebarMenu(props) {
                         </DropdownMenu>
                     </Dropdown>
                     {/* TODO: Dark/Light move to settings */}
-                    <NavItem>
+                    <NavItem title={t('Dark / Light Mode')}>
                         <NavLink id="light-dark"  onClick={onChangeLayoutMode}>
                             <i className="ri-sun-line theme-mode-icon"></i>
                         </NavLink>
-                        <UncontrolledTooltip target="light-dark" placement="right">
-                            {t('Dark / Light Mode')}
-                        </UncontrolledTooltip>
                     </NavItem>
                     <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
-                        <DropdownToggle className="nav-link" tag="a">
+                        <DropdownToggle className="nav-link" tag="a" title={t('Profile')}>
                             <img src={avatar1} alt="" className="profile-user rounded-circle" />
                         </DropdownToggle>
                         <DropdownMenu>
