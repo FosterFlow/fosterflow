@@ -9,14 +9,9 @@ import {
   DropdownToggle,
   Card,
 } from "reactstrap";
-
-//Import components
+import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import CustomCollapse from "../../../components/CustomCollapse";
-
-//Import Images
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
-
-//i18n
 import { useTranslation } from "react-i18next";
 
 function Profile(props) {
@@ -36,68 +31,69 @@ function Profile(props) {
 
   return (
     <React.Fragment>
-      <div className="chat-leftsidebar me-lg-1">
-        <div className="px-4 pt-4">
-          <div className="user-chat-nav float-end">
-            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-              <DropdownToggle
-                tag="a"
-                className="font-size-18 text-muted dropdown-toggle"
-              >
-                <i className="ri-more-2-fill"></i>
-              </DropdownToggle>
-              <DropdownMenu className="dropdown-menu-end">
-                <DropdownItem>
-                  <RouterNavLink to="/settings">
-                    {t("Edit")}
-                  </RouterNavLink>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <h4 className="mb-0">{t("My Profile")}</h4>
-        </div>
-
-        <div className="text-center p-4 border-bottom">
-          <div className="mb-4">
-            <img
-              src={avatar1}
-              className="rounded-circle avatar-lg img-thumbnail"
-            />
+      <div className="user-profile me-lg-1">
+        <div className="user-profile-wrapper">
+          <div className="p-4">
+            <div className="user-chat-nav float-end">
+              <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                <DropdownToggle
+                  tag="a"
+                  className="font-size-18 text-muted dropdown-toggle"
+                >
+                  <i className="ri-more-2-fill"></i>
+                </DropdownToggle>
+                <DropdownMenu className="dropdown-menu-end">
+                  <DropdownItem>
+                    <RouterNavLink to="/settings">
+                      {t("Edit")}
+                    </RouterNavLink>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <h4 className="mb-0">{t("My Profile")}</h4>
           </div>
 
-          <h5 className="font-size-16 mb-1 text-truncate">
-            {props.profile.first_name} {props.profile.last_name}
-          </h5>
-        </div>
-        {/* End profile user  */}
+          <div className="user-profile-sroll-area">
+            <div className="px-4 border-bottom">
+              <div className="mb-4">
+                <img
+                  src={avatar1}
+                  className="rounded-circle avatar-lg img-thumbnail"
+                />
+              </div>
+
+              <h5 className="font-size-16 mb-1 text-truncate">
+                {props.profile.first_name} {props.profile.last_name}
+              </h5>
+            </div>
+            {/* End profile user  */}
         
-        {/* Start user-profile-desc */}
-        <div className="p-4 user-profile-desc">
-
-          <div id="profile-user-accordion-1" className="custom-accordion">
-            <Card className="shadow-none border mb-2">
-              {/* import collaps */}
-              <CustomCollapse
-                title="About"
-                iconClass="ri-user-2-line"
-                isOpen={isOpen1}
-                toggleCollapse={toggleCollapse1}
-              >
-                <div>
-                  <p className="text-muted mb-1">{t("Name")} {t("Surname")}</p>
-                  <h5 className="font-size-14">
-                    {props.profile.first_name} {props.profile.last_name}
-                  </h5>
-                </div>
-              </CustomCollapse>
-            </Card>
-            {/* End About card  */}
-
+            {/* Start user-profile-desc */}
+            <div className="p-4">
+              <Card className="shadow-none border">
+                {/* import collaps */}
+                <CustomCollapse
+                  title="About"
+                  iconClass="ri-user-2-line"
+                  isOpen={isOpen1}
+                  toggleCollapse={toggleCollapse1}
+                >
+                  <div>
+                    <p className="text-muted mb-1">{t("Name")} {t("Surname")}</p>
+                    <h5 className="font-size-14">
+                      {props.profile.first_name} {props.profile.last_name}
+                    </h5>
+                  </div>
+                </CustomCollapse>
+              </Card>
+              {/* End About card  */}
+            </div>
+            {/* end user-profile-desc  */}
           </div>
-          {/* end profile-user-accordion  */}
+          {/* end user-profile-scroll-area  */}
         </div>
-        {/* end user-profile-desc  */}
+        <SideBarMenuMobile />
       </div>
     </React.Fragment>
   );

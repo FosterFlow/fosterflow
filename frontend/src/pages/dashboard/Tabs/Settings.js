@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Card, Button } from "reactstrap";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import SimpleBar from "simplebar-react";
 import CustomCollapse from "../../../components/CustomCollapse";
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import { useTranslation } from 'react-i18next';
+import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 function Settings(props) {
     const [isOpen1, setIsOpen1] = useState(true);
@@ -19,63 +19,63 @@ function Settings(props) {
 
     return (
         <React.Fragment>
-            <div className="chat-leftsidebar me-lg-1">
-                <div className="px-4 pt-4">
-                    <h4 className="mb-0">{t('Settings')}</h4>
-                </div>
-
-                <div className="text-center border-bottom p-4">
-                    <div className="mb-4 profile-user">
-                        <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail"/>
-                        <Button type="button" color="light" className="avatar-xs p-0 rounded-circle profile-photo-edit">
-                            <i className="ri-pencil-fill"></i>
-                        </Button>
-
+            <div className="user-profile me-lg-1">
+                <div className="user-profile-wrapper">
+                    <div className="p-4">
+                        <h4 className="mb-0">{t('Settings')}</h4>
                     </div>
 
-                    <h5 className="font-size-16 mb-1 text-truncate">
-                        {props.profile.first_name} {props.profile.last_name}
-                    </h5>
-                </div>
-                {/* End profile user */}
+                    <div className="user-profile-sroll-area">
+                        <div className="border-bottom px-4">
+                            <div className="mb-4 profile-user">
+                                <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail"/>
+                                <Button type="button" color="light" className="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                    <i className="ri-pencil-fill"></i>
+                                </Button>
+                            </div>
 
-                {/* Start User profile description */}
-                <SimpleBar style={{ maxHeight: "100%" }} className="p-4 user-profile-desc">
+                            <h5 className="font-size-16 mb-1 text-truncate">
+                                {props.profile.first_name} {props.profile.last_name}
+                            </h5>
+                        </div>
+                        {/* End profile user */}
 
-                    <div id="profile-setting-accordion" className="custom-accordion">
-                        <Card className="accordion-item border mb-2">
-                            <CustomCollapse
-                                title="Personal Info"
-                                isOpen={isOpen1}
-                                toggleCollapse={toggleCollapse1}
-                            >
-                                <div className="float-end">
-                                    <Button color="light" size="sm" type="button" ><i className="ri-edit-fill me-1 align-middle"></i> {t('Edit')}</Button>
-                                </div>
+                        {/* Start User profile description */}
+                        <div className="p-4">
+                            <Card className="accordion-item border">
+                                <CustomCollapse
+                                    title="Personal Info"
+                                    isOpen={isOpen1}
+                                    toggleCollapse={toggleCollapse1}
+                                >
+                                    <div className="float-end">
+                                        <Button color="light" size="sm" type="button" ><i className="ri-edit-fill me-1 align-middle"></i> {t('Edit')}</Button>
+                                    </div>
 
-                                <div>
-                                    <p className="text-muted mb-1">{t('Full Name')}</p>
-                                    <h5 className="font-size-14">
-                                        {props.profile.first_name} {props.profile.last_name}
-                                    </h5>
-                                </div>
+                                    <div>
+                                        <p className="text-muted mb-1">{t('Full Name')}</p>
+                                        <h5 className="font-size-14">
+                                            {props.profile.first_name} {props.profile.last_name}
+                                        </h5>
+                                    </div>
 
-                                <div className="mt-4">
-                                    <p className="text-muted mb-1">{t('Email')}</p>
-                                    <h5 className="font-size-14">
-                                        {props.user.authorizedUser.email}
-                                    </h5>
-                                </div>
+                                    <div className="mt-4">
+                                        <p className="text-muted mb-1">{t('Email')}</p>
+                                        <h5 className="font-size-14">
+                                            {props.user.authorizedUser.email}
+                                        </h5>
+                                    </div>
 
-                            </CustomCollapse>
+                                </CustomCollapse>
                             
-                        </Card>
-                        {/* end profile card */}
-
+                            </Card>
+                            {/* end profile card */}
+                        </div>
+                        {/* End User profile description */}
                     </div>
-                    {/* end profile-setting-accordion */}
-                </SimpleBar>
-                {/* End User profile description */}
+                    {/* End scroll areaa */}     
+                </div>
+                <SideBarMenuMobile />
             </div>
         </React.Fragment>
     );
