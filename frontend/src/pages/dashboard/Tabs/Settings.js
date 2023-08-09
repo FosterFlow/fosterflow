@@ -1,21 +1,13 @@
-import React, { useState } from 'react';
-import { Card, Button } from "reactstrap";
+import React from 'react';
+import { Card, Button, CardHeader, CardBody } from "reactstrap";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import CustomCollapse from "../../../components/CustomCollapse";
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 function Settings(props) {
-    const [isOpen1, setIsOpen1] = useState(true);
-
-    /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
-
-    const toggleCollapse1 = () => {
-        setIsOpen1(!isOpen1);
-    };
 
     return (
         <React.Fragment>
@@ -42,14 +34,15 @@ function Settings(props) {
 
                         {/* Start User profile description */}
                         <div className="p-4">
-                            <Card className="accordion-item border">
-                                <CustomCollapse
-                                    title="Personal Info"
-                                    isOpen={isOpen1}
-                                    toggleCollapse={toggleCollapse1}
-                                >
+                            <Card className="border">
+                                <CardHeader>
+                                    {t('Personal Info')}
+                                </CardHeader>
+                                <CardBody>
                                     <div className="float-end">
-                                        <Button color="light" size="sm" type="button" ><i className="ri-edit-fill me-1 align-middle"></i> {t('Edit')}</Button>
+                                        <Button color="light" size="sm" type="button" >
+                                            <i className="ri-edit-fill me-1 align-middle"></i> {t('Edit')}
+                                        </Button>
                                     </div>
 
                                     <div>
@@ -65,9 +58,7 @@ function Settings(props) {
                                             {props.user.authorizedUser.email}
                                         </h5>
                                     </div>
-
-                                </CustomCollapse>
-                            
+                                </CardBody>
                             </Card>
                             {/* end profile card */}
                         </div>
