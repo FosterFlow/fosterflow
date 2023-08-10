@@ -45,8 +45,8 @@ const Login = (props) => {
             password: ''
         },
         validationSchema: Yup.object({
-            email: Yup.string().required('Please Enter Your Email'),
-            password: Yup.string().required('Please Enter Your Password')
+            email: Yup.string().required(t('Please enter your email')),
+            password: Yup.string().required(t('Please Enter Your Password'))
         }),
         onSubmit: values => {
             console.log('Login page', 'onSubmit', values.email, values.password );

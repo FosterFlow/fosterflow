@@ -100,5 +100,7 @@
     "Full Name": "Nome Completo",
     "Change Language": "Cambia lingua",
     "Name not specified": "Nome non specificato",
-    "Edit": "Modifica"
+    "Edit": "Modifica",
+    "Please enter your email": "Inserisci la tua email",
+    "Please enter your password": "Inserisci la tua password"
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card, CardBody, CardHeader, Button, Form, FormGroup, Input, FormFeedback, InputGroup, Label } from "reactstrap";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -9,7 +9,6 @@ import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 
 function Settings(props) {
     const { t } = useTranslation();
-    const [errors, setErrors] = useState(null);
 
     const formik = useFormik({
         initialValues: {
@@ -18,9 +17,9 @@ function Settings(props) {
             email: (props.user.authorizedUser && props.user.authorizedUser.email) || ''
         },
         validationSchema: Yup.object({
-            first_name: Yup.string().required('Please Enter Your First Name'),
-            last_name: Yup.string().required('Please Enter Your Second Name'),
-            email: Yup.string().email('Invalid email address').required('Please Enter Your Email')
+            first_name: Yup.string().required(t('Please Enter Your First Name')),
+            last_name: Yup.string().required(t('Please Enter Your Second Name')),
+            email: Yup.string().email(t('Invalid email address')).required(t('Please Enter Your Email'))
         }),
         onSubmit: values => {
             // Submit the form values to your backend or a Redux action

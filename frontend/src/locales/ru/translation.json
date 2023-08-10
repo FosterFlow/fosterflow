@@ -100,5 +100,7 @@
     "Full Name": "Полное Имя",
     "Change Language": "Изменить язык",
     "Name not specified": "Имя не указано",
-    "Edit": "Редактировать"
+    "Edit": "Редактировать",
+    "Please enter your email": "Пожалуйста, введите ваш электронный адрес",
+    "Please enter your password": "Пожалуйста, введите ваш пароль"
 }

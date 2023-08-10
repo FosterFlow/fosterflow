@@ -45,9 +45,11 @@ const Register = (props) => {
             password: ''
         },
         validationSchema: Yup.object({            
-            email: Yup.string().email(t('Enter proper email')).required('Required'),
+            email: Yup.string()
+                .email(t('Enter proper email'))
+                .required(t('Please enter your email')),
             password: Yup.string()
-                .required('Required')
+                .required(t('Please enter your password'))
         }),
         onSubmit: values => {
             console.log('Register page', 'onSubmit', values.email, values.password );
