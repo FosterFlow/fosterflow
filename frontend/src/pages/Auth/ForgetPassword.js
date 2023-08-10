@@ -41,7 +41,9 @@ const ForgetPassword = (props) => {
             email: ''
         },
         validationSchema: Yup.object({
-            email: Yup.string().required(t('Please enter your email'))
+            email: Yup.string()
+            .email(t('Enter proper email'))
+            .required(t('Please enter your email'))
         }),
         onSubmit: values => {
             props.forgetPassword(values.email);

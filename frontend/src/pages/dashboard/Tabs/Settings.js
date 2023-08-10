@@ -18,6 +18,7 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
+import { updateProfile } from '../../../redux/actions';
 
 function Settings(props) {
     const { t } = useTranslation();
@@ -59,8 +60,8 @@ function Settings(props) {
 
     const personalInfoForm = useFormik({
         initialValues: {
-            first_name: props.profile.first_name || '',
-            last_name: props.profile.last_name || '',
+            first_name: (props.profile && props.profile.profile.first_name) || '',
+            last_name: (props.profile && props.profile.profile.last_name) || '',
         },
         validationSchema: Yup.object({
             first_name: Yup.string()
@@ -72,6 +73,13 @@ function Settings(props) {
         }),
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
+            const user = props.user;
+            if (user && user.authorizedUser) {
+                props.updateProfile(user.authorizedUser.id, values);
+                return;
+            } 
+            //TODO: handle error;
+            console.log ('Settings page personalInfoForm', 'onSubmit error', "No active user");
         },
     });
 
@@ -248,4 +256,4 @@ const mapStateToProps = (state) => ({
     user: state.User
 });
 
-export default withRouter(connect(mapStateToProps)(Settings));
+export default withRouter(connect(mapStateToProps, {updateProfile})(Settings));

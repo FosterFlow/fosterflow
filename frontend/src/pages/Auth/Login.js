@@ -19,11 +19,7 @@ import { Link } from 'react-router-dom';
 import withRouter from "../../components/withRouter";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-
-//i18n
 import { useTranslation } from 'react-i18next';
-
-//redux store
 import { loginUser, authError  } from '../../redux/actions';
 
 /**
@@ -61,7 +57,9 @@ const Login = (props) => {
             password: ''
         },
         validationSchema: Yup.object({
-            email: Yup.string().required(t('Please enter your email')),
+            email: Yup.string()
+                .required(t('Please enter your email'))
+                .email(t('Enter proper email')),
             password: Yup.string().required(t('Please Enter Your Password'))
         }),
         onSubmit: values => {
