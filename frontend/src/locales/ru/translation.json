@@ -119,5 +119,7 @@
     "At least one uppercase character": "Как минимум одна прописная буква",
     "At least one digit": "Как минимум одна цифра",
     "At least one special character (in this set: @ $ ! % * ? & #)": "Как минимум один специальный символ (из этого набора: @ $ ! % * ? & #)",
-    "At least 8 characters in total": "Как минимум 8 символов в сумме"
+    "At least 8 characters in total": "Как минимум 8 символов в сумме",
+    "Please enter new password": "Пожалуйста, введите новый пароль",
+    "Please enter your current password": "Пожалуйста, введите ваш текущий пароль"
 }

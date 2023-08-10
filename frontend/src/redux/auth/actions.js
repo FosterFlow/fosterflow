@@ -21,8 +21,31 @@ import {
     REFRESH_TOKEN_UPDATE_SUCCESS,
     REFRESH_TOKEN_UPDATE_FAILURE,
     ADD_AUTHENTICATED_API_REQUEST,
-    CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
+    CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
+    CHANGE_PASSWORD,
+    CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_FAILED
 } from './constants';
+
+export const changePassword = (currentPassword, newPassword) => {
+    return {
+        type: CHANGE_PASSWORD,
+        payload: {currentPassword, newPassword}
+    }
+};
+
+export const changePasswordSuccess = () => {
+    return {
+        type: CHANGE_PASSWORD_SUCCESS,
+    }
+};
+
+export const changePasswordFailed = (error) => {
+    return {
+        type: CHANGE_PASSWORD_FAILED,
+        error: error
+    }
+};
 
 export const refreshTokenUpdate = () => {
     return {

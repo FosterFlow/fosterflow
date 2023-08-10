@@ -119,5 +119,7 @@
     "At least one uppercase character": "Al menos una letra mayúscula",
     "At least one digit": "Al menos un dígito",
     "At least one special character (in this set: @ $ ! % * ? & #)": "Al menos un carácter especial (en este conjunto: @ $ ! % * ? & #)",
-    "At least 8 characters in total": "Al menos 8 caracteres en total"
+    "At least 8 characters in total": "Al menos 8 caracteres en total",
+    "Please enter new password": "Por favor, introduce una nueva contraseña",
+    "Please enter your current password": "Por favor, introduce tu contraseña actual"
 }

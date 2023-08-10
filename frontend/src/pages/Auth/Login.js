@@ -60,7 +60,7 @@ const Login = (props) => {
             email: Yup.string()
                 .required(t('Please enter your email'))
                 .email(t('Enter proper email')),
-            password: Yup.string().required(t('Please Enter Your Password'))
+            password: Yup.string().required(t('Please enter your password'))
         }),
         onSubmit: values => {
             console.log('Login page', 'onSubmit', values.email, values.password );

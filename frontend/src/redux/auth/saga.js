@@ -11,7 +11,8 @@ import {
     RESET_PASSWORD_CONFIRM,
     VALIDATE_RESET_TOKEN,
     SEND_CONFIRMATION_EMAIL,
-    REFRESH_TOKEN_UPDATE
+    REFRESH_TOKEN_UPDATE,
+    CHANGE_PASSWORD
 } from './constants';
 
 
@@ -27,7 +28,9 @@ import {
     validateResetTokenSuccess,
     sendConfirmationEmailSuccess,
     refreshTokenUpdateSuccess,
-    refreshTokenUpdateFailure
+    refreshTokenUpdateFailure,
+    changePasswordSuccess,
+    changePasswordFailed
 } from './actions';
 
 /**
@@ -178,6 +181,19 @@ function* refreshTokenUpdate() {
     }
 }
 
+function* changePassword({ payload: { currentPassword, newPassword } }) {
+    try {
+        const response = yield call(apiClient.put, '/change-password/', { currentPassword, newPassword });
+        if(response.status === "OK") {
+            yield put(changePasswordSuccess(response.message));
+        }
+    } catch (errors) {
+        if (errors.details) {
+            yield put(changePasswordFailed(errors.details));
+        }
+    }
+}
+
 export function* watchRefreshTokenUpdate() {
     yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdate);
 }
@@ -210,8 +226,12 @@ export function* watchConfirmEmail() {
     yield takeEvery(CONFIRM_EMAIL, confirmEmail);
 }
 
-  export function* watchSendConfirmationEmail() {
+export function* watchSendConfirmationEmail() {
     yield takeEvery(SEND_CONFIRMATION_EMAIL, sendConfirmationEmail);
+}
+
+export function* watchChangePassword() {
+    yield takeEvery(CHANGE_PASSWORD, changePassword);
 }
 
 function* authSaga() {
@@ -224,7 +244,8 @@ function* authSaga() {
         fork(watchSendConfirmationEmail),
         fork(watchResetPasswordConfirm), 
         fork(watchValidateResetToken),
-        fork(watchRefreshTokenUpdate)  
+        fork(watchRefreshTokenUpdate),
+        fork(watchChangePassword),  
     ]);
 }
 
