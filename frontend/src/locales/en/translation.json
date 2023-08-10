@@ -108,5 +108,10 @@
     "Enter first name": "Enter first name",
     "Second Name": "Second Name",
     "Enter second name": "Enter second name",
-    "Update": "Update"
+    "Update": "Update",
+    "Email information not found": "Email information not found",
+    "Security section": "Security section",
+    "Reset password": "Reset password",
+    "Enter current password": "Enter current password",
+    "Enter new password": "Enter new password"
 }

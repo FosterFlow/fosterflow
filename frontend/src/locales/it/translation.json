@@ -108,5 +108,10 @@
     "Enter first name": "Inserisci il nome",
     "Second Name": "Cognome",
     "Enter second name": "Inserisci il cognome",
-    "Update": "Aggiorna"
+    "Update": "Aggiorna",
+    "Email information not found": "Informazioni e-mail non trovate",
+    "Security section": "Sezione sicurezza",
+    "Reset password": "Reimposta password",
+    "Enter current password": "Inserisci la password attuale",
+    "Enter new password": "Inserisci una nuova password"
 }

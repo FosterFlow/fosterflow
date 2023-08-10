@@ -1,5 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, CardBody, FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
+import { 
+    Container,
+    Row, 
+    Col, 
+    Card, 
+    CardBody, 
+    FormGroup, 
+    Alert, 
+    Form, 
+    Input, 
+    Button, 
+    FormFeedback, 
+    Label, 
+    InputGroup
+} from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withRouter from "../../components/withRouter";
@@ -19,7 +33,7 @@ import { loginUser, authError  } from '../../redux/actions';
 const Login = (props) => {
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
-    const [errors, setErrors] = useState(null);
+    const [formAlertError, setformAlertError] = useState(null);
 
     //resetting previeous errors
     useEffect(() => {
@@ -29,7 +43,9 @@ const Login = (props) => {
     useEffect(() => {
         if (props.error && props.error.errors) {
             const propsErrors = props.error.errors;
-            setErrors(propsErrors);
+            if (propsErrors.details){
+                setformAlertError(propsErrors.details);
+            }
             let formErrors = {};
             for (let key in propsErrors) {
                 formErrors[key] = propsErrors[key][0];
@@ -65,8 +81,8 @@ const Login = (props) => {
                             <Card>
                                 <CardBody className="p-4">
                                     {
-                                        errors && errors.details &&
-                                         <Alert color="danger">{errors.details}</Alert>
+                                        formAlertError &&
+                                         <Alert color="danger">{formAlertError}</Alert>
                                     }
                                     <div className="p-3">
 

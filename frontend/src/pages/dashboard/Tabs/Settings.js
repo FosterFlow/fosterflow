@@ -1,5 +1,16 @@
-import React from 'react';
-import { Card, CardBody, CardHeader, Button, Form, FormGroup, Input, FormFeedback, InputGroup, Label } from "reactstrap";
+import React, { useEffect, useState } from 'react';
+import { 
+    Card, 
+    CardBody, 
+    CardHeader, 
+    Button, 
+    Form, 
+    FormGroup, 
+    Input, 
+    FormFeedback, 
+    Alert, 
+    Label 
+} from "reactstrap";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +20,41 @@ import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 
 function Settings(props) {
     const { t } = useTranslation();
+    const [errors, setErrors] = useState(null);
+    const [formAlertError, setformAlertError] = useState(null);
+
+    //TODO: review errors works
+    useEffect(() => {
+        const profile = props.profile;
+        if (profile.error && profile.error.errors) {
+            const propsErrors = profile.error.errors;
+            if (propsErrors.details){
+                setformAlertError(propsErrors.details);
+            }
+            setErrors(propsErrors);
+            let formErrors = {};
+            for (let key in propsErrors) {
+                formErrors[key] = propsErrors[key][0];
+            }
+            formik.setErrors(formErrors);
+        }
+    }, [props.profile.error]);
+
+    //TODO: review errors works
+    useEffect(() => {
+        const user = props.user;
+        if (user.error && user.error.errors) {
+            const propsErrors = user.error.errors;
+            if (propsErrors.details){
+                setformAlertError(propsErrors.details);
+            }
+            let formErrors = {};
+            for (let key in propsErrors) {
+                formErrors[key] = propsErrors[key][0];
+            }
+            formik.setErrors(formErrors);
+        }
+    }, [props.user.error]);
 
     const formik = useFormik({
         initialValues: {
@@ -28,8 +74,9 @@ function Settings(props) {
                 .required(t('Please enter your email'))
         }),
         onSubmit: values => {
-            // Submit the form values to your backend or a Redux action
             console.log('Settings page', 'onSubmit', values);
+
+
         },
     });
 
@@ -42,13 +89,6 @@ function Settings(props) {
                     </div>
 
                     <div className="user-profile-sroll-area">
-                        <div className="border-bottom px-4">
-                            <div className="mb-4 profile-user">
-                                <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail"/>
-                            </div>
-                        </div>
-                        {/* End profile user */}
-
                         {/* Start User profile description */}
                         <div className="p-4">
                             <Card className="border">
@@ -56,7 +96,22 @@ function Settings(props) {
                                     {t('Personal Info')}
                                 </CardHeader>
                                 <CardBody>
+                                    {
+                                        formAlertError &&
+                                         <Alert color="danger">{formAlertError}</Alert>
+                                    }
                                     <Form onSubmit={formik.handleSubmit}>
+                                        <FormGroup>
+                                            <Label>{t('Photo')}</Label>
+                                            <div className='pb-3'>
+                                                <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail"/>
+                                            </div>
+                                            <Input
+                                                id="exampleFile"
+                                                name="file"
+                                                type="file"
+                                            />
+                                        </FormGroup>
                                         <FormGroup>
                                             <Label>{t('First Name')}</Label>
                                             <Input 
@@ -88,33 +143,70 @@ function Settings(props) {
                                                 <FormFeedback>{formik.errors.last_name}</FormFeedback>
                                             )}
                                         </FormGroup>
+                                        <Button type="submit">{t('Update')}</Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </div>
+                        {/* end profile card */}
+                        {/* Start User profile description */}
+                        <div className="p-4">
+                            <Card className="border">
+                                <CardHeader>
+                                    {t('Security section')}
+                                </CardHeader>
+                                <CardBody>
+                                    {
+                                        formAlertError &&
+                                         <Alert color="danger">{formAlertError}</Alert>
+                                    }
+                                    <Form onSubmit={formik.handleSubmit}>
+                                        <FormGroup className='border p-3'>
+                                            <Label>{t('Email')}:</Label>
+                                            <div>
+                                                {
+                                                    props.user && props.user.authorizedUser 
+                                                    && props.user.authorizedUser.email ||
+                                                    t('Email information not found')
+                                                }
+                                            </div>
+                                        </FormGroup>
 
-                                        <FormGroup>
-                                            <Label>{t('Email')}</Label>
+                                        <FormGroup className='border p-3'>
+                                            <Label>{t('Reset password')}</Label>
+                                            <div className='pb-4'>
+                                                <Input 
+                                                    type="password" 
+                                                    name="current_password" 
+                                                    value={formik.values.password}
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    invalid={formik.touched.last_name && formik.errors.last_name ? true : false}
+                                                    placeholder={t('Enter current password')}
+                                                />
+                                            </div>
+                                            
                                             <Input 
-                                                type="email" 
-                                                name="email" 
-                                                value={formik.values.email}
+                                                type="password" 
+                                                name="new_password" 
+                                                value={formik.values.password}
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
-                                                invalid={formik.touched.email && formik.errors.email ? true : false}
-                                                placeholder={t('Enter email')}
+                                                invalid={formik.touched.last_name && formik.errors.last_name ? true : false}
+                                                placeholder={t('Enter new password')}
                                             />
-                                            {formik.touched.email && formik.errors.email && (
-                                                <FormFeedback>{formik.errors.email}</FormFeedback>
-                                            )}
                                         </FormGroup>
 
                                         <Button type="submit">{t('Update')}</Button>
                                     </Form>
                                 </CardBody>
                             </Card>
-                            {/* end profile card */}
                         </div>
-                        {/* End User profile description */}
+                        {/* end profile card */}
                     </div>
-                    {/* End scroll areaa */}     
+                    {/* End User profile description */}   
                 </div>
+                {/* End scroll areaa */}  
             </div>
         </React.Fragment>
     );
