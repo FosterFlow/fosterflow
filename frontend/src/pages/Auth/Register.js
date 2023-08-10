@@ -50,6 +50,10 @@ const Register = (props) => {
                 .required(t('Please enter your email')),
             password: Yup.string()
                 .required(t('Please enter your password'))
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                    t('The password must meet the requirements below')  
+                ),
         }),
         onSubmit: values => {
             console.log('Register page', 'onSubmit', values.email, values.password );
@@ -122,6 +126,13 @@ const Register = (props) => {
                                                     ) : null}
 
                                                 </InputGroup>
+                                                <ul>
+                                                    <li>{t('At least one lowercase character')}.</li>
+                                                    <li>{t('At least one uppercase character')}.</li>
+                                                    <li>{t('At least one digit')}.</li>
+                                                    <li>{t('At least one special character (in this set: @ $ ! % * ? & #)')}.</li>
+                                                    <li>{t('At least 8 characters in total')}.</li>
+                                                </ul>
                                             </FormGroup>
 
 

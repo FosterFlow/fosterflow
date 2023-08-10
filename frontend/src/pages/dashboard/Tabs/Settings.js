@@ -36,7 +36,7 @@ function Settings(props) {
             for (let key in propsErrors) {
                 formErrors[key] = propsErrors[key][0];
             }
-            formik.setErrors(formErrors);
+            personalInfoForm.setErrors(formErrors);
         }
     }, [props.profile.error]);
 
@@ -52,15 +52,14 @@ function Settings(props) {
             for (let key in propsErrors) {
                 formErrors[key] = propsErrors[key][0];
             }
-            formik.setErrors(formErrors);
+            securityForm.setErrors(formErrors);
         }
     }, [props.user.error]);
 
-    const formik = useFormik({
+    const personalInfoForm = useFormik({
         initialValues: {
             first_name: props.profile.first_name || '',
             last_name: props.profile.last_name || '',
-            email: (props.user.authorizedUser && props.user.authorizedUser.email) || ''
         },
         validationSchema: Yup.object({
             first_name: Yup.string()
@@ -69,14 +68,35 @@ function Settings(props) {
             last_name: Yup.string()
                 .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
                 .notRequired(),
-            email: Yup.string()
-                .email(t('Invalid email address'))
-                .required(t('Please enter your email'))
         }),
         onSubmit: values => {
-            console.log('Settings page', 'onSubmit', values);
+            console.log('Settings page personalInfoForm', 'onSubmit', values);
+        },
+    });
 
-
+    const securityForm = useFormik({
+        initialValues: {
+            current_password: '', // initialize with an empty string
+            new_password: ''     // initialize with an empty string
+        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                .email(t('Invalid email address'))
+                .required(t('Please enter your email')),
+            current_password: Yup.string()  // no requirement since it's optional
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                    t('The password must meet the requirements below')  // Your custom error message for simplicity
+                ),
+            new_password: Yup.string()  // no requirement since it's optional
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                    t('The password must meet the requirements below')  // Your custom error message for simplicity
+                )
+                .oneOf([Yup.ref('current_password'), null], t('Passwords must match'))
+        }),
+        onSubmit: values => {
+            console.log('Settings page securityForm', 'onSubmit', values);
         },
     });
 
@@ -100,7 +120,7 @@ function Settings(props) {
                                         formAlertError &&
                                          <Alert color="danger">{formAlertError}</Alert>
                                     }
-                                    <Form onSubmit={formik.handleSubmit}>
+                                    <Form onSubmit={personalInfoForm.handleSubmit}>
                                         <FormGroup>
                                             <Label>{t('Photo')}</Label>
                                             <div className='pb-3'>
@@ -117,14 +137,14 @@ function Settings(props) {
                                             <Input 
                                                 type="text" 
                                                 name="first_name" 
-                                                value={formik.values.first_name}
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                invalid={formik.touched.first_name && formik.errors.first_name ? true : false}
+                                                value={personalInfoForm.values.first_name}
+                                                onChange={personalInfoForm.handleChange}
+                                                onBlur={personalInfoForm.handleBlur}
+                                                invalid={personalInfoForm.touched.first_name && personalInfoForm.errors.first_name ? true : false}
                                                 placeholder={t('Enter first name')}
                                             />
-                                            {formik.touched.first_name && formik.errors.first_name && (
-                                                <FormFeedback>{formik.errors.first_name}</FormFeedback>
+                                            {personalInfoForm.touched.first_name && personalInfoForm.errors.first_name && (
+                                                <FormFeedback>{personalInfoForm.errors.first_name}</FormFeedback>
                                             )}
                                         </FormGroup>
 
@@ -133,14 +153,14 @@ function Settings(props) {
                                             <Input 
                                                 type="text" 
                                                 name="last_name" 
-                                                value={formik.values.last_name}
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                invalid={formik.touched.last_name && formik.errors.last_name ? true : false}
+                                                value={personalInfoForm.values.last_name}
+                                                onChange={personalInfoForm.handleChange}
+                                                onBlur={personalInfoForm.handleBlur}
+                                                invalid={personalInfoForm.touched.last_name && personalInfoForm.errors.last_name ? true : false}
                                                 placeholder={t('Enter second name')}
                                             />
-                                            {formik.touched.last_name && formik.errors.last_name && (
-                                                <FormFeedback>{formik.errors.last_name}</FormFeedback>
+                                            {personalInfoForm.touched.last_name && personalInfoForm.errors.last_name && (
+                                                <FormFeedback>{personalInfoForm.errors.last_name}</FormFeedback>
                                             )}
                                         </FormGroup>
                                         <Button type="submit">{t('Update')}</Button>
@@ -160,7 +180,7 @@ function Settings(props) {
                                         formAlertError &&
                                          <Alert color="danger">{formAlertError}</Alert>
                                     }
-                                    <Form onSubmit={formik.handleSubmit}>
+                                    <Form onSubmit={securityForm.handleSubmit}>
                                         <FormGroup className='border p-3'>
                                             <Label>{t('Email')}:</Label>
                                             <div>
@@ -178,26 +198,38 @@ function Settings(props) {
                                                 <Input 
                                                     type="password" 
                                                     name="current_password" 
-                                                    value={formik.values.password}
-                                                    onChange={formik.handleChange}
-                                                    onBlur={formik.handleBlur}
-                                                    invalid={formik.touched.last_name && formik.errors.last_name ? true : false}
+                                                    value={securityForm.values.password}
+                                                    onChange={securityForm.handleChange}
+                                                    onBlur={securityForm.handleBlur}
+                                                    invalid={securityForm.touched.last_name && securityForm.errors.last_name ? true : false}
                                                     placeholder={t('Enter current password')}
                                                 />
+                                                <FormFeedback>
+                                                    {securityForm.touched.current_password && securityForm.errors.current_password}
+                                                </FormFeedback>
                                             </div>
                                             
                                             <Input 
                                                 type="password" 
                                                 name="new_password" 
-                                                value={formik.values.password}
-                                                onChange={formik.handleChange}
-                                                onBlur={formik.handleBlur}
-                                                invalid={formik.touched.last_name && formik.errors.last_name ? true : false}
+                                                value={securityForm.values.password}
+                                                onChange={securityForm.handleChange}
+                                                onBlur={securityForm.handleBlur}
+                                                invalid={securityForm.touched.last_name && securityForm.errors.last_name ? true : false}
                                                 placeholder={t('Enter new password')}
                                             />
+                                            <FormFeedback>
+                                                {securityForm.touched.new_password && securityForm.errors.new_password}
+                                            </FormFeedback>    
+                                            <ul className='pt-3'>
+                                                <li>{t('At least one lowercase character')}.</li>
+                                                <li>{t('At least one uppercase character')}.</li>
+                                                <li>{t('At least one digit')}.</li>
+                                                <li>{t('At least one special character (in this set: @ $ ! % * ? & #)')}.</li>
+                                                <li>{t('At least 8 characters in total')}.</li>
+                                            </ul>
+                                            <Button type="submit">{t('Update password')}</Button>
                                         </FormGroup>
-
-                                        <Button type="submit">{t('Update')}</Button>
                                     </Form>
                                 </CardBody>
                             </Card>
