@@ -113,5 +113,11 @@
     "Security section": "Security section",
     "Reset password": "Reset password",
     "Enter current password": "Enter current password",
-    "Enter new password": "Enter new password"
+    "Enter new password": "Enter new password",
+    "Update password": "Update password",
+    "At least one lowercase character": "At least one lowercase character",
+    "At least one uppercase character": "At least one uppercase character",
+    "At least one digit": "At least one digit",
+    "At least one special character (in this set: @ $ ! % * ? & #)": "At least one special character (in this set: @ $ ! % * ? & #)",
+    "At least 8 characters in total": "At least 8 characters in total"
 }

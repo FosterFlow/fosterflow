@@ -113,5 +113,11 @@
     "Security section": "Sicherheitsbereich",
     "Reset password": "Passwort zurücksetzen",
     "Enter current password": "Aktuelles Passwort eingeben",
-    "Enter new password": "Neues Passwort eingeben"
+    "Enter new password": "Neues Passwort eingeben",
+    "Update password": "Passwort aktualisieren",
+    "At least one lowercase character": "Mindestens ein Kleinbuchstabe",
+    "At least one uppercase character": "Mindestens ein Großbuchstabe",
+    "At least one digit": "Mindestens eine Ziffer",
+    "At least one special character (in this set: @ $ ! % * ? & #)": "Mindestens ein Sonderzeichen (aus diesem Set: @ $ ! % * ? & #)",
+    "At least 8 characters in total": "Mindestens 8 Zeichen insgesamt"
 }

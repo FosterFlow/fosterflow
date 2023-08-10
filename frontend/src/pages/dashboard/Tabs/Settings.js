@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
+import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 function Settings(props) {
     const { t } = useTranslation();
@@ -80,9 +81,6 @@ function Settings(props) {
             new_password: ''     // initialize with an empty string
         },
         validationSchema: Yup.object({
-            email: Yup.string()
-                .email(t('Invalid email address'))
-                .required(t('Please enter your email')),
             current_password: Yup.string()  // no requirement since it's optional
                 .matches(
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
@@ -192,16 +190,16 @@ function Settings(props) {
                                             </div>
                                         </FormGroup>
 
-                                        <FormGroup className='border p-3'>
+                                        <FormGroup>
                                             <Label>{t('Reset password')}</Label>
                                             <div className='pb-4'>
                                                 <Input 
                                                     type="password" 
                                                     name="current_password" 
-                                                    value={securityForm.values.password}
+                                                    value={securityForm.values.current_password}
                                                     onChange={securityForm.handleChange}
                                                     onBlur={securityForm.handleBlur}
-                                                    invalid={securityForm.touched.last_name && securityForm.errors.last_name ? true : false}
+                                                    invalid={securityForm.touched.current_password && securityForm.errors.current_password ? true : false}
                                                     placeholder={t('Enter current password')}
                                                 />
                                                 <FormFeedback>
@@ -212,10 +210,10 @@ function Settings(props) {
                                             <Input 
                                                 type="password" 
                                                 name="new_password" 
-                                                value={securityForm.values.password}
+                                                value={securityForm.values.new_password}
                                                 onChange={securityForm.handleChange}
                                                 onBlur={securityForm.handleBlur}
-                                                invalid={securityForm.touched.last_name && securityForm.errors.last_name ? true : false}
+                                                invalid={securityForm.touched.new_password && securityForm.errors.new_password ? true : false}
                                                 placeholder={t('Enter new password')}
                                             />
                                             <FormFeedback>
@@ -228,8 +226,8 @@ function Settings(props) {
                                                 <li>{t('At least one special character (in this set: @ $ ! % * ? & #)')}.</li>
                                                 <li>{t('At least 8 characters in total')}.</li>
                                             </ul>
-                                            <Button type="submit">{t('Update password')}</Button>
                                         </FormGroup>
+                                        <Button type="submit">{t('Update password')}</Button>
                                     </Form>
                                 </CardBody>
                             </Card>
@@ -238,7 +236,8 @@ function Settings(props) {
                     </div>
                     {/* End User profile description */}   
                 </div>
-                {/* End scroll areaa */}  
+                {/* End scroll areaa */} 
+                <SideBarMenuMobile /> 
             </div>
         </React.Fragment>
     );

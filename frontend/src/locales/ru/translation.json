@@ -113,5 +113,11 @@
     "Security section": "Раздел безопасности",
     "Reset password": "Сбросить пароль",
     "Enter current password": "Введите текущий пароль",
-    "Enter new password": "Введите новый пароль"
+    "Enter new password": "Введите новый пароль",
+    "Update password": "Обновить пароль",
+    "At least one lowercase character": "Как минимум одна строчная буква",
+    "At least one uppercase character": "Как минимум одна прописная буква",
+    "At least one digit": "Как минимум одна цифра",
+    "At least one special character (in this set: @ $ ! % * ? & #)": "Как минимум один специальный символ (из этого набора: @ $ ! % * ? & #)",
+    "At least 8 characters in total": "Как минимум 8 символов в сумме"
 }
