@@ -77,7 +77,7 @@
     "Email and instructions was sent to your email": "Электронное письмо и инструкции были отправлены на вашу электронную почту",
     "Enter your Email and instructions will be sent to you" : "Введите ваш электронный адрес и инструкции будут отправлены вам",
     "Remember It": "Запомните это",
-    "Enter Email": "Введите электронную почту",
+    "Enter email": "Введите электронную почту",
     "Forgot password": "Забыли пароль",
     "Enter Password": "Введите пароль",
     "Passwords must match": "Пароли должны совпадать",
@@ -102,5 +102,11 @@
     "Name not specified": "Имя не указано",
     "Edit": "Редактировать",
     "Please enter your email": "Пожалуйста, введите ваш электронный адрес",
-    "Please enter your password": "Пожалуйста, введите ваш пароль"
+    "Please enter your password": "Пожалуйста, введите ваш пароль",
+    "No special characters allowed": "Специальные символы не разрешены",
+    "First Name": "Имя",
+    "Enter first name": "Введите имя",
+    "Second Name": "Фамилия",
+    "Enter second name": "Введите фамилию",
+    "Update": "Обновить"
 }

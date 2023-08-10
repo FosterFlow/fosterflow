@@ -77,7 +77,7 @@
     "Email and instructions was sent to your email": "Email and instructions was sent to your email",
     "Enter your Email and instructions will be sent to you" : "Enter your Email and instructions will be sent to you",
     "Remember It": "Remember It",
-    "Enter Email": "Enter email",
+    "Enter email": "Enter email",
     "Forgot password": "Forgot password",
     "Enter Password": "Enter Password",
     "Passwords must match": "Passwords must match",
@@ -102,5 +102,11 @@
     "Name not specified": "Name not specified",
     "Edit": "Edit",
     "Please enter your email": "Please enter your email",
-    "Please enter your password": "Please enter your password"
+    "Please enter your password": "Please enter your password",
+    "No special characters allowed": "No special characters allowed",
+    "First Name": "First Name",
+    "Enter first name": "Enter first name",
+    "Second Name": "Second Name",
+    "Enter second name": "Enter second name",
+    "Update": "Update"
 }

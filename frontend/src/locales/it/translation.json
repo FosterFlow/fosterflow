@@ -102,5 +102,11 @@
     "Name not specified": "Nome non specificato",
     "Edit": "Modifica",
     "Please enter your email": "Inserisci la tua email",
-    "Please enter your password": "Inserisci la tua password"
+    "Please enter your password": "Inserisci la tua password",
+    "No special characters allowed": "Caratteri speciali non consentiti",
+    "First Name": "Nome",
+    "Enter first name": "Inserisci il nome",
+    "Second Name": "Cognome",
+    "Enter second name": "Inserisci il cognome",
+    "Update": "Aggiorna"
 }

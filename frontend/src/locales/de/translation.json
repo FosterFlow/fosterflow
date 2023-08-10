@@ -77,7 +77,7 @@
     "Email and instructions was sent to your email": "E-Mail und Anweisungen wurden an Ihre E-Mail gesendet",
     "Enter your Email and instructions will be sent to you" : "Geben Sie Ihre E-Mail ein und Anweisungen werden Ihnen zugesendet",
     "Remember It": "Merken Sie es sich",
-    "Enter Email": "E-Mail eingeben",
+    "Enter email": "E-Mail eingeben",
     "Forgot password": "Passwort vergessen",
     "Enter Password": "Passwort eingeben",
     "Passwords must match": "Passwörter müssen übereinstimmen",
@@ -102,5 +102,11 @@
     "Name not specified": "Name nicht angegeben",
     "Edit": "Bearbeiten",
     "Please enter your email": "Bitte geben Sie Ihre E-Mail-Adresse ein",
-    "Please enter your password": "Bitte geben Sie Ihr Passwort ein"
+    "Please enter your password": "Bitte geben Sie Ihr Passwort ein",
+    "No special characters allowed": "Sonderzeichen nicht erlaubt",
+    "First Name": "Vorname",
+    "Enter first name": "Vornamen eingeben",
+    "Second Name": "Nachname",
+    "Enter second name": "Nachnamen eingeben",
+    "Update": "Aktualisieren"
 }

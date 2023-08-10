@@ -17,9 +17,15 @@ function Settings(props) {
             email: (props.user.authorizedUser && props.user.authorizedUser.email) || ''
         },
         validationSchema: Yup.object({
-            first_name: Yup.string().required(t('Please Enter Your First Name')),
-            last_name: Yup.string().required(t('Please Enter Your Second Name')),
-            email: Yup.string().email(t('Invalid email address')).required(t('Please Enter Your Email'))
+            first_name: Yup.string()
+                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
+                .notRequired(),
+            last_name: Yup.string()
+                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
+                .notRequired(),
+            email: Yup.string()
+                .email(t('Invalid email address'))
+                .required(t('Please enter your email'))
         }),
         onSubmit: values => {
             // Submit the form values to your backend or a Redux action
@@ -60,6 +66,7 @@ function Settings(props) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 invalid={formik.touched.first_name && formik.errors.first_name ? true : false}
+                                                placeholder={t('Enter first name')}
                                             />
                                             {formik.touched.first_name && formik.errors.first_name && (
                                                 <FormFeedback>{formik.errors.first_name}</FormFeedback>
@@ -75,6 +82,7 @@ function Settings(props) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 invalid={formik.touched.last_name && formik.errors.last_name ? true : false}
+                                                placeholder={t('Enter second name')}
                                             />
                                             {formik.touched.last_name && formik.errors.last_name && (
                                                 <FormFeedback>{formik.errors.last_name}</FormFeedback>
@@ -90,6 +98,7 @@ function Settings(props) {
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
                                                 invalid={formik.touched.email && formik.errors.email ? true : false}
+                                                placeholder={t('Enter email')}
                                             />
                                             {formik.touched.email && formik.errors.email && (
                                                 <FormFeedback>{formik.errors.email}</FormFeedback>
