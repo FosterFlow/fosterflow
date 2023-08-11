@@ -86,10 +86,10 @@ function resolveRequestsQueue() {
 
   const apiRequestsQueue = state.Auth.authenticatedApiRequestsQueue;
   if (apiRequestsQueue.length > 0 ) {
-    apiRequestsQueue.forEach(({ method, url, data, resolve, reject }) => {
-      apiAxios.request({ method, url, data })
-        .then(resolve)
-        .catch(reject);
+    apiRequestsQueue.forEach(({ method, url, data, headers, resolve, reject }) => {
+      apiAxios.request({ method, url, data, headers }) 
+          .then(resolve)
+          .catch(reject);
     });
     store.dispatch(clearAuthenticatedApiRequestsQueue());
   }
@@ -105,10 +105,12 @@ function resolveRequestsQueue() {
  * @param {string} method post,get, delete, update ...
  * @param {string} url  
  * @param {Object} data
+ * @param {Object} headers additional headers that requires for the specific request. 
+ * For example: 'Content-Type': 'multipart/form-data'
  * 
  * @returns {Object} returns promise 
  */
-function apiRequestsManager (method, url, data) {
+function apiRequestsManager (method, url, data, headers) {
   let resolve, reject;
   
   //  We use "resolve" method when we get updated access Token.
@@ -128,6 +130,7 @@ function apiRequestsManager (method, url, data) {
   requestPromise.method = method;
   requestPromise.url = url;
   requestPromise.data = data;
+  requestPromise.headers = headers;
 
   store.dispatch(addAuthenticatedApiRequest(requestPromise));
   resolveRequestsQueue();
