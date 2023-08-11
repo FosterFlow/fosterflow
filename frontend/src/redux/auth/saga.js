@@ -43,7 +43,7 @@ function* login({ payload: { email, password } }) {
         const response = yield call(apiClient.post, '/token/', { email, password });
         console.log("redux aux saga", "login response", response );
         //we store isAuthenticated param into Local Storage for the case if user reloaded the page
-        localStorage.setItem("isAuthenticated", true);
+        yield localStorage.setItem("isAuthenticated", true);
         yield put(loginUserSuccess(response.access));            
     } catch (error) {
         yield put(authError(error.data ? error.data : error));
@@ -137,10 +137,8 @@ function* sendConfirmationEmail() {
 
   function* resetPasswordConfirm({ payload: { password, token } }) {
     try {
-        const response = yield call(apiClient.post, '/password-reset/confirm/', { password, token });
-        if(response.status === "OK") {
-            yield put(resetPasswordConfirmSuccess());
-        }
+        yield call(apiClient.post, '/password-reset/confirm/', { password, token });
+        yield put(resetPasswordConfirmSuccess());
     } catch (error) {
         if (error.data) {
             yield put(authError(error.data));
@@ -152,10 +150,8 @@ function* sendConfirmationEmail() {
 
 function* validateResetToken({ payload: { token } }) {
     try {
-        const response = yield call(apiClient.post, '/password-reset/validate_token/', { token });
-        if(response.status === "OK") {
-            yield put(validateResetTokenSuccess());
-        }
+        yield call(apiClient.post, '/password-reset/validate_token/', { token });
+        yield put(validateResetTokenSuccess());
     } catch (error) {
         if (error.data) {
             yield put(authError(error.data));
@@ -168,10 +164,8 @@ function* validateResetToken({ payload: { token } }) {
 function* refreshTokenUpdate() {
     try {
         const response = yield call(apiClient.post, '/token/refresh/');
-        if(response.status === "OK") {
-            yield put(refreshTokenUpdateSuccess(response.access));
-            yield call(apiClient.resolve);
-        }
+        yield put(refreshTokenUpdateSuccess(response.access));
+        yield call(apiAuthorizedClient.resolve);
     } catch (error) {
         if (error.data) {
             yield put(refreshTokenUpdateFailure(error.data));
@@ -184,9 +178,7 @@ function* refreshTokenUpdate() {
 function* changePassword({ payload: { currentPassword, newPassword } }) {
     try {
         const response = yield call(apiClient.put, '/change-password/', { currentPassword, newPassword });
-        if(response.status === "OK") {
-            yield put(changePasswordSuccess(response.message));
-        }
+        yield put(changePasswordSuccess(response.message));
     } catch (errors) {
         if (errors.details) {
             yield put(changePasswordFailed(errors.details));
