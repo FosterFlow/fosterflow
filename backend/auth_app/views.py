@@ -449,10 +449,18 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         response = Response()
-        refresh = request.COOKIES.get('refresh')
-        token_class = RefreshToken
+        try:
+            refresh = request.COOKIES.get('refresh')
+            if refresh is None:
+                response = {"errors": {'details': 'Refresh is None'}}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            token_class = RefreshToken
 
-        refresh = token_class(refresh)
+            refresh = token_class(refresh)
+        except Exception as e:
+            response = {"errors": {'details': e.args}}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
 
         data = {"access": str(refresh.access_token)}
 
