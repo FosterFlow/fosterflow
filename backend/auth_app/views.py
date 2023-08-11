@@ -461,7 +461,6 @@ class CustomTokenRefreshView(TokenRefreshView):
             response = {"errors": {'details': e.args}}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-
         data = {"access": str(refresh.access_token)}
 
         if api_settings.ROTATE_REFRESH_TOKENS:
