@@ -77,7 +77,7 @@ class UserLoginAPIView(GenericAPIView):
             )
 
             response['CSRFToken'] = csrf.get_token(request)
-            data = {"refresh": str(token), "access": str(token.access_token)}
+            data = {"access": str(token.access_token)}
             response.data = data
             response.status_code = status.HTTP_200_OK
         else:
@@ -186,7 +186,7 @@ class RegisterApi(generics.GenericAPIView):
 
             response['CSRFToken'] = csrf.get_token(request)
 
-            data = {"refresh": str(token), "access": str(token.access_token)}
+            data = {"access": str(token.access_token)}
             response.data = data
             response.status_code = status.HTTP_200_OK
 
