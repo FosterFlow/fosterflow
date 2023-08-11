@@ -2,11 +2,6 @@ import React from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import {
-  Card,
-  CardBody,
-  CardHeader
-} from "reactstrap";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import { useTranslation } from "react-i18next";
@@ -16,9 +11,10 @@ function Profile(props) {
   const { t } = useTranslation();
 
   function fullName (){
-    if (props.profile) {
-      const firstName = props.profile.first_name;
-      const lastName = props.profile.last_name;
+    if (props.profile && props.profile.profile) {
+      const profile = props.profile.profile;
+      const firstName = profile.first_name;
+      const lastName = profile.last_name;
       if (firstName || lastName) {
           return firstName + " " + lastName; 
       }
@@ -40,7 +36,7 @@ function Profile(props) {
           </div>
 
           <div className="user-profile-sroll-area">
-            <div className="px-4 border-bottom">
+            <div className="px-4 pb-4">
               <div className="mb-4">
                 <img
                   src={avatar1}
@@ -53,19 +49,6 @@ function Profile(props) {
               </h5>
             </div>
             {/* End profile user  */}
-        
-            {/* Start user-profile-desc */}
-            <div className="p-4">
-              <Card className="border">
-                  <CardHeader>{t("About")}</CardHeader>
-                  <CardBody>
-                    <p className="text-muted mb-1">{t("Full Name")}</p>
-                    <h5 className="font-size-14">{fullName()}</h5>
-                  </CardBody>
-              </Card>
-              {/* End About card  */}
-            </div>
-            {/* end user-profile-desc  */}
           </div>
           {/* end user-profile-scroll-area  */}
         </div>

@@ -47,8 +47,10 @@ const ResetPassword = (props) => {
             confirmPassword: ''
         },
         validationSchema: Yup.object({
-            password: Yup.string().required(t('Please Enter Your New Password')),
-            confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], t('Passwords must match')).required(t('Please Confirm Your New Password'))
+            password: Yup.string().required(t('Please enter your new password')),
+            confirmPassword: Yup.string()
+                .oneOf([Yup.ref('password'), null], t('Passwords must match'))
+                .required(t('Please confirm your new password'))
         }),
         onSubmit: values => {
             console.log('ResetPassword page', 'onSubmit', values.password, token );

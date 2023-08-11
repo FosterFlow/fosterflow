@@ -21,7 +21,10 @@ import {
     REFRESH_TOKEN_UPDATE_SUCCESS,
     REFRESH_TOKEN_UPDATE_FAILURE,
     ADD_AUTHENTICATED_API_REQUEST,
-    CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
+    CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
+    CHANGE_PASSWORD,
+    CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_FAILED
 } from './constants';
 
 const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -137,7 +140,16 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, loading: true, resetPasswordConfirmed: false };
 
         case RESET_PASSWORD_CONFIRM_SUCCESS:
-            return { ...state, loading: false, resetPasswordConfirmed: true }; 
+            return { ...state, loading: false, resetPasswordConfirmed: true };
+            
+        case CHANGE_PASSWORD:
+            return { ...state, loading: true };
+    
+        case CHANGE_PASSWORD_SUCCESS:
+            return { ...state, loading: false };
+
+        case CHANGE_PASSWORD_FAILED:
+            return { ...state, error: action.payload };
 
         case VALIDATE_RESET_TOKEN:
             return { ...state, loading: true, resetTokenValidationStatus: false };
