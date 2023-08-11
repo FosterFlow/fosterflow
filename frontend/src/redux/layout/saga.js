@@ -18,7 +18,7 @@ function* setLayoutMode({ payload:  layoutMode  }) {
   try {
     if (layoutMode === "light") {
       yield call(changeBodyAttribute, "data-bs-theme", layoutMode);
-      localStorage.setItem("layoutMode", layoutMode);
+      yield localStorage.setItem("layoutMode", layoutMode);
     } else if (layoutMode === "dark") {
       yield call(changeBodyAttribute, "data-bs-theme", layoutMode);
       localStorage.setItem("layoutMode", layoutMode);
@@ -34,8 +34,8 @@ function* setLayoutMode({ payload:  layoutMode  }) {
  */
 function* setLanguage({ payload:  language  }) {
   try {
-      i18n.changeLanguage(language);
-      localStorage.setItem("language", language);
+      yield i18n.changeLanguage(language);
+      yield localStorage.setItem("language", language);
     } catch (error) { 
       //TODO: add error handler
       console.log ("saga setLanguage error", error);

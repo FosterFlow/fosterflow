@@ -41,6 +41,7 @@ const apiAxios = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true
 });
 
 // Handling errors
