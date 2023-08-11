@@ -24,6 +24,7 @@ function Settings(props) {
     const { t } = useTranslation();
     const [errors, setErrors] = useState(null);
     const [formAlertError, setformAlertError] = useState(null);
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
 
     //TODO: review errors works
     useEffect(() => {
@@ -81,7 +82,7 @@ function Settings(props) {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
             const user = props.user;
             if (user && user.authorizedUser) {
-                props.updateProfile(user.authorizedUser.id, values);
+                props.updateProfile(user.authorizedUser.id, values, selectedAvatar);
                 return;
             } 
             //TODO: handle error if we don't have active User;
@@ -136,12 +137,16 @@ function Settings(props) {
                                         <FormGroup>
                                             <Label>{t('Photo')}</Label>
                                             <div className='pb-3'>
-                                                <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail"/>
+                                            <img 
+                                                src={selectedAvatar ? URL.createObjectURL(selectedAvatar) : avatar1} 
+                                                className="rounded-circle avatar-lg img-thumbnail"
+                                                />
                                             </div>
                                             <Input
                                                 id="exampleFile"
                                                 name="file"
                                                 type="file"
+                                                onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                         </FormGroup>
                                         <FormGroup>

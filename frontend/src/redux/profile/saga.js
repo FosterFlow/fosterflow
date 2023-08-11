@@ -14,9 +14,26 @@ function* getProfile({ payload: { id } }) {
     }
 }
 
-function* updateProfile({ payload: { id, data } }) {
+function* updateProfile({ payload: { id, data, avatar } }) {
     try {
-        const response = yield call(api.patch, `/profiles/${id}/`, data);
+        let formData = new FormData();
+        
+        // Append data to formData
+        for (let key in data) {
+            formData.append(key, data[key]);
+        }
+
+        // Append the avatar file if provided
+        if (avatar) {
+            formData.append('avatar', avatar);
+        }
+
+        const response = yield call(api.patch, `/profiles/${id}/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        
         yield put(updateProfileSuccess(response));
     } catch (error) {
         yield put(profileError(error));

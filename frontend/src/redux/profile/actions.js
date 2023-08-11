@@ -16,9 +16,9 @@ export const getProfileSuccess = (profile) => ({
     payload: profile
 });
 
-export const updateProfile = (id, data) => ({
+export const updateProfile = (id, data, avatar) => ({
     type: UPDATE_PROFILE,
-    payload: { id, data }
+    payload: { id, data, avatar }
 });
 
 export const updateProfileSuccess = (profile) => ({
