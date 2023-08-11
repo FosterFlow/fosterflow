@@ -177,7 +177,13 @@ function* refreshTokenUpdate() {
 
 function* changePassword({ payload: { currentPassword, newPassword } }) {
     try {
-        const response = yield call(apiClient.put, '/change-password/', { currentPassword, newPassword });
+        const response = yield call(
+            apiAuthorizedClient.put,
+            '/change-password/', 
+            { 
+                old_password: currentPassword, 
+                new_password: newPassword 
+            });
         yield put(changePasswordSuccess(response.message));
     } catch (errors) {
         if (errors.details) {
