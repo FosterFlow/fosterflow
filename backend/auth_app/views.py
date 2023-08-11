@@ -117,11 +117,14 @@ class UserLogoutAPIView(GenericAPIView):
             Response: The HTTP response containing the success message or error details.
         """
 
+        response = Response()
         try:
-            refresh_token = request.data["refresh"]
+            refresh_token = request.COOKIES.get('refresh')
+            if refresh_token is None:
+                response = {"errors": {'details': 'Refresh is None'}}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
             token = RefreshToken(refresh_token)
             token.blacklist()
-            response = Response()
             response.delete_cookie('refresh')
             response.data = {
                 'message': 'Logout successfully',
