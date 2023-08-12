@@ -109,7 +109,7 @@ function resolveRequestsQueue() {
  * @param {string} url  
  * @param {Object} data
  * @param {Object} config additional config that requires for the specific request. 
- * For example: headers: {'Content-Type': 'multipart/form-data'}
+ * For example: {headers: {'Content-Type': 'multipart/form-data'}}
  * 
  * @returns {Object} returns promise 
  */
