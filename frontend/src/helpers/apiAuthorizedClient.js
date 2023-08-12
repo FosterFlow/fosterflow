@@ -86,8 +86,11 @@ function resolveRequestsQueue() {
 
   const apiRequestsQueue = state.Auth.authenticatedApiRequestsQueue;
   if (apiRequestsQueue.length > 0 ) {
-    apiRequestsQueue.forEach(({ method, url, data, headers, resolve, reject }) => {
-      apiAxios.request({ method, url, data, headers }) 
+    apiRequestsQueue.forEach(({ method, url, data, config, resolve, reject }) => {
+      if (typeof config === "undefined") {
+        config = {}
+      }
+      apiAxios.request({ method, url, data, ...config }) 
           .then(resolve)
           .catch(reject);
     });
@@ -105,12 +108,12 @@ function resolveRequestsQueue() {
  * @param {string} method post,get, delete, update ...
  * @param {string} url  
  * @param {Object} data
- * @param {Object} headers additional headers that requires for the specific request. 
- * For example: 'Content-Type': 'multipart/form-data'
+ * @param {Object} config additional config that requires for the specific request. 
+ * For example: headers: {'Content-Type': 'multipart/form-data'}
  * 
  * @returns {Object} returns promise 
  */
-function apiRequestsManager (method, url, data, headers) {
+function apiRequestsManager (method, url, data, config) {
   let resolve, reject;
   
   //  We use "resolve" method when we get updated access Token.
@@ -130,7 +133,7 @@ function apiRequestsManager (method, url, data, headers) {
   requestPromise.method = method;
   requestPromise.url = url;
   requestPromise.data = data;
-  requestPromise.headers = headers;
+  requestPromise.config = config;
 
   store.dispatch(addAuthenticatedApiRequest(requestPromise));
   resolveRequestsQueue();
@@ -139,13 +142,13 @@ function apiRequestsManager (method, url, data, headers) {
 }
 
 const apiAuthorizedClient = {
-  post: (url, data) => apiRequestsManager("post", url, data),
-  get: (url, data) => apiRequestsManager("get", url, data),
-  delete: (url, data) => apiRequestsManager("delete", url, data),
-  head: (url, data) => apiRequestsManager("head", url, data),
-  options: (url, data) => apiRequestsManager("options", url, data),
-  put: (url, data) => apiRequestsManager("put", url, data),
-  patch: (url, data) => apiRequestsManager("patch", url, data),
+  post: (url, data, config) => apiRequestsManager("post", url, data, config),
+  get: (url, data, config) => apiRequestsManager("get", url, data, config),
+  delete: (url, data, config) => apiRequestsManager("delete", url, data, config),
+  head: (url, data, config) => apiRequestsManager("head", url, data, config),
+  options: (url, data, config) => apiRequestsManager("options", url, data, config),
+  put: (url, data, config) => apiRequestsManager("put", url, data, config),
+  patch: (url, data, config) => apiRequestsManager("patch", url, data, config),
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   resolve: () => apiRequestsManager("resolve")
