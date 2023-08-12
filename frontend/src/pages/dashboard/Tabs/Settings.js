@@ -16,9 +16,8 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
-import { updateProfile, changePassword } from '../../../redux/actions';
+import { updateProfileData, changePassword, updateProfileAvatar } from '../../../redux/actions';
 
 function Settings(props) {
     const { t } = useTranslation();
@@ -42,6 +41,33 @@ function Settings(props) {
             personalInfoForm.setErrors(formErrors);
         }
     }, [props.profile.error]);
+
+    function getProfileAvatar (){
+        if (selectedAvatar !== null){
+            return URL.createObjectURL(selectedAvatar);
+        }
+
+        if (props.profile && props.profile.profile) {
+          const profile = props.profile.profile;
+          return profile.avatar;
+        }
+        return "";
+      }
+
+    function submitAvatar (event){
+        event.preventDefault();
+
+        if (selectedAvatar !== null){
+            const user = props.user;
+            
+            if (user && user.authorizedUser) {
+                props.updateProfileAvatar(user.authorizedUser.id, selectedAvatar);
+                return;
+            }
+        }
+
+        //TODO: show exception, that avatar wasn't chosen
+    }
 
     //TODO: review errors works
     useEffect(() => {
@@ -82,7 +108,7 @@ function Settings(props) {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
             const user = props.user;
             if (user && user.authorizedUser) {
-                props.updateProfile(user.authorizedUser.id, values, selectedAvatar);
+                props.updateProfileData(user.authorizedUser.id, values);
                 return;
             } 
             //TODO: handle error if we don't have active User;
@@ -122,23 +148,23 @@ function Settings(props) {
                     </div>
 
                     <div className="user-profile-sroll-area">
-                        {/* Start User profile description */}
+                        {/* Start Avatar card */}
                         <div className="p-4">
                             <Card className="border">
                                 <CardHeader>
-                                    {t('Personal Info')}
+                                    {t('User\'s photo')}
                                 </CardHeader>
                                 <CardBody>
                                     {
                                         formAlertError &&
                                          <Alert color="danger">{formAlertError}</Alert>
                                     }
-                                    <Form onSubmit={personalInfoForm.handleSubmit}>
+                                    <Form onSubmit={submitAvatar}>
                                         <FormGroup>
                                             <Label>{t('Photo')}</Label>
                                             <div className='pb-3'>
                                             <img 
-                                                src={selectedAvatar ? URL.createObjectURL(selectedAvatar) : avatar1} 
+                                                src={getProfileAvatar ()} 
                                                 className="rounded-circle avatar-lg img-thumbnail"
                                                 />
                                             </div>
@@ -149,6 +175,24 @@ function Settings(props) {
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                         </FormGroup>
+                                        <Button type="submit">{t('Update')}</Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </div>
+                        {/* End Avatar card */}
+                        {/* Start Personal information card */}
+                        <div className="p-4">
+                            <Card className="border">
+                                <CardHeader>
+                                    {t('Personal information')}
+                                </CardHeader>
+                                <CardBody>
+                                    {
+                                        formAlertError &&
+                                         <Alert color="danger">{formAlertError}</Alert>
+                                    }
+                                    <Form onSubmit={personalInfoForm.handleSubmit}>
                                         <FormGroup>
                                             <Label>{t('First Name')}</Label>
                                             <Input 
@@ -185,8 +229,8 @@ function Settings(props) {
                                 </CardBody>
                             </Card>
                         </div>
-                        {/* end profile card */}
-                        {/* Start User profile description */}
+                        {/* End Personal information card */}
+                        {/* Start Security section card */}
                         <div className="p-4">
                             <Card className="border">
                                 <CardHeader>
@@ -251,7 +295,7 @@ function Settings(props) {
                                 </CardBody>
                             </Card>
                         </div>
-                        {/* end profile card */}
+                        {/* End security card */}
                     </div>
                     {/* End User profile description */}   
                 </div>
@@ -267,4 +311,10 @@ const mapStateToProps = (state) => ({
     user: state.User
 });
 
-export default withRouter(connect(mapStateToProps, {updateProfile, changePassword})(Settings));
+const mapDispatchToProps = {
+    updateProfileData,
+    changePassword,
+    updateProfileAvatar
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));

@@ -1,9 +1,14 @@
 import {
     GET_PROFILE,
     GET_PROFILE_SUCCESS,
-    UPDATE_PROFILE,
-    UPDATE_PROFILE_SUCCESS,
-    PROFILE_FAILED
+    GET_PROFILE_FAILED,
+    UPDATE_PROFILE_DATA,
+    UPDATE_PROFILE_DATA_SUCCESS,
+    UPDATE_PROFILE_DATA_FAILED,
+    UPDATE_PROFILE_AVATAR,
+    UPDATE_PROFILE_AVATAR_SUCCESS,
+    UPDATE_PROFILE_AVATAR_FAILED,
+    PROFILE_FAILED,
 } from './constants';
 
 export const getProfile = (id) => ({
@@ -16,14 +21,39 @@ export const getProfileSuccess = (profile) => ({
     payload: profile
 });
 
-export const updateProfile = (id, data, avatar) => ({
-    type: UPDATE_PROFILE,
-    payload: { id, data, avatar }
+export const getProfileFailed = (error) => ({
+    type: GET_PROFILE_FAILED,
+    payload: error
 });
 
-export const updateProfileSuccess = (profile) => ({
-    type: UPDATE_PROFILE_SUCCESS,
+export const updateProfileData = (id, data) => ({
+    type: UPDATE_PROFILE_DATA,
+    payload: { id, data }
+});
+
+export const updateProfileDataSuccess = (profile) => ({
+    type: UPDATE_PROFILE_DATA_SUCCESS,
     payload: profile
+});
+
+export const updateProfileDataFailed = (error) => ({
+    type: UPDATE_PROFILE_DATA_FAILED,
+    payload: error
+});
+
+export const updateProfileAvatar = (id, avatar) => ({
+    type: UPDATE_PROFILE_AVATAR,
+    payload: { id, avatar }
+});
+
+export const updateProfileAvatarSuccess = (profile) => ({
+    type: UPDATE_PROFILE_AVATAR_SUCCESS,
+    payload: profile
+});
+
+export const updateProfileAvatarFailed = (error) => ({
+    type: UPDATE_PROFILE_AVATAR_FAILED,
+    payload: error
 });
 
 export const profileError = (error) => ({

@@ -1,7 +1,14 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { GET_PROFILE, UPDATE_PROFILE } from './constants';
-import { getProfileSuccess, updateProfileSuccess, profileError } from './actions';
+import { GET_PROFILE, UPDATE_PROFILE_DATA, UPDATE_PROFILE_AVATAR } from './constants';
+import { 
+    getProfileSuccess,
+    updateProfileDataSuccess,
+    getProfileFailed,
+    updateProfileDataFailed,
+    updateProfileAvatarSuccess,
+    updateProfileAvatarFailed
+ } from './actions';
 const api = apiAuthorizedClient;
 
 //TODO does saga reach API by each user request?
@@ -10,33 +17,33 @@ function* getProfile({ payload: { id } }) {
         const response = yield call(api.get, `/profiles/${id}/`);
         yield put(getProfileSuccess(response));
     } catch (error) {
-        yield put(profileError(error));
+        yield put(getProfileFailed(error));
     }
 }
 
-function* updateProfile({ payload: { id, data, avatar } }) {
+function* updateProfileData({ payload: { id, data } }) {
     try {
-        let formData = new FormData();
+        const response = yield call(api.patch, `/profiles/${id}/`, data);
+        yield put(updateProfileDataSuccess(response));
+    } catch (error) {
+        yield put(updateProfileDataFailed(error));
+    }
+}
+
+function* updateProfileAvatar({ payload: { id, avatar } }) {
+    try {
+        let avatarData = new FormData();
         
-        // Append data to formData
-        for (let key in data) {
-            formData.append(key, data[key]);
-        }
-
-        // Append the avatar file if provided
-        if (avatar) {
-            formData.append('avatar', avatar);
-        }
-
-        const response = yield call(api.patch, `/profiles/${id}/`, formData, {
+        avatarData.append('avatar', avatar);
+        const response = yield call(api.patch, `/profiles/${id}/`, avatarData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
-        
-        yield put(updateProfileSuccess(response));
+
+        yield put(updateProfileAvatarSuccess(response));
     } catch (error) {
-        yield put(profileError(error));
+        yield put(updateProfileAvatarFailed(error));
     }
 }
 
@@ -44,14 +51,19 @@ export function* watchGetProfile() {
     yield takeEvery(GET_PROFILE, getProfile);
 }
 
-export function* watchUpdateProfile() {
-    yield takeEvery(UPDATE_PROFILE, updateProfile);
+export function* watchUpdateProfileData() {
+    yield takeEvery(UPDATE_PROFILE_DATA, updateProfileData);
+}
+
+export function* watchUpdateProfileAvatar() {
+    yield takeEvery(UPDATE_PROFILE_AVATAR, updateProfileAvatar);
 }
 
 function* profileSaga() {
     yield all([
         fork(watchGetProfile),
-        fork(watchUpdateProfile),
+        fork(watchUpdateProfileData),
+        fork(watchUpdateProfileAvatar),
     ]);
 }
 
