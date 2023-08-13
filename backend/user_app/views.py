@@ -88,13 +88,15 @@ class UserAgentModelViewSet(ModelViewSet):
         return Response(agent_serializer.data, status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
-        agent = Agent.objects.get(id=kwargs['pk'])
-        agent_serializer = AgentSerializer(
-            instance=agent,
-            many=False
-        )
-        return Response(agent_serializer.data, status.HTTP_200_OK)
-
+        try:
+            agent = Agent.objects.get(id=kwargs['pk'])
+            agent_serializer = AgentSerializer(
+                instance=agent,
+                many=False
+            )
+            return Response(agent_serializer.data, status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"errors": {"details": e.args}}, status=status.HTTP_404_NOT_FOUND)
 
 
 class SelfAgentAPIView(APIView):
