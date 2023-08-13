@@ -16,14 +16,14 @@
         const chatSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/chat/'
+            + '/ws/chats/'
             + roomName
             + '/?access='
             + localStorage.getItem('access')
         );
         console.log('ws://'
             + window.location.host
-            + '/ws/chat/'
+            + '/ws/chats/'
             + roomName
             + '/')
 
