@@ -4,11 +4,12 @@ import {
     GET_PROFILE_FAILED,
     UPDATE_PROFILE_DATA,
     UPDATE_PROFILE_DATA_SUCCESS,
+    HIDE_PROFILE_DATA_SUCCESS_MESSAGE,
     UPDATE_PROFILE_DATA_FAILED,
     UPDATE_PROFILE_AVATAR,
     UPDATE_PROFILE_AVATAR_SUCCESS,
-    UPDATE_PROFILE_AVATAR_FAILED,
-    PROFILE_FAILED,
+    HIDE_PROFILE_AVATAR_SUCCESS_MESSAGE,
+    UPDATE_PROFILE_AVATAR_FAILED
 } from './constants';
 
 export const getProfile = (id) => ({
@@ -36,6 +37,10 @@ export const updateProfileDataSuccess = (profile) => ({
     payload: profile
 });
 
+export const hideProfileDataSuccessMessage = () => ({
+    type: HIDE_PROFILE_DATA_SUCCESS_MESSAGE,
+});
+
 export const updateProfileDataFailed = (error) => ({
     type: UPDATE_PROFILE_DATA_FAILED,
     payload: error
@@ -46,17 +51,16 @@ export const updateProfileAvatar = (id, avatar) => ({
     payload: { id, avatar }
 });
 
-export const updateProfileAvatarSuccess = (profile) => ({
+export const updateProfileAvatarSuccess = (avatar) => ({
     type: UPDATE_PROFILE_AVATAR_SUCCESS,
-    payload: profile
+    payload: avatar
+});
+
+export const hideProfileAvatarSuccessMessage = () => ({
+    type: HIDE_PROFILE_AVATAR_SUCCESS_MESSAGE
 });
 
 export const updateProfileAvatarFailed = (error) => ({
     type: UPDATE_PROFILE_AVATAR_FAILED,
-    payload: error
-});
-
-export const profileError = (error) => ({
-    type: PROFILE_FAILED,
     payload: error
 });

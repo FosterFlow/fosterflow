@@ -1,13 +1,15 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery, delay} from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import { GET_PROFILE, UPDATE_PROFILE_DATA, UPDATE_PROFILE_AVATAR } from './constants';
 import { 
     getProfileSuccess,
     updateProfileDataSuccess,
+    hideProfileDataSuccessMessage,
     getProfileFailed,
     updateProfileDataFailed,
     updateProfileAvatarSuccess,
-    updateProfileAvatarFailed
+    updateProfileAvatarFailed,
+    hideProfileAvatarSuccessMessage
  } from './actions';
 const api = apiAuthorizedClient;
 
@@ -25,6 +27,8 @@ function* updateProfileData({ payload: { id, data } }) {
     try {
         const response = yield call(api.patch, `/profiles/${id}/`, data);
         yield put(updateProfileDataSuccess(response));
+        yield delay(10000);
+        yield put(hideProfileDataSuccessMessage());
     } catch (error) {
         yield put(updateProfileDataFailed(error));
     }
@@ -42,6 +46,8 @@ function* updateProfileAvatar({ payload: { id, avatar } }) {
         });
 
         yield put(updateProfileAvatarSuccess(response));
+        yield delay(10000);
+        yield put(hideProfileAvatarSuccessMessage());
     } catch (error) {
         yield put(updateProfileAvatarFailed(error));
     }

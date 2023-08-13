@@ -4,17 +4,26 @@ import {
     GET_PROFILE_FAILED,
     UPDATE_PROFILE_DATA,
     UPDATE_PROFILE_DATA_SUCCESS,
-    PROFILE_FAILED,
+    HIDE_PROFILE_DATA_SUCCESS_MESSAGE,
+    UPDATE_PROFILE_DATA_FAILED,
     UPDATE_PROFILE_AVATAR,
-    UPDATE_PROFILE_AVATAR_SUCCESS
+    UPDATE_PROFILE_AVATAR_SUCCESS,
+    HIDE_PROFILE_AVATAR_SUCCESS_MESSAGE,
+    UPDATE_PROFILE_AVATAR_FAILED
 } from './constants';
 import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
 
 const INIT_STATE = {
-    profile: null,
+    errors: null,
     loading: false,
-    error: null,
-    avatar: defaultAvatarImage
+    profile: null,
+    profileDataLoading: false,
+    profileDataErrors: null,
+    profileDataSuccess: false,
+    avatar: defaultAvatarImage,
+    avatarLoading: false,
+    avatarErrors: null,
+    avatarSuccess: false
 };
 
 const Profile = (state = INIT_STATE, action) => {
@@ -26,22 +35,70 @@ const Profile = (state = INIT_STATE, action) => {
             return { ...state, profile: action.payload, loading: false, error: null };
 
         case GET_PROFILE_FAILED:
-            return { ...state, loading: false, error: action.payload };
+            return { ...state, loading: false, errors: action.payload };
         
         case UPDATE_PROFILE_DATA:
-            return { ...state, loading: true, error: null };
+            return { 
+                ...state,
+                profileDataLoading: true,
+                profileDataErrors: null,
+                profileDataSuccess: false
+            };
         
         case UPDATE_PROFILE_DATA_SUCCESS:
-            return { ...state, profile: action.payload, loading: false, error: null };
+            return { 
+                ...state,
+                profile: action.payload,
+                profileDataLoading: false,
+                profileDataErrors: null,
+                profileDataSuccess: true
+            };
+
+        case HIDE_PROFILE_DATA_SUCCESS_MESSAGE:
+            return { 
+                ...state,
+                profileDataSuccess: false
+            };
+
+        case UPDATE_PROFILE_DATA_FAILED:
+            return { 
+                ...state,
+                profileDataLoading: false,
+                profileDataErrors: action.payload,
+                profileDataSuccess: false
+            };
 
         case UPDATE_PROFILE_AVATAR:
-            return { ...state, loading: true, error: null };
+            return { 
+                ...state, 
+                avatarLoading: true, 
+                avatarErrors: null,
+                avatarSuccess: false 
+            };
             
         case UPDATE_PROFILE_AVATAR_SUCCESS:
-            return { ...state, avatar: action.payload, loading: false, error: null };
+            return { 
+                ...state, 
+                avatar: action.payload, 
+                avatarLoading: false, 
+                avatarErrors: null,
+                avatarSuccess: true 
+            };
 
-        case PROFILE_FAILED:
-            return { ...state, loading: false, error: action.payload };
+        case HIDE_PROFILE_AVATAR_SUCCESS_MESSAGE:
+            return { 
+                ...state, 
+                avatarSuccess: false 
+            };
+
+        case UPDATE_PROFILE_AVATAR_FAILED:
+            return { 
+                ...state, 
+                avatar: action.payload, 
+                avatarLoading: false, 
+                avatarErrors: null,
+                avatarSuccess: false 
+            };
 
         default: return { ...state };
     }

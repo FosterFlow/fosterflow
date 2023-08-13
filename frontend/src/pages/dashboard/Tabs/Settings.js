@@ -21,11 +21,9 @@ import { updateProfileData, changePassword, updateProfileAvatar } from '../../..
 
 function Settings(props) {
     const { t } = useTranslation();
-    const [errors, setErrors] = useState(null);
     const [formAlertError, setformAlertError] = useState(null);
     const [selectedAvatar, setSelectedAvatar] = useState(null);
 
-    //TODO: review errors works
     useEffect(() => {
         const profile = props.profile;
         if (profile.error && profile.error.errors) {
@@ -33,7 +31,7 @@ function Settings(props) {
             if (propsErrors.details){
                 setformAlertError(propsErrors.details);
             }
-            setErrors(propsErrors);
+
             let formErrors = {};
             for (let key in propsErrors) {
                 formErrors[key] = propsErrors[key][0];
@@ -195,10 +193,11 @@ function Settings(props) {
                                                 id="exampleFile"
                                                 name="file"
                                                 type="file"
+                                                disabled={props.profile.avatarLoading}
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                         </FormGroup>
-                                        <Button type="submit">{t('Update')}</Button>
+                                        <Button type="submit" disabled={props.profile.avatarLoading}>{t('Update')}</Button>
                                     </Form>
                                 </CardBody>
                             </Card>
@@ -226,6 +225,7 @@ function Settings(props) {
                                                 onBlur={personalInfoForm.handleBlur}
                                                 invalid={personalInfoForm.touched.first_name && personalInfoForm.errors.first_name ? true : false}
                                                 placeholder={t('Enter first name')}
+                                                disabled={props.profile.profileDataLoading}
                                             />
                                             {personalInfoForm.touched.first_name && personalInfoForm.errors.first_name && (
                                                 <FormFeedback>{personalInfoForm.errors.first_name}</FormFeedback>
@@ -242,12 +242,13 @@ function Settings(props) {
                                                 onBlur={personalInfoForm.handleBlur}
                                                 invalid={personalInfoForm.touched.last_name && personalInfoForm.errors.last_name ? true : false}
                                                 placeholder={t('Enter second name')}
+                                                disabled={props.profile.profileDataLoading}
                                             />
                                             {personalInfoForm.touched.last_name && personalInfoForm.errors.last_name && (
                                                 <FormFeedback>{personalInfoForm.errors.last_name}</FormFeedback>
                                             )}
                                         </FormGroup>
-                                        <Button type="submit">{t('Update')}</Button>
+                                        <Button type="submit" disabled={props.profile.profileDataLoading}>{t('Update')}</Button>
                                     </Form>
                                 </CardBody>
                             </Card>
