@@ -523,10 +523,6 @@ paths:
                 type: string
                 example: 'SecondLorem'
                 pattern: '^[a-zA-Z_.-][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$'
-        - in: formData
-          name: avatar
-          type: file
-          description: The Picture to upload.
       responses:
         '200':
           description: ''

@@ -38,13 +38,12 @@ class ChatModelSerializer(ModelSerializer):
         Returns:
             str or None: The answer text of the latest message or None.
         """
-
         try:
             customer_account_query = Message.objects.filter(
                 chat_id=obj.id
             ).latest('id')
 
-            return customer_account_query.answer_text
+            return customer_account_query.message_text
         except Exception as e:
             return None
 
