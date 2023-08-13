@@ -8,12 +8,13 @@ import {
     UPDATE_PROFILE_AVATAR,
     UPDATE_PROFILE_AVATAR_SUCCESS
 } from './constants';
+import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
 
 const INIT_STATE = {
     profile: null,
     loading: false,
     error: null,
-    avatar: "../../assets/images/users/avatar_default.png"
+    avatar: defaultAvatarImage
 };
 
 const Profile = (state = INIT_STATE, action) => {
