@@ -69,13 +69,32 @@ class UserAgentModelViewSet(ModelViewSet):
     http_method_names = ['get', 'patch', ]
 
     def partial_update(self, request, *args, **kwargs):
-        print(request.data)
-        instance = self.get_object()
-        kwargs['partial'] = True
+        agent = get_object_or_404(Agent, pk=kwargs['pk'])
+        serializer = AgentSerializer(agent, data=request.data, partial=True)
 
-        if request.user.id == instance.user_id.id:
-            return super().update(request, *args, **kwargs)
-        return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
+        if serializer.is_valid():
+            if request.user.id != agent.user_id.id:
+                return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request, *args, **kwargs):
+        agents = Agent.objects.all()
+        agent_serializer = AgentSerializer(
+            instance=agents,
+            many=True
+        )
+        return Response(agent_serializer.data, status.HTTP_200_OK)
+
+    def retrieve(self, request, *args, **kwargs):
+        agent = Agent.objects.get(id=kwargs['pk'])
+        agent_serializer = AgentSerializer(
+            instance=agent,
+            many=False
+        )
+        return Response(agent_serializer.data, status.HTTP_200_OK)
+
 
 
 class SelfAgentAPIView(APIView):
@@ -102,6 +121,8 @@ class UserAvatarUpdateView(APIView):
         serializer = UserAvatarSerializer(agent, data=request.data, partial=True)
 
         if serializer.is_valid():
+            if request.user.id != agent.user_id.id:
+                return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
