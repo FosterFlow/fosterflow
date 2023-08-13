@@ -14,7 +14,7 @@
     "General" : "General",
     "Reporting" : "Reporting",
     "Available" : "Available",
-    "Personal Info" : "Personal Info",
+    "Personal information" : "Personal information",
     "Privacy" : "Privacy",
     "Profile photo" : "Profile photo",
     "Everyone" : "Everyone",
@@ -121,5 +121,7 @@
     "At least one special character (in this set: @ $ ! % * ? & #)": "At least one special character (in this set: @ $ ! % * ? & #)",
     "At least 8 characters in total": "At least 8 characters in total",
     "Please enter new password": "Please enter new password",
-    "Please enter your current password": "Please enter your current password"
+    "Please enter your current password": "Please enter your current password",
+    "User's photo": "User's photo",
+    "Photo": "Photo"
 }

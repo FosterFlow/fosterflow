@@ -3,12 +3,19 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import { useTranslation } from "react-i18next";
 
 function Profile(props) {
   /* intilize t variable for multi language implementation */
   const { t } = useTranslation();
+
+  function getProfileAvatar (){
+    if (props.profile && props.profile.profile) {
+      const profile = props.profile.profile;
+      return profile.avatar;
+    }
+    return "";
+  }
 
   function fullName (){
     if (props.profile && props.profile.profile) {
@@ -39,7 +46,7 @@ function Profile(props) {
             <div className="px-4 pb-4">
               <div className="mb-4">
                 <img
-                  src={avatar1}
+                  src={getProfileAvatar()}
                   className="rounded-circle avatar-lg img-thumbnail"
                 />
               </div>

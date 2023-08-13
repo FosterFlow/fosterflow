@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { Nav, NavItem, NavLink, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
-
 import { setLayoutMode, setLanguage } from "../../redux/actions";
-
-//Import Images
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
-
 import { useTranslation } from 'react-i18next';
 
 //TODO: move to sprite
@@ -20,6 +15,14 @@ import russia from "../../assets/images/flags/russia.jpg";
 function LeftSidebarMenu(props) {
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+
+    function getProfileAvatar (){
+        if (props.profile && props.profile.profile) {
+          const profile = props.profile.profile;
+          return profile.avatar;
+        }
+        return "";
+      }
 
     const onChangeLayoutMode = (event) => { 
         event.preventDefault();
@@ -77,7 +80,7 @@ function LeftSidebarMenu(props) {
                     </NavItem>
                     <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
                         <DropdownToggle className="nav-link" tag="a" title={t('Profile')}>
-                            <img src={avatar1} alt="" className="profile-user rounded-circle" />
+                            <img src={getProfileAvatar()} alt="" className="profile-user rounded-circle" />
                         </DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem>
@@ -109,7 +112,8 @@ function LeftSidebarMenu(props) {
 const mapStatetoProps = state => {
     return {
         layoutMode: state.Layout.layoutMode,
-        language: state.Layout.language
+        language: state.Layout.language,
+        profile: state.Profile
     };
 };
 

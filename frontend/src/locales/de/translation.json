@@ -14,7 +14,7 @@
     "General" : "Allgemein",
     "Reporting" : "Berichterstattung",
     "Available" : "Verfügbar",
-    "Personal Info" : "Persönliche Informationen",
+    "Personal information" : "Persönliche Informationen",
     "Privacy" : "Datenschutz",
     "Profile photo" : "Profilfoto",
     "Everyone" : "Jeder",
@@ -121,5 +121,7 @@
     "At least one special character (in this set: @ $ ! % * ? & #)": "Mindestens ein Sonderzeichen (aus diesem Set: @ $ ! % * ? & #)",
     "At least 8 characters in total": "Mindestens 8 Zeichen insgesamt",
     "Please enter new password": "Bitte geben Sie ein neues Passwort ein",
-    "Please enter your current password": "Bitte geben Sie Ihr aktuelles Passwort ein"
+    "Please enter your current password": "Bitte geben Sie Ihr aktuelles Passwort ein",
+    "User's photo": "Benutzerfoto",
+    "Photo": "Foto"
 }
