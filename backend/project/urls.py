@@ -18,6 +18,7 @@ from user_app.views import UserModelViewSet, UserAgentModelViewSet, SelfUserAPIV
 from auth_app.views import CustomTokenRefreshView
 
 from chat_app.views import index, room
+from user_app.views import UserAvatarUpdateView
 
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
@@ -52,6 +53,7 @@ urlpatterns = [
     path('api/register/', RegisterApi.as_view()),
     path('api/user/', SelfUserAPIView.as_view(), name='user'),
     path('api/agent/', SelfAgentAPIView.as_view(), name='agent'),
+    path('api/agents/<int:pk>/avatar/', UserAvatarUpdateView.as_view(), name='avatar_update'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/logout/', UserLogoutAPIView.as_view(), name='logout'),

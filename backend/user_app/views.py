@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
+from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from .models import Agent
 from .permissions import IsOwnerAgent, IsOwnerUser
-from .serializers import CustomUserSerializer, AgentSerializer, SelfUserSerializer
+from .serializers import CustomUserSerializer, AgentSerializer, SelfUserSerializer, UserAvatarSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
@@ -91,3 +92,16 @@ class SelfAgentAPIView(APIView):
             many=False
         )
         return Response(agent_serializer.data, status.HTTP_200_OK)
+
+
+class UserAvatarUpdateView(APIView):
+    permission_classes = (IsAuthenticated, IsOwnerAgent)
+
+    def patch(self, request, pk=None, *args, **kwargs):
+        agent = get_object_or_404(Agent, pk=pk)
+        serializer = UserAvatarSerializer(agent, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

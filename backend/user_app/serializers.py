@@ -47,3 +47,9 @@ class AgentSerializer(CustomUserSerializer):
     class Meta:
         model = Agent
         fields = ('user_id', 'first_name', 'last_name', 'avatar')
+
+
+class UserAvatarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agent
+        fields = ('avatar', )

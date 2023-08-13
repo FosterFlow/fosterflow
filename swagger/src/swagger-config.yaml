@@ -552,6 +552,41 @@ paths:
         description: A unique integer value identifying this agent.
         required: true
         type: integer
+
+  /agents/{id}/avatar/:
+    patch:
+      security:
+        - Bearer: [ ]
+      summary: Edit agent by ID
+      operationId: agents_avatar_update
+      description: Update Agent avatar
+      parameters:
+        - in: formData
+          name: avatar
+          type: file
+          description: The Picture to upload.
+      responses:
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - agents
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this agent.
+        required: true
+        type: integer
+
   /users/:
     get:
       security:
