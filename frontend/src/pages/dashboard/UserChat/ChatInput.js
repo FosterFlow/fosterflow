@@ -1,27 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Row, Col, Form } from "reactstrap";
 import { connect } from "react-redux";
 import { addMessage as actionAddMessage, addDialogue} from "../../../redux/chat/actions";
 import { bindActionCreators } from "redux";
-//i18n
 import { useTranslation } from 'react-i18next';
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
-    /* intilize t variable for multi language implementation */
+    const textAreaRef = useRef(null);
     const { t } = useTranslation();
 
-    //function for text input value change
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+    
+    useEffect(() => {
+        textAreaRef.current.style.height = "auto";
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 3}px`;
+    }, [textMessage]);
+
     const handleChange = event => {
         settextMessage(event.target.value);
     }
 
-    //function that handles submitting a form
     const formSubmit = (event, textMessage) => {
-        event.preventDefault();
-        addMessage (textMessage);
+        if (isMobileDevice()) {
+            event.preventDefault();
+            return;
+        }
+         
+        addMessage(textMessage);
     }
     
+
+    const handleButtonClick = (event, textMessage) => {
+        if (isMobileDevice()) {
+            event.preventDefault();
+            addMessage(textMessage);
+        }
+    }
 
     //function for send data to onaddMessage function(in userChat/index.js component)
     const addMessage = (textMessage) => {
@@ -55,6 +72,10 @@ function ChatInput(props) {
 
     //function for handling 'Enter' key press
     const handleKeyDown = (event) => {
+        if (isMobileDevice()) {
+            return;
+        }
+
         if (event.keyCode === 13 && event.shiftKey === false) {
             event.preventDefault();
             addMessage(textMessage);
@@ -63,12 +84,10 @@ function ChatInput(props) {
 
     return (
         <React.Fragment>
-            <div className="chat-input p-3 p-lg-3">
+            <div className="chat-input">
                 <Form onSubmit={(e) => formSubmit(e, textMessage)} >
-                    <Row className='g-0'>
-                        <Col>
-                            <div>
-                                <textarea 
+                                <textarea
+                                    ref={textAreaRef} 
                                     value={textMessage} 
                                     onChange={handleChange} 
                                     onKeyDown={handleKeyDown}
@@ -76,20 +95,9 @@ function ChatInput(props) {
                                     placeholder={t('Enter Message') + '...'} 
                                     style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
                                 />
-                            </div>
-                        </Col>
-                        <Col xs="auto">
-                            <div className="chat-input-links ms-2">
-                                <ul className="list-inline mb-0 ms-0">
-                                    <li className="list-inline-item">
-                                        <Button type="submit" color="primary" className="font-size-16 btn-lg chat-send">
+                                        <Button onClick={(e) => handleButtonClick(e, textMessage)} type="submit" color="primary" className="font-size-16 btn-sm chat-send">
                                             <i className="ri-send-plane-2-fill"></i>
                                         </Button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </Col>
-                    </Row>
                 </Form>
             </div>
         </React.Fragment>

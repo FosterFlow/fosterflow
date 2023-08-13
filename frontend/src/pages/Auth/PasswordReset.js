@@ -134,7 +134,7 @@ const ResetPassword = (props) => {
                             </Card>
 
                             <div className="mt-5 text-center">
-                                <p>{t("Remember your password")}? <Link to="/login" className="font-weight-medium text-primary"> {t('Signin now')} </Link> </p>
+                                <p>{t("Remember your password")}? <Link to="/login" className="font-weight-medium text-primary"> {t('Sign in now')} </Link> </p>
                             </div>
                         </Col>
                     </Row>

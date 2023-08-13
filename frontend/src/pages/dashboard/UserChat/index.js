@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import SimpleBar from "simplebar-react";
 import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism'; 
+import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import gfm from 'remark-gfm';
+import _ from 'lodash';
 
 // Import Components
 import UserHead from "./UserHead";
@@ -18,8 +19,15 @@ import { getUser } from "../../../redux/user/actions";
 function CodeBlock({node, inline, className, children, ...props}) {
   const match = /language-(\w+)/.exec(className || '')
   return !inline && match ? (
-    <SyntaxHighlighter style={solarizedlight} language={match[1]} PreTag="div" {...props}>
-      {String(children).replace(/\n$/, '')}
+    <SyntaxHighlighter 
+        style={materialDark} 
+        customStyle={{
+            fontSize: "0.875rem",
+        }} 
+        language={match[1]} 
+        {...props}
+    >
+        {String(children).replace(/\n$/, '')}
     </SyntaxHighlighter>
   ) : (
     <code className={className} {...props}>
@@ -29,54 +37,92 @@ function CodeBlock({node, inline, className, children, ...props}) {
 }
 
 function UserChat(props) {
-    const ref = useRef();
+    const chatWindowRef = useRef();
+    const userWasAtBottomRef = useRef(true);
     const { messages, activeDialogueId } = props;
     const relevantMessages = messages.filter(message => message.dialog_id === activeDialogueId);
+    const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
+    const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
+    const [messageMaxWidth, setMessageMaxWidth] = useState(0);
+
+    function handleChatScroll() {
+        const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
+        userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+    };
+
+    function handleWindowResize () {
+        messageMaxMidthUpdate(true);
+    }
+
+    /**
+     * Hack, didn't find working CSS solution
+     * Need to specidy maximum width for the messages, because of possible long code blocks
+     * 
+     * param rerender {boolean}
+     */
+    function messageMaxMidthUpdate (rerender) {
+        if (rerender || (messageMaxWidth === 0 && chatWindowRef.current)) {
+            const width = chatWindowRef.current.clientWidth - 32;
+            setMessageMaxWidth(width);
+        }
+    }
+
+    // Add useEffect to auto scroll to bottom when messages update
+    useEffect(() => {
+        if (Array.isArray(messages) && messages.length > 0){
+            const { scrollHeight } = chatWindowRef.current;
+            if (userWasAtBottomRef.current){
+                chatWindowRef.current.scrollTop = scrollHeight;
+            }
+        }
+    }, [messages]);
+
+    useEffect(() => {
+        window.addEventListener('resize', debounceHandleWindowResize);
+        messageMaxMidthUpdate ();
+        return () => {
+          window.removeEventListener('resize', debounceHandleWindowResize);
+        };
+    }, []);
+    
 
     return (
         <React.Fragment>
             <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
-                <div className="user-chat-content-wrapper">
+                <div className="user-chat-wrapper">
                     <UserHead />
                     <div
-                        className="chat-conversation p-3 p-lg-3"
+                        ref={chatWindowRef}
+                        onScroll={debouncedHandleChatScroll} 
+                        className="user-chat-conversation"
                         id="messages">
-                            <ul className="list-unstyled mb-0">
-                                {
-                                    relevantMessages.map((chat, key) =>
-                                        <React.Fragment key={key}>
-                                            <li className="right">
-                                                <div className="conversation-list">
-                                                    <div className="user-chat-content">
-                                                        <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content">
-                                                                <pre>
-                                                                    {chat.message_text}
-                                                                </pre>
-                                                            </div>
-                                                        </div>
+                                <ul className="user-chat-conversation-list">
+                                    {
+                                        relevantMessages.map((chat, key) =>
+                                            <React.Fragment key={key}>
+                                                <li className="user-chat-conversation-list-item right">
+                                                    <div className="user-chat-message user-chat-message-formatting">
+                                                        {chat.message_text}
                                                     </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div className="conversation-list">
-                                                    <div className="user-chat-content">
-                                                        <div className="ctext-wrap">
-                                                            <div className="ctext-wrap-content">
-                                                                <ReactMarkdown components={{code: CodeBlock}} className="mb-0">
+                                                </li>
+                                                <li className="user-chat-conversation-list-item"> 
+                                                    <div 
+                                                        className="user-chat-message" 
+                                                        style={{maxWidth: `${messageMaxWidth}px`}}
+                                                        >
+                                                            <ReactMarkdown 
+                                                                remarkPlugins={[gfm]} 
+                                                                components={{code: CodeBlock}}>
                                                                     {chat.answer_text}
-                                                                </ReactMarkdown>
-                                                            </div>
-                                                        </div>
+                                                            </ReactMarkdown>
                                                     </div>
-                                                </div>
-                                            </li>
-                                        </React.Fragment>
-                                    )
-                                }
-                            </ul>
-                        </div>
+                                                </li>
+                                            </React.Fragment>
+                                        )
+                                    }
+                                </ul>
                     </div>
+                </div>
                 <ChatInput/>
             </div>
         </React.Fragment>

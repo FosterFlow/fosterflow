@@ -3,15 +3,11 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 import { Nav, NavItem, NavLink, UncontrolledTooltip, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
 
-import { setLayoutMode } from "../../redux/actions";
-
+import { setLayoutMode, setLanguage } from "../../redux/actions";
 
 //Import Images
-// import logo from "../../assets/images/logo.svg"
 import avatar1 from "../../assets/images/users/avatar-1.jpg";
 
-//i18n
-import i18n from '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 // falgs
@@ -33,31 +29,11 @@ function LeftSidebarMenu(props) {
         props.setLayoutMode(layoutMode);
     }
 
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [dropdownOpen2, setDropdownOpen2] = useState(false);
-    const [lng, setlng] = useState("English");
+    const [dropdownProfile, setDropdownProfile] = useState(false);
+    const [dropdownChangeLanguge, setDropdownChangeLanguge] = useState(false);
 
-
-    const toggle = () => setDropdownOpen(!dropdownOpen);
-    const toggle2 = () => setDropdownOpen2(!dropdownOpen2);
-
-    /* changes language according to clicked language menu item */
-    const changeLanguageAction = (lng) => {
-
-        /* set the selected language to i18n */
-        i18n.changeLanguage(lng);
-
-        if (lng === "sp")
-            setlng("Spanish");
-        else if (lng === "gr")
-            setlng("German");
-        else if (lng === "rs")
-            setlng("Russian");
-        else if (lng === "it")
-            setlng("Italian");
-        else if (lng === "eng")
-            setlng("English");
-    }
+    const toggleProfile = () => setDropdownProfile(!dropdownProfile);
+    const toggleChangeLanguge = () => setDropdownChangeLanguge(!dropdownChangeLanguge);
 
     return (
         <React.Fragment>
@@ -74,24 +50,24 @@ function LeftSidebarMenu(props) {
                     </UncontrolledTooltip>
 
                     {/* TODO: Languages move to settings */}
-                    <Dropdown nav isOpen={dropdownOpen2} className="btn-group dropup profile-user-dropdown" toggle={toggle2}>
+                    <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup profile-user-dropdown" toggle={toggleChangeLanguge}>
                         <DropdownToggle nav>
                             <i className="ri-global-line"></i>
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem onClick={() => changeLanguageAction('eng')} active={lng === "English"}>
+                            <DropdownItem onClick={() => props.setLanguage('en')} active={props.language === "en"}>
                                 <img src={usFlag} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('English')}</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => changeLanguageAction('sp')} active={lng === "Spanish"}>
+                            <DropdownItem onClick={() => props.setLanguage('es')} active={props.language === "es"}>
                                 <img src={spain} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Spanish')}</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => changeLanguageAction('gr')} active={lng === "German"}>
+                            <DropdownItem onClick={() => props.setLanguage('de')} active={props.language === "de"}>
                                 <img src={germany} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('German')}</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => changeLanguageAction('it')} active={lng === "Italian"}>
+                            <DropdownItem onClick={() => props.setLanguage('it')} active={props.language === "it"}>
                                 <img src={italy} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Italian')}</span>
                             </DropdownItem>
-                            <DropdownItem onClick={() => changeLanguageAction('rs')} active={lng === "Russian"}>
+                            <DropdownItem onClick={() => props.setLanguage('ru')} active={props.language === "ru"}>
                                 <img src={russia} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Russian')}</span>
                             </DropdownItem>
                         </DropdownMenu>
@@ -105,7 +81,7 @@ function LeftSidebarMenu(props) {
                             {t('Dark / Light Mode')}
                         </UncontrolledTooltip>
                     </NavItem>
-                    <Dropdown nav isOpen={dropdownOpen} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggle}>
+                    <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
                         <DropdownToggle className="nav-link" tag="a">
                             <img src={avatar1} alt="" className="profile-user rounded-circle" />
                         </DropdownToggle>
@@ -126,8 +102,14 @@ function LeftSidebarMenu(props) {
 
 const mapStatetoProps = state => {
     return {
-        layoutMode: state.Layout.layoutMode
+        layoutMode: state.Layout.layoutMode,
+        language: state.Layout.language
     };
 };
 
-export default connect(mapStatetoProps, {setLayoutMode})(LeftSidebarMenu);
+const mapDispatchToProps = {
+    setLayoutMode,
+    setLanguage
+  };
+
+export default connect(mapStatetoProps, mapDispatchToProps)(LeftSidebarMenu);

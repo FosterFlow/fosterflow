@@ -357,10 +357,8 @@ paths:
           examples:
             application/json:
               {
-                "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4NjkxOTA4NiwiaWF0IjoxNjg2ODMyNjg2LCJqdGkiOiIxYmVhOGVmY2YwYjc0NTVkODY0NTU3MDg4MGI5ZWIxZCIsInVzZXJfaWQiOjR9.Jn667YJy4p0Y958TmW9zIcj2BCS-_E_APRvi_fI2axk",
                 "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg2ODM2Mjg2LCJpYXQiOjE2ODY4MzI2ODYsImp0aSI6ImI0OWQyZDE5NzgwZTQ3Y2M5MzJjZmJlMzZmN2UyMjI2IiwidXNlcl9pZCI6NH0.VQjwSsOuBD8UDlu966e-N3RlBZEJpWVt3rvSqg_oQGU"
               }
-
         400:
           description: Bad request.
           schema:
@@ -392,8 +390,6 @@ paths:
           schema:
             type: object
             properties:
-              refresh:
-                type: string
               access:
                 type: string
         400:
@@ -410,23 +406,12 @@ paths:
       description: |-
         Takes a refresh type JSON web token and returns an access type JSON web
         token if the refresh token is valid.
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              refresh:
-                type: string
       responses:
         '200':
           description: 'The answer will be refresh access and refresh tokens'
           schema:
             type: object
             properties:
-              refresh:
-                type: string
               access:
                 type: string
         400:
@@ -749,15 +734,6 @@ paths:
       summary: An endpoint to logout users.
       description: |-
         Add JWT to blacklist
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              refresh:
-                type: string
       responses:
         200:
           description: Successful operation
@@ -1027,10 +1003,6 @@ definitions:
       - refresh
     type: object
     properties:
-      refresh:
-        title: Refresh
-        type: string
-        minLength: 1
       access:
         title: Access
         type: string
