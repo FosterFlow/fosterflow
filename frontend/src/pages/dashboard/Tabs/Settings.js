@@ -85,16 +85,39 @@ function Settings(props) {
         }
     }, [props.user.error]);
 
+    function getFirstName (){
+        return (props.profile
+        && props.profile.profile 
+        && props.profile.profile.first_name) || '';
+    }
+
+    function getLastName (){
+        return (props.profile
+            && props.profile.profile  
+            && props.profile.profile.last_name) || ''
+    }
+
+    //Filling the form after page reloading
+    useEffect(() => {
+        const lastName = getLastName();
+        const formikLastName = personalInfoForm.values.last_name;
+
+        if ((lastName !== "") && (formikLastName === "")) {
+            personalInfoForm.setFieldValue('last_name', lastName);
+        }
+
+        const firstName = getFirstName();
+        const formikFirstName = personalInfoForm.values.first_name;
+        
+        if ((firstName !== "") && (formikFirstName === "")) {
+            personalInfoForm.setFieldValue('first_name', firstName);
+        }
+    }, [props.profile]);
+
     const personalInfoForm = useFormik({
         initialValues: {
-            first_name: (
-                props.profile
-                && props.profile.profile 
-                && props.profile.profile.first_name) || '',
-            last_name: (
-                props.profile
-                && props.profile.profile  
-                && props.profile.profile.last_name) || '',
+            first_name: getFirstName(),
+            last_name: getLastName(),
         },
         validationSchema: Yup.object({
             first_name: Yup.string()
