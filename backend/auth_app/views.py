@@ -122,7 +122,7 @@ class UserLogoutAPIView(GenericAPIView):
         try:
             refresh_token = request.COOKIES.get('refresh')
             if refresh_token is None:
-                response = {"errors": {'details': 'Refresh is None'}}
+                response = {"errors": {'details': ['Refresh is None']}}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             token = RefreshToken(refresh_token)
             token.blacklist()
@@ -452,7 +452,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         try:
             refresh = request.COOKIES.get('refresh')
             if refresh is None:
-                response = {"errors": {'details': 'Refresh is None'}}
+                response = {"errors": {'details': ['Refresh is None']}}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
             token_class = RefreshToken
 
