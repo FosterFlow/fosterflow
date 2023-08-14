@@ -24,6 +24,7 @@ import {
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
     CHANGE_PASSWORD,
     CHANGE_PASSWORD_SUCCESS,
+    HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
     CHANGE_PASSWORD_FAILED
 } from './constants';
 
@@ -35,7 +36,10 @@ const INIT_STATE = {
     confirmationEmailSent: false,
     isAuthenticated: JSON.parse(isAuthenticated ) || false,
     refreshTokenLoading: false,
-    authenticatedApiRequestsQueue: []
+    authenticatedApiRequestsQueue: [],
+    changePasswordLoading: false,
+    changePassswordErrors: null,
+    changePasswordSuccess: false
 };
 
 
@@ -143,13 +147,35 @@ const Auth = (state = INIT_STATE, action) => {
             return { ...state, loading: false, resetPasswordConfirmed: true };
             
         case CHANGE_PASSWORD:
-            return { ...state, loading: true };
+            return { 
+                ...state, 
+                changePassswordErrors: null, 
+                changePasswordLoading: true,
+                changePasswordSuccess: false 
+            };
     
         case CHANGE_PASSWORD_SUCCESS:
-            return { ...state, loading: false };
+            return { 
+                ...state,
+                changePassswordErrors: null,
+                changePasswordLoading: false,
+                changePasswordSuccess: true 
+            };
+
+        case HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE:
+            return { 
+                ...state,
+                loading: false,
+                changePasswordSuccess: false 
+            };
 
         case CHANGE_PASSWORD_FAILED:
-            return { ...state, error: action.payload };
+            return { 
+                ...state,
+                changePassswordErrors: action.payload,
+                changePasswordLoading: false,
+                changePasswordSuccess: false  
+            };
 
         case VALIDATE_RESET_TOKEN:
             return { ...state, loading: true, resetTokenValidationStatus: false };

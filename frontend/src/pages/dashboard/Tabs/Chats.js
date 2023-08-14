@@ -144,6 +144,7 @@ const Chats = (props) => {
     );
 }
 
+//TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
     dialogues: state.Chat.dialogues,
     activeDialogueId: state.Chat.activeDialogueId,

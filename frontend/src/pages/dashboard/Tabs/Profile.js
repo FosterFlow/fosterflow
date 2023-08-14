@@ -65,9 +65,10 @@ function Profile(props) {
   );
 }
 
+//TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
   profile: state.Profile,
-  user: state.User
+  user: state.User  
 });
 
 const mapDispatchToProps = {

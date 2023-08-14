@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, takeEvery, delay } from 'redux-saga/effects';
 import apiClient from '../../helpers/apiClient';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 
@@ -30,6 +30,7 @@ import {
     refreshTokenUpdateSuccess,
     refreshTokenUpdateFailure,
     changePasswordSuccess,
+    hideChangePasswordSuccessMessage,
     changePasswordFailed
 } from './actions';
 
@@ -185,6 +186,8 @@ function* changePassword({ payload: { currentPassword, newPassword } }) {
                 new_password: newPassword 
             });
         yield put(changePasswordSuccess(response.message));
+        yield delay(10000);
+        yield put(hideChangePasswordSuccessMessage());
     } catch (errors) {
         if (errors.details) {
             yield put(changePasswordFailed(errors.details));

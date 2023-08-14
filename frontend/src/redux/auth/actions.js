@@ -24,6 +24,7 @@ import {
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
     CHANGE_PASSWORD,
     CHANGE_PASSWORD_SUCCESS,
+    HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
     CHANGE_PASSWORD_FAILED
 } from './constants';
 
@@ -37,6 +38,12 @@ export const changePassword = (currentPassword, newPassword) => {
 export const changePasswordSuccess = () => {
     return {
         type: CHANGE_PASSWORD_SUCCESS,
+    }
+};
+
+export const hideChangePasswordSuccessMessage = () => {
+    return {
+        type: HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
     }
 };
 

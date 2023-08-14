@@ -303,6 +303,7 @@ function Settings(props) {
                                                     onBlur={securityForm.handleBlur}
                                                     invalid={securityForm.touched.current_password && securityForm.errors.current_password ? true : false}
                                                     placeholder={t('Enter current password')}
+                                                    disabled={props.auth.changePasswordLoading}
                                                 />
                                                 <FormFeedback>
                                                     {securityForm.touched.current_password && securityForm.errors.current_password}
@@ -317,6 +318,7 @@ function Settings(props) {
                                                 onBlur={securityForm.handleBlur}
                                                 invalid={securityForm.touched.new_password && securityForm.errors.new_password ? true : false}
                                                 placeholder={t('Enter new password')}
+                                                disabled={props.auth.changePasswordLoading}
                                             />
                                             <FormFeedback>
                                                 {securityForm.touched.new_password && securityForm.errors.new_password}
@@ -329,7 +331,14 @@ function Settings(props) {
                                                 <li>{t('At least 8 characters in total')}.</li>
                                             </ul>
                                         </FormGroup>
-                                        <Button type="submit">{t('Update password')}</Button>
+                                        <Button type="submit" disabled={props.auth.changePasswordLoading}>
+                                            {props.auth.changePasswordLoading &&
+                                                <div className='pe-2 d-inline-block'>
+                                                    <Spinner color="primary" size="sm"/>
+                                                </div>
+                                            }
+                                            {t('Update password')}
+                                        </Button>
                                     </Form>
                                 </CardBody>
                             </Card>
@@ -345,9 +354,11 @@ function Settings(props) {
     );
 }
 
+//TODO: suscribe only to required fields
 const mapStateToProps = (state) => ({
     profile: state.Profile,
-    user: state.User
+    user: state.User,
+    auth: state.Auth
 });
 
 const mapDispatchToProps = {
