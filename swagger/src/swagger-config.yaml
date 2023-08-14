@@ -154,14 +154,62 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/NotFound'
+      parameters:
+        - name: id
+          in: path
+          description: A unique integer value identifying this chat.
+          required: true
+          type: integer
       tags:
         - chats
-    parameters:
-      - name: id
-        in: path
-        description: A unique integer value identifying this chat.
-        required: true
-        type: integer
+    options:
+      security:
+        - Bearer: [ ]
+      summary: Instruction to connect websocket
+      description: >-
+        To connect to the chat websocket, you should make the following request: <br>
+        ws://localhost:8000/ws/chats/**{chat_id}**/?access=**{access_token}** <br>
+        Where **{chat_id}** - ID Chat, **{access_token}** - token for auth <br>
+        <br>
+        After connection you can write message to chat. You should use this structure: <br>
+        {"message": "**{your message}**"} <br>
+        Where **{your message}** - message to sent <br>
+        <br>
+        Receiving messages looks like this: <br>
+        {"message": "", "finish_reason": ""} <br>
+        Where **message** - text message and **finish_reason** - an attribute that makes it clear whether the response has ended. There can only be a **null** or **stop** value<br>
+        <br>
+        <br>
+        Example cod on JavaScript: <br>
+        
+        **Connect to WebSocket:** <br>
+        const chatSocket = new WebSocket( 
+            &nbsp; &nbsp; 'ws://' 
+            &nbsp; &nbsp; + window.location.host 
+            &nbsp; &nbsp; + '/ws/chats/' 
+            &nbsp; &nbsp; + chat_id 
+            &nbsp; &nbsp; + '/?access=' 
+            &nbsp; &nbsp; + localStorage.getItem('access') 
+        );<br>
+        
+        **Send message to WebSocket:** <br>
+        chatSocket.send(JSON.stringify({ <br>
+        &nbsp; &nbsp; 'message': message <br>
+        });<br>
+        
+        **Take message from WebSocket:** <br>
+        chatSocket.onmessage = function(e) {
+            &nbsp; &nbsp; const data = JSON.parse(e.data);
+            &nbsp; &nbsp; document.querySelector('#chat-log').value += (data.message);
+            &nbsp; &nbsp; if(data.finish_reason === "stop"){
+            &nbsp; &nbsp; &nbsp; &nbsp; document.querySelector('#chat-log').value += "END" ;
+            &nbsp; &nbsp; }
+        }; <br>
+      responses:
+        101:
+          description: Switching Protocols
+      tags:
+        - chats
   /messages/:
     get:
       security:
