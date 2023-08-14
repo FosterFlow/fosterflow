@@ -9,7 +9,8 @@ import {
     Input, 
     FormFeedback, 
     Alert, 
-    Label 
+    Label,
+    Spinner 
 } from "reactstrap";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -197,7 +198,14 @@ function Settings(props) {
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.profile.avatarLoading}>{t('Update')}</Button>
+                                        <Button type="submit" disabled={props.profile.avatarLoading}>
+                                            {props.profile.avatarLoading &&
+                                                <div className='pe-2 d-inline-block'>
+                                                    <Spinner color="primary" size="sm"/>
+                                                </div>
+                                            }
+                                            {t('Update')}
+                                        </Button>
                                     </Form>
                                 </CardBody>
                             </Card>
@@ -248,7 +256,14 @@ function Settings(props) {
                                                 <FormFeedback>{personalInfoForm.errors.last_name}</FormFeedback>
                                             )}
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.profile.profileDataLoading}>{t('Update')}</Button>
+                                        <Button type="submit" disabled={props.profile.profileDataLoading}>
+                                            {props.profile.profileDataLoading &&
+                                                <div className='pe-2 d-inline-block'>
+                                                    <Spinner color="primary" size="sm"/>
+                                                </div>
+                                            }
+                                            {t('Update')}
+                                        </Button>
                                     </Form>
                                 </CardBody>
                             </Card>

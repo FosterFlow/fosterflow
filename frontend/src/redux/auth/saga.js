@@ -59,7 +59,7 @@ function* logout() {
     try {
         //we use isAuthorized param for the case if user reloaded the page
         localStorage.setItem("isAuthenticated", false);
-        yield call(apiClient.post, '/logout/');
+        yield call(apiAuthorizedClient.post, '/logout/');
         yield put(logoutUserSuccess());
     } catch (error) {
         yield put(logoutUserFailed(error.message));
