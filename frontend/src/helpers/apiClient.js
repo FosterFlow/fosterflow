@@ -15,7 +15,21 @@ const apiClient = axios.create({
 apiClient.interceptors.response.use(
   response => response.data ? response.data : response,
   error => {
-    return Promise.reject(error.response);
+    const errorsData = (error.response && error.response.data && error.response.data.errors) || null;
+    
+    if (errorsData !== null) {
+      if (errorsData.details !== undefined) {
+        return Promise.reject(errorsData.details);
+      }
+
+      return Promise.reject(errorsData);
+    }
+    
+    if (error.message) {
+      return Promise.reject(error.message);
+    }
+    
+    return Promise.reject("Something wrong.");
   }
 );
 

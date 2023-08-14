@@ -1,14 +1,11 @@
-import axios from 'axios';
+import apiClient from './apiClient';
 import { store } from '../redux/store';
 import { 
   refreshTokenUpdate,
   addAuthenticatedApiRequest,
   clearAuthenticatedApiRequestsQueue
 } from '../redux/auth/actions';
-import config from './../config';
 import jwtDecode from 'jwt-decode';
-
-const API_URL = config.API_URL;
 
 /**
  * Checks if access token is expired
@@ -28,39 +25,12 @@ function isTokenExpired (accessToken) {
 };
 
 function getAccessTokenFromAxios() {
-  const authHeader = apiAxios.defaults.headers['Authorization'];
+  const authHeader = apiClient.defaults.headers['Authorization'];
   if (authHeader && authHeader.startsWith('Bearer ')) {
       return authHeader.split(' ')[1];
   }
   return ""; 
 }
-
-// Create an Axios instance
-const apiAxios = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true
-});
-
-// Handling errors
-//TODO show errors on the screen
-apiAxios.interceptors.response.use(
-  response => response.data ? response.data : response,
-  async error => {
-    let message = '';
-    
-    switch (error.status) {
-        case 500: message = 'Internal Server Error'; break;
-        case 401: message = 'Invalid credentials'; break;
-        case 404: message = "Sorry! the data you are looking for could not be found"; break;
-        default: message = error.message || error;
-    }
-    return Promise.reject(message);
-  }
-);
-
 
 /**
  * Function checks that accesss token is valid and resolve the queue of requests
@@ -81,7 +51,7 @@ function resolveRequestsQueue() {
 
   const axiosAccessToken = getAccessTokenFromAxios();
   if (accessToken !== axiosAccessToken) {
-    apiAxios.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
+    apiClient.defaults.headers['Authorization'] = `Bearer ${accessToken}`;
   }
 
   const apiRequestsQueue = state.Auth.authenticatedApiRequestsQueue;
@@ -90,7 +60,7 @@ function resolveRequestsQueue() {
       if (typeof config === "undefined") {
         config = {}
       }
-      apiAxios.request({ method, url, data, ...config }) 
+      apiClient.request({ method, url, data, ...config }) 
           .then(resolve)
           .catch(reject);
     });

@@ -22,24 +22,7 @@ import { updateProfileData, changePassword, updateProfileAvatar } from '../../..
 
 function Settings(props) {
     const { t } = useTranslation();
-    const [formAlertError, setformAlertError] = useState(null);
     const [selectedAvatar, setSelectedAvatar] = useState(null);
-
-    useEffect(() => {
-        const profile = props.profile;
-        if (profile.error && profile.error.errors) {
-            const propsErrors = profile.error.errors;
-            if (propsErrors.details){
-                setformAlertError(propsErrors.details);
-            }
-
-            let formErrors = {};
-            for (let key in propsErrors) {
-                formErrors[key] = propsErrors[key][0];
-            }
-            personalInfoForm.setErrors(formErrors);
-        }
-    }, [props.profile.error]);
 
     function getProfileAvatar (){
         if (selectedAvatar !== null){
@@ -67,22 +50,6 @@ function Settings(props) {
 
         //TODO: show exception, that avatar wasn't chosen
     }
-
-    //TODO: review errors works
-    useEffect(() => {
-        const user = props.user;
-        if (user.error && user.error.errors) {
-            const propsErrors = user.error.errors;
-            if (propsErrors.details){
-                setformAlertError(propsErrors.details);
-            }
-            let formErrors = {};
-            for (let key in propsErrors) {
-                formErrors[key] = propsErrors[key][0];
-            }
-            securityForm.setErrors(formErrors);
-        }
-    }, [props.user.error]);
 
     function getFirstName (){
         return (props.profile
@@ -124,7 +91,7 @@ function Settings(props) {
                 .notRequired(),
             last_name: Yup.string()
                 .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
-                .notRequired(),
+                .notRequired()
         }),
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
@@ -144,14 +111,14 @@ function Settings(props) {
             new_password: ''     // initialize with an empty string
         },
         validationSchema: Yup.object({
-            current_password: Yup.string()  // no requirement since it's optional
-                .required(t('Please enter your current password')),
+            current_password: Yup.string(),  // no requirement since it's optional
+                // .required(t('Please enter your current password')),
             new_password: Yup.string() 
-                .required(t('Please enter new password'))
-                .matches(
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                    t('The password must meet the requirements below')  // Your custom error message for simplicity
-                )
+                // .required(t('Please enter new password'))
+                // .matches(
+                //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                //     t('The password must meet the requirements below')  // Your custom error message for simplicity
+                // )
         }),
         onSubmit: values => {
             console.log('Settings page securityForm', 'onSubmit', values);
@@ -160,6 +127,41 @@ function Settings(props) {
             props.changePassword(currentPassword, newPassword);
         },
     });
+
+
+    function getFirstNameErrors () {
+        let errors = [];
+        if (personalInfoForm.errors && personalInfoForm.errors.first_name) {
+            errors.push(personalInfoForm.errors.first_name);
+        }
+
+        if (props.profile 
+            && props.profile.profileDataErrors
+            && typeof props.profile.profileDataErrors === "object"
+            && props.profile.profileDataErrors.first_name) {
+
+            errors = [...errors, ...props.profile.profileDataErrors.first_name]
+        }
+
+        return errors
+    }
+
+    function getLastNameErrors () {
+        let errors = [];
+        if (personalInfoForm.errors && personalInfoForm.errors.last_name) {
+            errors.push(personalInfoForm.errors.last_name);
+        }
+
+        if (props.profile 
+            && props.profile.profileDataErrors
+            && typeof props.profile.profileDataErrors === "object"
+            && props.profile.profileDataErrors.last_name) {
+
+            errors = [...errors, ...props.profile.profileDataErrors.last_name]
+        }
+
+        return errors
+    }
 
     return (
         <React.Fragment>
@@ -170,6 +172,10 @@ function Settings(props) {
                     </div>
 
                     <div className="user-profile-sroll-area">
+                        {
+                            (props.profile && props.profile.errors) &&
+                            <Alert color="danger">{props.profile.errors}</Alert>
+                        }
                         {/* Start Avatar card */}
                         <div className="p-4">
                             <Card className="border">
@@ -178,8 +184,9 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        formAlertError &&
-                                         <Alert color="danger">{formAlertError}</Alert>
+                                        (props.profile && props.profile.avatarErrors 
+                                            && typeof props.profile.avatarErrors === "string") &&
+                                        <Alert color="danger">{props.profile.avatarErrors}</Alert>
                                     }
                                     {
                                          props.profile.avatarSuccess &&
@@ -201,6 +208,14 @@ function Settings(props) {
                                                 disabled={props.profile.avatarLoading}
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
+                                            <FormFeedback>
+                                                {
+                                                    props.profile 
+                                                    && props.profile.avatarErrors 
+                                                    && typeof props.avatarErrors === "object"
+                                                    && props.profile.avatarErrors.avatar
+                                                }
+                                            </FormFeedback>
                                         </FormGroup>
                                         <Button type="submit" disabled={props.profile.avatarLoading}>
                                             {props.profile.avatarLoading &&
@@ -223,8 +238,9 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        formAlertError &&
-                                         <Alert color="danger">{formAlertError}</Alert>
+                                        (props.profile && props.profile.profileDataErrors 
+                                            && typeof props.profile.profileDataErrors === "string") &&
+                                        <Alert color="danger">{props.profile.profileDataErrors}</Alert>
                                     }
                                     {
                                          props.profile.profileDataSuccess &&
@@ -239,13 +255,21 @@ function Settings(props) {
                                                 value={personalInfoForm.values.first_name}
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
-                                                invalid={personalInfoForm.touched.first_name && personalInfoForm.errors.first_name ? true : false}
+                                                invalid={getFirstNameErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter first name')}
                                                 disabled={props.profile.profileDataLoading}
                                             />
-                                            {personalInfoForm.touched.first_name && personalInfoForm.errors.first_name && (
-                                                <FormFeedback>{personalInfoForm.errors.first_name}</FormFeedback>
-                                            )}
+                                            <FormFeedback>
+                                                {
+                                                    getFirstNameErrors().length > 0 && (
+                                                        <ul>
+                                                            {getFirstNameErrors().map((error, index) => (
+                                                                <li key={index}>{error}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )
+                                                }
+                                            </FormFeedback>
                                         </FormGroup>
 
                                         <FormGroup>
@@ -256,13 +280,21 @@ function Settings(props) {
                                                 value={personalInfoForm.values.last_name}
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
-                                                invalid={personalInfoForm.touched.last_name && personalInfoForm.errors.last_name ? true : false}
+                                                invalid={getLastNameErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter second name')}
                                                 disabled={props.profile.profileDataLoading}
                                             />
-                                            {personalInfoForm.touched.last_name && personalInfoForm.errors.last_name && (
-                                                <FormFeedback>{personalInfoForm.errors.last_name}</FormFeedback>
-                                            )}
+                                            <FormFeedback>
+                                                {
+                                                    getLastNameErrors().length > 0 && (
+                                                        <ul>
+                                                            {getLastNameErrors().map((error, index) => (
+                                                                <li key={index}>{error}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )
+                                                }
+                                            </FormFeedback>
                                         </FormGroup>
                                         <Button type="submit" disabled={props.profile.profileDataLoading}>
                                             {props.profile.profileDataLoading &&
@@ -285,8 +317,9 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        formAlertError &&
-                                         <Alert color="danger">{formAlertError}</Alert>
+                                        (props.auth && props.auth.changePassswordErrors 
+                                            && typeof props.auth.changePassswordErrors === "string") &&
+                                        <Alert color="danger">{props.auth.changePassswordErrors}</Alert>
                                     }
                                     {
                                          props.auth.changePasswordSuccess &&
@@ -313,12 +346,17 @@ function Settings(props) {
                                                     value={securityForm.values.current_password}
                                                     onChange={securityForm.handleChange}
                                                     onBlur={securityForm.handleBlur}
-                                                    invalid={securityForm.touched.current_password && securityForm.errors.current_password ? true : false}
+                                                    invalid={(securityForm.errors && securityForm.errors.current_password) ? true : false}
                                                     placeholder={t('Enter current password')}
                                                     disabled={props.auth.changePasswordLoading}
                                                 />
                                                 <FormFeedback>
-                                                    {securityForm.touched.current_password && securityForm.errors.current_password}
+                                                    {securityForm.errors && securityForm.errors.current_password}
+                                                    {
+                                                        props.auth && props.auth.changePassswordErrors 
+                                                        && typeof props.auth.changePassswordErrors === "object"
+                                                        && typeof props.auth.changePassswordErrors.current_password
+                                                    }
                                                 </FormFeedback>
                                             </div>
                                             
@@ -328,12 +366,17 @@ function Settings(props) {
                                                 value={securityForm.values.new_password}
                                                 onChange={securityForm.handleChange}
                                                 onBlur={securityForm.handleBlur}
-                                                invalid={securityForm.touched.new_password && securityForm.errors.new_password ? true : false}
+                                                invalid={(securityForm.errors && securityForm.errors.new_password) ? true : false}
                                                 placeholder={t('Enter new password')}
                                                 disabled={props.auth.changePasswordLoading}
                                             />
                                             <FormFeedback>
-                                                {securityForm.touched.new_password && securityForm.errors.new_password}
+                                                {securityForm.errors && securityForm.errors.new_password}
+                                                {
+                                                    props.auth && props.auth.changePassswordErrors 
+                                                    && typeof props.auth.changePassswordErrors === "object"
+                                                    && typeof props.auth.changePassswordErrors.new_password
+                                                }
                                             </FormFeedback>    
                                             <ul className='pt-3'>
                                                 <li>{t('At least one lowercase character')}.</li>
