@@ -181,6 +181,10 @@ function Settings(props) {
                                         formAlertError &&
                                          <Alert color="danger">{formAlertError}</Alert>
                                     }
+                                    {
+                                         props.profile.avatarSuccess &&
+                                         <Alert color="success">{t("The photo has been successfully updated")}.</Alert>
+                                    }
                                     <Form onSubmit={submitAvatar}>
                                         <FormGroup>
                                             <Label>{t('Photo')}</Label>
@@ -221,6 +225,10 @@ function Settings(props) {
                                     {
                                         formAlertError &&
                                          <Alert color="danger">{formAlertError}</Alert>
+                                    }
+                                    {
+                                         props.profile.profileDataSuccess &&
+                                         <Alert color="success">{t("Personal information has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={personalInfoForm.handleSubmit}>
                                         <FormGroup>
@@ -279,6 +287,10 @@ function Settings(props) {
                                     {
                                         formAlertError &&
                                          <Alert color="danger">{formAlertError}</Alert>
+                                    }
+                                    {
+                                         props.auth.changePasswordSuccess &&
+                                         <Alert color="success">{t("The password has been successfully changed")}.</Alert>
                                     }
                                     <Form onSubmit={securityForm.handleSubmit}>
                                         <FormGroup className='border p-3'>
