@@ -123,5 +123,8 @@
     "Please enter new password": "Please enter new password",
     "Please enter your current password": "Please enter your current password",
     "User's photo": "User's photo",
-    "Photo": "Photo"
+    "Photo": "Photo",
+    "Personal information has been successfully updated": "Personal information has been successfully updated",
+    "The photo has been successfully updated": "The photo has been successfully updated",
+    "The password has been successfully changed": "The password has been successfully changed"
 }

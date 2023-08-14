@@ -123,5 +123,8 @@
     "Please enter new password": "Por favor, introduce una nueva contraseña",
     "Please enter your current password": "Por favor, introduce tu contraseña actual",
     "User's photo": "Foto del usuario",
-    "Photo": "Foto"
+    "Photo": "Foto",
+    "Personal information has been successfully updated": "La información personal ha sido actualizada con éxito",
+    "The photo has been successfully updated": "La foto ha sido actualizada con éxito",
+    "The password has been successfully changed": "La contraseña ha sido cambiada con éxito"
 }

@@ -123,5 +123,8 @@
     "Please enter new password": "Пожалуйста, введите новый пароль",
     "Please enter your current password": "Пожалуйста, введите ваш текущий пароль",
     "User's photo": "Фото пользователя",
-    "Photo": "Фото"
+    "Photo": "Фото",
+    "Personal information has been successfully updated": "Персональная информация была успешно изменена",
+    "The photo has been successfully updated": "Фотография была успешно изменена",
+    "The password has been successfully changed": "Пароль был успешно изменен"
 }
