@@ -28,10 +28,10 @@ import {
     CHANGE_PASSWORD_FAILED
 } from './constants';
 
-export const changePassword = (currentPassword, newPassword) => {
+export const changePassword = (oldPassword, newPassword) => {
     return {
         type: CHANGE_PASSWORD,
-        payload: {currentPassword, newPassword}
+        payload: {oldPassword, newPassword}
     }
 };
 
@@ -47,10 +47,10 @@ export const hideChangePasswordSuccessMessage = () => {
     }
 };
 
-export const changePasswordFailed = (error) => {
+export const changePasswordFailed = (errors) => {
     return {
         type: CHANGE_PASSWORD_FAILED,
-        error: error
+        payload: errors
     }
 };
 

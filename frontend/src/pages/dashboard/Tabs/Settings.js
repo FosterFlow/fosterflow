@@ -107,28 +107,29 @@ function Settings(props) {
 
     const securityForm = useFormik({
         initialValues: {
-            current_password: '', // initialize with an empty string
+            old_password: '', // initialize with an empty string
             new_password: ''     // initialize with an empty string
         },
         validationSchema: Yup.object({
-            current_password: Yup.string(),  // no requirement since it's optional
-                // .required(t('Please enter your current password')),
+            old_password: Yup.string()  // no requirement since it's optional
+                .required(t('Please enter your current password')),
             new_password: Yup.string() 
-                // .required(t('Please enter new password'))
-                // .matches(
-                //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                //     t('The password must meet the requirements below')  // Your custom error message for simplicity
-                // )
+                .required(t('Please enter new password'))
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                    t('The password must meet the requirements below')  // Your custom error message for simplicity
+                )
         }),
         onSubmit: values => {
             console.log('Settings page securityForm', 'onSubmit', values);
-            const currentPassword = values.current_password;
+            const oldPassword = values.old_password;
             const newPassword = values.new_password;
-            props.changePassword(currentPassword, newPassword);
+            props.changePassword(oldPassword, newPassword);
         },
     });
 
 
+    //TODO: reduce number of invokes
     function getFirstNameErrors () {
         let errors = [];
         if (personalInfoForm.errors && personalInfoForm.errors.first_name) {
@@ -146,6 +147,7 @@ function Settings(props) {
         return errors
     }
 
+    //TODO: reduce number of invokes
     function getLastNameErrors () {
         let errors = [];
         if (personalInfoForm.errors && personalInfoForm.errors.last_name) {
@@ -158,6 +160,40 @@ function Settings(props) {
             && props.profile.profileDataErrors.last_name) {
 
             errors = [...errors, ...props.profile.profileDataErrors.last_name]
+        }
+
+        return errors
+    }
+
+    //TODO: reduce number of invokes
+    function getOldPasswordErrors () {
+        let errors = [];
+        if (securityForm.errors && securityForm.errors.old_password) {
+            errors.push(securityForm.errors.old_password);
+        }
+
+        if (props.auth && props.auth.changePassswordErrors 
+            && typeof props.auth.changePassswordErrors === "object"
+            && props.auth.changePassswordErrors.old_password) {
+
+            errors = [...errors, ...props.auth.changePassswordErrors.old_password]
+        }
+
+        return errors
+    }
+
+    //TODO: reduce number of invokes
+    function getNewPasswordErrors () {
+        let errors = [];
+        if (securityForm.errors && securityForm.errors.new_password) {
+            errors.push(securityForm.errors.new_password);
+        }
+
+        if (props.auth && props.auth.changePassswordErrors 
+            && typeof props.auth.changePassswordErrors === "object"
+            && props.auth.changePassswordErrors.new_password) {
+
+            errors = [...errors, ...props.auth.changePassswordErrors.new_password]
         }
 
         return errors
@@ -342,20 +378,23 @@ function Settings(props) {
                                             <div className='pb-4'>
                                                 <Input 
                                                     type="password" 
-                                                    name="current_password" 
-                                                    value={securityForm.values.current_password}
+                                                    name="old_password" 
+                                                    value={securityForm.values.old_password}
                                                     onChange={securityForm.handleChange}
                                                     onBlur={securityForm.handleBlur}
-                                                    invalid={(securityForm.errors && securityForm.errors.current_password) ? true : false}
+                                                    invalid={getOldPasswordErrors().length > 0 ? true : false}
                                                     placeholder={t('Enter current password')}
                                                     disabled={props.auth.changePasswordLoading}
                                                 />
                                                 <FormFeedback>
-                                                    {securityForm.errors && securityForm.errors.current_password}
                                                     {
-                                                        props.auth && props.auth.changePassswordErrors 
-                                                        && typeof props.auth.changePassswordErrors === "object"
-                                                        && typeof props.auth.changePassswordErrors.current_password
+                                                        getOldPasswordErrors().length > 0 && (
+                                                            <ul>
+                                                                {getOldPasswordErrors().map((error, index) => (
+                                                                    <li key={index}>{error}</li>
+                                                                ))}
+                                                            </ul>
+                                                        )
                                                     }
                                                 </FormFeedback>
                                             </div>
@@ -366,16 +405,19 @@ function Settings(props) {
                                                 value={securityForm.values.new_password}
                                                 onChange={securityForm.handleChange}
                                                 onBlur={securityForm.handleBlur}
-                                                invalid={(securityForm.errors && securityForm.errors.new_password) ? true : false}
+                                                invalid={getNewPasswordErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter new password')}
                                                 disabled={props.auth.changePasswordLoading}
                                             />
                                             <FormFeedback>
-                                                {securityForm.errors && securityForm.errors.new_password}
                                                 {
-                                                    props.auth && props.auth.changePassswordErrors 
-                                                    && typeof props.auth.changePassswordErrors === "object"
-                                                    && typeof props.auth.changePassswordErrors.new_password
+                                                    getNewPasswordErrors().length > 0 && (
+                                                        <ul>
+                                                            {getNewPasswordErrors().map((error, index) => (
+                                                                <li key={index}>{error}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )
                                                 }
                                             </FormFeedback>    
                                             <ul className='pt-3'>

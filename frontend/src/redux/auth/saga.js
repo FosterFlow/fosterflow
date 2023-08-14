@@ -47,7 +47,7 @@ function* login({ payload: { email, password } }) {
         yield localStorage.setItem("isAuthenticated", true);
         yield put(loginUserSuccess(response.access));            
     } catch (error) {
-        yield put(authError(error.data ? error.data : error));
+        yield put(authError(error));
     }
 }
 
@@ -63,7 +63,7 @@ function* logout() {
         yield call(apiAuthorizedClient.post, '/logout/');
         yield put(logoutUserSuccess());
     } catch (error) {
-        yield put(logoutUserFailed(error.message));
+        yield put(logoutUserFailed(error));
     }
 }
 
@@ -77,11 +77,7 @@ function* register({ payload: { email, password } }) {
         localStorage.setItem("isAuthenticated", true);
         yield put(registerUserSuccess(response.access));
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
@@ -94,11 +90,7 @@ function* forgetPassword({ payload: { email } }) {
         const response = yield call(apiClient.post, '/password-reset/', { email });
         yield put(forgetPasswordSuccess(response.status));
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
@@ -111,11 +103,7 @@ function* confirmEmail({ payload: { token } }) {
       yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
       yield put(confirmEmailSuccess());
     } catch (error) {
-      if (error.data) {
-        yield put(authError(error.data));
-      } else {
         yield put(authError(error));
-      }
     }
   }
 
@@ -127,11 +115,7 @@ function* sendConfirmationEmail() {
       yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
       yield put(sendConfirmationEmailSuccess());
     } catch (error) {
-      if (error.data) {
-        yield put(authError(error.data));
-      } else {
         yield put(authError(error));
-      }
     }
   }
 
@@ -141,11 +125,7 @@ function* sendConfirmationEmail() {
         yield call(apiClient.post, '/password-reset/confirm/', { password, token });
         yield put(resetPasswordConfirmSuccess());
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
@@ -154,11 +134,7 @@ function* validateResetToken({ payload: { token } }) {
         yield call(apiClient.post, '/password-reset/validate_token/', { token });
         yield put(validateResetTokenSuccess());
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
@@ -168,30 +144,24 @@ function* refreshTokenUpdate() {
         yield put(refreshTokenUpdateSuccess(response.access));
         yield call(apiAuthorizedClient.resolve);
     } catch (error) {
-        if (error.data) {
-            yield put(refreshTokenUpdateFailure(error.data));
-        } else {
-            yield put(refreshTokenUpdateFailure(error));
-        }
+        yield put(refreshTokenUpdateFailure(error));
     }
 }
 
-function* changePassword({ payload: { currentPassword, newPassword } }) {
+function* changePassword({ payload: { oldPassword, newPassword } }) {
     try {
         const response = yield call(
             apiAuthorizedClient.put,
             '/change-password/', 
             { 
-                old_password: currentPassword, 
+                old_password: oldPassword, 
                 new_password: newPassword 
             });
         yield put(changePasswordSuccess(response.message));
         yield delay(10000);
         yield put(hideChangePasswordSuccessMessage());
-    } catch (errors) {
-        if (errors.details) {
-            yield put(changePasswordFailed(errors.details));
-        }
+    } catch (error) {
+        yield put(changePasswordFailed(error));
     }
 }
 
