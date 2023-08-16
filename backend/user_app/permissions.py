@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class IsOwnerProfile(permissions.BasePermission):
+class IsOwnerAgent(permissions.BasePermission):
     message = {"errors": {"details": "Available only for the owner"}}
 
     def has_permission(self, request, view):

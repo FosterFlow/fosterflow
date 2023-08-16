@@ -57,3 +57,8 @@ instructions below, make sure that you are in the **backend** folder.
     python3 manage.py migrate
     python3 manage.py loaddata db_test.json         # (optional) Add test data to Database
     python3 manage.py runserver
+
+### Install Redis
+
+1. Install Docker on https://docs.docker.com/desktop/
+2. Download and install docker-container **redis:5**

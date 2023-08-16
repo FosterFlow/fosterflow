@@ -1,8 +1,8 @@
 from rest_framework import permissions
-from .models import Dialog
+from .models import Chat
 
 
-class IsOwnerDialog(permissions.BasePermission):
+class IsOwnerChat(permissions.BasePermission):
     message = {"errors": {"details": "Available only for the owner"}}
 
     def has_permission(self, request, view):
@@ -22,7 +22,7 @@ class IsOwnerDialog(permissions.BasePermission):
 
         if request.method == 'POST':
             try:
-                return request.user.id == request.data['user_id']
+                return request.user.id == request.data['owner_id']
             except Exception as e:
                 return False
         if request.user.is_authenticated:
@@ -42,8 +42,8 @@ class IsOwnerDialog(permissions.BasePermission):
         Returns:
             bool: True if the user has permission, False otherwise.
         """
-
-        return obj.user_id == request.user
+        if obj.owner_id.id == request.user.id or obj.addressee_id.id == request.user.id:
+            return True
 
 
 class IsOwnerMessage(permissions.BasePermission):
@@ -54,7 +54,7 @@ class IsOwnerMessage(permissions.BasePermission):
         Check if the user has permission to access the view.
 
         For POST requests, the user must provide a 'dialog_id' field in the request data
-        that corresponds to a dialog associated with the authenticated user. For other methods,
+        that corresponds to a chat associated with the authenticated user. For other methods,
         the user must be authenticated.
 
         Args:
@@ -67,10 +67,12 @@ class IsOwnerMessage(permissions.BasePermission):
 
         if request.method == 'POST':
             try:
-                dialog_id = request.data['dialog_id']
-                user_dialogs = Dialog.objects.filter(user_id=request.user).values_list('id', flat=True)
-                return dialog_id in user_dialogs
+                chat_id = request.data['chat_id']
+                agent_chats = Chat.objects.filter(owner_id_id=request.user.id).values_list('id', flat=True)
+
+                return chat_id in agent_chats
             except Exception as e:
+                print(e)
                 return False
         if request.user.is_authenticated:
             return True
@@ -79,7 +81,7 @@ class IsOwnerMessage(permissions.BasePermission):
         """
         Check if the user has permission to access the object.
 
-        The user must be the owner of the dialog associated with the object (obj)
+        The user must be the owner of the chat associated with the object (obj)
         in order to have permission.
 
         Args:
@@ -91,6 +93,10 @@ class IsOwnerMessage(permissions.BasePermission):
             bool: True if the user has permission, False otherwise.
         """
 
-        user_dialogs = Dialog.objects.filter(user_id=request.user)
-        if obj.dialog_id in user_dialogs:
+        owner_chats = Chat.objects.filter(owner_id_id=request.user.id)
+        if obj.chat_id in owner_chats:
+            return True
+
+        addressee_chats = Chat.objects.filter(addressee_id_id=request.user.id)
+        if obj.chat_id in addressee_chats:
             return True
