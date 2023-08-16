@@ -53,7 +53,7 @@ class IsOwnerMessage(permissions.BasePermission):
         """
         Check if the user has permission to access the view.
 
-        For POST requests, the user must provide a 'dialog_id' field in the request data
+        For POST requests, the user must provide a 'chat_id' field in the request data
         that corresponds to a chat associated with the authenticated user. For other methods,
         the user must be authenticated.
 

@@ -70,7 +70,7 @@ class MessageModelSerializer(ModelSerializer):
         It generates an answer text using the `take_answer` utility function.
 
         Args:
-            validated_data (dict): The validated data containing message_text and dialog_id.
+            validated_data (dict): The validated data containing message_text and chat_id.
 
         Returns:
             Message: The created message instance.

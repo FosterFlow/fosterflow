@@ -20,7 +20,7 @@ def take_answer(prompt, chat_id):
 
     Args:
         prompt (str): The user's prompt.
-        dialog_id (int): The ID of the chat.
+        chat_id (int): The ID of the chat.
 
     Returns:
         str: The AI-generated answer.
