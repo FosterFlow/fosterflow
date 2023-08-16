@@ -103,12 +103,12 @@ class MessageModelViewSet(ModelViewSet):
             QuerySet: The filtered queryset of Message objects.
         """
 
-        user_dialogs = Chat.objects.filter(
+        user_chats = Chat.objects.filter(
             Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
-        owner_queryset = self.queryset.filter(chat_id__in=user_dialogs)
+        owner_queryset = self.queryset.filter(chat_id__in=user_chats)
 
         chat_id = self.request.query_params.get('chat_id')
-        if not user_dialogs.filter(id=chat_id).exists() and chat_id:
+        if not user_chats.filter(id=chat_id).exists() and chat_id:
             raise rest_framework.exceptions.PermissionDenied(
                 {
                     "errors": {

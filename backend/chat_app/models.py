@@ -36,7 +36,7 @@ class Message(models.Model):
     Model representing a message.
 
     Attributes:
-        dialog_id (ForeignKey): The chat associated with the message.
+        chat_id (ForeignKey): The chat associated with the message.
         message_text (TextField): The text of the message.
         answer_text (TextField): The text of the answer (optional).
     """
