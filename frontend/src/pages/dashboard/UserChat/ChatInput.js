@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Row, Col, Form } from "reactstrap";
+import { Button, Form } from "reactstrap";
 import { connect } from "react-redux";
-import { addMessage as actionAddMessage, addDialogue} from "../../../redux/chat/actions";
+import { addMessage as actionAddMessage, addChat} from "../../../redux/chat/actions";
 import { bindActionCreators } from "redux";
 import { useTranslation } from 'react-i18next';
 
@@ -53,7 +53,7 @@ function ChatInput(props) {
         //if text value is not empty then call onaddMessage function
         if (textMessage !== "") {
             if (props.newChat){
-                props.addDialogue({
+                props.addChat({
                     "user_id": props.authorizedUser.id,
                     "name": textMessage.substring(0, 32),
                     "message": textMessage
@@ -64,7 +64,7 @@ function ChatInput(props) {
 
             props.actionAddMessage({
                 "message_text": textMessage,
-                "dialog_id": props.activeDialogueId
+                "chat_id": props.activeChatId
             });
             settextMessage("");
         }
@@ -107,14 +107,14 @@ function ChatInput(props) {
 const mapStateToProps = (state) => {
     console.log("Dashabord Tabs ChatsInput mapStateToProps state", state);
     return { 
-        activeDialogueId: state.Chat.activeDialogueId,
+        activeChatId: state.Chat.activeChatId,
         authorizedUser: state.User.authorizedUser,
         newChat: state.Chat.newChat
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ actionAddMessage, addDialogue }, dispatch);
+    return bindActionCreators({ actionAddMessage, addChat }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatInput);
