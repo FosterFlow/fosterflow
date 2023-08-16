@@ -9,19 +9,19 @@ function Profile(props) {
   /* intilize t variable for multi language implementation */
   const { t } = useTranslation();
 
-  function getProfileAvatar (){
-    if (props.profile && props.profile.profile) {
-      const profile = props.profile.profile;
-      return profile.avatar;
+  function getAgentAvatar (){
+    if (props.agent && props.agent.avatar) {
+      const agent = props.agent;
+      return agent.avatar;
     }
     return "";
-  }
+}
 
   function fullName (){
-    if (props.profile && props.profile.profile) {
-      const profile = props.profile.profile;
-      const firstName = profile.first_name;
-      const lastName = profile.last_name;
+    if (props.agent && props.agent.agent) {
+      const agent = props.agent.agent;
+      const firstName = agent.first_name;
+      const lastName = agent.last_name;
       if (firstName || lastName) {
           return firstName + " " + lastName; 
       }
@@ -46,7 +46,7 @@ function Profile(props) {
             <div className="px-4 pb-4">
               <div className="mb-4">
                 <img
-                  src={getProfileAvatar()}
+                  src={getAgentAvatar()}
                   className="rounded-circle avatar-lg img-thumbnail"
                 />
               </div>
@@ -67,7 +67,7 @@ function Profile(props) {
 
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
-  profile: state.Profile,
+  agent: state.Agent,
   user: state.User  
 });
 
