@@ -54,9 +54,9 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL("""
             INSERT INTO chat_app_message (message_text, chat_id_id, created_at, owner_id_id)
-            SELECT message_text, chat_id_id, created_at, owner_id_id
+            SELECT answer_text, chat_id_id, created_at, owner_id_id
             FROM chat_app_message
-            WHERE message_text IS NOT NULL;
+            WHERE answer_text IS NOT NULL;
         """),
         migrations.RemoveField(
             model_name='message',
