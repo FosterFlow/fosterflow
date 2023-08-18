@@ -17,10 +17,6 @@ class Migration(migrations.Migration):
             old_name='Dialog',
             new_name='Chat',
         ),
-        migrations.RemoveField(
-            model_name='chat',
-            name='user_id',
-        ),
         migrations.AddField(
             model_name='chat',
             name='owner_id',
@@ -34,6 +30,11 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='addressee_id',
                                     to='user_app.agent'),
             preserve_default=False,
+        ),
+        migrations.RunSQL('UPDATE dialog SET owner_id=user, adres_id=user;'),
+        migrations.RemoveField(
+            model_name='chat',
+            name='user_id',
         ),
         migrations.RemoveField(
             model_name='message',
