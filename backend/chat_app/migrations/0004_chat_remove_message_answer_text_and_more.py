@@ -36,10 +36,6 @@ class Migration(migrations.Migration):
             model_name='chat',
             name='user_id',
         ),
-        migrations.RemoveField(
-            model_name='message',
-            name='answer_text',
-        ),
         migrations.RenameField(
             model_name='message',
             old_name='dialog_id',
@@ -55,5 +51,15 @@ class Migration(migrations.Migration):
             model_name='message',
             name='owner_id',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
+        ),
+        migrations.RunSQL("""
+            INSERT INTO chat_app_message (message_text, chat_id_id, created_at, owner_id_id)
+            SELECT message_text, chat_id_id, created_at, owner_id_id
+            FROM chat_app_message
+            WHERE message_text IS NOT NULL;
+        """),
+        migrations.RemoveField(
+            model_name='message',
+            name='answer_text',
         ),
     ]
