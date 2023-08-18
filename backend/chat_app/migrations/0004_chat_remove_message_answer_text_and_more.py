@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                                     to='user_app.agent'),
             preserve_default=False,
         ),
-        migrations.RunSQL('UPDATE dialog SET owner_id=user, adres_id=user;'),
+        migrations.RunSQL('UPDATE chat_app_chat SET owner_id_id=user_id_id, addressee_id_id=user_id_id;'),
         migrations.RemoveField(
             model_name='chat',
             name='user_id',
