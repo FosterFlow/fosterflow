@@ -6,7 +6,6 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat_app', '0004_chat_remove_message_answer_text_and_more'),
         ('user_app', '0002_alter_user_is_active'),
     ]
 

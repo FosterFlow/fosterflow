@@ -8,7 +8,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_app', '0002_alter_user_is_active'),
+        ('user_app', '0003_rename_profile_agent'),
         ('chat_app', '0003_alter_message_answer_text_alter_message_message_text'),
     ]
 
