@@ -39,9 +39,10 @@ class Migration(migrations.Migration):
             model_name='message',
             name='answer_text',
         ),
-        migrations.RemoveField(
+        migrations.RenameField(
             model_name='message',
-            name='dialog_id',
+            old_name='dialog_id',
+            new_name='chat_id'
         ),
         migrations.AddField(
             model_name='message',
@@ -51,8 +52,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='message',
-            name='chat_id',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='chat_app.chat'),
-            preserve_default=False,
+            name='owner_id',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
         ),
     ]

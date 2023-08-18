@@ -48,10 +48,11 @@ class Message(models.Model):
         on_delete=models.CASCADE,
     )
     message_text = models.TextField()
-    # owner_id = models.ForeignKey(
-    #     Agent,
-    #     on_delete=models.CASCADE,
-    # )
+    owner_id = models.ForeignKey(
+        Agent,
+        on_delete=models.CASCADE,
+        null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
