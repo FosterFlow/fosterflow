@@ -52,8 +52,22 @@ class Migration(migrations.Migration):
             name='owner_id',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
         ),
+        migrations.RunSQL('UPDATE chat_app_message SET owner_id_id=user_id_id, addressee_id_id=user_id_id;'),
         migrations.RunSQL("""
-            INSERT INTO chat_app_message (message_text, chat_id_id, created_at, owner_id_id)
+        INSERT INTO User (id, username, email, is_active, is_staff, is_email_confirmed, created_at, updated_at)
+        VALUES (100, 'gpt-3', 'gpt-3@example.com', true, false, true, now(), now())
+        RETURNING id;
+        
+        -- Получение ID нового пользователя
+        DECLARE @user_id INTEGER;
+        FETCH NEXT FROM pg_cursor INTO @user_id;
+        
+        -- Вставка нового агента, связанного с пользователем
+        INSERT INTO Agent (user_id, avatar, first_name, last_name)
+        VALUES (@user_id, 'avatar1.jpg', 'First Name', 'Last Name');
+        """),
+        migrations.RunSQL("""
+            INSERT INTO chat_app_message (message_text, chat_id_id, created_at, 1)
             SELECT answer_text, chat_id_id, created_at, owner_id_id
             FROM chat_app_message
             WHERE answer_text IS NOT NULL;
