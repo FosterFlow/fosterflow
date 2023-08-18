@@ -13,16 +13,27 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Chat',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.TextField(max_length=32)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('addressee_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='addressee', to='user_app.agent')),
-                ('owner_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='owner_id', to='user_app.agent')),
-            ],
+        migrations.RenameModel(
+            old_name='Dialog',
+            new_name='Chat',
+        ),
+        migrations.RemoveField(
+            model_name='chat',
+            name='user_id',
+        ),
+        migrations.AddField(
+            model_name='chat',
+            name='owner_id',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='owner_id',
+                                    to='user_app.agent'),
+            preserve_default=False,
+        ),
+        migrations.AddField(
+            model_name='chat',
+            name='addressee_id',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='addressee_id',
+                                    to='user_app.agent'),
+            preserve_default=False,
         ),
         migrations.RemoveField(
             model_name='message',
@@ -37,15 +48,6 @@ class Migration(migrations.Migration):
             name='created_at',
             field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='message',
-            name='owner_id',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
-            preserve_default=False,
-        ),
-        migrations.DeleteModel(
-            name='Dialog',
         ),
         migrations.AddField(
             model_name='message',
