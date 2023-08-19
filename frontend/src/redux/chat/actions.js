@@ -89,9 +89,9 @@ import {
     payload: id
   });
 
-  export const startWsConnection = (chatId, token) => ({
+  export const startWsConnection = (chatId) => ({
     type: WS_CONNECTION_START,
-    payload: { chatId, token }
+    payload: chatId
   });
   
   export const wsConnectionSuccess = () => ({

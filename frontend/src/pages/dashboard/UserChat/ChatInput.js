@@ -62,11 +62,7 @@ function ChatInput(props) {
                 return;        
             }
 
-            chatSocket.send(JSON.stringify({ 'message': textMessage }));
-            // props.actionAddMessage({
-            //     "message_text": textMessage,
-            //     "chat_id": props.activeChatId
-            // });
+            props.wsChatConnection.send(JSON.stringify({'message': textMessage }));
             settextMessage("");
         }
     }
@@ -110,7 +106,8 @@ const mapStateToProps = (state) => {
     return { 
         activeChatId: state.Chat.activeChatId,
         authorizedUser: state.User.authorizedUser,
-        newChat: state.Chat.newChat
+        newChat: state.Chat.newChat,
+        wsChatConnection: state.Chat.wsConnection
     }
 };
 

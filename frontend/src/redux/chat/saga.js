@@ -1,4 +1,4 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { call, fork, put, takeEvery, take } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import {
   FETCH_CHATS_REQUEST,
@@ -16,6 +16,13 @@ import {
   WS_CONNECTION_START
 } from './constants';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
+import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
+import {
+  wsConnectionSuccess,
+  wsReceiveMessage,
+  wsConnectionError,
+  wsConnectionClosed
+} from './actions';
 const api = apiAuthorizedClient;
 
 function* fetchChats() {
@@ -84,13 +91,6 @@ function* deleteMessage(action) {
 }
 
 
-function createWebSocketConnection(chatId, token) {
-  //TODO: move to apiAuthorizedClient.js
-  return new WebSocket(
-    `ws://localhost:8000/ws/chats/${chatId}/?access=${token}`
-  );
-}
-
 function* watchMessages(socket) {
   const socketChannel = eventChannel(emit => {
     socket.onmessage = (event) => {
@@ -99,12 +99,8 @@ function* watchMessages(socket) {
     socket.onerror = (errorEvent) => {
       emit(new Error(errorEvent.reason));
     };
-    socket.onclose = (event) => {
-      // Close the channel when the socket closes
-      emit(END);
-    };
-    return () => {
-      socket.close();
+    socket.onclose = () => {
+      emit(wsConnectionClosed());
     };
   });
 
@@ -121,24 +117,21 @@ function* watchMessages(socket) {
 }
 
 function* webSocketSaga(action) {
-  const { chatId, token } = action.payload;
-  const socket = yield call(createWebSocketConnection, chatId, token);
+  const socket = yield call(webSocketsAuthorizedClient, `/messages/${action.payload}/`);
   
   socket.onopen = () => {
-    put(wsConnectionSuccess());
+    put(wsConnectionSuccess(socket));
   };
 
-  const task = yield fork(watchMessages, socket);
+  yield fork(watchMessages, socket);
 
   socket.onerror = (event) => {
     put(wsConnectionError(event));
   };
 
-  socket.onclose = (event) => {
+  socket.onclose = () => {
     put(wsConnectionClosed());
   };
-
-  // Here you can add logic to send messages using socket.send
 }
 
 export default function* chatSaga() {
@@ -148,5 +141,5 @@ export default function* chatSaga() {
   yield takeEvery(FETCH_MESSAGES_REQUEST, fetchMessages);
   yield takeEvery(ADD_MESSAGE_REQUEST, addMessage);
   yield takeEvery(DELETE_MESSAGE_REQUEST, deleteMessage);
-  yield takeEvery(WS_CONNECTION_START, wsSaga);
+  yield takeEvery(WS_CONNECTION_START, webSocketSaga);
 }

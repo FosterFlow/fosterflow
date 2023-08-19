@@ -43,23 +43,19 @@ function resolveWebSocketsQueue() {
 
   const webSocketsRequestsQueue = state.Auth.webSocketsRequestsQueue;
   if (webSocketsRequestsQueue.length > 0 ) {
-    webSocketsRequestsQueue.forEach(({ method, url, resolve, reject }) => {
+    webSocketsRequestsQueue.forEach(({ method, url, resolve }) => {
         if (method !== "newSocket") {
             return;
         }
         
-        try {
-            const webSocketConnection = new WebSocket(
-                config.WS_URL
-                + url
-                + '/?access='
-                + accessToken
-            );
+        const webSocketConnection = new WebSocket(
+            config.WS_URL
+            + url
+            + '/?access='
+            + accessToken
+        );
     
-            resolve(webSocketConnection);
-        } catch (error) {
-            reject (error)
-        }
+        resolve(webSocketConnection);
     });
     store.dispatch(clearWebSocketsApiRequestsQueue());
   }
@@ -78,7 +74,7 @@ function resolveWebSocketsQueue() {
  * @returns {Object} returns promise 
  */
 function webSocketManager (method, url) {
-  let resolve, reject;
+  let resolve;
   
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
@@ -87,24 +83,22 @@ function webSocketManager (method, url) {
     return;
   }
 
-  const requestPromise = new Promise ((_resolve, _reject) =>{
+  const requestPromise = new Promise ((_resolve) =>{
     resolve = _resolve;
-    reject = _reject;
   });
 
   requestPromise.resolve = resolve;
-  requestPromise.reject = reject;
   requestPromise.method = method;
   requestPromise.url = url;
 
   store.dispatch(addWebSocketRequest(requestPromise));
-  resolveRequestsQueue();
+  resolveWebSocketsQueue();
 
   return requestPromise;
 }
 
 const webSocketsAuthorizedClient = {
-  newSocket: (url, data) => webSocketManager("newSocket", url, data),
+  newSocket: (url) => webSocketManager("newSocket", url),
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   resolve: () => webSocketManager("resolve")

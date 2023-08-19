@@ -24,7 +24,9 @@ const INIT_STATE = {
   activeChatId: 0,
   chatWindow: false,
   newChat: false,
-  wsConnected: false
+  wsConnection: null,
+  wsConnected: false,
+  wsConnectionError: null
 };
 
 const Chat = (state = INIT_STATE, action) => {
@@ -110,17 +112,21 @@ const Chat = (state = INIT_STATE, action) => {
     case WS_CONNECTION_SUCCESS:
         return {
             ...state,
-            wsConnected: true
+            wsConnected: true,
+            wsConnection: action.payload
         };
     case WS_CONNECTION_ERROR:
         return {
             ...state,
-            wsConnected: false
+            wsConnected: false,
+            wsConnectionError: action.payload
         };
     case WS_CONNECTION_CLOSED:
         return {
             ...state,
-            wsConnected: false
+            wsConnected: false,
+            wsConnection: null,
+            wsConnectionError: null
         };
     case WS_RECEIVE_MESSAGE:
         // Assuming the WebSocket message contains a new chat message
