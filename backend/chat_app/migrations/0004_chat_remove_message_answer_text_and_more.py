@@ -7,7 +7,7 @@ import django.utils.timezone
 
 def create_user(apps, schema_editor):
     User = get_user_model()
-    user = User(id=100, username='GPT-3.5-turbo', email="",
+    user = User(id=100, username='GPT-3.5-turbo', email="GPT-3.5-turbo",
                 password=''.join(random.choice(string.ascii_letters) for _ in range(30)))
     user.save()
 
@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
             old_name='Dialog',
             new_name='Chat',
         ),
+        migrations.RunPython(create_user),
         migrations.AddField(
             model_name='chat',
             name='owner_id',
@@ -37,7 +38,7 @@ class Migration(migrations.Migration):
                                     to='user_app.agent'),
             preserve_default=False,
         ),
-        migrations.RunSQL('UPDATE chat_app_chat SET owner_id_id=user_id_id, addressee_id_id=user_id_id;'),
+        migrations.RunSQL('UPDATE chat_app_chat SET owner_id_id=user_id_id, addressee_id_id=100;'),
         migrations.RemoveField(
             model_name='chat',
             name='user_id',
@@ -58,9 +59,13 @@ class Migration(migrations.Migration):
             name='owner_id',
             field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
         ),
-        # migrations.RunSQL('UPDATE chat_app_message SET owner_id_id=user_id_id, addressee_id_id=user_id_id;'),
-        migrations.RunPython(create_user),
         migrations.RunSQL('UPDATE user_app_agent SET id=100 WHERE user_id_id=100'),
+        migrations.RunSQL("""            
+            UPDATE chat_app_message
+            SET owner_id_id = chat_app_chat.owner_id_id
+            FROM chat_app_chat
+            WHERE chat_app_message.chat_id_id = chat_app_chat.id;
+        """),
         migrations.RunSQL("""
             INSERT INTO chat_app_message (message_text, chat_id_id, created_at, owner_id_id)
             SELECT answer_text, chat_id_id, created_at, 100
