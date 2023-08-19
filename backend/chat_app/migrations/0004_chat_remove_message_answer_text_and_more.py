@@ -74,7 +74,7 @@ class Migration(migrations.Migration):
             """),
         migrations.RunSQL("""
             CREATE TABLE temp_table AS SELECT * FROM chat_app_message;
-            UPDATE temp_table SET id = id * 2;
+            UPDATE temp_table SET id = id * 2 - 1;
             DELETE FROM chat_app_message;
             INSERT INTO chat_app_message SELECT * FROM temp_table;
             DROP TABLE temp_table;
