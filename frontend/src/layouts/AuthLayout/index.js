@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
 import withRouter from '../../components/withRouter';
-import { sendConfirmationEmail } from '../../redux/actions';
+import { sendConfirmationEmail, getAuthorizedUser, getProfile } from '../../redux/actions';
 
 //i18n
 import { useTranslation } from 'react-i18next';
@@ -13,6 +13,7 @@ import SidebarMenuDesktop from "./SidebarMenuDesktop";
 const Index = (props) => {
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+    const authorizedUser = props.authorizedUser;
 
     if (props.layoutMode){
         //TODO: move to jsx template
@@ -20,9 +21,16 @@ const Index = (props) => {
     }
     
     useEffect(() => {
-        //set document title according to page path name
         document.title = "FosterFlow Chat";
+        props.getAuthorizedUser();
     }, []);
+
+
+    useEffect(() => {
+        if (authorizedUser && authorizedUser.id){
+            props.getProfile(authorizedUser.id);
+        }
+    }, [authorizedUser]);
 
     const sendConfirmationEmailAgain = () => {
         props.sendConfirmationEmail();
@@ -57,7 +65,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    sendConfirmationEmail
+    sendConfirmationEmail,
+    getAuthorizedUser,
+    getProfile
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));

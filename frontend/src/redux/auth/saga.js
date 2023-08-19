@@ -1,8 +1,6 @@
-import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
-
+import { all, call, fork, put, takeEvery, delay } from 'redux-saga/effects';
 import apiClient from '../../helpers/apiClient';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { setTokens } from '../../helpers/authUtils';
 
 import {
     LOGIN_USER,
@@ -12,7 +10,9 @@ import {
     CONFIRM_EMAIL,
     RESET_PASSWORD_CONFIRM,
     VALIDATE_RESET_TOKEN,
-    SEND_CONFIRMATION_EMAIL
+    SEND_CONFIRMATION_EMAIL,
+    REFRESH_TOKEN_UPDATE,
+    CHANGE_PASSWORD
 } from './constants';
 
 
@@ -22,10 +22,16 @@ import {
     forgetPasswordSuccess,
     authError,
     logoutUserSuccess,
+    logoutUserFailed,
     confirmEmailSuccess,
     resetPasswordConfirmSuccess,
     validateResetTokenSuccess,
-    sendConfirmationEmailSuccess
+    sendConfirmationEmailSuccess,
+    refreshTokenUpdateSuccess,
+    refreshTokenUpdateFailure,
+    changePasswordSuccess,
+    hideChangePasswordSuccessMessage,
+    changePasswordFailed
 } from './actions';
 
 /**
@@ -37,33 +43,27 @@ function* login({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
         console.log("redux aux saga", "login response", response );
-
-        setTokens(response); // Save the user data to localStorage using setLoggedInUser
-        yield put(loginUserSuccess(response));            
+        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
+        yield localStorage.setItem("isAuthenticated", true);
+        yield put(loginUserSuccess(response.access));            
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
 
 /**
  * Logout the user
- * @param {*} param0 
  */
 function* logout() {
+    console.log ("Auth saga logout");
     try {
-        localStorage.removeItem("tokens");
-        yield put(logoutUserSuccess(true));
+        //we use isAuthorized param for the case if user reloaded the page
+        localStorage.setItem("isAuthenticated", false);
+        yield call(apiAuthorizedClient.post, '/logout/');
+        yield put(logoutUserSuccess());
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(logoutUserFailed(error));
     }
 }
 
@@ -73,14 +73,11 @@ function* logout() {
 function* register({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/register/', { email, password });
-        setTokens(response); 
-        yield put(registerUserSuccess(response));
+        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
+        localStorage.setItem("isAuthenticated", true);
+        yield put(registerUserSuccess(response.access));
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
@@ -93,11 +90,7 @@ function* forgetPassword({ payload: { email } }) {
         const response = yield call(apiClient.post, '/password-reset/', { email });
         yield put(forgetPasswordSuccess(response.status));
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
@@ -110,11 +103,7 @@ function* confirmEmail({ payload: { token } }) {
       yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
       yield put(confirmEmailSuccess());
     } catch (error) {
-      if (error.data) {
-        yield put(authError(error.data));
-      } else {
         yield put(authError(error));
-      }
     }
   }
 
@@ -126,43 +115,58 @@ function* sendConfirmationEmail() {
       yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
       yield put(sendConfirmationEmailSuccess());
     } catch (error) {
-      if (error.data) {
-        yield put(authError(error.data));
-      } else {
         yield put(authError(error));
-      }
     }
   }
 
 
   function* resetPasswordConfirm({ payload: { password, token } }) {
     try {
-        const response = yield call(apiClient.post, '/password-reset/confirm/', { password, token });
-        if(response.status === "OK") {
-            yield put(resetPasswordConfirmSuccess());
-        }
+        yield call(apiClient.post, '/password-reset/confirm/', { password, token });
+        yield put(resetPasswordConfirmSuccess());
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
 }
 
 function* validateResetToken({ payload: { token } }) {
     try {
-        const response = yield call(apiClient.post, '/password-reset/validate_token/', { token });
-        if(response.status === "OK") {
-            yield put(validateResetTokenSuccess());
-        }
+        yield call(apiClient.post, '/password-reset/validate_token/', { token });
+        yield put(validateResetTokenSuccess());
     } catch (error) {
-        if (error.data) {
-            yield put(authError(error.data));
-        } else {
-            yield put(authError(error));
-        }
+        yield put(authError(error));
     }
+}
+
+function* refreshTokenUpdate() {
+    try {
+        const response = yield call(apiClient.post, '/token/refresh/');
+        yield put(refreshTokenUpdateSuccess(response.access));
+        yield call(apiAuthorizedClient.resolve);
+    } catch (error) {
+        yield put(refreshTokenUpdateFailure(error));
+    }
+}
+
+function* changePassword({ payload: { oldPassword, newPassword } }) {
+    try {
+        const response = yield call(
+            apiAuthorizedClient.put,
+            '/change-password/', 
+            { 
+                old_password: oldPassword, 
+                new_password: newPassword 
+            });
+        yield put(changePasswordSuccess(response.message));
+        yield delay(10000);
+        yield put(hideChangePasswordSuccessMessage());
+    } catch (error) {
+        yield put(changePasswordFailed(error));
+    }
+}
+
+export function* watchRefreshTokenUpdate() {
+    yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdate);
 }
 
 export function* watchResetPasswordConfirm() {
@@ -193,8 +197,12 @@ export function* watchConfirmEmail() {
     yield takeEvery(CONFIRM_EMAIL, confirmEmail);
 }
 
-  export function* watchSendConfirmationEmail() {
+export function* watchSendConfirmationEmail() {
     yield takeEvery(SEND_CONFIRMATION_EMAIL, sendConfirmationEmail);
+}
+
+export function* watchChangePassword() {
+    yield takeEvery(CHANGE_PASSWORD, changePassword);
 }
 
 function* authSaga() {
@@ -206,7 +214,9 @@ function* authSaga() {
         fork(watchConfirmEmail),
         fork(watchSendConfirmationEmail),
         fork(watchResetPasswordConfirm), 
-        fork(watchValidateResetToken), 
+        fork(watchValidateResetToken),
+        fork(watchRefreshTokenUpdate),
+        fork(watchChangePassword),  
     ]);
 }
 

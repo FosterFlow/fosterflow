@@ -1,59 +1,42 @@
 import React, { Suspense } from 'react';
-import { Routes as SwitchRoute, Route, Navigate } from 'react-router-dom';
-import { isUserAuthenticated } from '../helpers/authUtils';
-
-//import routes
+import { Routes as SwitchRoute, Route, Navigate, useLocation } from 'react-router-dom';
 import { authProtectedRoutes, authRoutes, publicRoutes } from './routes';
 import { connect } from "react-redux";
-
-//import layouts
 import NonAuthLayout from "../layouts/NonAuth";
 import AuthLayout from "../layouts/AuthLayout/";
-
-const AuthProtected = (props) => {
-  
-      //TODO: check number of invokes
-      if (!isUserAuthenticated() ) {
-            return (
-                <Navigate to={{ pathname: "/login", state: { from: props.location } }} />
-            );
-        }
-  
-    return <>{props.children}</>;
-  };
-
-const AuthRoutes = (props) => {
-  
-      //TODO: check number of invokes
-      if (isUserAuthenticated() ) {
-            return (
-                <Navigate to={{ pathname: "/chats", state: { from: props.location } }} />
-            );
-        }
-  
-    return <>{props.children}</>;
-  };
 
 /**
  * Main Route component
  */
-const Routes = () => {
+const Routes = (props) => {
+    const location = useLocation();
+
+    // Check if the current route is in either authRoutes or authProtectedRoutes
+    const isAuthRoute = authRoutes.some(route => route.path === location.pathname);
+    const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === location.pathname);
+
+    //Redirect in case if user not authenticated and tried to reach protected route
+    if (!props.isAuthenticated && isAuthProtectedRoute) {
+        return <Navigate to={{ pathname: "/login", state: { from: location } }} />;
+    }
+
+    //Redirect in case if user is authenticated and tried to reach auth route like login or register
+    if (props.isAuthenticated && isAuthRoute) {
+        return <Navigate to={{ pathname: "/chats", state: { from: location } }} />;
+    }
 
     return (
         // rendering the router with layout
         <React.Fragment>
-            <Suspense fallback = {<div></div>} >
+            {/* TODO add styled loading page */}
+            <Suspense fallback={<div>Loading...</div>} >
                 <SwitchRoute>
                     {/* public routes */}
                     {authRoutes.map((route, idx) =>
                         <Route 
                             path={route.path} 
                             layout={NonAuthLayout} 
-                            element={
-                                <AuthRoutes>
-                                    <NonAuthLayout>{route.component}</NonAuthLayout>
-                                </AuthRoutes>
-                            }
+                            element={<NonAuthLayout>{route.component}</NonAuthLayout>}
                             key={idx} 
                         />
                     )}
@@ -63,13 +46,7 @@ const Routes = () => {
                         <Route 
                             path={route.path} 
                             layout={AuthLayout} 
-                            element={
-                                <AuthProtected>
-                                    <AuthLayout>
-                                        {route.component}
-                                    </AuthLayout>
-                                </AuthProtected>
-                            }
+                            element={<AuthLayout>{route.component}</AuthLayout>}
                             key={idx} 
                         />
                     )}
@@ -79,9 +56,7 @@ const Routes = () => {
                         <Route 
                             path={route.path} 
                             layout={AuthLayout} 
-                            element={
-                                <NonAuthLayout>{route.component}</NonAuthLayout>
-                            }
+                            element={<NonAuthLayout>{route.component}</NonAuthLayout>}
                             key={idx} 
                         />
                     )}
@@ -92,11 +67,10 @@ const Routes = () => {
 }
 
 const mapStateToProps = (state) => {
-    const areAuthTokensNull = state.Auth.tokens === null;
     return {
-        //cause re-render of the router if user was authentificated or logout
-        areAuthTokensNull: areAuthTokensNull
+        //cause re-render of the router if user was authenticated or logout
+        isAuthenticated: state.Auth.isAuthenticated
     }
-  };
-  
-  export default connect(mapStateToProps)(Routes);
+};
+
+export default connect(mapStateToProps)(Routes);

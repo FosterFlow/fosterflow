@@ -5,7 +5,7 @@ import profileSaga from './profile/saga';
 import chatSaga from './chat/saga';
 import LayoutSaga from './layout/saga';
 
-export default function* rootSaga(getState) {
+export default function* rootSaga() {
     yield all([
         authSaga(),
         userSaga(),

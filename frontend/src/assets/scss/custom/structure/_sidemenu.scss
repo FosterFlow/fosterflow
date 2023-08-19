@@ -104,5 +104,33 @@
     }
 }
 
+.profile-user-dropdown{
+    .dropdown-item {
+        padding: 0;
+
+        &.active {
+          color: $white;
+          text-decoration: none;
+          background-color: $primary;
+        }
+
+        a {
+            color: $secondary;
+            display: block;
+            padding: var(--#{$prefix}dropdown-item-padding-y) var(--#{$prefix}dropdown-item-padding-x);
+        }
+      }
+
+    &.dropup {
+      .dropdown-menu{
+        bottom: 51px;
+        top: auto !important;
+        &.show {
+          top: auto !important;
+        }
+      }
+    }
+  }
+
 
 

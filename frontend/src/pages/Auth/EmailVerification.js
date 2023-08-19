@@ -12,8 +12,6 @@ function EmailVerification(props) {
     const { t } = useTranslation();
     let { token } = useParams();
 
-    console.log("EmailVerification page");
-
     useEffect(() => {
         // Dispatch the action to confirm the email when the component mounts
         props.confirmEmail(token);

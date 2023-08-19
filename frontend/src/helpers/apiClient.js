@@ -9,13 +9,27 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true,
+  withCredentials: true
 });
 
 apiClient.interceptors.response.use(
   response => response.data ? response.data : response,
   error => {
-    return Promise.reject(error.response);
+    const errorsData = (error.response && error.response.data && error.response.data.errors) || null;
+    
+    if (errorsData !== null) {
+      if (errorsData.details !== undefined) {
+        return Promise.reject(errorsData.details);
+      }
+
+      return Promise.reject(errorsData);
+    }
+    
+    if (error.message) {
+      return Promise.reject(error.message);
+    }
+    
+    return Promise.reject("Something wrong.");
   }
 );
 

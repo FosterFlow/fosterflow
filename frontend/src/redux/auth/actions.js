@@ -3,6 +3,7 @@ import {
     LOGIN_USER_SUCCESS,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
+    LOGOUT_USER_FAILED,
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
     FORGET_PASSWORD,
@@ -15,8 +16,63 @@ import {
     RESET_PASSWORD_CONFIRM,
     RESET_PASSWORD_CONFIRM_SUCCESS,
     VALIDATE_RESET_TOKEN,
-    VALIDATE_RESET_TOKEN_SUCCESS
+    VALIDATE_RESET_TOKEN_SUCCESS,
+    REFRESH_TOKEN_UPDATE,
+    REFRESH_TOKEN_UPDATE_SUCCESS,
+    REFRESH_TOKEN_UPDATE_FAILURE,
+    ADD_AUTHENTICATED_API_REQUEST,
+    CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
+    CHANGE_PASSWORD,
+    CHANGE_PASSWORD_SUCCESS,
+    HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
+    CHANGE_PASSWORD_FAILED
 } from './constants';
+
+export const changePassword = (oldPassword, newPassword) => {
+    return {
+        type: CHANGE_PASSWORD,
+        payload: {oldPassword, newPassword}
+    }
+};
+
+export const changePasswordSuccess = () => {
+    return {
+        type: CHANGE_PASSWORD_SUCCESS,
+    }
+};
+
+export const hideChangePasswordSuccessMessage = () => {
+    return {
+        type: HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
+    }
+};
+
+export const changePasswordFailed = (errors) => {
+    return {
+        type: CHANGE_PASSWORD_FAILED,
+        payload: errors
+    }
+};
+
+export const refreshTokenUpdate = () => {
+    return {
+        type: REFRESH_TOKEN_UPDATE,
+    }
+};
+
+export const refreshTokenUpdateSuccess = (accessToken) => {
+    return {
+        type: REFRESH_TOKEN_UPDATE_SUCCESS,
+        payload: accessToken
+    }
+};
+
+export const refreshTokenUpdateFailure = (error) => {
+    return {
+        type: REFRESH_TOKEN_UPDATE_FAILURE,
+        payload: error
+    }
+};
 
 export const loginUser = (email, password ) => {
     console.log('Actions', 'loginUser', 'email, password ', email, password );
@@ -26,11 +82,11 @@ export const loginUser = (email, password ) => {
     }
 };
 
-export const loginUserSuccess = (user) => {
-    console.log('Actions', 'loginUserSuccess', 'user', user);   
+export const loginUserSuccess = (accessToken) => {
+    console.log('Actions', 'loginUserSuccess', 'accessToken', accessToken);   
     return {
         type: LOGIN_USER_SUCCESS,
-        payload: user
+        payload: accessToken
     }
 };
 
@@ -47,17 +103,24 @@ export const registerUserSuccess = (user) => ({
     payload: user
 });
 
-export const logoutUser = (history) => ({
-    type: LOGOUT_USER,
-    payload: { history }
-});
+export const logoutUser = (history) => {
+    return {
+        type: LOGOUT_USER,
+        payload: { history }
+    }
+};
 
 export const logoutUserSuccess = () => {
     return {
-      type: LOGOUT_USER_SUCCESS,
-      payload: {},
+      type: LOGOUT_USER_SUCCESS
     };
-  };
+};
+
+export const logoutUserFailed = () => {
+    return {
+      type: LOGOUT_USER_FAILED
+    };
+};
 
 export const forgetPassword = (email) => ({
     type: FORGET_PASSWORD,
@@ -110,4 +173,13 @@ export const validateResetToken = (token) => ({
 
 export const validateResetTokenSuccess = () => ({
     type: VALIDATE_RESET_TOKEN_SUCCESS
+});
+
+export const addAuthenticatedApiRequest = (requestPromise) => ({
+    type: ADD_AUTHENTICATED_API_REQUEST,
+    payload: requestPromise
+});
+
+export const clearAuthenticatedApiRequestsQueue = () => ({
+    type: CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
 });
