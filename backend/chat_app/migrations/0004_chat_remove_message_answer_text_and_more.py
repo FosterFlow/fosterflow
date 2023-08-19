@@ -2,10 +2,7 @@
 import random, string
 from django.contrib.auth import get_user_model
 from django.db import migrations, models
-import django.db.models.deletion
 import django.utils.timezone
-
-from user_app.models import Agent
 
 
 def create_user(apps, schema_editor):
@@ -14,13 +11,6 @@ def create_user(apps, schema_editor):
                 password=''.join(random.choice(string.ascii_letters) for _ in range(30)))
     user.save()
 
-def create_agent(apps, schema_editor):
-    User = get_user_model()
-    user = User.objects.get(id=100)
-    print(user)
-    agent = Agent(id=100, user_id=user, first_name="", last_name="")
-    print(agent)
-    agent.save()
 
 class Migration(migrations.Migration):
     dependencies = [
@@ -70,13 +60,29 @@ class Migration(migrations.Migration):
         ),
         # migrations.RunSQL('UPDATE chat_app_message SET owner_id_id=user_id_id, addressee_id_id=user_id_id;'),
         migrations.RunPython(create_user),
-        migrations.RunPython(create_agent),
-        # migrations.RunSQL("""
-        #     INSERT INTO chat_app_message (message_text, chat_id_id, created_at, owner_id_id)
-        #     SELECT answer_text, chat_id_id, created_at, 100
-        #     FROM chat_app_message
-        #     WHERE answer_text IS NOT NULL;
-        # """),
+        migrations.RunSQL('UPDATE user_app_agent SET id=100 WHERE user_id_id=100'),
+        migrations.RunSQL("""
+            INSERT INTO chat_app_message (message_text, chat_id_id, created_at, owner_id_id)
+            SELECT answer_text, chat_id_id, created_at, 100
+            FROM chat_app_message
+            WHERE answer_text IS NOT NULL;            
+            """),
+        migrations.RunSQL("""
+            CREATE TABLE temp_table AS SELECT * FROM chat_app_message;
+            UPDATE temp_table SET id = id * 2;
+            DELETE FROM chat_app_message;
+            INSERT INTO chat_app_message SELECT * FROM temp_table;
+            DROP TABLE temp_table;
+        """),
+        migrations.RunSQL("""
+                CREATE TABLE temp_table AS SELECT * FROM chat_app_message;
+                UPDATE temp_table
+                SET id = id - (SELECT COUNT(*) FROM temp_table) + 1 
+                WHERE ID > (SELECT MAX(id)/2 FROM temp_table);
+                DELETE FROM chat_app_message;
+                INSERT INTO chat_app_message SELECT * FROM temp_table;
+                DROP TABLE temp_table;
+        """),
         migrations.RemoveField(
             model_name='message',
             name='answer_text',
