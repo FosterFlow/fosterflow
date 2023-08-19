@@ -1,6 +1,7 @@
 import { all, call, fork, put, takeEvery, delay } from 'redux-saga/effects';
 import apiClient from '../../helpers/apiClient';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
+import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 
 import {
     LOGIN_USER,
@@ -143,6 +144,7 @@ function* refreshTokenUpdate() {
         const response = yield call(apiClient.post, '/token/refresh/');
         yield put(refreshTokenUpdateSuccess(response.access));
         yield call(apiAuthorizedClient.resolve);
+        yield call(webSocketsAuthorizedClient.resolve);
     } catch (error) {
         yield put(refreshTokenUpdateFailure(error));
     }

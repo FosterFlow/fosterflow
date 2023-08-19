@@ -6,13 +6,14 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gfm from 'remark-gfm';
 import _ from 'lodash';
-
-// Import Components
 import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
-
-// Import actions
-import { fetchMessages, addMessage, deleteMessage } from "../../../redux/chat/actions";
+import { 
+    fetchMessages,
+    addMessage,
+    deleteMessage,
+    startWsConnection
+} from "../../../redux/chat/actions";
 import { getUser } from "../../../redux/user/actions";
 
 // Here's the custom component to render the code blocks
@@ -83,8 +84,10 @@ function UserChat(props) {
         return () => {
           window.removeEventListener('resize', debounceHandleWindowResize);
         };
+
+        const token = localStorage.getItem('access'); // Assuming you store the token in local storage
+        props.startWsConnection(props.activeChatId, token);
     }, []);
-    
 
     return (
         <React.Fragment>
@@ -141,7 +144,8 @@ const mapDispatchToProps = {
     fetchMessages,
     addMessage,
     deleteMessage,
-    getUser
+    getUser,
+    startWsConnection
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));

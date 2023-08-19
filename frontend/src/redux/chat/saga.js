@@ -1,9 +1,19 @@
-import { takeEvery, put, take } from 'redux-saga/effects';
+import { takeEvery, put } from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
 import {
-  FETCH_CHATS_REQUEST, ADD_CHAT_REQUEST, DELETE_CHAT_REQUEST,
-  FETCH_MESSAGES_REQUEST, ADD_MESSAGE_REQUEST, DELETE_MESSAGE_REQUEST,
-  FETCH_CHATS_SUCCESS, ADD_CHAT_SUCCESS, DELETE_CHAT_SUCCESS,
-  FETCH_MESSAGES_SUCCESS, ADD_MESSAGE_SUCCESS, DELETE_MESSAGE_SUCCESS
+  FETCH_CHATS_REQUEST,
+  ADD_CHAT_REQUEST,
+  DELETE_CHAT_REQUEST,
+  FETCH_MESSAGES_REQUEST,
+  ADD_MESSAGE_REQUEST,
+  DELETE_MESSAGE_REQUEST,
+  FETCH_CHATS_SUCCESS,
+  ADD_CHAT_SUCCESS,
+  DELETE_CHAT_SUCCESS,
+  FETCH_MESSAGES_SUCCESS,
+  ADD_MESSAGE_SUCCESS,
+  DELETE_MESSAGE_SUCCESS,
+  WS_CONNECTION_START
 } from './constants';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 const api = apiAuthorizedClient;
@@ -73,6 +83,64 @@ function* deleteMessage(action) {
   }
 }
 
+
+function createWebSocketConnection(chatId, token) {
+  //TODO: move to apiAuthorizedClient.js
+  return new WebSocket(
+    `ws://localhost:8000/ws/chats/${chatId}/?access=${token}`
+  );
+}
+
+function* watchMessages(socket) {
+  const socketChannel = eventChannel(emit => {
+    socket.onmessage = (event) => {
+      emit(JSON.parse(event.data));
+    };
+    socket.onerror = (errorEvent) => {
+      emit(new Error(errorEvent.reason));
+    };
+    socket.onclose = (event) => {
+      // Close the channel when the socket closes
+      emit(END);
+    };
+    return () => {
+      socket.close();
+    };
+  });
+
+  try {
+    while (true) {
+      const payload = yield take(socketChannel);
+      yield put(wsReceiveMessage(payload));
+    }
+  } catch (error) {
+    console.error("Socket error:", error);
+  } finally {
+    console.log("WebSocket was closed");
+  }
+}
+
+function* webSocketSaga(action) {
+  const { chatId, token } = action.payload;
+  const socket = yield call(createWebSocketConnection, chatId, token);
+  
+  socket.onopen = () => {
+    put(wsConnectionSuccess());
+  };
+
+  const task = yield fork(watchMessages, socket);
+
+  socket.onerror = (event) => {
+    put(wsConnectionError(event));
+  };
+
+  socket.onclose = (event) => {
+    put(wsConnectionClosed());
+  };
+
+  // Here you can add logic to send messages using socket.send
+}
+
 export default function* chatSaga() {
   yield takeEvery(FETCH_CHATS_REQUEST, fetchChats);
   yield takeEvery(ADD_CHAT_REQUEST, addChat);
@@ -80,4 +148,5 @@ export default function* chatSaga() {
   yield takeEvery(FETCH_MESSAGES_REQUEST, fetchMessages);
   yield takeEvery(ADD_MESSAGE_REQUEST, addMessage);
   yield takeEvery(DELETE_MESSAGE_REQUEST, deleteMessage);
+  yield takeEvery(WS_CONNECTION_START, wsSaga);
 }

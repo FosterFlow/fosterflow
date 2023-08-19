@@ -1,8 +1,19 @@
 // actions.js
 import {
-    FETCH_CHATS_REQUEST, ADD_CHAT_REQUEST,
-    DELETE_CHAT_REQUEST, FETCH_MESSAGES_REQUEST, ADD_MESSAGE_REQUEST,
-    DELETE_MESSAGE_REQUEST, SET_ACTIVE_CHAT, SHOW_CHAT_WINDOW, SET_ACTIVE_NEW_CHAT
+    FETCH_CHATS_REQUEST,
+    ADD_CHAT_REQUEST,
+    DELETE_CHAT_REQUEST,
+    FETCH_MESSAGES_REQUEST,
+    ADD_MESSAGE_REQUEST,
+    DELETE_MESSAGE_REQUEST,
+    SET_ACTIVE_CHAT,
+    SHOW_CHAT_WINDOW,
+    SET_ACTIVE_NEW_CHAT,
+    WS_CONNECTION_START,
+    WS_CONNECTION_SUCCESS,
+    WS_CONNECTION_ERROR,
+    WS_CONNECTION_CLOSED,
+    WS_RECEIVE_MESSAGE
   } from './constants';
   
   /**
@@ -76,4 +87,27 @@ import {
   export const deleteMessage = (id) => ({
     type: DELETE_MESSAGE_REQUEST,
     payload: id
+  });
+
+  export const startWsConnection = (chatId, token) => ({
+    type: WS_CONNECTION_START,
+    payload: { chatId, token }
+  });
+  
+  export const wsConnectionSuccess = () => ({
+    type: WS_CONNECTION_SUCCESS
+  });
+  
+  export const wsConnectionError = (error) => ({
+    type: WS_CONNECTION_ERROR,
+    payload: error
+  });
+  
+  export const wsConnectionClosed = () => ({
+    type: WS_CONNECTION_CLOSED
+  });
+  
+  export const wsReceiveMessage = (message) => ({
+    type: WS_RECEIVE_MESSAGE,
+    payload: message
   });

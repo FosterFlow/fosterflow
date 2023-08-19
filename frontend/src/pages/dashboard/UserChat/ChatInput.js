@@ -62,10 +62,11 @@ function ChatInput(props) {
                 return;        
             }
 
-            props.actionAddMessage({
-                "message_text": textMessage,
-                "chat_id": props.activeChatId
-            });
+            chatSocket.send(JSON.stringify({ 'message': textMessage }));
+            // props.actionAddMessage({
+            //     "message_text": textMessage,
+            //     "chat_id": props.activeChatId
+            // });
             settextMessage("");
         }
     }
