@@ -167,6 +167,7 @@ function* changePassword({ payload: { oldPassword, newPassword } }) {
     }
 }
 
+//TODO: redevelop like in chat/saga
 export function* watchRefreshTokenUpdate() {
     yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdate);
 }

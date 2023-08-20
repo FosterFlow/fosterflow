@@ -70,6 +70,13 @@ import {
     }
   };
   
+  export const addChatSuccess = (newChat) => {
+    return {
+      type: ADD_CHAT_SUCCESS,
+      payload: newChat
+    }
+  };
+
   export const deleteChat = (id) => {
     console.log("actions deleteChat id ", id);
     return {

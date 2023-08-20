@@ -51,7 +51,7 @@ function resolveWebSocketsQueue() {
         const webSocketConnection = new WebSocket(
             config.WS_URL
             + url
-            + '/?access='
+            + '?access='
             + accessToken
         );
     

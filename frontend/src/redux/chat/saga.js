@@ -5,12 +5,12 @@ import {
   DELETE_CHAT_REQUEST,
   FETCH_MESSAGES_REQUEST,
   DELETE_MESSAGE_REQUEST,
-  ADD_CHAT_SUCCESS,
   WS_CONNECTION_START
 } from './constants';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 import {
+  addChatSuccess,
   fetchChatsSuccess,
   deleteChatSuccess,
   fetchMessagesSuccess,
@@ -25,7 +25,7 @@ const api = apiAuthorizedClient;
 
 function* fetchChats() {
   try {
-    const chats = yield api.get('/chats/');
+    const chats = yield call(api.get, '/chats/');
     yield put(fetchChatsSuccess(chats));
   } catch (error) {
     console.log(error);
@@ -35,11 +35,11 @@ function* fetchChats() {
 function* addChat(action) {
   const data = action.payload;
   try {
-      const chat = yield api.post('/chats/', {
+      const chat = yield call(api.post, '/chats/', {
           "user_id": data.user_id,
           "name": data.name
       });
-      yield put({ type: ADD_CHAT_SUCCESS, payload: chat });
+      yield put(addChatSuccess, chat);
       if (data.message) {
         //TODO: case for new chat
         // yield put({ type: ADD_MESSAGE_REQUEST, payload: {
@@ -55,7 +55,7 @@ function* addChat(action) {
 function* deleteChat(action) {
   console.log("chat saga deleteChat action ", action);
   try {
-    yield api.delete(`/chats/${action.payload}/`);
+    yield call(api.delete, `/chats/${action.payload}/`);
     yield put(deleteChatSuccess(action.payload));
   } catch (error) {
     console.log(error);
@@ -74,7 +74,7 @@ function* fetchMessages(action) {
 
 function* deleteMessage(action) {
   try {
-    yield api.delete(`/messages/${action.payload}/`);
+    yield call(api.delete, `/messages/${action.payload}/`);
     yield put(deleteMessageSuccess(action.payload));
   } catch (error) {
     console.log(error);
@@ -83,7 +83,7 @@ function* deleteMessage(action) {
 
 
 function* webSocketSaga(action) {
-  const socket = yield call(webSocketsAuthorizedClient, `/messages/${action.payload}/`);
+  const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${action.payload}/`);
   
   socket.onopen = () => {
     put(wsConnectionSuccess(socket));
