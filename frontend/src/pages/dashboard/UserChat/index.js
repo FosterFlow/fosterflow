@@ -10,8 +10,6 @@ import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
 import { 
     fetchMessages,
-    addMessage,
-    deleteMessage,
     startWsConnection
 } from "../../../redux/chat/actions";
 import { getUser } from "../../../redux/user/actions";
@@ -84,9 +82,6 @@ function UserChat(props) {
         return () => {
           window.removeEventListener('resize', debounceHandleWindowResize);
         };
-
-        const token = localStorage.getItem('access'); // Assuming you store the token in local storage
-        props.startWsConnection(props.activeChatId, token);
     }, []);
 
     return (
@@ -142,8 +137,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     fetchMessages,
-    addMessage,
-    deleteMessage,
     getUser,
     startWsConnection
 }

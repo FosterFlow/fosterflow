@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form } from "reactstrap";
 import { connect } from "react-redux";
-import { addMessage as actionAddMessage, addChat} from "../../../redux/chat/actions";
+import { addChat} from "../../../redux/chat/actions";
 import { bindActionCreators } from "redux";
 import { useTranslation } from 'react-i18next';
 
@@ -112,7 +112,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ actionAddMessage, addChat }, dispatch);
+    return bindActionCreators({ addChat }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatInput);

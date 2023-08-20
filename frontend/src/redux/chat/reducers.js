@@ -5,7 +5,6 @@ import {
     DELETE_CHAT_SUCCESS,
     FETCH_MESSAGES_REQUEST,
     FETCH_MESSAGES_SUCCESS, 
-    ADD_MESSAGE_SUCCESS,
     DELETE_MESSAGE_SUCCESS,
     SET_ACTIVE_CHAT,
     SHOW_CHAT_WINDOW,
@@ -93,11 +92,6 @@ const Chat = (state = INIT_STATE, action) => {
             messages: updatedMessages
         };
     
-    case ADD_MESSAGE_SUCCESS:
-        return { 
-            ...state,
-            messages: [...state.messages, action.payload]
-        };
     case DELETE_MESSAGE_SUCCESS:
         return { 
             ...state,

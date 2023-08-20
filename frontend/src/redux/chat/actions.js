@@ -1,11 +1,15 @@
 // actions.js
 import {
     FETCH_CHATS_REQUEST,
+    FETCH_CHATS_SUCCESS,
     ADD_CHAT_REQUEST,
+    ADD_CHAT_SUCCESS,
     DELETE_CHAT_REQUEST,
+    DELETE_CHAT_SUCCESS,
     FETCH_MESSAGES_REQUEST,
-    ADD_MESSAGE_REQUEST,
+    FETCH_MESSAGES_SUCCESS,
     DELETE_MESSAGE_REQUEST,
+    DELETE_MESSAGE_SUCCESS,
     SET_ACTIVE_CHAT,
     SHOW_CHAT_WINDOW,
     SET_ACTIVE_NEW_CHAT,
@@ -13,7 +17,7 @@ import {
     WS_CONNECTION_SUCCESS,
     WS_CONNECTION_ERROR,
     WS_CONNECTION_CLOSED,
-    WS_RECEIVE_MESSAGE
+    WS_RECEIVE_MESSAGE,
   } from './constants';
   
   /**
@@ -52,6 +56,11 @@ import {
   export const fetchChats = () => ({
     type: FETCH_CHATS_REQUEST
   });
+
+  export const fetchChatsSuccess = (chats) => ({
+    type: FETCH_CHATS_SUCCESS,
+    payload: chats
+  });
   
   export const addChat = (data) => {
     console.log ("Chat -> actions -> addChat data", data);
@@ -68,24 +77,32 @@ import {
       payload: id
     }
   };
+
+  export const deleteChatSuccess = (id) => {
+    return {
+      type: DELETE_CHAT_SUCCESS,
+      payload: id
+    }
+  };
   
   //TODO split chats and messages?
   export const fetchMessages = (chatId) => ({
     type: FETCH_MESSAGES_REQUEST,
     payload: chatId
   });
-  
-  /* data : {
-      "message_text": "text",
-      "chat_id": 0
-  } */
-  export const addMessage = (data) => ({
-    type: ADD_MESSAGE_REQUEST,
-    payload: data
+
+  export const fetchMessagesSuccess = (messages) => ({
+    type: FETCH_MESSAGES_SUCCESS,
+    payload: messages
   });
   
   export const deleteMessage = (id) => ({
     type: DELETE_MESSAGE_REQUEST,
+    payload: id
+  });
+
+  export const deleteMessageSuccess = (id) => ({
+    type: DELETE_MESSAGE_SUCCESS,
     payload: id
   });
 
