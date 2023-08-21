@@ -67,12 +67,6 @@ class Migration(migrations.Migration):
             WHERE chat_app_message.chat_id_id = chat_app_chat.id;
         """),
         migrations.RunSQL("""
-            INSERT INTO chat_app_message (message_text, chat_id_id, created_at, owner_id_id)
-            SELECT answer_text, chat_id_id, created_at, 100
-            FROM chat_app_message
-            WHERE answer_text IS NOT NULL;            
-            """),
-        migrations.RunSQL("""
             CREATE TABLE temp_table AS SELECT * FROM chat_app_message;
             UPDATE temp_table SET id = id * 2 - 1;
             DELETE FROM chat_app_message;
@@ -80,14 +74,11 @@ class Migration(migrations.Migration):
             DROP TABLE temp_table;
         """),
         migrations.RunSQL("""
-                CREATE TABLE temp_table AS SELECT * FROM chat_app_message;
-                UPDATE temp_table
-                SET id = id - (SELECT COUNT(*) FROM temp_table) + 1 
-                WHERE ID > (SELECT MAX(id)/2 FROM temp_table);
-                DELETE FROM chat_app_message;
-                INSERT INTO chat_app_message SELECT * FROM temp_table;
-                DROP TABLE temp_table;
-        """),
+            INSERT INTO chat_app_message (id, message_text, chat_id_id, created_at, owner_id_id)
+            SELECT id + 1, answer_text, chat_id_id, created_at, 100
+            FROM chat_app_message
+            WHERE answer_text IS NOT NULL;            
+            """),
         migrations.RemoveField(
             model_name='message',
             name='answer_text',
