@@ -23,7 +23,8 @@ class TokenAuthMiddleWare:
         self.app = app
 
     async def __call__(self, scope, receive, send):
-        token = parse_qs(scope["query_string"].decode("utf8"))["access"][0]
+        headers = dict(scope['headers'])
+        token = headers[b'access'].decode("utf8").split()[0]
         user = await get_user(token)
         scope["user"] = user
         return await self.app(scope, receive, send)

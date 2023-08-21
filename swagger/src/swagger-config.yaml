@@ -175,7 +175,9 @@ paths:
       summary: Instruction to connect websocket
       description: >-
         To connect to the chat websocket, you should make the following request: <br>
-        ws://localhost:8000/ws/chats/**{chat_id}**/?access=**{access_token}** <br>
+        ws://localhost:8000/ws/chats/**{chat_id}**/** <br>
+        In headers you must provide access token like this: <br>
+        key: "access", value: "**{access_token}**" <br>
         Where **{chat_id}** - ID Chat, **{access_token}** - token for auth <br>
         <br>
         After connection you can write message to chat. You should use this structure: <br>
@@ -194,9 +196,7 @@ paths:
             &nbsp; &nbsp; 'ws://' 
             &nbsp; &nbsp; + window.location.host 
             &nbsp; &nbsp; + '/ws/chats/' 
-            &nbsp; &nbsp; + chat_id 
-            &nbsp; &nbsp; + '/?access=' 
-            &nbsp; &nbsp; + localStorage.getItem('access') 
+            &nbsp; &nbsp; + chat_id/
         );<br>
         
         **Send message to WebSocket:** <br>
