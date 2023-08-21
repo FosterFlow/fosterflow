@@ -32,4 +32,4 @@ class TokenAuthMiddleWare:
             scope["user"] = user
             return await self.app(scope, receive, send)
         except Exception as e:
-            return await self.app(scope, receive, send)
+            await send({"type": "websocket.close"})
