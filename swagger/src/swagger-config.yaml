@@ -215,6 +215,8 @@ paths:
       responses:
         101:
           description: Switching Protocols
+        '403':
+          description: '403 Access denied'
       tags:
         - chats
   /messages/:
