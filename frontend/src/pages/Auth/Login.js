@@ -20,35 +20,19 @@ import withRouter from "../../components/withRouter";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { loginUser, authError  } from '../../redux/actions';
+import { loginUser, loginErrors  } from '../../redux/actions';
 
 /**
  * Login component
  * @param {*} props 
  */
 const Login = (props) => {
-    /* intilize t variable for multi language implementation */
+    const { loading, loginErrors } = props;
     const { t } = useTranslation();
-    const [formAlertError, setformAlertError] = useState(null);
 
-    //resetting previeous errors
     useEffect(() => {
-            props.authError(null);
+            props.loginErrors(null);
     }, []);
-
-    useEffect(() => {
-        if (props.error && props.error.errors) {
-            const propsErrors = props.error.errors;
-            if (propsErrors.details){
-                setformAlertError(propsErrors.details);
-            }
-            let formErrors = {};
-            for (let key in propsErrors) {
-                formErrors[key] = propsErrors[key][0];
-            }
-            formik.setErrors(formErrors);
-        }
-    }, [props.error]);
 
     // validation
     const formik = useFormik({
@@ -79,8 +63,8 @@ const Login = (props) => {
                             <Card>
                                 <CardBody className="p-4">
                                     {
-                                        formAlertError &&
-                                         <Alert color="danger">{formAlertError}</Alert>
+                                        typeof loginErrors === "string" &&
+                                         <Alert color="danger">{loginErrors}</Alert>
                                     }
                                     <div className="p-3">
 
@@ -166,8 +150,8 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
     //TODO: show loading
-    const { user, loading, error } = state.Auth;
-    return { user, loading, error };
+    const { loading, loginErrors } = state.Auth;
+    return { loading, loginErrors };
 };
 
-export default withRouter(connect(mapStateToProps, { loginUser, authError })(Login));
+export default withRouter(connect(mapStateToProps, { loginUser, loginErrors })(Login));

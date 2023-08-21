@@ -18,6 +18,7 @@ import {
 
 import {
     loginUserSuccess,
+    loginUserFailed,
     registerUserSuccess,
     forgetPasswordSuccess,
     authError,
@@ -47,7 +48,7 @@ function* login({ payload: { email, password } }) {
         yield localStorage.setItem("isAuthenticated", true);
         yield put(loginUserSuccess(response.access));            
     } catch (error) {
-        yield put(authError(error));
+        yield put(loginUserFailed(error));
     }
 }
 
