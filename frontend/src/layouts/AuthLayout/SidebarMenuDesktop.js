@@ -16,13 +16,13 @@ function LeftSidebarMenu(props) {
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
 
-    function getProfileAvatar (){
-        if (props.profile && props.profile.avatar) {
-          const profile = props.profile;
-          return profile.avatar;
+    function getAgentAvatar (){
+        if (props.agent && props.agent.avatar) {
+          const agent = props.agent;
+          return agent.avatar;
         }
         return "";
-      }
+    }
 
     const onChangeLayoutMode = (event) => { 
         event.preventDefault();
@@ -87,7 +87,7 @@ function LeftSidebarMenu(props) {
                         </NavItem>
                         <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
                             <DropdownToggle title={t('Profile')} className="nav-link" tag="a">
-                                <img src={getProfileAvatar()} alt="" className="profile-user rounded-circle" />
+                                <img src={getAgentAvatar()} alt="" className="profile-user rounded-circle" />
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem>
@@ -120,7 +120,7 @@ const mapStatetoProps = state => {
     return {
         layoutMode: state.Layout.layoutMode,
         language: state.Layout.language,
-        profile: state.Profile
+        agent: state.Agent
     };
 };
 

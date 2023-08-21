@@ -6,9 +6,9 @@ import withRouter from "../../../components/withRouter";
 import UserChat from "../UserChat/";
 import NewUserChat from "../NewUserChat";
 import { 
-    fetchDialogues,
+    fetchChats,
     fetchMessages,
-    setActiveDialogue,
+    setActiveChat,
     setActiveNewChat,
     showChatWindow 
 } from "../../../redux/actions";
@@ -32,39 +32,39 @@ const Chats = (props) => {
             return;
         }
 
-        props.fetchDialogues();
+        props.fetchChats();
     }, [props.authorizedUser]);
 
     useEffect(() => {
-        const dialogues = props.dialogues; 
-        if (dialogues && dialogues.length === 0) {
+        const chats = props.chats; 
+        if (chats && chats.length === 0) {
             return;
         }
 
-        setRecentChatList(dialogues.reverse());
+        setRecentChatList(chats.reverse());
         
-        const activeDialogueId = props.activeDialogueId;
-        if (id === 0 && activeDialogueId > 0) {
-            //added new dialogue
-            props.router.navigate(`/chats/${activeDialogueId}`);
+        const activeChatId = props.activeChatId;
+        if (id === 0 && activeChatId > 0) {
+            //added new chats
+            props.router.navigate(`/chats/${activeChatId}`);
         }
-    }, [props.dialogues]);
+    }, [props.chats]);
 
     useEffect(() => {
         if (id === 0) {
-            props.setActiveDialogue(0);
+            props.setActiveChat(0);
             props.showChatWindow(false);
             props.setActiveNewChat(true);
             return;
         }
 
-        if (props.activeDialogueId === id){
+        if (props.activeChatId === id){
             return;
         }
         
         //Opened specific chat by id in url
         props.showChatWindow(true);
-        props.setActiveDialogue(id);
+        props.setActiveChat(id);
         props.setActiveNewChat(false);
 
         //TODO: we have to check if we already have actual messages into state
@@ -74,11 +74,11 @@ const Chats = (props) => {
     const handleSearchChange = useCallback((event) => {
         const search = event.target.value.toLowerCase();
         setSearchChat(search);
-        const filteredDialogues = props.dialogues.filter(
-            dialogue => dialogue.latest_message && dialogue.latest_message.toString().toLowerCase().includes(search)
+        const filteredChats = props.chats.filter(
+            chat => chat.latest_message && chat.latest_message.toString().toLowerCase().includes(search)
         );
-        setRecentChatList(filteredDialogues);
-    }, [props.dialogues]);
+        setRecentChatList(filteredChats);
+    }, [props.chats]);
 
 
     const newChatHandleLinkClick = useCallback(() => {
@@ -117,16 +117,16 @@ const Chats = (props) => {
                 <div className="chats-list-wrapper">
                         <ul className="list-unstyled chats-list" id="chat-list">
                             {
-                                recentChatList.map((dialogue, key) =>
+                                recentChatList.map((chat, key) =>
                                     <li 
                                         key={key} 
-                                        id={"conversation"+ dialogue.id} 
-                                        className={`px-2 pt-2 ${props.activeDialogueId === dialogue.id ? 'active' : ''}`}
+                                        id={"conversation"+ chat.id} 
+                                        className={`px-2 pt-2 ${props.activeChatId === chat.id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/chats/${dialogue.id}`} onClick={chatHandleLinkClick}>
-                                        {dialogue.latest_message 
-                                            ? <h5 className="text-truncate font-size-15 mb-1">{dialogue.latest_message}</h5> 
-                                            : <h5 className="text-truncate font-size-15 mb-1">{dialogue.name} </h5>
+                                        <Link to={`/chats/${chat.id}`} onClick={chatHandleLinkClick}>
+                                        {chat.latest_message 
+                                            ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
+                                            : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
                                         }
                                             <p className="chat-user-message text-truncate mb-0">
                                                 {t('Click to open chat')}
@@ -146,8 +146,8 @@ const Chats = (props) => {
 
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
-    dialogues: state.Chat.dialogues,
-    activeDialogueId: state.Chat.activeDialogueId,
+    chats: state.Chat.chats,
+    activeChatId: state.Chat.activeChatId,
     chatWindow: state.Chat.chatWindow,
     newChat: state.Chat.newChat,
     //TODO: cause redundun re-render
@@ -155,9 +155,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    fetchDialogues,
+    fetchChats,
     fetchMessages,
-    setActiveDialogue,
+    setActiveChat,
     setActiveNewChat,
     showChatWindow
 }

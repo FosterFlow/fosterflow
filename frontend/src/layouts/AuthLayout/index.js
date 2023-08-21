@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert } from 'reactstrap';
 import withRouter from '../../components/withRouter';
-import { sendConfirmationEmail, getAuthorizedUser, getProfile } from '../../redux/actions';
+import { sendConfirmationEmail, getAuthorizedUser, getAgent } from '../../redux/actions';
 
 //i18n
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,7 @@ const Index = (props) => {
 
     useEffect(() => {
         if (authorizedUser && authorizedUser.id){
-            props.getProfile(authorizedUser.id);
+            props.getAgent(authorizedUser.id);
         }
     }, [authorizedUser]);
 
@@ -67,7 +67,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
     sendConfirmationEmail,
     getAuthorizedUser,
-    getProfile
+    getAgent
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));

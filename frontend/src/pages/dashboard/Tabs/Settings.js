@@ -18,20 +18,20 @@ import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
-import { updateProfileData, changePassword, updateProfileAvatar } from '../../../redux/actions';
+import { updateAgentData, changePassword, updateAgentAvatar } from '../../../redux/actions';
 
 function Settings(props) {
     const { t } = useTranslation();
     const [selectedAvatar, setSelectedAvatar] = useState(null);
 
-    function getProfileAvatar (){
+    function getAgentAvatar (){
         if (selectedAvatar !== null){
             return URL.createObjectURL(selectedAvatar);
         }
 
-        if (props.profile && props.profile.profile) {
-          const profile = props.profile.profile;
-          return profile.avatar;
+        if (props.agent && props.agent.agent) {
+          const agent = props.agent.agent;
+          return agent.avatar;
         }
         return "";
       }
@@ -43,7 +43,7 @@ function Settings(props) {
             const user = props.user;
             
             if (user && user.authorizedUser) {
-                props.updateProfileAvatar(user.authorizedUser.id, selectedAvatar);
+                props.updateAgentAvatar(user.authorizedUser.id, selectedAvatar);
                 return;
             }
         }
@@ -52,15 +52,15 @@ function Settings(props) {
     }
 
     function getFirstName (){
-        return (props.profile
-        && props.profile.profile 
-        && props.profile.profile.first_name) || '';
+        return (props.agent
+        && props.agent.agent 
+        && props.agent.agent.first_name) || '';
     }
 
     function getLastName (){
-        return (props.profile
-            && props.profile.profile  
-            && props.profile.profile.last_name) || ''
+        return (props.agent
+            && props.agent.agent  
+            && props.agent.agent.last_name) || ''
     }
 
     //Filling the form after page reloading
@@ -78,7 +78,7 @@ function Settings(props) {
         if ((firstName !== "") && (formikFirstName === "")) {
             personalInfoForm.setFieldValue('first_name', firstName);
         }
-    }, [props.profile]);
+    }, [props.agent]);
 
     const personalInfoForm = useFormik({
         initialValues: {
@@ -97,7 +97,7 @@ function Settings(props) {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
             const user = props.user;
             if (user && user.authorizedUser) {
-                props.updateProfileData(user.authorizedUser.id, values);
+                props.updateAgentData(user.authorizedUser.id, values);
                 return;
             } 
             //TODO: handle error if we don't have active User;
@@ -136,12 +136,12 @@ function Settings(props) {
             errors.push(personalInfoForm.errors.first_name);
         }
 
-        if (props.profile 
-            && props.profile.profileDataErrors
-            && typeof props.profile.profileDataErrors === "object"
-            && props.profile.profileDataErrors.first_name) {
+        if (props.agent 
+            && props.agent.agentDataErrors
+            && typeof props.agent.agentDataErrors === "object"
+            && props.agent.agentDataErrors.first_name) {
 
-            errors = [...errors, ...props.profile.profileDataErrors.first_name]
+            errors = [...errors, ...props.agent.agentDataErrors.first_name]
         }
 
         return errors
@@ -154,12 +154,12 @@ function Settings(props) {
             errors.push(personalInfoForm.errors.last_name);
         }
 
-        if (props.profile 
-            && props.profile.profileDataErrors
-            && typeof props.profile.profileDataErrors === "object"
-            && props.profile.profileDataErrors.last_name) {
+        if (props.agent 
+            && props.agent.agentDataErrors
+            && typeof props.agent.agentDataErrors === "object"
+            && props.agent.agentDataErrors.last_name) {
 
-            errors = [...errors, ...props.profile.profileDataErrors.last_name]
+            errors = [...errors, ...props.agent.agentDataErrors.last_name]
         }
 
         return errors
@@ -209,8 +209,8 @@ function Settings(props) {
 
                     <div className="user-profile-sroll-area">
                         {
-                            (props.profile && props.profile.errors) &&
-                            <Alert color="danger">{props.profile.errors}</Alert>
+                            (props.agent && props.agent.errors) &&
+                            <Alert color="danger">{props.agent.errors}</Alert>
                         }
                         {/* Start Avatar card */}
                         <div className="p-4">
@@ -220,12 +220,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.profile && props.profile.avatarErrors 
-                                            && typeof props.profile.avatarErrors === "string") &&
-                                        <Alert color="danger">{props.profile.avatarErrors}</Alert>
+                                        (props.agent && props.agent.avatarErrors 
+                                            && typeof props.agent.avatarErrors === "string") &&
+                                        <Alert color="danger">{props.agent.avatarErrors}</Alert>
                                     }
                                     {
-                                         props.profile.avatarSuccess &&
+                                         props.agent.avatarSuccess &&
                                          <Alert color="success">{t("The photo has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={submitAvatar}>
@@ -233,7 +233,7 @@ function Settings(props) {
                                             <Label>{t('Photo')}</Label>
                                             <div className='pb-3'>
                                             <img 
-                                                src={getProfileAvatar ()} 
+                                                src={getAgentAvatar ()} 
                                                 className="rounded-circle avatar-lg img-thumbnail"
                                                 />
                                             </div>
@@ -241,20 +241,20 @@ function Settings(props) {
                                                 id="exampleFile"
                                                 name="file"
                                                 type="file"
-                                                disabled={props.profile.avatarLoading}
+                                                disabled={props.agent.avatarLoading}
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                             <FormFeedback>
                                                 {
-                                                    props.profile 
-                                                    && props.profile.avatarErrors 
+                                                    props.agent 
+                                                    && props.agent.avatarErrors 
                                                     && typeof props.avatarErrors === "object"
-                                                    && props.profile.avatarErrors.avatar
+                                                    && props.agent.avatarErrors.avatar
                                                 }
                                             </FormFeedback>
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.profile.avatarLoading}>
-                                            {props.profile.avatarLoading &&
+                                        <Button type="submit" disabled={props.agent.avatarLoading}>
+                                            {props.agent.avatarLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -274,12 +274,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.profile && props.profile.profileDataErrors 
-                                            && typeof props.profile.profileDataErrors === "string") &&
-                                        <Alert color="danger">{props.profile.profileDataErrors}</Alert>
+                                        (props.agent && props.agent.agentDataErrors 
+                                            && typeof props.agent.agentDataErrors === "string") &&
+                                        <Alert color="danger">{props.agent.agentDataErrors}</Alert>
                                     }
                                     {
-                                         props.profile.profileDataSuccess &&
+                                         props.agent.agentDataSuccess &&
                                          <Alert color="success">{t("Personal information has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={personalInfoForm.handleSubmit}>
@@ -293,7 +293,7 @@ function Settings(props) {
                                                 onBlur={personalInfoForm.handleBlur}
                                                 invalid={getFirstNameErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter first name')}
-                                                disabled={props.profile.profileDataLoading}
+                                                disabled={props.agent.agentDataLoading}
                                             />
                                             <FormFeedback>
                                                 {
@@ -318,7 +318,7 @@ function Settings(props) {
                                                 onBlur={personalInfoForm.handleBlur}
                                                 invalid={getLastNameErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter second name')}
-                                                disabled={props.profile.profileDataLoading}
+                                                disabled={props.agent.agentDataLoading}
                                             />
                                             <FormFeedback>
                                                 {
@@ -332,8 +332,8 @@ function Settings(props) {
                                                 }
                                             </FormFeedback>
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.profile.profileDataLoading}>
-                                            {props.profile.profileDataLoading &&
+                                        <Button type="submit" disabled={props.agent.agentDataLoading}>
+                                            {props.agent.agentDataLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -453,15 +453,15 @@ function Settings(props) {
 
 //TODO: suscribe only to required fields
 const mapStateToProps = (state) => ({
-    profile: state.Profile,
+    agent: state.Agent,
     user: state.User,
     auth: state.Auth
 });
 
 const mapDispatchToProps = {
-    updateProfileData,
+    updateAgentData,
     changePassword,
-    updateProfileAvatar
+    updateAgentAvatar
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));

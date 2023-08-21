@@ -1,20 +1,20 @@
 // actions.js
 import {
-    FETCH_DIALOGUES_REQUEST, ADD_DIALOGUE_REQUEST,
-    DELETE_DIALOGUE_REQUEST, FETCH_MESSAGES_REQUEST, ADD_MESSAGE_REQUEST,
-    DELETE_MESSAGE_REQUEST, SET_ACTIVE_DIALOGUE, SHOW_CHAT_WINDOW, SET_ACTIVE_NEW_CHAT
+    FETCH_CHATS_REQUEST, ADD_CHAT_REQUEST,
+    DELETE_CHAT_REQUEST, FETCH_MESSAGES_REQUEST, ADD_MESSAGE_REQUEST,
+    DELETE_MESSAGE_REQUEST, SET_ACTIVE_CHAT, SHOW_CHAT_WINDOW, SET_ACTIVE_NEW_CHAT
   } from './constants';
   
   /**
-   * Specify an id of currently active dialogue. 
-   * Required for show active dialogue into list of dialogues.
+   * Specify an id of currently active chat. 
+   * Required for show active chat into list of chats.
    * 
-   * @param {number} dialogId 
+   * @param {number} chatId 
    * @returns 
    */
-  export const setActiveDialogue = (dialogId) => ({
-    type: SET_ACTIVE_DIALOGUE,
-    payload: dialogId
+  export const setActiveChat = (chatId) => ({
+    type: SET_ACTIVE_CHAT,
+    payload: chatId
   });
 
   /**
@@ -38,35 +38,35 @@ import {
     payload: set
   });
 
-  export const fetchDialogues = () => ({
-    type: FETCH_DIALOGUES_REQUEST
+  export const fetchChats = () => ({
+    type: FETCH_CHATS_REQUEST
   });
   
-  export const addDialogue = (data) => {
-    console.log ("Chat -> actions -> addDialogue data", data);
+  export const addChat = (data) => {
+    console.log ("Chat -> actions -> addChat data", data);
     return {
-      type: ADD_DIALOGUE_REQUEST,
+      type: ADD_CHAT_REQUEST,
       payload: data
     }
   };
   
-  export const deleteDialogue = (id) => {
-    console.log("actions deleteDialogue id ", id);
+  export const deleteChat = (id) => {
+    console.log("actions deleteChat id ", id);
     return {
-      type: DELETE_DIALOGUE_REQUEST,
+      type: DELETE_CHAT_REQUEST,
       payload: id
     }
   };
   
-  //TODO split dialogues and messages?
-  export const fetchMessages = (dialogId) => ({
+  //TODO split chats and messages?
+  export const fetchMessages = (chatId) => ({
     type: FETCH_MESSAGES_REQUEST,
-    payload: dialogId
+    payload: chatId
   });
   
   /* data : {
       "message_text": "text",
-      "dialog_id": 0
+      "chat_id": 0
   } */
   export const addMessage = (data) => ({
     type: ADD_MESSAGE_REQUEST,
