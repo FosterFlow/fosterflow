@@ -55,29 +55,32 @@ paths:
             application/json:
               [
                 {
-                  "id": 18,
-                  "latest_message": null,
-                  "name": "ChatName",
-                  "created_at": "2023-06-23T09:15:34.562981Z",
-                  "updated_at": "2023-06-23T09:15:34.562998Z",
-                  "user_id": 1
+                  "id": 1,
+                  "latest_message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "name": "ChatName1",
+                  "created_at": "2023-06-19T16:28:47.904000Z",
+                  "updated_at": "2023-06-19T16:32:33.773000Z",
+                  "owner_id": 1,
+                  "addressee_id": 2
                 },
                 {
-                  "id": 19,
-                  "latest_message": "I am ... ",
-                  "name": "ChatName",
-                  "created_at": "2023-06-23T09:21:32.283418Z",
-                  "updated_at": "2023-06-23T09:21:32.283434Z",
-                  "user_id": 1
+                  "id": 2,
+                  "latest_message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "name": "ChatName2",
+                  "created_at": "2023-06-19T16:28:47.904000Z",
+                  "updated_at": "2023-06-19T16:28:47.955000Z",
+                  "owner_id": 1,
+                  "addressee_id": 2
                 },
                 {
-                  "id": 20,
-                  "latest_message": "Hello",
-                  "name": "ChatName",
-                  "created_at": "2023-06-23T09:21:34.937211Z",
-                  "updated_at": "2023-06-23T09:21:34.937226Z",
-                  "user_id": 1
-                },
+                  "id": 3,
+                  "latest_message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "name": "ChatName3",
+                  "created_at": "2023-06-19T16:28:47.904000Z",
+                  "updated_at": "2023-06-19T16:28:47.955000Z",
+                  "owner_id": 1,
+                  "addressee_id": 2
+                }
               ]
         401:
           description: Unauthorized
@@ -97,8 +100,8 @@ paths:
           description: 'Chats object that needs to be added:'
           type: object
           properties:
-            user_id:
-              title: User_id
+            owner_id:
+              title: owner_id
               type: integer
               example: 1
             name:
@@ -107,6 +110,10 @@ paths:
               maxLength: 200
               minLength: 1
               example: 'ChatName'
+            addressee_id:
+              title: addressee_id
+              type: integer
+              example: 1
       responses:
         '201':
           description: 'Successful operation'
@@ -235,22 +242,32 @@ paths:
               [
                 {
                   "id": 1,
-                  "message_text": "Hello Message",
-                  "answer_text": "Hello Answer",
-                  "chat": 1
+                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "created_at": "2023-06-19T12:51:26.301069Z",
+                  "chat_id": 1,
+                  "owner_id": 1
                 },
                 {
                   "id": 2,
-                  "message_text": "Hello Message2",
-                  "answer_text": "Hello Answer2",
-                  "chat": 1
+                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "created_at": "2023-06-19T12:51:26.301069Z",
+                  "chat_id": 1,
+                  "owner_id": 2
+                },
+                {
+                  "id": 3,
+                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "created_at": "2023-06-19T12:51:26.301069Z",
+                  "chat_id": 1,
+                  "owner_id": 1
                 },
                 {
                   "id": 4,
-                  "message_text": "3",
-                  "answer_text": "work there",
-                  "chat": 1
-                },
+                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "created_at": "2023-06-19T12:51:26.301069Z",
+                  "chat_id": 1,
+                  "owner_id": 2
+                }
               ]
         400:
           description: Bad request.
@@ -290,6 +307,10 @@ paths:
                 title: chat_id
                 type: integer
                 example: 1
+              owner_id:
+                title: owner_id
+                type: integer
+                example: 1
       responses:
         '201':
           description: 'The message will return with a ready answer to the question'
@@ -298,10 +319,11 @@ paths:
           examples:
             application/json:
               {
-                "id": 5,
+                "id": 1,
                 "message_text": "Hello, how are you?",
-                "answer_text": "I'm doing well, thank you. How about you?",
-                "chat_id": 1
+                "created_at": "2023-06-18T13:22:32.194640Z",
+                "chat_id": 1,
+                "owner_id": 1
               }
         400:
           description: Bad request.
@@ -988,10 +1010,6 @@ definitions:
         maxLength: 1000
         minLength: 1
         example: 'This is message'
-      user_id:
-        title: User_id
-        type: integer
-        example: 1
       name:
         title: Name
         type: string
@@ -1006,6 +1024,14 @@ definitions:
         title: Created at
         type: date
         example: "2023-06-23T09:15:34.562981Z"
+      owner_id:
+        title: owner_id
+        type: integer
+        example: 1
+      addressee_id:
+        title: addressee_id
+        type: integer
+        example: 1
   MessageModel:
     required:
       - message_text

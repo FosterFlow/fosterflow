@@ -83,4 +83,24 @@ class Migration(migrations.Migration):
             model_name='message',
             name='answer_text',
         ),
+        migrations.AlterField(
+            model_name='chat',
+            name='addressee_id',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='addressee_id',
+                                    to='user_app.agent'),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='chat',
+            name='owner_id',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='owner_id',
+                                    to='user_app.agent'),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='message',
+            name='owner_id',
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
+            preserve_default=False,
+        ),
     ]
