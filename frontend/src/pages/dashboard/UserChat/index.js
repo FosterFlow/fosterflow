@@ -6,14 +6,12 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gfm from 'remark-gfm';
 import _ from 'lodash';
-
-// Import Components
 import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
-
-// Import actions
-import { fetchMessages, addMessage, deleteMessage } from "../../../redux/chat/actions";
-import { getUser } from "../../../redux/user/actions";
+import { 
+    fetchMessages,
+    startWsConnection
+} from "../../../redux/chat/actions";
 
 // Here's the custom component to render the code blocks
 function CodeBlock({node, inline, className, children, ...props}) {
@@ -39,7 +37,8 @@ function CodeBlock({node, inline, className, children, ...props}) {
 function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
-    const { messages, activeChatId } = props;
+    const { messages, activeChatId, authorizedUser} = props;
+    //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
     const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
     const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
@@ -84,7 +83,22 @@ function UserChat(props) {
           window.removeEventListener('resize', debounceHandleWindowResize);
         };
     }, []);
-    
+
+    useEffect(() => {
+        if (activeChatId === 0) {
+            return;
+        }
+
+        if (authorizedUser === null){
+            return;
+        }
+
+        if (authorizedUser.is_email_confirmed === false){
+            return;
+        }
+
+        props.fetchMessages(activeChatId);
+    }, [authorizedUser, activeChatId]);
 
     return (
         <React.Fragment>
@@ -96,31 +110,36 @@ function UserChat(props) {
                         onScroll={debouncedHandleChatScroll} 
                         className="user-chat-conversation"
                         id="messages">
-                                <ul className="user-chat-conversation-list">
-                                    {
-                                        relevantMessages.map((chat, key) =>
-                                            <React.Fragment key={key}>
-                                                <li className="user-chat-conversation-list-item right">
-                                                    <div className="user-chat-message user-chat-message-formatting">
-                                                        {chat.message_text}
-                                                    </div>
-                                                </li>
-                                                <li className="user-chat-conversation-list-item"> 
-                                                    <div 
-                                                        className="user-chat-message" 
-                                                        style={{maxWidth: `${messageMaxWidth}px`}}
+                            <ul className="user-chat-conversation-list">
+                                {
+                                    relevantMessages.map((message, key) =>
+                                        <React.Fragment key={key}>
+                                            {
+                                                authorizedUser.id === message.owner_id ? (
+                                                    <li className="user-chat-conversation-list-item right">
+                                                        <div className="user-chat-message user-chat-message-formatting">
+                                                            {message.message_text}
+                                                        </div>
+                                                    </li>
+                                                ) : (
+                                                    <li className="user-chat-conversation-list-item"> 
+                                                        <div 
+                                                            className="user-chat-message" 
+                                                            style={{maxWidth: `${messageMaxWidth}px`}}
                                                         >
                                                             <ReactMarkdown 
                                                                 remarkPlugins={[gfm]} 
                                                                 components={{code: CodeBlock}}>
-                                                                    {chat.answer_text}
+                                                                {message.message_text}
                                                             </ReactMarkdown>
-                                                    </div>
-                                                </li>
-                                            </React.Fragment>
-                                        )
-                                    }
-                                </ul>
+                                                        </div>
+                                                    </li>
+                                                )
+                                            }
+                                        </React.Fragment>
+                                    )
+                                }
+                            </ul>
                     </div>
                 </div>
                 <ChatInput/>
@@ -134,14 +153,13 @@ const mapStateToProps = (state) => {
         messages: state.Chat.messages,
         activeChatId: state.Chat.activeChatId,
         chatWindow: state.Chat.chatWindow,
+        authorizedUser: state.User.authorizedUser
     }
 };
 
 const mapDispatchToProps = {
     fetchMessages,
-    addMessage,
-    deleteMessage,
-    getUser
+    startWsConnection
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));
