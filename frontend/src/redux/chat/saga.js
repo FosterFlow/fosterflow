@@ -1,4 +1,5 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
+import { call, put, take, takeEvery } from 'redux-saga/effects';
 import {
   FETCH_CHATS_REQUEST,
   ADD_CHAT_REQUEST,
@@ -81,25 +82,35 @@ function* deleteMessage(action) {
   }
 }
 
+function createWebSocketChannel(socket) {
+  return eventChannel(emit => {
+    socket.onopen = () => {
+      emit(wsConnectionSuccess(socket));
+    };
+    socket.onmessage = (event) => {
+      emit(wsReceiveMessage(event.data));
+    };
+    socket.onerror = (event) => {
+      emit(wsConnectionError(event));
+    };
+    socket.onclose = () => {
+      emit(wsConnectionClosed());
+    };
+    return () => {
+      socket.close();
+    };
+  });
+}
+
 
 function* webSocketSaga(action) {
   const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${action.payload}/`);
-  
-  socket.onopen = () => {
-    put(wsConnectionSuccess(socket));
-  };
+  const socketChannel = yield call(createWebSocketChannel, socket);
 
-  socket.onmessage = (event) => {
-    put(wsReceiveMessage(event.data));
-  };
-
-  socket.onerror = (event) => {
-    put(wsConnectionError(event));
-  };
-
-  socket.onclose = () => {
-    put(wsConnectionClosed());
-  };
+  while (true) {
+    const action = yield take(socketChannel);
+    yield put(action);
+  }
 }
 
 export default function* chatSaga() {

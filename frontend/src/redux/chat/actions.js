@@ -118,8 +118,9 @@ import {
     payload: chatId
   });
   
-  export const wsConnectionSuccess = () => ({
-    type: WS_CONNECTION_SUCCESS
+  export const wsConnectionSuccess = (socket) => ({
+    type: WS_CONNECTION_SUCCESS,
+    payload: socket
   });
   
   export const wsConnectionError = (error) => ({
