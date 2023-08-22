@@ -33,7 +33,11 @@ services:
     command: bash -c "yarn start"
     networks:
       - myNetwork
-      
+    depends_on:
+      - db
+      - backend
+
+
 networks:
   myNetwork:
     driver: bridge
