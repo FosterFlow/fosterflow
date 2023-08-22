@@ -9,15 +9,31 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: library
-  backend2:
-    build:
-      context: .
+    networks:
+      - myNetwork
+  
+  backend:
+    container_name: backend
+    build: ./backend
     ports:
       - 8080:8080
-    command: bash -c "
-      ./wait-for-postgres.sh db
-      && python manage.py migrate
-      && python manage.py runserver 0.0.0.0:8080
-      "
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
     depends_on:
       - db
+    networks:
+      - myNetwork
+  
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend
+    command: bash -c "yarn start"
+    networks:
+      - myNetwork
+      
+networks:
+  myNetwork:
+    driver: bridge
