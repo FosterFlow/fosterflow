@@ -1,6 +1,7 @@
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
+    LOGIN_USER_FAILED,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILED,
@@ -89,6 +90,13 @@ export const loginUserSuccess = (accessToken) => {
     return {
         type: LOGIN_USER_SUCCESS,
         payload: accessToken
+    }
+};
+
+export const loginUserFailed = (errors) => {
+    return {
+        type: LOGIN_USER_FAILED,
+        payload: errors
     }
 };
 

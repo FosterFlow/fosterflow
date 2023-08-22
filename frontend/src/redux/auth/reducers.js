@@ -1,6 +1,7 @@
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
+    LOGIN_USER_FAILED,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILED,
@@ -35,6 +36,7 @@ const INIT_STATE = {
     accessToken: undefined,
     loading: false,
     error: null,
+    loginErrors: null,
     confirmationEmailSent: false,
     isAuthenticated: JSON.parse(isAuthenticated ) || false,
     refreshTokenLoading: false,
@@ -91,7 +93,15 @@ const Auth = (state = INIT_STATE, action) => {
                 isAuthenticated: true,
                 accessToken: action.payload,
                 loading: false,
-                error: null
+                loginErrors: null
+            };
+
+        case LOGIN_USER_FAILED:
+            return { 
+                ...state,
+                isAuthenticated: false,
+                loading: false,
+                loginErrors: action.payload
             };
 
         case REGISTER_USER:
