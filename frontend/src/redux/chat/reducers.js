@@ -127,7 +127,7 @@ const Chat = (state = INIT_STATE, action) => {
             // Assuming the WebSocket message contains a new chat message
             return {
                 ...state,
-                messages: [...state.messages, action.payload.message]
+                messages: [...state.messages, action.payload]
             };
 
         default: return { ...state };

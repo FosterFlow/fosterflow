@@ -61,18 +61,18 @@ function UserChat(props) {
      */
     function messageMaxMidthUpdate (rerender) {
         if (rerender || (messageMaxWidth === 0 && chatWindowRef.current)) {
-            const width = chatWindowRef.current.clientWidth - 32;
-            setMessageMaxWidth(width);
+        const width = chatWindowRef.current.clientWidth - 32;
+        setMessageMaxWidth(width);
         }
     }
 
     // Add useEffect to auto scroll to bottom when messages update
     useEffect(() => {
         if (Array.isArray(messages) && messages.length > 0){
-            const { scrollHeight } = chatWindowRef.current;
-            if (userWasAtBottomRef.current){
-                chatWindowRef.current.scrollTop = scrollHeight;
-            }
+        const { scrollHeight } = chatWindowRef.current;
+        if (userWasAtBottomRef.current){
+        chatWindowRef.current.scrollTop = scrollHeight;
+        }
         }
     }, [messages]);
 
@@ -80,7 +80,7 @@ function UserChat(props) {
         window.addEventListener('resize', debounceHandleWindowResize);
         messageMaxMidthUpdate ();
         return () => {
-          window.removeEventListener('resize', debounceHandleWindowResize);
+        window.removeEventListener('resize', debounceHandleWindowResize);
         };
     }, []);
 

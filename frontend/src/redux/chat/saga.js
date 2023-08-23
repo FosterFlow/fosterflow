@@ -88,7 +88,9 @@ function createWebSocketChannel(socket) {
       emit(wsConnectionSuccess(socket));
     };
     socket.onmessage = (event) => {
-      emit(wsReceiveMessage(event.data));
+      const data = JSON.parse(event.data);
+      console.log("Chat saga reateWebSocketChannel onmessage", data);
+      emit(wsReceiveMessage(data.message));
     };
     socket.onerror = (event) => {
       emit(wsConnectionError(event));

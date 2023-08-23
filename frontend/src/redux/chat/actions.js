@@ -132,7 +132,7 @@ import {
     type: WS_CONNECTION_CLOSED
   });
   
-  export const wsReceiveMessage = (message) => ({
+  export const wsReceiveMessage = (messageChunk) => ({
     type: WS_RECEIVE_MESSAGE,
-    payload: message
+    payload: messageChunk
   });
