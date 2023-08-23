@@ -39,8 +39,8 @@ function CodeBlock({node, inline, className, children, ...props}) {
 function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
-    const { messages, activeDialogueId } = props;
-    const relevantMessages = messages.filter(message => message.dialog_id === activeDialogueId);
+    const { messages, activeChatId } = props;
+    const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
     const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
     const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
@@ -132,7 +132,7 @@ function UserChat(props) {
 const mapStateToProps = (state) => {
     return {
         messages: state.Chat.messages,
-        activeDialogueId: state.Chat.activeDialogueId,
+        activeChatId: state.Chat.activeChatId,
         chatWindow: state.Chat.chatWindow,
     }
 };

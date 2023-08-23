@@ -2,13 +2,14 @@ import environ
 import rest_framework.exceptions
 from django.contrib.auth import get_user_model
 from .filters import MessageFilter
-from .models import Dialog, Message
-from .permissions import IsOwnerDialog, IsOwnerMessage
-from .serializers import DialogModelSerializer, MessageModelSerializer
+from .models import Chat, Message
+from .permissions import IsOwnerChat, IsOwnerMessage
+from .serializers import ChatModelSerializer, MessageModelSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
 from auth_app.permissions import IsEmailConfirm
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -17,42 +18,44 @@ environ.Env.read_env()
 FRONTEND_URL = env('FRONTEND_URL')
 
 
-class DialogModelViewSet(ModelViewSet):
+class ChatModelViewSet(ModelViewSet):
     """
-    ViewSet class for the Dialog model.
+    ViewSet class for the Chats model.
 
-    This ViewSet provides CRUD functionality for Dialog objects.
+    This ViewSet provides CRUD functionality for Chats objects.
 
     Attributes:
-        queryset (QuerySet): The queryset of Dialog objects.
-        serializer_class (Serializer): The serializer class for Dialog objects.
+        queryset (QuerySet): The queryset of Chats objects.
+        serializer_class (Serializer): The serializer class for Chats objects.
         permission_classes (list): The list of permission classes.
         http_method_names (list): The list of allowed HTTP methods.
     """
 
-    queryset = Dialog.objects.all()
-    serializer_class = DialogModelSerializer
-    permission_classes = [IsOwnerDialog, IsEmailConfirm]
+    queryset = Chat.objects.all()
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsOwnerChat, IsEmailConfirm]
     http_method_names = ['get', 'post', 'delete']
 
     def get_queryset(self):
         """
-        Get the queryset of Dialog objects.
+        Get the queryset of Chats objects.
 
         This method filters the queryset based on the user's ownership.
 
         Returns:
-            QuerySet: The filtered queryset of Dialog objects.
+            QuerySet: The filtered queryset of Chats objects.
         """
 
-        owner_queryset = self.queryset.filter(user_id=self.request.user)
+        owner_queryset = self.queryset.filter(
+            Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
+        print(owner_queryset)
         return owner_queryset
 
     def destroy(self, request, *args, **kwargs):
         """
-        Destroy a Dialog object.
+        Destroy a Chats object.
 
-        This method deletes the specified Dialog object and returns a success message.
+        This method deletes the specified Chats object and returns a success message.
 
         Args:
             request (HttpRequest): The HTTP request object.
@@ -64,7 +67,7 @@ class DialogModelViewSet(ModelViewSet):
         item = self.get_object()
         item.delete()
         response = {
-            'message': 'Dialog deletes successfully',
+            'message': 'Chats deletes successfully',
         }
 
         return Response(response, status=status.HTTP_200_OK)
@@ -94,17 +97,18 @@ class MessageModelViewSet(ModelViewSet):
         """
         Get the queryset of Message objects.
 
-        This method filters the queryset based on the user's ownership and dialog ID.
+        This method filters the queryset based on the user's ownership and chat ID.
 
         Returns:
             QuerySet: The filtered queryset of Message objects.
         """
 
-        user_dialogs = Dialog.objects.filter(user_id=self.request.user)
-        owner_queryset = self.queryset.filter(dialog_id__in=user_dialogs)
+        user_chats = Chat.objects.filter(
+            Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
+        owner_queryset = self.queryset.filter(chat_id__in=user_chats)
 
-        dialog_id = self.request.query_params.get('dialog_id')
-        if not user_dialogs.filter(id=dialog_id).exists() and dialog_id:
+        chat_id = self.request.query_params.get('chat_id')
+        if not user_chats.filter(id=chat_id).exists() and chat_id:
             raise rest_framework.exceptions.PermissionDenied(
                 {
                     "errors": {
@@ -134,3 +138,14 @@ class MessageModelViewSet(ModelViewSet):
         }
 
         return Response(response, status=status.HTTP_200_OK)
+
+
+from django.shortcuts import render
+
+
+def index(request):
+    return render(request, "chat/index.html")
+
+
+def room(request, room_name):
+    return render(request, "chat/room.html", {"room_name": room_name})

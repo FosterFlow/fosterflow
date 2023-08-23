@@ -1,106 +1,467 @@
-import React, { useState } from 'react';
-import { Dropdown, DropdownMenu, DropdownItem, DropdownToggle, Card, Button } from "reactstrap";
-
-import SimpleBar from "simplebar-react";
-
-//Import components
-import CustomCollapse from "../../../components/CustomCollapse";
-
-//Import Images
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
-
-//i18n
+import React, { useEffect, useState } from 'react';
+import { 
+    Card, 
+    CardBody, 
+    CardHeader, 
+    Button, 
+    Form, 
+    FormGroup, 
+    Input, 
+    FormFeedback, 
+    Alert, 
+    Label,
+    Spinner 
+} from "reactstrap";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { connect } from "react-redux";
+import withRouter from "../../../components/withRouter";
+import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
+import { updateAgentData, changePassword, updateAgentAvatar } from '../../../redux/actions';
 
 function Settings(props) {
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [isOpen1, setIsOpen1] = useState(true);
-
-    /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
 
-    const toggleCollapse1 = () => {
-        setIsOpen1(!isOpen1);
-    };
+    function getAgentAvatar (){
+        if (selectedAvatar !== null){
+            return URL.createObjectURL(selectedAvatar);
+        }
 
-    const toggle = () => setDropdownOpen(!dropdownOpen);
+        if (props.agent && props.agent.agent) {
+          const agent = props.agent.agent;
+          return agent.avatar;
+        }
+        return "";
+      }
+
+    function submitAvatar (event){
+        event.preventDefault();
+
+        if (selectedAvatar !== null){
+            const user = props.user;
+            
+            if (user && user.authorizedUser) {
+                props.updateAgentAvatar(user.authorizedUser.id, selectedAvatar);
+                return;
+            }
+        }
+
+        //TODO: show exception, that avatar wasn't chosen
+    }
+
+    function getFirstName (){
+        return (props.agent
+        && props.agent.agent 
+        && props.agent.agent.first_name) || '';
+    }
+
+    function getLastName (){
+        return (props.agent
+            && props.agent.agent  
+            && props.agent.agent.last_name) || ''
+    }
+
+    //Filling the form after page reloading
+    useEffect(() => {
+        const lastName = getLastName();
+        const formikLastName = personalInfoForm.values.last_name;
+
+        if ((lastName !== "") && (formikLastName === "")) {
+            personalInfoForm.setFieldValue('last_name', lastName);
+        }
+
+        const firstName = getFirstName();
+        const formikFirstName = personalInfoForm.values.first_name;
+        
+        if ((firstName !== "") && (formikFirstName === "")) {
+            personalInfoForm.setFieldValue('first_name', firstName);
+        }
+    }, [props.agent]);
+
+    const personalInfoForm = useFormik({
+        initialValues: {
+            first_name: getFirstName(),
+            last_name: getLastName(),
+        },
+        validationSchema: Yup.object({
+            first_name: Yup.string()
+                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
+                .notRequired(),
+            last_name: Yup.string()
+                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
+                .notRequired()
+        }),
+        onSubmit: values => {
+            console.log('Settings page personalInfoForm', 'onSubmit', values);
+            const user = props.user;
+            if (user && user.authorizedUser) {
+                props.updateAgentData(user.authorizedUser.id, values);
+                return;
+            } 
+            //TODO: handle error if we don't have active User;
+            console.log ('Settings page personalInfoForm', 'onSubmit error', "No active user");
+        },
+    });
+
+    const securityForm = useFormik({
+        initialValues: {
+            old_password: '', // initialize with an empty string
+            new_password: ''     // initialize with an empty string
+        },
+        validationSchema: Yup.object({
+            old_password: Yup.string()  // no requirement since it's optional
+                .required(t('Please enter your current password')),
+            new_password: Yup.string() 
+                .required(t('Please enter new password'))
+                .matches(
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                    t('The password must meet the requirements below')  // Your custom error message for simplicity
+                )
+        }),
+        onSubmit: values => {
+            console.log('Settings page securityForm', 'onSubmit', values);
+            const oldPassword = values.old_password;
+            const newPassword = values.new_password;
+            props.changePassword(oldPassword, newPassword);
+        },
+    });
+
+
+    //TODO: reduce number of invokes
+    function getFirstNameErrors () {
+        let errors = [];
+        if (personalInfoForm.errors && personalInfoForm.errors.first_name) {
+            errors.push(personalInfoForm.errors.first_name);
+        }
+
+        if (props.agent 
+            && props.agent.agentDataErrors
+            && typeof props.agent.agentDataErrors === "object"
+            && props.agent.agentDataErrors.first_name) {
+
+            errors = [...errors, ...props.agent.agentDataErrors.first_name]
+        }
+
+        return errors
+    }
+
+    //TODO: reduce number of invokes
+    function getLastNameErrors () {
+        let errors = [];
+        if (personalInfoForm.errors && personalInfoForm.errors.last_name) {
+            errors.push(personalInfoForm.errors.last_name);
+        }
+
+        if (props.agent 
+            && props.agent.agentDataErrors
+            && typeof props.agent.agentDataErrors === "object"
+            && props.agent.agentDataErrors.last_name) {
+
+            errors = [...errors, ...props.agent.agentDataErrors.last_name]
+        }
+
+        return errors
+    }
+
+    //TODO: reduce number of invokes
+    function getOldPasswordErrors () {
+        let errors = [];
+        if (securityForm.errors && securityForm.errors.old_password) {
+            errors.push(securityForm.errors.old_password);
+        }
+
+        if (props.auth && props.auth.changePassswordErrors 
+            && typeof props.auth.changePassswordErrors === "object"
+            && props.auth.changePassswordErrors.old_password) {
+
+            errors = [...errors, ...props.auth.changePassswordErrors.old_password]
+        }
+
+        return errors
+    }
+
+    //TODO: reduce number of invokes
+    function getNewPasswordErrors () {
+        let errors = [];
+        if (securityForm.errors && securityForm.errors.new_password) {
+            errors.push(securityForm.errors.new_password);
+        }
+
+        if (props.auth && props.auth.changePassswordErrors 
+            && typeof props.auth.changePassswordErrors === "object"
+            && props.auth.changePassswordErrors.new_password) {
+
+            errors = [...errors, ...props.auth.changePassswordErrors.new_password]
+        }
+
+        return errors
+    }
 
     return (
         <React.Fragment>
-            <div className="chat-leftsidebar me-lg-1">
-                <div className="px-4 pt-4">
-                    <h4 className="mb-0">{t('Settings')}</h4>
-                </div>
-
-                <div className="text-center border-bottom p-4">
-                    <div className="mb-4 profile-user">
-                        <img src={avatar1} className="rounded-circle avatar-lg img-thumbnail"/>
-                        <Button type="button" color="light" className="avatar-xs p-0 rounded-circle profile-photo-edit">
-                            <i className="ri-pencil-fill"></i>
-                        </Button>
-
+            <div className="user-profile me-lg-1">
+                <div className="user-profile-wrapper">
+                    <div className="p-4">
+                        <h4 className="mb-0">{t('Settings')}</h4>
                     </div>
 
-                    <h5 className="font-size-16 mb-1 text-truncate">{t('Patricia Smith')}</h5>
-                    <Dropdown isOpen={dropdownOpen} toggle={toggle} className="d-inline-block mb-1">
-                        <DropdownToggle tag="a" className="text-muted pb-1 d-block" >
-                            {t('Available')} <i className="mdi mdi-chevron-down"></i>
-                        </DropdownToggle>
+                    <div className="user-profile-sroll-area">
+                        {
+                            (props.agent && props.agent.errors) &&
+                            <Alert color="danger">{props.agent.errors}</Alert>
+                        }
+                        {/* Start Avatar card */}
+                        <div className="p-4">
+                            <Card className="border">
+                                <CardHeader>
+                                    {t('User\'s photo')}
+                                </CardHeader>
+                                <CardBody>
+                                    {
+                                        (props.agent && props.agent.avatarErrors 
+                                            && typeof props.agent.avatarErrors === "string") &&
+                                        <Alert color="danger">{props.agent.avatarErrors}</Alert>
+                                    }
+                                    {
+                                         props.agent.avatarSuccess &&
+                                         <Alert color="success">{t("The photo has been successfully updated")}.</Alert>
+                                    }
+                                    <Form onSubmit={submitAvatar}>
+                                        <FormGroup>
+                                            <Label>{t('Photo')}</Label>
+                                            <div className='pb-3'>
+                                            <img 
+                                                src={getAgentAvatar ()} 
+                                                className="rounded-circle avatar-lg img-thumbnail"
+                                                />
+                                            </div>
+                                            <Input
+                                                id="exampleFile"
+                                                name="file"
+                                                type="file"
+                                                disabled={props.agent.avatarLoading}
+                                                onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
+                                            />
+                                            <FormFeedback>
+                                                {
+                                                    props.agent 
+                                                    && props.agent.avatarErrors 
+                                                    && typeof props.avatarErrors === "object"
+                                                    && props.agent.avatarErrors.avatar
+                                                }
+                                            </FormFeedback>
+                                        </FormGroup>
+                                        <Button type="submit" disabled={props.agent.avatarLoading}>
+                                            {props.agent.avatarLoading &&
+                                                <div className='pe-2 d-inline-block'>
+                                                    <Spinner color="primary" size="sm"/>
+                                                </div>
+                                            }
+                                            {t('Update')}
+                                        </Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </div>
+                        {/* End Avatar card */}
+                        {/* Start Personal information card */}
+                        <div className="p-4">
+                            <Card className="border">
+                                <CardHeader>
+                                    {t('Personal information')}
+                                </CardHeader>
+                                <CardBody>
+                                    {
+                                        (props.agent && props.agent.agentDataErrors 
+                                            && typeof props.agent.agentDataErrors === "string") &&
+                                        <Alert color="danger">{props.agent.agentDataErrors}</Alert>
+                                    }
+                                    {
+                                         props.agent.agentDataSuccess &&
+                                         <Alert color="success">{t("Personal information has been successfully updated")}.</Alert>
+                                    }
+                                    <Form onSubmit={personalInfoForm.handleSubmit}>
+                                        <FormGroup>
+                                            <Label>{t('First Name')}</Label>
+                                            <Input 
+                                                type="text" 
+                                                name="first_name" 
+                                                value={personalInfoForm.values.first_name}
+                                                onChange={personalInfoForm.handleChange}
+                                                onBlur={personalInfoForm.handleBlur}
+                                                invalid={getFirstNameErrors().length > 0 ? true : false}
+                                                placeholder={t('Enter first name')}
+                                                disabled={props.agent.agentDataLoading}
+                                            />
+                                            <FormFeedback>
+                                                {
+                                                    getFirstNameErrors().length > 0 && (
+                                                        <ul>
+                                                            {getFirstNameErrors().map((error, index) => (
+                                                                <li key={index}>{error}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )
+                                                }
+                                            </FormFeedback>
+                                        </FormGroup>
 
-                        <DropdownMenu>
-                            <DropdownItem>{t('Available')}</DropdownItem>
-                            <DropdownItem>{t('Busy')}</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                </div>
-                {/* End profile user */}
+                                        <FormGroup>
+                                            <Label>{t('Second Name')}</Label>
+                                            <Input 
+                                                type="text" 
+                                                name="last_name" 
+                                                value={personalInfoForm.values.last_name}
+                                                onChange={personalInfoForm.handleChange}
+                                                onBlur={personalInfoForm.handleBlur}
+                                                invalid={getLastNameErrors().length > 0 ? true : false}
+                                                placeholder={t('Enter second name')}
+                                                disabled={props.agent.agentDataLoading}
+                                            />
+                                            <FormFeedback>
+                                                {
+                                                    getLastNameErrors().length > 0 && (
+                                                        <ul>
+                                                            {getLastNameErrors().map((error, index) => (
+                                                                <li key={index}>{error}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )
+                                                }
+                                            </FormFeedback>
+                                        </FormGroup>
+                                        <Button type="submit" disabled={props.agent.agentDataLoading}>
+                                            {props.agent.agentDataLoading &&
+                                                <div className='pe-2 d-inline-block'>
+                                                    <Spinner color="primary" size="sm"/>
+                                                </div>
+                                            }
+                                            {t('Update')}
+                                        </Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </div>
+                        {/* End Personal information card */}
+                        {/* Start Security section card */}
+                        <div className="p-4">
+                            <Card className="border">
+                                <CardHeader>
+                                    {t('Security section')}
+                                </CardHeader>
+                                <CardBody>
+                                    {
+                                        (props.auth && props.auth.changePassswordErrors 
+                                            && typeof props.auth.changePassswordErrors === "string") &&
+                                        <Alert color="danger">{props.auth.changePassswordErrors}</Alert>
+                                    }
+                                    {
+                                         props.auth.changePasswordSuccess &&
+                                         <Alert color="success">{t("The password has been successfully changed")}.</Alert>
+                                    }
+                                    <Form onSubmit={securityForm.handleSubmit}>
+                                        <FormGroup className='border p-3'>
+                                            <Label>{t('Email')}:</Label>
+                                            <div>
+                                                {
+                                                    props.user && props.user.authorizedUser 
+                                                    && props.user.authorizedUser.email ||
+                                                    t('Email information not found')
+                                                }
+                                            </div>
+                                        </FormGroup>
 
-                {/* Start User profile description */}
-                <SimpleBar style={{ maxHeight: "100%" }} className="p-4 user-profile-desc">
-
-                    <div id="profile-setting-accordion" className="custom-accordion">
-                        <Card className="accordion-item border mb-2">
-                            <CustomCollapse
-                                title="Personal Info"
-                                isOpen={isOpen1}
-                                toggleCollapse={toggleCollapse1}
-                            >
-
-                                <div className="float-end">
-                                    <Button color="light" size="sm" type="button" ><i className="ri-edit-fill me-1 align-middle"></i> {t('Edit')}</Button>
-                                </div>
-
-                                <div>
-                                    <p className="text-muted mb-1">{t('Name')}</p>
-                                    <h5 className="font-size-14">{t('Patricia Smith')}</h5>
-                                </div>
-
-                                <div className="mt-4">
-                                    <p className="text-muted mb-1">{t('Email')}</p>
-                                    <h5 className="font-size-14">'adc@123.com'</h5>
-                                </div>
-
-                                <div className="mt-4">
-                                    <p className="text-muted mb-1">{t('Time')}</p>
-                                    <h5 className="font-size-14">'11:40 AM'</h5>
-                                </div>
-
-                                <div className="mt-4">
-                                    <p className="text-muted mb-1">{t('Location')}</p>
-                                    <h5 className="font-size-14 mb-0">{t('California')}, {t('USA')}</h5>
-                                </div>
-                            </CustomCollapse>
-                            
-                        </Card>
-                        {/* end profile card */}
-
+                                        <FormGroup>
+                                            <Label>{t('Reset password')}</Label>
+                                            <div className='pb-4'>
+                                                <Input 
+                                                    type="password" 
+                                                    name="old_password" 
+                                                    value={securityForm.values.old_password}
+                                                    onChange={securityForm.handleChange}
+                                                    onBlur={securityForm.handleBlur}
+                                                    invalid={getOldPasswordErrors().length > 0 ? true : false}
+                                                    placeholder={t('Enter current password')}
+                                                    disabled={props.auth.changePasswordLoading}
+                                                />
+                                                <FormFeedback>
+                                                    {
+                                                        getOldPasswordErrors().length > 0 && (
+                                                            <ul>
+                                                                {getOldPasswordErrors().map((error, index) => (
+                                                                    <li key={index}>{error}</li>
+                                                                ))}
+                                                            </ul>
+                                                        )
+                                                    }
+                                                </FormFeedback>
+                                            </div>
+                                            
+                                            <Input 
+                                                type="password" 
+                                                name="new_password" 
+                                                value={securityForm.values.new_password}
+                                                onChange={securityForm.handleChange}
+                                                onBlur={securityForm.handleBlur}
+                                                invalid={getNewPasswordErrors().length > 0 ? true : false}
+                                                placeholder={t('Enter new password')}
+                                                disabled={props.auth.changePasswordLoading}
+                                            />
+                                            <FormFeedback>
+                                                {
+                                                    getNewPasswordErrors().length > 0 && (
+                                                        <ul>
+                                                            {getNewPasswordErrors().map((error, index) => (
+                                                                <li key={index}>{error}</li>
+                                                            ))}
+                                                        </ul>
+                                                    )
+                                                }
+                                            </FormFeedback>    
+                                            <ul className='pt-3'>
+                                                <li>{t('At least one lowercase character')}.</li>
+                                                <li>{t('At least one uppercase character')}.</li>
+                                                <li>{t('At least one digit')}.</li>
+                                                <li>{t('At least one special character (in this set: @ $ ! % * ? & #)')}.</li>
+                                                <li>{t('At least 8 characters in total')}.</li>
+                                            </ul>
+                                        </FormGroup>
+                                        <Button type="submit" disabled={props.auth.changePasswordLoading}>
+                                            {props.auth.changePasswordLoading &&
+                                                <div className='pe-2 d-inline-block'>
+                                                    <Spinner color="primary" size="sm"/>
+                                                </div>
+                                            }
+                                            {t('Update password')}
+                                        </Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
+                        </div>
+                        {/* End security card */}
                     </div>
-                    {/* end profile-setting-accordion */}
-                </SimpleBar>
-                {/* End User profile description */}
+                    {/* End User profile description */}   
+                </div>
+                {/* End scroll areaa */} 
+                <SideBarMenuMobile /> 
             </div>
         </React.Fragment>
     );
 }
 
-export default Settings;
+//TODO: suscribe only to required fields
+const mapStateToProps = (state) => ({
+    agent: state.Agent,
+    user: state.User,
+    auth: state.Auth
+});
+
+const mapDispatchToProps = {
+    updateAgentData,
+    changePassword,
+    updateAgentAvatar
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));

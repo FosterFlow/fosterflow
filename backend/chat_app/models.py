@@ -1,28 +1,36 @@
 from django.db import models
-from django.conf import settings
+from user_app.models import Agent
 
 
-class Dialog(models.Model):
+class Chat(models.Model):
     """
-    Model representing a dialog.
+    Model representing a chat.
 
     Attributes:
-        user_id (ForeignKey): The user associated with the dialog.
-        name (TextField): The name of the dialog.
-        created_at (DateTimeField): The date and time of dialog creation.
-        updated_at (DateTimeField): The date and time of dialog update.
+        user_id (ForeignKey): The user associated with the chat.
+        name (TextField): The name of the chat.
+        created_at (DateTimeField): The date and time of chat creation.
+        updated_at (DateTimeField): The date and time of chat update.
     """
 
-    user_id = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+    owner_id = models.ForeignKey(
+        Agent,
         on_delete=models.CASCADE,
+        related_name='owner_id',
+        null=True,
+    )
+    addressee_id = models.ForeignKey(
+        Agent,
+        on_delete=models.CASCADE,
+        related_name='addressee_id',
+        null=True,
     )
     name = models.TextField(max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.id} {self.user_id}'
+        return f'{self.id} {self.owner_id}'
 
 
 class Message(models.Model):
@@ -30,17 +38,22 @@ class Message(models.Model):
     Model representing a message.
 
     Attributes:
-        dialog_id (ForeignKey): The dialog associated with the message.
+        chat_id (ForeignKey): The chat associated with the message.
         message_text (TextField): The text of the message.
         answer_text (TextField): The text of the answer (optional).
     """
 
-    dialog_id = models.ForeignKey(
-        Dialog,
+    chat_id = models.ForeignKey(
+        Chat,
         on_delete=models.CASCADE,
     )
     message_text = models.TextField()
-    answer_text = models.TextField(blank=True)
+    owner_id = models.ForeignKey(
+        Agent,
+        on_delete=models.CASCADE,
+        null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.id} {self.dialog_id.user_id}'
+        return f'{self.id} {self.owner_id}'

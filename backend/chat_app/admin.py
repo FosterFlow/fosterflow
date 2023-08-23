@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Dialog, Message
+from .models import Chat, Message
+from django.contrib import admin
 
-admin.site.register(Dialog)
-admin.site.register(Message)
+
+class MessageModelAdmin(admin.ModelAdmin):
+    list_filter = [
+        "chat_id",
+    ]
+
+
+admin.site.register(Chat)
+admin.site.register(Message, MessageModelAdmin)

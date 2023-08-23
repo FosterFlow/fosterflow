@@ -6,7 +6,7 @@ class MessageFilter(filters.FilterSet):
     """
     Filter class for the Message model.
 
-    This class defines filters for the Message model based on the `dialog_id` field.
+    This class defines filters for the Message model based on the `chat_id` field.
 
     Meta:
         model (Message): The model to filter.
@@ -15,4 +15,4 @@ class MessageFilter(filters.FilterSet):
 
     class Meta:
         model = Message
-        fields = ['dialog_id']
+        fields = ['chat_id']

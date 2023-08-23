@@ -3,7 +3,7 @@ import { Row, Col } from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import { deleteDialogue as actionDeleteDialogue, showChatWindow, setActiveNewChat} from "../../../redux/chat/actions";
+import { deleteChat as actionDeleteChat, showChatWindow, setActiveNewChat} from "../../../redux/chat/actions";
 
 function UserHead(props) {
     const id = Number(props.router.params.id) || 0;
@@ -18,10 +18,10 @@ function UserHead(props) {
         props.setActiveNewChat(false);
     }
 
-    function deleteDialogue(event) {
+    function deleteChat(event) {
         event.preventDefault();
-        console.log("UserHead deleteDialogue activeDialogueId ", props.activeDialogueId);
-        props.actionDeleteDialogue(props.activeDialogueId);
+        console.log("UserHead deleteChat activeChatId ", props.activeChatId);
+        props.actionDeleteChat(props.activeChatId);
         props.router.navigate("/chats/");
     }
 
@@ -37,7 +37,7 @@ function UserHead(props) {
                     {/* TODO: don't show on intial "/chats" page */}
                     <Col sm={1} xs={2} >
                         {!props.newChat && (
-                            <a href="#" onClick={(event) => deleteDialogue(event)} className="user-chat-delete p-2 ri-delete-bin-line"></a>
+                            <a href="#" onClick={(event) => deleteChat(event)} className="user-chat-delete p-2 ri-delete-bin-line"></a>
                         )}
                     </Col>
                 </Row>
@@ -52,13 +52,13 @@ const mapStateToProps = (state) => {
 
     console.log("Dashabord Tabs UserHead mapStateToProps state", state);
     return { 
-        activeDialogueId: state.Chat.activeDialogueId,
+        activeChatId: state.Chat.activeChatId,
         newChat: state.Chat.newChat,
     };
 };
 
 const mapDispatchToProps = {
-    actionDeleteDialogue,
+    actionDeleteChat,
     showChatWindow,
     setActiveNewChat
 }

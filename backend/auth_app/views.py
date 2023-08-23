@@ -5,6 +5,7 @@ from django.utils.html import strip_tags
 from django_rest_passwordreset.tokens import get_token_generator
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
+from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
 from .models import EmailConfirmationToken
@@ -77,7 +78,7 @@ class UserLoginAPIView(GenericAPIView):
             )
 
             response['CSRFToken'] = csrf.get_token(request)
-            data = {"refresh": str(token), "access": str(token.access_token)}
+            data = {"access": str(token.access_token)}
             response.data = data
             response.status_code = status.HTTP_200_OK
         else:
@@ -117,11 +118,14 @@ class UserLogoutAPIView(GenericAPIView):
             Response: The HTTP response containing the success message or error details.
         """
 
+        response = Response()
         try:
-            refresh_token = request.data["refresh"]
+            refresh_token = request.COOKIES.get('refresh')
+            if refresh_token is None:
+                response = {"errors": {'details': ['Refresh is None']}}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
             token = RefreshToken(refresh_token)
             token.blacklist()
-            response = Response()
             response.delete_cookie('refresh')
             response.data = {
                 'message': 'Logout successfully',
@@ -186,7 +190,7 @@ class RegisterApi(generics.GenericAPIView):
 
             response['CSRFToken'] = csrf.get_token(request)
 
-            data = {"refresh": str(token), "access": str(token.access_token)}
+            data = {"access": str(token.access_token)}
             response.data = data
             response.status_code = status.HTTP_200_OK
 
@@ -443,19 +447,44 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 
 
 class CustomTokenRefreshView(TokenRefreshView):
-    def finalize_response(self, request, response, *args, **kwargs):
-        response = super().finalize_response(request, response, *args, **kwargs)
+    def post(self, request, *args, **kwargs):
+        response = Response()
+        try:
+            refresh = request.COOKIES.get('refresh')
+            if refresh is None:
+                response = {"errors": {'details': ['Refresh is None']}}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+            token_class = RefreshToken
 
-        refresh_token = response.data.get("refresh")
+            refresh = token_class(refresh)
+        except Exception as e:
+            response = {"errors": {'details': e.args}}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
-        if refresh_token:
+        data = {"access": str(refresh.access_token)}
+
+        if api_settings.ROTATE_REFRESH_TOKENS:
+            if api_settings.BLACKLIST_AFTER_ROTATION:
+                try:
+                    # Attempt to blacklist the given refresh token
+                    refresh.blacklist()
+                except AttributeError:
+                    # If blacklist app not installed, `blacklist` method will
+                    # not be present
+                    pass
+
+            refresh.set_jti()
+            refresh.set_exp()
+            refresh.set_iat()
+
             response.set_cookie(
                 key=settings.SIMPLE_JWT['AUTH_COOKIE_REFRESH'],
-                value=refresh_token,
+                value=str(refresh),
                 expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
                 secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
                 httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
                 samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
-
+            response.data = data
+            response.status_code = status.HTTP_200_OK
         return response

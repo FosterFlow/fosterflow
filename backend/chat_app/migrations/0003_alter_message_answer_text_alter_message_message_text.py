@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='message',
             name='answer_text',
-            field=models.TextField(blank=True),
+            field=models.TextField(blank=True, null=True),
         ),
         migrations.AlterField(
             model_name='message',

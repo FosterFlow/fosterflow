@@ -20,6 +20,7 @@ const authProtectedRoutes = [
   { path: "/chats/:id", component: <Chats /> },
   { path: "/profile", component: <Profile /> },
   { path: "/settings", component: <Settings /> },
+  //TODO:  don't render the page
   { path: "/logout", component: <Logout /> },
 
     // this route should be at the end of all other routes

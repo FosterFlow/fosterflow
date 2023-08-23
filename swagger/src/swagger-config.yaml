@@ -4,7 +4,7 @@ info:
   description: Authorization must take place via token. Enter the token with the `Bearer` prefix, e.g. "Bearer abcde12345".
   termsOfService: https://www.google.com/policies/terms/
   version: v1
-host: 127.0.0.1:8000
+host: localhost:8000
 basePath: /api
 consumes:
   - application/json
@@ -19,13 +19,13 @@ securityDefinitions:
     description: >-
       Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
 tags:
-  - name: dialogues
-    description: The dialog is needed for grouping messages
+  - name: chats
+    description: The chat is needed for grouping messages
   - name: messages
     description: This is what the user sends and receives a response
   - name: users
     description: The model for User
-  - name: profiles
+  - name: agents
     description: Information containing user data
   - name: register
     description: Registering a new user
@@ -40,24 +40,24 @@ tags:
   - name: confirmation-email
     description: An Api View which provides send and confirm email
 paths:
-  /dialogues/:
+  /chats/:
     get:
-      summary: Get all the dialogs
-      description: 'Get all the dialogs. The dialogs will be filtered by user, who make request.'
+      summary: Get all the chats
+      description: 'Get all the chats. The chats will be filtered by user, who make request.'
       security:
         - Bearer: [ ]
       responses:
         '200':
-          description: 'The answer will be all the users dialogs'
+          description: 'The answer will be all the users chats'
           schema:
-            $ref: '#/definitions/DialogModel'
+            $ref: '#/definitions/ChatModel'
           examples:
             application/json:
               [
                 {
                   "id": 18,
                   "latest_message": null,
-                  "name": "DialogName",
+                  "name": "ChatName",
                   "created_at": "2023-06-23T09:15:34.562981Z",
                   "updated_at": "2023-06-23T09:15:34.562998Z",
                   "user_id": 1
@@ -65,7 +65,7 @@ paths:
                 {
                   "id": 19,
                   "latest_message": "I am ... ",
-                  "name": "DialogName",
+                  "name": "ChatName",
                   "created_at": "2023-06-23T09:21:32.283418Z",
                   "updated_at": "2023-06-23T09:21:32.283434Z",
                   "user_id": 1
@@ -73,7 +73,7 @@ paths:
                 {
                   "id": 20,
                   "latest_message": "Hello",
-                  "name": "DialogName",
+                  "name": "ChatName",
                   "created_at": "2023-06-23T09:21:34.937211Z",
                   "updated_at": "2023-06-23T09:21:34.937226Z",
                   "user_id": 1
@@ -84,17 +84,17 @@ paths:
           schema:
             $ref: '#/definitions/TokenNotValid'
       tags:
-        - dialogues
+        - chats
     post:
       security:
         - Bearer: [ ]
-      operationId: dialogues_create
-      summary: Add a new dialog
+      operationId: chats_create
+      summary: Add a new chat
       parameters:
         - name: body
           in: body
           required: true
-          description: 'Dialog object that needs to be added:'
+          description: 'Chats object that needs to be added:'
           type: object
           properties:
             user_id:
@@ -106,12 +106,12 @@ paths:
               type: string
               maxLength: 200
               minLength: 1
-              example: 'DialogName'
+              example: 'ChatName'
       responses:
         '201':
           description: 'Successful operation'
           schema:
-            $ref: '#/definitions/DialogModel'
+            $ref: '#/definitions/ChatModel'
 
         400:
           description: Bad request.
@@ -126,21 +126,21 @@ paths:
           schema:
             $ref: '#/definitions/Forbidden'
       tags:
-        - dialogues
+        - chats
     parameters: [ ]
-  /dialogues/{id}/:
+  /chats/{id}/:
     delete:
       security:
         - Bearer: [ ]
-      operationId: dialogues_delete
-      summary: 'Deletes a dialog'
+      operationId: chats_delete
+      summary: 'Deletes a chat'
       responses:
         '200':
           description: 'successful operation'
           examples:
             application/json:
               {
-                "message": "Dialog delete successfully"
+                "message": "Chats delete successfully"
               }
         400:
           description: Bad request.
@@ -154,14 +154,62 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/NotFound'
+      parameters:
+        - name: id
+          in: path
+          description: A unique integer value identifying this chat.
+          required: true
+          type: integer
       tags:
-        - dialogues
-    parameters:
-      - name: id
-        in: path
-        description: A unique integer value identifying this dialog.
-        required: true
-        type: integer
+        - chats
+    options:
+      security:
+        - Bearer: [ ]
+      summary: Instruction to connect websocket
+      description: >-
+        To connect to the chat websocket, you should make the following request: <br>
+        ws://localhost:8000/ws/chats/**{chat_id}**/?access=**{access_token}** <br>
+        Where **{chat_id}** - ID Chat, **{access_token}** - token for auth <br>
+        <br>
+        After connection you can write message to chat. You should use this structure: <br>
+        {"message": "**{your message}**"} <br>
+        Where **{your message}** - message to sent <br>
+        <br>
+        Receiving messages looks like this: <br>
+        {"message": "", "finish_reason": ""} <br>
+        Where **message** - text message and **finish_reason** - an attribute that makes it clear whether the response has ended. There can only be a **null** or **stop** value<br>
+        <br>
+        <br>
+        Example cod on JavaScript: <br>
+        
+        **Connect to WebSocket:** <br>
+        const chatSocket = new WebSocket( 
+            &nbsp; &nbsp; 'ws://' 
+            &nbsp; &nbsp; + window.location.host 
+            &nbsp; &nbsp; + '/ws/chats/' 
+            &nbsp; &nbsp; + chat_id 
+            &nbsp; &nbsp; + '/?access=' 
+            &nbsp; &nbsp; + localStorage.getItem('access') 
+        );<br>
+        
+        **Send message to WebSocket:** <br>
+        chatSocket.send(JSON.stringify({ <br>
+        &nbsp; &nbsp; 'message': message <br>
+        });<br>
+        
+        **Take message from WebSocket:** <br>
+        chatSocket.onmessage = function(e) {
+            &nbsp; &nbsp; const data = JSON.parse(e.data);
+            &nbsp; &nbsp; document.querySelector('#chat-log').value += (data.message);
+            &nbsp; &nbsp; if(data.finish_reason === "stop"){
+            &nbsp; &nbsp; &nbsp; &nbsp; document.querySelector('#chat-log').value += "END" ;
+            &nbsp; &nbsp; }
+        }; <br>
+      responses:
+        101:
+          description: Switching Protocols
+      tags:
+        - chats
   /messages/:
     get:
       security:
@@ -170,9 +218,9 @@ paths:
       summary: Get all the messages
       description: 'Get all the messages. The messages will be filtered by user, who make request.'
       parameters:
-        - name: dialog_id
+        - name: chat_id
           in: query
-          description: 'Get all the messages by dialog. Only the owner of the dialog will receive the messages'
+          description: 'Get all the messages by chat. Only the owner of the chat will receive the messages'
           required: false
           type: string
       responses:
@@ -189,19 +237,19 @@ paths:
                   "id": 1,
                   "message_text": "Hello Message",
                   "answer_text": "Hello Answer",
-                  "dialog": 1
+                  "chat": 1
                 },
                 {
                   "id": 2,
                   "message_text": "Hello Message2",
                   "answer_text": "Hello Answer2",
-                  "dialog": 1
+                  "chat": 1
                 },
                 {
                   "id": 4,
                   "message_text": "3",
                   "answer_text": "work there",
-                  "dialog": 1
+                  "chat": 1
                 },
               ]
         400:
@@ -238,8 +286,8 @@ paths:
                 maxLength: 200
                 minLength: 1
                 example: Hello, how are you?
-              dialog_id:
-                title: Dialog_id
+              chat_id:
+                title: chat_id
                 type: integer
                 example: 1
       responses:
@@ -253,7 +301,7 @@ paths:
                 "id": 5,
                 "message_text": "Hello, how are you?",
                 "answer_text": "I'm doing well, thank you. How about you?",
-                "dialog_id": 1
+                "chat_id": 1
               }
         400:
           description: Bad request.
@@ -288,7 +336,7 @@ paths:
                 "id": 5,
                 "message_text": "Hello, how are you?",
                 "answer_text": "I'm doing well, thank you. How about you?",
-                "dialog_id": 1
+                "chat_id": 1
               }
         400:
           description: Bad request.
@@ -357,10 +405,8 @@ paths:
           examples:
             application/json:
               {
-                "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4NjkxOTA4NiwiaWF0IjoxNjg2ODMyNjg2LCJqdGkiOiIxYmVhOGVmY2YwYjc0NTVkODY0NTU3MDg4MGI5ZWIxZCIsInVzZXJfaWQiOjR9.Jn667YJy4p0Y958TmW9zIcj2BCS-_E_APRvi_fI2axk",
                 "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg2ODM2Mjg2LCJpYXQiOjE2ODY4MzI2ODYsImp0aSI6ImI0OWQyZDE5NzgwZTQ3Y2M5MzJjZmJlMzZmN2UyMjI2IiwidXNlcl9pZCI6NH0.VQjwSsOuBD8UDlu966e-N3RlBZEJpWVt3rvSqg_oQGU"
               }
-
         400:
           description: Bad request.
           schema:
@@ -392,8 +438,6 @@ paths:
           schema:
             type: object
             properties:
-              refresh:
-                type: string
               access:
                 type: string
         400:
@@ -410,23 +454,12 @@ paths:
       description: |-
         Takes a refresh type JSON web token and returns an access type JSON web
         token if the refresh token is valid.
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              refresh:
-                type: string
       responses:
         '200':
           description: 'The answer will be refresh access and refresh tokens'
           schema:
             type: object
             properties:
-              refresh:
-                type: string
               access:
                 type: string
         400:
@@ -436,13 +469,13 @@ paths:
       tags:
         - token
     parameters: [ ]
-  /profiles/:
+  /agents/:
     get:
-      summary: Get all the profiles
+      summary: Get all the agents
       security:
         - Bearer: [ ]
-      operationId: profiles_list
-      description: Get, Update user profile
+      operationId: agents_list
+      description: Get, Update user agent
       parameters: [ ]
       responses:
         '200':
@@ -450,7 +483,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Profile'
+              $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -460,21 +493,21 @@ paths:
           schema:
             $ref: '#/definitions/TokenNotValid'
       tags:
-        - profiles
+        - agents
     parameters: [ ]
-  /profile/:
+  /agent/:
     get:
-      summary: Get user profiles
+      summary: Get user agents
       security:
         - Bearer: [ ]
-      description: Get user profiles
+      description: Get user agents
       responses:
         '200':
           description: ''
           schema:
             type: array
             items:
-              $ref: '#/definitions/Profile'
+              $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -488,21 +521,21 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - profiles
+        - agents
     parameters: [ ]
-  /profiles/{id}/:
+  /agents/{id}/:
     get:
-      summary: Get profile by ID
+      summary: Get agent by ID
       security:
         - Bearer: [ ]
-      operationId: profiles_read
-      description: Get, Update user profile
+      operationId: agents_read
+      description: Get, Update user agent
       parameters: [ ]
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Profile'
+            $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -516,13 +549,13 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - profiles
+        - agents
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit profile by ID
-      operationId: profiles_update
-      description: Get, Update user profile
+      summary: Edit agent by ID
+      operationId: agents_update
+      description: Get, Update user agent
       parameters:
         - name: data
           in: body
@@ -533,20 +566,16 @@ paths:
               first_name:
                 type: string
                 example: 'FirstLorem'
-                pattern: '^[a-zA-Z_.-][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$'
+                pattern: '^[^@$%&*#!?()№;~:]+$'
               last_name:
                 type: string
                 example: 'SecondLorem'
-                pattern: '^[a-zA-Z_.-][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$'
-        - in: formData
-          name: avatar
-          type: file
-          description: The Picture to upload.
+                pattern: '^[^@$%&*#!?()№;~:]+$'
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Profile'
+            $ref: '#/definitions/Agent'
         400:
           description: Bad request.
           schema:
@@ -560,13 +589,48 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - profiles
+        - agents
     parameters:
       - name: id
         in: path
-        description: A unique integer value identifying this profile.
+        description: A unique integer value identifying this agent.
         required: true
         type: integer
+
+  /agents/{id}/avatar/:
+    patch:
+      security:
+        - Bearer: [ ]
+      summary: Edit agent by ID
+      operationId: agents_avatar_update
+      description: Update Agent avatar
+      parameters:
+        - in: formData
+          name: avatar
+          type: file
+          description: The Picture to upload.
+      responses:
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - agents
+    parameters:
+      - name: id
+        in: path
+        description: A unique integer value identifying this agent.
+        required: true
+        type: integer
+
   /users/:
     get:
       security:
@@ -749,15 +813,6 @@ paths:
       summary: An endpoint to logout users.
       description: |-
         Add JWT to blacklist
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            type: object
-            properties:
-              refresh:
-                type: string
       responses:
         200:
           description: Successful operation
@@ -916,7 +971,7 @@ paths:
         - confirmation-email
     parameters: [ ]
 definitions:
-  DialogModel:
+  ChatModel:
     required:
       - user_id
       - name
@@ -942,7 +997,7 @@ definitions:
         type: string
         maxLength: 200
         minLength: 1
-        example: 'DialogName'
+        example: 'ChatName'
       created_at:
         title: Created at
         type: date
@@ -954,7 +1009,7 @@ definitions:
   MessageModel:
     required:
       - message_text
-      - dialog_id
+      - chat_id
     type: object
     properties:
       id:
@@ -973,8 +1028,8 @@ definitions:
         type: string
         maxLength: 200
         example: answer_text
-      dialog_id:
-        title: Dialog_id
+      chat_id:
+        title: chat_id
         type: integer
         example: 1
   Register:
@@ -1027,10 +1082,6 @@ definitions:
       - refresh
     type: object
     properties:
-      refresh:
-        title: Refresh
-        type: string
-        minLength: 1
       access:
         title: Access
         type: string

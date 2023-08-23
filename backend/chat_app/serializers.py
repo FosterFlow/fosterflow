@@ -1,50 +1,49 @@
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
-from .models import Dialog, Message
+from .models import Chat, Message
 from rest_framework import serializers
 from .request_to_agent import take_answer
 
 User = get_user_model()
 
 
-class DialogModelSerializer(ModelSerializer):
+class ChatModelSerializer(ModelSerializer):
     """
-    Serializer class for the Dialog model.
+    Serializer class for the Chats model.
 
-    This serializer is used to serialize and deserialize Dialog objects.
+    This serializer is used to serialize and deserialize Chats objects.
 
     Fields:
-        latest_message (SerializerMethodField): The latest message associated with the dialog.
+        latest_message (SerializerMethodField): The latest message associated with the chat.
     """
 
     latest_message = serializers.SerializerMethodField()
 
     class Meta:
-        model = Dialog
+        model = Chat
         fields = '__all__'
 
     def get_latest_message(self, obj):
         """
-        Get the latest message associated with the dialog.
+        Get the latest message associated with the chat.
 
-        This method retrieves the latest message associated with the dialog
-        by filtering the messages based on the dialog ID and ordering them
+        This method retrieves the latest message associated with the chat
+        by filtering the messages based on the chat ID and ordering them
         by descending ID. It returns the answer text of the latest message
         or None if no messages are found.
 
         Args:
-            obj (Dialog): The Dialog object.
+            obj (Chat): The Chats object.
 
         Returns:
             str or None: The answer text of the latest message or None.
         """
-
         try:
             customer_account_query = Message.objects.filter(
-                dialog_id=obj.id
+                chat_id=obj.id
             ).latest('id')
 
-            return customer_account_query.answer_text
+            return customer_account_query.message_text
         except Exception as e:
             return None
 
@@ -71,14 +70,12 @@ class MessageModelSerializer(ModelSerializer):
         It generates an answer text using the `take_answer` utility function.
 
         Args:
-            validated_data (dict): The validated data containing message_text and dialog_id.
+            validated_data (dict): The validated data containing message_text and chat_id.
 
         Returns:
             Message: The created message instance.
         """
 
-        if 'answer_text' in validated_data:
-            validated_data.pop('answer_text')
-        answer_text = take_answer(validated_data['message_text'], validated_data['dialog_id'])
-        message = Message.objects.create(answer_text=answer_text, **validated_data)
+        answer_text = "take_answer(validated_data['message_text'], validated_data['chat_id'])"
+        message = Message.objects.create(**validated_data)
         return message
