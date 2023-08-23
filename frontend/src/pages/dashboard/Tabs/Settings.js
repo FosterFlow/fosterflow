@@ -23,6 +23,7 @@ import config from '../../../config';
 
 function Settings(props) {
     const { t } = useTranslation();
+    const { agent } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
 
     //TODO: redevelop to flat structure into agent and remove this method
@@ -31,18 +32,14 @@ function Settings(props) {
             return URL.createObjectURL(selectedAvatar);
         }
 
-        if (props.agent) {
-          
-            if (props.agent.agent) {
-                const agent = props.agent
-          
-                if (agent.agent && agent.agent.avatar !== undefined) {
-                    return config.BACKEND_URL + agent.agent.avatar;
+        if (agent) {
+            if (agent.agent) {
+                const agentData = agent.agent;
+                if (agentData && agentData.avatar !== undefined) {
+                    return config.BACKEND_URL + agentData.avatar;
                 }
-                
-                return agent.avater;
             }
-            
+            return agent.avatar;
         }
         return "";
       }
