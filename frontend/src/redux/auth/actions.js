@@ -1,32 +1,48 @@
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
-    LOGIN_USER_FAILED,
+    LOGIN_USER_FAILURE,
+
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
-    LOGOUT_USER_FAILED,
+    LOGOUT_USER_FAILURE,
+
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
+    REGISTER_USER_FAILURE,
+
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
+    FORGET_PASSWORD_FAILURE,
+
     AUTH_FAILED,
     CONFIRM_EMAIL,
     CONFIRM_EMAIL_SUCCESS,
+    CONFIRM_EMAIL_FAILURE,
+
     SEND_CONFIRMATION_EMAIL,
     SEND_CONFIRMATION_EMAIL_SUCCESS,
+    SEND_CONFIRMATION_EMAIL_FAILURE,
+
     RESET_PASSWORD_CONFIRM,
     RESET_PASSWORD_CONFIRM_SUCCESS,
+    RESET_PASSWORD_CONFIRM_FAILURE,
+
     VALIDATE_RESET_TOKEN,
     VALIDATE_RESET_TOKEN_SUCCESS,
+    VALIDATE_RESET_TOKEN_FAILURE,
+
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
     REFRESH_TOKEN_UPDATE_FAILURE,
+
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
+    
     CHANGE_PASSWORD,
     CHANGE_PASSWORD_SUCCESS,
     HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
-    CHANGE_PASSWORD_FAILED
+    CHANGE_PASSWORD_FAILURE
 } from './constants';
 
 export const changePassword = (oldPassword, newPassword) => {
@@ -48,9 +64,9 @@ export const hideChangePasswordSuccessMessage = () => {
     }
 };
 
-export const changePasswordFailed = (errors) => {
+export const changePasswordFailure = (errors) => {
     return {
-        type: CHANGE_PASSWORD_FAILED,
+        type: CHANGE_PASSWORD_FAILURE,
         payload: errors
     }
 };
@@ -68,10 +84,10 @@ export const refreshTokenUpdateSuccess = (accessToken) => {
     }
 };
 
-export const refreshTokenUpdateFailure = (error) => {
+export const refreshTokenUpdateFailure = (errors) => {
     return {
         type: REFRESH_TOKEN_UPDATE_FAILURE,
-        payload: error
+        payload: errors
     }
 };
 
@@ -91,9 +107,9 @@ export const loginUserSuccess = (accessToken) => {
     }
 };
 
-export const loginUserFailed = (errors) => {
+export const loginUserFailure = (errors) => {
     return {
-        type: LOGIN_USER_FAILED,
+        type: LOGIN_USER_FAILURE,
         payload: errors
     }
 };
@@ -111,6 +127,11 @@ export const registerUserSuccess = (user) => ({
     payload: user
 });
 
+export const registerUserFailure = (errors) => ({
+    type: REGISTER_USER_FAILURE,
+    payload: errors
+});
+
 export const logoutUser = (history) => {
     return {
         type: LOGOUT_USER,
@@ -124,9 +145,10 @@ export const logoutUserSuccess = () => {
     };
 };
 
-export const logoutUserFailed = () => {
+export const logoutUserFailure = (errors) => {
     return {
-      type: LOGOUT_USER_FAILED
+      type: LOGOUT_USER_FAILURE,
+      payload: errors
     };
 };
 
@@ -140,13 +162,10 @@ export const forgetPasswordSuccess = (passwordResetStatus) => ({
     payload: passwordResetStatus
 });
 
-export const authError = (error) => {
-    console.log("Auth action authError error ", error);
-    return {
-        type: AUTH_FAILED,
-        payload: error
-    }
-};
+export const forgetPasswordFailure = (errors) => ({
+    type: FORGET_PASSWORD_FAILURE,
+    payload: errors
+});
 
 export const confirmEmail = (token) => ({
     type: CONFIRM_EMAIL,
@@ -157,12 +176,22 @@ export const confirmEmailSuccess = () => ({
     type: CONFIRM_EMAIL_SUCCESS
 });
 
+export const confirmEmailFailure = (errors) => ({
+    type: CONFIRM_EMAIL_FAILURE,
+    payload: errors
+});
+
 export const sendConfirmationEmail = () => ({
     type: SEND_CONFIRMATION_EMAIL,
 });
   
 export const sendConfirmationEmailSuccess = () => ({
     type: SEND_CONFIRMATION_EMAIL_SUCCESS
+});
+
+export const sendConfirmationEmailFailure = (errors) => ({
+    type: SEND_CONFIRMATION_EMAIL_FAILURE,
+    payload: errors
 });
 
 export const resetPasswordConfirm = (password, token) => ({
@@ -174,6 +203,10 @@ export const resetPasswordConfirmSuccess = () => ({
     type: RESET_PASSWORD_CONFIRM_SUCCESS
 });
 
+export const resetPasswordConfirmFailure = (errors) => ({
+    type: RESET_PASSWORD_CONFIRM_FAILURE
+});
+
 export const validateResetToken = (token) => ({
     type: VALIDATE_RESET_TOKEN,
     payload: { token }
@@ -181,6 +214,11 @@ export const validateResetToken = (token) => ({
 
 export const validateResetTokenSuccess = () => ({
     type: VALIDATE_RESET_TOKEN_SUCCESS
+});
+
+export const validateResetTokenFailure = (errors) => ({
+    type: VALIDATE_RESET_TOKEN_FAILURE,
+    paylod: errors
 });
 
 export const addAuthenticatedApiRequest = (requestPromise) => ({

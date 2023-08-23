@@ -1,30 +1,47 @@
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
-    LOGIN_USER_FAILED,
+    LOGIN_USER_FAILURE,
+
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
-    LOGOUT_USER_FAILED,
+    LOGOUT_USER_FAILURE,
+
     REGISTER_USER,
     REGISTER_USER_SUCCESS,
+    REGISTER_USER_FAILURE,
+
     FORGET_PASSWORD,
     FORGET_PASSWORD_SUCCESS,
-    AUTH_FAILED,
+    FORGET_PASSWORD_FAILURE,
+
     CONFIRM_EMAIL,
     CONFIRM_EMAIL_SUCCESS,
+    CONFIRM_EMAIL_FAILURE,
+
     RESET_PASSWORD_CONFIRM,
     RESET_PASSWORD_CONFIRM_SUCCESS,
+    ESET_PASSWORD_CONFIRM_FAILURE,
+
     VALIDATE_RESET_TOKEN,
     VALIDATE_RESET_TOKEN_SUCCESS,
+    VALIDATE_RESET_TOKEN_FAILURE,
+
     SEND_CONFIRMATION_EMAIL,
     SEND_CONFIRMATION_EMAIL_SUCCESS,
+    SEND_CONFIRMATION_EMAIL_FAILURE,
+
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
     REFRESH_TOKEN_UPDATE_FAILURE,
+
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
+    
     CHANGE_PASSWORD,
     CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_FAILURE,
+    
     HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
     CHANGE_PASSWORD_FAILED
 } from './constants';
@@ -32,22 +49,142 @@ import {
 const isAuthenticated = localStorage.getItem("isAuthenticated");
 const INIT_STATE = {
     accessToken: undefined,
-    loading: false,
-    error: null,
+    
+    loginLoading: false,
+    loginSuccess: false,
     loginErrors: null,
-    confirmationEmailSent: false,
-    isAuthenticated: JSON.parse(isAuthenticated ) || false,
-    refreshTokenLoading: false,
-    authenticatedApiRequestsQueue: [],
+    
+    logoutLoading: false,
+    logoutSuccess: false,
+    logoutErrors: null,
+
+    registerLoading: false,
+    registerSuccess: false,
+    registerErrors: null,
+
+    forgetPasswordLoading: false,
+    forgetPasswordSuccess: false,
+    forgetPasswordErrors: null,
+
+    confirmEmailLoading: false,
+    confirmEmailSuccess: false,
+    confirmEmailErrors: null,
+
+    resetPaswordLoading: false,
+    resetPaswordSuccess: false,
+    resetPaswordErrors: null,
+
+    validateResetTokenLoading: false,
+    validateResetTokenSuccess: false,
+    validateResetTokenErrors: null,
+
+    sendConfirmationEmailLoading: false,
+    sendConfirmationEmailSuccess: false,
+    sendConfirmationEmailErrors: null,
+
+    refreshTokenUpdateLoading: false,
+    refreshTokenUpdateSuccess: false,
+    refreshTokenUpdateErrors: null,
+
     changePasswordLoading: false,
     changePassswordErrors: null,
-    changePasswordSuccess: false
+    changePasswordSuccess: false,
+    
+    isAuthenticated: JSON.parse(isAuthenticated ) || false,
+    authenticatedApiRequestsQueue: [],
 };
 
 
 const Auth = (state = INIT_STATE, action) => {
     console.log("reducers", "Auth", "action", action);
     switch (action.type) {
+        case LOGIN_USER:
+            return { 
+                ...state,
+                loginLoading: true,
+                loginSuccess: false,
+                loginErrors: null, 
+            };
+        
+        case LOGIN_USER_SUCCESS:
+            return { 
+                ...state,
+                isAuthenticated: true,
+                accessToken: action.payload,
+                loginLoading: false,
+                loginSuccess: true,
+                loginErrors: null, 
+            };
+
+        case LOGIN_USER_FAILURE:
+            return { 
+                ...state,
+                isAuthenticated: false,
+                loginLoading: false,
+                loginSuccess: false,
+                loginErrors: action.payload, 
+            };
+
+        case LOGOUT_USER:
+            return { 
+                ...state,
+                isAuthenticated: false,
+                user: null,
+                logoutLoading: true,
+                logoutSuccess: false,
+                logoutErrors: null,
+            };
+    
+        case LOGOUT_USER_SUCCESS:
+            return { 
+                ...state,
+                accessToken: undefined,
+                refreshTokenLoading: false,
+                authenticatedApiRequestsQueue: [],
+                logoutLoading: false,
+                logoutSuccess: true,
+                logoutErrors: null,
+            };
+    
+        case LOGOUT_USER_FAILURE:
+            return { 
+                accessToken: undefined,
+                refreshTokenLoading: false,
+                authenticatedApiRequestsQueue: [],
+                logoutLoading: false,
+                logoutSuccess: false,
+                logoutErrors: action.payload,
+            };
+
+        case REGISTER_USER:
+            return { 
+                ...state,
+                registerLoading: true,
+                registerSuccess: false,
+                registerErrors: null,
+            };
+        
+        case REGISTER_USER_SUCCESS:
+            return { 
+                ...state,
+                isAuthenticated: true,
+                accessToken: action.payload,
+                registerLoading: false,
+                registerSuccess: true,
+                registerErrors: null,
+            };
+        
+        case REGISTER_USER_FAILURE:
+            return { 
+                ...state,
+                isAuthenticated: true,
+                accessToken: undefined,
+                registerLoading: false,
+                registerSuccess: false,
+                registerErrors: action.payload,
+            };
+        
+        
         case REFRESH_TOKEN_UPDATE:
             return { ...state, refreshTokenLoading: true };
         
@@ -71,72 +208,33 @@ const Auth = (state = INIT_STATE, action) => {
         case CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE:
             return { ...state, authenticatedApiRequestsQueue: [] };
         
-        case LOGIN_USER:
-            return { ...state, loading: true };
         
-        case LOGIN_USER_SUCCESS:
-            return { 
-                ...state,
-                isAuthenticated: true,
-                accessToken: action.payload,
-                loading: false,
-                loginErrors: null
-            };
 
-        case LOGIN_USER_FAILED:
-            return { 
-                ...state,
-                isAuthenticated: false,
-                loading: false,
-                loginErrors: action.payload
-            };
+        
+    
 
-        case REGISTER_USER:
-            return { ...state, loading: true };
-
-        case REGISTER_USER_SUCCESS:
-            return { 
-                ...state,
-                isAuthenticated: true,
-                accessToken: action.payload,
-                loading: false,
-                error: null
-            };
-
-        case LOGOUT_USER:
-            return { 
-                ...state,
-                isAuthenticated: false,
-                user: null,
-                loading: true
-            };
-
-        case LOGOUT_USER_SUCCESS:
-            return { 
-                ...state,
-                accessToken: undefined,
-                refreshTokenLoading: false,
-                authenticatedApiRequestsQueue: [],
-                loading: false,
-            };
-
-        case LOGOUT_USER_FAILED:
-            return { 
-                accessToken: undefined,
-                refreshTokenLoading: false,
-                authenticatedApiRequestsQueue: [],
-                loading: false,
-                error: action.payload
-            };
+        
 
         case FORGET_PASSWORD:
             return { ...state, loading: true };
 
         case FORGET_PASSWORD_SUCCESS:
-            return { ...state, passwordResetStatus: action.payload, loading: false, error: null };
+            return { 
+                ...state, 
+                passwordResetStatus: action.payload,
+                loading: false,
+                error: null 
+            };
 
         case AUTH_FAILED:
-            return { ...state, isAuthenticated: false, accessToken: undefined, user: null, loading: false, error: action.payload };
+            return { 
+                ...state, 
+                isAuthenticated: false, 
+                accessToken: undefined, 
+                user: null, 
+                loading: false, 
+                error: action.payload 
+            };
         
         case CONFIRM_EMAIL:
             return { ...state, loading: true, emailConfirmed: false }; 
