@@ -4,7 +4,6 @@ import { Nav, NavItem, NavLink, Dropdown, DropdownItem, DropdownToggle, Dropdown
 import { connect } from "react-redux";
 import { setLayoutMode, setLanguage } from "../../redux/actions";
 import { useTranslation } from 'react-i18next';
-import config from '../../config';
 
 //TODO move to css sprite
 import usFlag from "../../assets/images/flags/us.jpg";
@@ -20,12 +19,6 @@ function LeftSidebarMenu(props) {
     //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
         if (agent) {
-            if (agent.agent) {
-                const agentData = agent.agent;
-                if (agentData && agentData.avatar !== undefined) {
-                    return config.BACKEND_URL + agentData.avatar;
-                }
-            }
             return agent.avatar;
         }
         return "";

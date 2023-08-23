@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import { useTranslation } from "react-i18next";
-import config from '../../../config';
 
 function Profile(props) {
   /* intilize t variable for multi language implementation */
@@ -14,13 +13,7 @@ function Profile(props) {
 //TODO: redevelop to flat structure into agent and remove this method
 function getAgentAvatar (){
   if (agent) {
-      if (agent.agent) {
-          const agentData = agent.agent;
-          if (agentData && agentData.avatar !== undefined) {
-              return config.BACKEND_URL + agentData.avatar;
-          }
-      }
-      return agent.avatar;
+    return agent.avatar;
   }
   return "";
 }

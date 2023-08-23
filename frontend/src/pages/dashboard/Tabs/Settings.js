@@ -19,7 +19,6 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import { updateAgentData, changePassword, updateAgentAvatar } from '../../../redux/actions';
-import config from '../../../config';
 
 function Settings(props) {
     const { t } = useTranslation();
@@ -33,12 +32,6 @@ function Settings(props) {
         }
 
         if (agent) {
-            if (agent.agent) {
-                const agentData = agent.agent;
-                if (agentData && agentData.avatar !== undefined) {
-                    return config.BACKEND_URL + agentData.avatar;
-                }
-            }
             return agent.avatar;
         }
         return "";
