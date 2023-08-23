@@ -19,19 +19,30 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import { updateAgentData, changePassword, updateAgentAvatar } from '../../../redux/actions';
+import config from '../../../config';
 
 function Settings(props) {
     const { t } = useTranslation();
     const [selectedAvatar, setSelectedAvatar] = useState(null);
 
+    //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
         if (selectedAvatar !== null){
             return URL.createObjectURL(selectedAvatar);
         }
 
-        if (props.agent && props.agent.agent) {
-          const agent = props.agent.agent;
-          return agent.avatar;
+        if (props.agent) {
+          
+            if (props.agent.agent) {
+                const agent = props.agent
+          
+                if (agent.agent && agent.agent.avatar !== undefined) {
+                    return config.BACKEND_URL + agent.agent.avatar;
+                }
+                
+                return agent.avater;
+            }
+            
         }
         return "";
       }
