@@ -45,7 +45,7 @@ function* updateAgentAvatar({ payload: { id, avatar } }) {
             },
         });
 
-        yield put(updateAgentAvatarSuccess(response));
+        yield put(updateAgentAvatarSuccess(response.avatar));
         yield delay(10000);
         yield put(hideAgentAvatarSuccessMessage());
     } catch (error) {

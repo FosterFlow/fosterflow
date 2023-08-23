@@ -7,21 +7,22 @@ import { useTranslation } from "react-i18next";
 
 function Profile(props) {
   /* intilize t variable for multi language implementation */
+  const { agent } = props;
   const { t } = useTranslation();
 
-  function getAgentAvatar (){
-    if (props.agent && props.agent.avatar) {
-      const agent = props.agent;
-      return agent.avatar;
-    }
-    return "";
+//TODO: redevelop to flat structure into agent and remove this method
+function getAgentAvatar (){
+  if (agent) {
+    return agent.avatar;
+  }
+  return "";
 }
 
   function fullName (){
-    if (props.agent && props.agent.agent) {
-      const agent = props.agent.agent;
-      const firstName = agent.first_name;
-      const lastName = agent.last_name;
+    if (agent && agent.agent) {
+      const agentData = agent.agent;
+      const firstName = agentData.first_name;
+      const lastName = agentData.last_name;
       if (firstName || lastName) {
           return firstName + " " + lastName; 
       }

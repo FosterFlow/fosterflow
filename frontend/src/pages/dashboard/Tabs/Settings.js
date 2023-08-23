@@ -22,16 +22,17 @@ import { updateAgentData, changePassword, updateAgentAvatar } from '../../../red
 
 function Settings(props) {
     const { t } = useTranslation();
+    const { agent } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
 
+    //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
         if (selectedAvatar !== null){
             return URL.createObjectURL(selectedAvatar);
         }
 
-        if (props.agent && props.agent.agent) {
-          const agent = props.agent.agent;
-          return agent.avatar;
+        if (agent) {
+            return agent.avatar;
         }
         return "";
       }
