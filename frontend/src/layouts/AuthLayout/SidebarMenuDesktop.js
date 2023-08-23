@@ -4,6 +4,7 @@ import { Nav, NavItem, NavLink, Dropdown, DropdownItem, DropdownToggle, Dropdown
 import { connect } from "react-redux";
 import { setLayoutMode, setLanguage } from "../../redux/actions";
 import { useTranslation } from 'react-i18next';
+import config from '../../config';
 
 //TODO move to css sprite
 import usFlag from "../../assets/images/flags/us.jpg";
@@ -13,13 +14,19 @@ import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
 function LeftSidebarMenu(props) {
-    /* intilize t variable for multi language implementation */
+    const { agent } = props;
     const { t } = useTranslation();
 
+    //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
-        if (props.agent && props.agent.avatar) {
-          const agent = props.agent;
-          return agent.avatar;
+        if (agent) {
+            if (agent.agent) {
+                const agentData = agent.agent;
+                if (agentData && agentData.avatar !== undefined) {
+                    return config.BACKEND_URL + agentData.avatar;
+                }
+            }
+            return agent.avatar;
         }
         return "";
     }
