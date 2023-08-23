@@ -1,6 +1,7 @@
 version: '3.1'
 services:
   db:
+    container_name: postgres
     image: postgres:13.1
     privileged: true
     ports:
@@ -11,15 +12,26 @@ services:
       POSTGRES_DB: library
     networks:
       - myNetwork
-  
+ 
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass password
+    volumes: 
+      - redis:/data
+       
   backend:
     container_name: backend
     build: ./backend
     ports:
-      - 8080:8080
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
+      - 8000:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
+      - redis
     networks:
       - myNetwork
   
@@ -37,7 +49,10 @@ services:
       - db
       - backend
 
-
+volumes:
+  redis:
+    driver: local
+    
 networks:
   myNetwork:
     driver: bridge
