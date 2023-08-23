@@ -49,6 +49,20 @@ services:
       - db
       - backend
 
+  swagger:
+    container_name: swagger
+    build: ./swagger
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./swagger:/swagger
+    command: bash -c "npm install && npm start --port 8080"
+    networks:
+      - myNetwork
+    depends_on:
+      - db
+      - backend
+
 volumes:
   redis:
     driver: local
