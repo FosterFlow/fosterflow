@@ -56,7 +56,7 @@ services:
       - "8080:8080"
     volumes:
       - ./swagger:/swagger
-    command: bash -c "npm install && npm start --port 8080"
+    command: bash -c "npm install && npm start"
     networks:
       - myNetwork
     depends_on:

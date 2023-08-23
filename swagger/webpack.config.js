@@ -8,7 +8,7 @@ const outputPath = path.resolve(__dirname, 'dist');
 module.exports = {
   mode: 'development',
   entry: {
-    app: require.resolve('./src/index'),
+    app: require.resolve('./src/index')
   },
   resolve: {
     extensions: ['.ts', '.js'],
