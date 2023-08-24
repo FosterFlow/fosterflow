@@ -60,7 +60,7 @@ class ChatConsumer(WebsocketConsumer):
             chat_id = Chat.objects.get(id=text_data_json['chat_id'])
             owner_id = Agent.objects.get(id=text_data_json['owner_id'])
             method = text_data_json['method']
-            if prompt and method == 'request':
+            if prompt and method == 'request' and chat_id == self.chat and Agent.objects.filter(id=owner_id.id).exists():
                 message1 = Message.objects.create(chat_id=chat_id,
                                                   message_text=prompt,
                                                   owner_id=owner_id)
@@ -81,6 +81,11 @@ class ChatConsumer(WebsocketConsumer):
                 complete = self.ask_gpt_stream(prompt, message2)
                 message2.message_text = complete
                 message2.save()
+            elif method != 'request' or method != 'response':
+                self.send(text_data=json.dumps(
+                    {
+                        'error': 'Not request or response'
+                    }))
         except Exception as e:
             self.send(text_data=json.dumps(
                 {
