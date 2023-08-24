@@ -55,21 +55,29 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        prompt = text_data_json['message']
-        self.send(text_data=json.dumps({"message": prompt}))
-
-        if prompt:
-            complete = self.ask_gpt_stream(prompt)
-            Message.objects.create(chat_id=self.chat,
-                                   message_text=prompt,
-                                   owner_id=self.owner_chat)
-            Message.objects.create(chat_id=self.chat,
-                                   message_text=complete,
-                                   owner_id=self.addressee)
-
+        try:
+            prompt = text_data_json['message_chunk']
+            chat_id = text_data_json['chat_id']
+            owner_id = text_data_json['owner_id']
+            status = text_data_json['status']
+            if prompt:
+                Message.objects.create(chat_id=self.chat,
+                                       message_text=prompt,
+                                       owner_id=self.owner_chat)
+                message = Message.objects.create(chat_id=self.chat,
+                                                 message_text='',
+                                                 owner_id=self.addressee)
+                complete = self.ask_gpt_stream(prompt, message)
+                message.message_text = complete
+                message.save()
+        except Exception as e:
+            self.send(text_data=json.dumps(
+                {
+                    'error': str(e)
+                }))
 
     # Receive message from room group
-    def ask_gpt_stream(self, prompt):
+    def ask_gpt_stream(self, prompt, main_message):
         previous_messages = Message.objects.filter(chat_id=self.chat_id).order_by('-id')[:5]
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}
@@ -92,18 +100,41 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         complete = ""
+        self.send(text_data=json.dumps({
+            'chat_id': main_message.chat_id.id,
+            'created_at': str(main_message.created_at),
+            'id': main_message.id,
+            'message_chunk': "",
+            'owner_id': main_message.owner_id.id,
+            'status': "start"
+        }))
         # iterate through the stream of events
         for event in response:
             print(event)
             try:
                 if event['choices'][0]['finish_reason'] != 'stop':
                     event_text = event['choices'][0]['delta']['content']  # extract the text
-                    self.send(text_data=json.dumps({"message": event_text, "finish_reason": "null"}))
+                    self.send(text_data=json.dumps(
+                        {
+                            'id': main_message.id,
+                            "message_chunk": event_text,
+                            "status": "progress"
+                        }))
                     complete += event_text
                 else:
-                    self.send(text_data=json.dumps({"message": '', "finish_reason": "stop"}))
-            except:
-                pass
+                    self.send(text_data=json.dumps(
+                        {
+                            'id': main_message.id,
+                            "message_chunk": '',
+                            "status": "done"
+                        }))
+            except Exception as e:
+                self.send(text_data=json.dumps(
+                    {
+                        'id': main_message.id,
+                        "message_chunk": '',
+                        "status": "error"
+                    }))
 
         return complete
 
@@ -112,4 +143,4 @@ class ChatConsumer(WebsocketConsumer):
         message = event["message"]
 
         # Send message to WebSocket
-        self.send(text_data=json.dumps({"message": message}))
+        # self.send(text_data=json.dumps({"message": message}))
