@@ -210,7 +210,7 @@ export const resetPassword = (password, token) => ({
 });
 
 export const resetPasswordInitState = () => ({
-    type: RESET_PASSWORD
+    type: RESET_PASSWORD_INIT_STATE
 });
 
 export const resetPasswordSuccess = () => ({
