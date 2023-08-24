@@ -24,13 +24,13 @@ import {
     SEND_CONFIRMATION_EMAIL_SUCCESS,
     SEND_CONFIRMATION_EMAIL_FAILURE,
 
-    RESET_PASSWORD_CONFIRM,
-    RESET_PASSWORD_CONFIRM_SUCCESS,
-    RESET_PASSWORD_CONFIRM_FAILURE,
+    RESET_PASSWORD,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_FAILURE,
 
-    VALIDATE_RESET_TOKEN,
-    VALIDATE_RESET_TOKEN_SUCCESS,
-    VALIDATE_RESET_TOKEN_FAILURE,
+    VALIDATE_PASSWORD_RESET_TOKEN,
+    VALIDATE_PASSWORD_RESET_TOKEN_SUCCESS,
+    VALIDATE_PASSWORD_RESET_TOKEN_FAILURE,
 
     REFRESH_TOKEN_UPDATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
@@ -194,30 +194,30 @@ export const sendConfirmationEmailFailure = (errors) => ({
     payload: errors
 });
 
-export const resetPasswordConfirm = (password, token) => ({
-    type: RESET_PASSWORD_CONFIRM,
+export const resetPassword = (password, token) => ({
+    type: RESET_PASSWORD,
     payload: { password, token }
 });
 
-export const resetPasswordConfirmSuccess = () => ({
-    type: RESET_PASSWORD_CONFIRM_SUCCESS
+export const resetPasswordSuccess = () => ({
+    type: RESET_PASSWORD_SUCCESS
 });
 
-export const resetPasswordConfirmFailure = (errors) => ({
-    type: RESET_PASSWORD_CONFIRM_FAILURE
+export const resetPasswordFailure = (errors) => ({
+    type: RESET_PASSWORD_FAILURE
 });
 
-export const validateResetToken = (token) => ({
-    type: VALIDATE_RESET_TOKEN,
+export const validatePasswordResetToken = (token) => ({
+    type: VALIDATE_PASSWORD_RESET_TOKEN,
     payload: { token }
 });
 
-export const validateResetTokenSuccess = () => ({
-    type: VALIDATE_RESET_TOKEN_SUCCESS
+export const validatePasswordResetTokenSuccess = () => ({
+    type: VALIDATE_PASSWORD_RESET_TOKEN_SUCCESS
 });
 
-export const validateResetTokenFailure = (errors) => ({
-    type: VALIDATE_RESET_TOKEN_FAILURE,
+export const validatePasswordResetTokenFailure = (errors) => ({
+    type: VALIDATE_PASSWORD_RESET_TOKEN_FAILURE,
     paylod: errors
 });
 

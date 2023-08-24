@@ -19,13 +19,13 @@ import {
     CONFIRM_EMAIL_SUCCESS,
     CONFIRM_EMAIL_FAILURE,
 
-    RESET_PASSWORD_CONFIRM,
-    RESET_PASSWORD_CONFIRM_SUCCESS,
-    ESET_PASSWORD_CONFIRM_FAILURE,
+    RESET_PASSWORD,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_FAILURE,
 
-    VALIDATE_RESET_TOKEN,
-    VALIDATE_RESET_TOKEN_SUCCESS,
-    VALIDATE_RESET_TOKEN_FAILURE,
+    VALIDATE_PASSWORD_RESET_TOKEN,
+    VALIDATE_PASSWORD_RESET_TOKEN_SUCCESS,
+    VALIDATE_PASSWORD_RESET_TOKEN_FAILURE,
 
     SEND_CONFIRMATION_EMAIL,
     SEND_CONFIRMATION_EMAIL_SUCCESS,
@@ -74,9 +74,9 @@ const INIT_STATE = {
     resetPaswordSuccess: false,
     resetPaswordErrors: null,
 
-    validateResetTokenLoading: false,
-    validateResetTokenSuccess: false,
-    validateResetTokenErrors: null,
+    validatePasswordResetTokenLoading: false,
+    validatePasswordResetTokenSuccess: false,
+    validatePasswordResetTokenErrors: null,
 
     sendConfirmationEmailLoading: false,
     sendConfirmationEmailSuccess: false,
@@ -183,21 +183,129 @@ const Auth = (state = INIT_STATE, action) => {
                 registerSuccess: false,
                 registerErrors: action.payload,
             };
-        
+
+        case FORGET_PASSWORD:
+            return { 
+                ...state, 
+                forgetPasswordLoading: true,
+                forgetPasswordSuccess: false,
+                forgetPasswordErrors: null,
+            };
+    
+        case FORGET_PASSWORD_SUCCESS:
+            return { 
+                ...state, 
+                forgetPasswordLoading: false,
+                forgetPasswordSuccess: true,
+                forgetPasswordErrors: null, 
+            };
+
+        case FORGET_PASSWORD_FAILURE:
+            return { 
+                ...state, 
+                forgetPasswordLoading: false,
+                forgetPasswordSuccess: false,
+                forgetPasswordErrors: action.payload, 
+            };
+
+        case CONFIRM_EMAIL:
+            return { 
+                ...state, 
+                confirmEmailLoading: true,
+                confirmEmailSuccess: false,
+                confirmEmailErrors: null,
+            }; 
+    
+        case CONFIRM_EMAIL_SUCCESS:
+            return { 
+                ...state, 
+                confirmEmailLoading: false,
+                confirmEmailSuccess: true,
+                confirmEmailErrors: null,
+            };
+            
+        case CONFIRM_EMAIL_FAILURE:
+            return { 
+                ...state, 
+                confirmEmailLoading: false,
+                confirmEmailSuccess: false,
+                confirmEmailErrors: action.payload,
+            };
+
+        case RESET_PASSWORD:
+            return { 
+                ...state, 
+                resetPaswordLoading: true,
+                resetPaswordSuccess: false,
+                resetPaswordErrors: null,
+            };
+    
+        case RESET_PASSWORD_SUCCESS:
+            return { 
+                ...state, 
+                resetPaswordLoading: false,
+                resetPaswordSuccess: false,
+                resetPaswordErrors: null,
+            };
+
+        case RESET_PASSWORD_FAILURE:
+            return { 
+                ...state, 
+                resetPaswordLoading: false,
+                resetPaswordSuccess: false,
+                resetPaswordErrors: action.payload,
+            };
+
+        case VALIDATE_PASSWORD_RESET_TOKEN:
+            return { 
+                ...state, 
+                validatePasswordResetTokenLoading: true,
+                validatePasswordResetTokenSuccess: false,
+                validatePasswordResetTokenErrors: null, 
+            };
+    
+        case VALIDATE_PASSWORD_RESET_TOKEN_SUCCESS:
+            return { 
+                ...state, 
+                validatePasswordResetTokenLoading: false,
+                validatePasswordResetTokenSuccess: true,
+                validatePasswordResetTokenErrors: null,
+            };
+
+        case VALIDATE_PASSWORD_RESET_TOKEN_FAILURE:
+            return { 
+                ...state, 
+                validatePasswordResetTokenLoading: false,
+                validatePasswordResetTokenSuccess: false,
+                validatePasswordResetTokenErrors: action.payload,
+            };
         
         case REFRESH_TOKEN_UPDATE:
-            return { ...state, refreshTokenLoading: true };
+            return { 
+                ...state,
+                refreshTokenUpdateLoading: true,
+                refreshTokenUpdateSuccess: false,
+                refreshTokenUpdateErrors: null,
+            };
         
         case REFRESH_TOKEN_UPDATE_SUCCESS:
-            return { ...state, refreshTokenLoading: false, accessToken: action.payload };
+            return { 
+                ...state, 
+                accessToken: action.payload,
+                refreshTokenUpdateLoading: false,
+                refreshTokenUpdateSuccess: true,
+                refreshTokenUpdateErrors: null, 
+            };
 
         case REFRESH_TOKEN_UPDATE_FAILURE:
             return { 
                 ...state,
-                refreshTokenLoading: false,
-                error: action.payload,
+                refreshTokenUpdateLoading: false,
+                refreshTokenUpdateSuccess: false,
+                refreshTokenUpdateErrors: action.payload, 
                 authenticatedApiRequestsQueue: []
             };
+
 
         case ADD_AUTHENTICATED_API_REQUEST:
             return { 
@@ -215,16 +323,7 @@ const Auth = (state = INIT_STATE, action) => {
 
         
 
-        case FORGET_PASSWORD:
-            return { ...state, loading: true };
-
-        case FORGET_PASSWORD_SUCCESS:
-            return { 
-                ...state, 
-                passwordResetStatus: action.payload,
-                loading: false,
-                error: null 
-            };
+        
 
         case AUTH_FAILED:
             return { 
@@ -236,11 +335,7 @@ const Auth = (state = INIT_STATE, action) => {
                 error: action.payload 
             };
         
-        case CONFIRM_EMAIL:
-            return { ...state, loading: true, emailConfirmed: false }; 
-
-        case CONFIRM_EMAIL_SUCCESS:
-            return { ...state, loading: false, emailConfirmed: true }; 
+        
 
         case SEND_CONFIRMATION_EMAIL:
             return { ...state, loading: true, confirmationEmailSent: false }; 
@@ -248,11 +343,7 @@ const Auth = (state = INIT_STATE, action) => {
         case SEND_CONFIRMATION_EMAIL_SUCCESS:
             return { ...state, loading: false, confirmationEmailSent: true }; 
 
-        case RESET_PASSWORD_CONFIRM:
-            return { ...state, loading: true, resetPasswordConfirmed: false };
-
-        case RESET_PASSWORD_CONFIRM_SUCCESS:
-            return { ...state, loading: false, resetPasswordConfirmed: true };
+        
             
         case CHANGE_PASSWORD:
             return { 
@@ -285,11 +376,7 @@ const Auth = (state = INIT_STATE, action) => {
                 changePasswordSuccess: false  
             };
 
-        case VALIDATE_RESET_TOKEN:
-            return { ...state, loading: true, resetTokenValidationStatus: false };
-
-        case VALIDATE_RESET_TOKEN_SUCCESS:
-            return { ...state, loading: false, resetTokenValidationStatus: true };
+        
 
         default: return { ...state };
     }
