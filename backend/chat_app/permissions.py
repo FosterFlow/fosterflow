@@ -68,9 +68,12 @@ class IsOwnerMessage(permissions.BasePermission):
         if request.method == 'POST':
             try:
                 chat_id = request.data['chat_id']
-                agent_chats = Chat.objects.filter(owner_id_id=request.user.id).values_list('id', flat=True)
+                if request.data['owner_id'] == request.user.id:
+                    agent_chats = Chat.objects.filter(owner_id_id=request.data['owner_id']).values_list('id', flat=True)
 
-                return chat_id in agent_chats
+                    return chat_id in agent_chats
+                else:
+                    return False
             except Exception as e:
                 print(e)
                 return False
