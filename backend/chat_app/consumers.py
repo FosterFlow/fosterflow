@@ -56,20 +56,31 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         try:
-            prompt = text_data_json['message_chunk']
-            chat_id = text_data_json['chat_id']
-            owner_id = text_data_json['owner_id']
-            status = text_data_json['status']
-            if prompt:
-                Message.objects.create(chat_id=self.chat,
-                                       message_text=prompt,
-                                       owner_id=self.owner_chat)
-                message = Message.objects.create(chat_id=self.chat,
-                                                 message_text='',
-                                                 owner_id=self.addressee)
-                complete = self.ask_gpt_stream(prompt, message)
-                message.message_text = complete
-                message.save()
+            prompt = text_data_json['prompt']
+            chat_id = Chat.objects.get(id=text_data_json['chat_id'])
+            owner_id = Agent.objects.get(id=text_data_json['owner_id'])
+            method = text_data_json['method']
+            if prompt and method == 'request':
+                message1 = Message.objects.create(chat_id=chat_id,
+                                                  message_text=prompt,
+                                                  owner_id=owner_id)
+                self.send(text_data=json.dumps(
+                    {
+                        "id": message1.id,
+                        "message_text": message1.message_text,
+                        "created_at": str(message1.created_at),
+                        "chat_id": message1.chat_id.id,
+                        "owner_id": message1.owner_id.id,
+                        "method": "response"
+                    }
+                ))
+
+                message2 = Message.objects.create(chat_id=self.chat,
+                                                  message_text='',
+                                                  owner_id=self.addressee)
+                complete = self.ask_gpt_stream(prompt, message2)
+                message2.message_text = complete
+                message2.save()
         except Exception as e:
             self.send(text_data=json.dumps(
                 {
@@ -137,10 +148,3 @@ class ChatConsumer(WebsocketConsumer):
                     }))
 
         return complete
-
-    # Receive message from room group
-    def chat_message(self, event):
-        message = event["message"]
-
-        # Send message to WebSocket
-        # self.send(text_data=json.dumps({"message": message}))
