@@ -1,101 +1,68 @@
 import {
     LOGIN_USER,
+    LOGIN_USER_INIT_STATE,
     LOGIN_USER_SUCCESS,
     LOGIN_USER_FAILURE,
 
     LOGOUT_USER,
+    LOGOUT_USER_INIT_STATE,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILURE,
 
     REGISTER_USER,
+    REGISTER_USER_INIT_STATE,
     REGISTER_USER_SUCCESS,
     REGISTER_USER_FAILURE,
 
-    FORGET_PASSWORD,
-    FORGET_PASSWORD_SUCCESS,
-    FORGET_PASSWORD_FAILURE,
-
-    AUTH_FAILED,
-    CONFIRM_EMAIL,
-    CONFIRM_EMAIL_SUCCESS,
-    CONFIRM_EMAIL_FAILURE,
-
     SEND_CONFIRMATION_EMAIL,
+    SEND_CONFIRMATION_EMAIL_INIT_STATE,
     SEND_CONFIRMATION_EMAIL_SUCCESS,
     SEND_CONFIRMATION_EMAIL_FAILURE,
 
-    RESET_PASSWORD,
-    RESET_PASSWORD_SUCCESS,
-    RESET_PASSWORD_FAILURE,
+    CONFIRM_EMAIL,
+    CONFIRM_EMAIL_INIT_STATE,
+    CONFIRM_EMAIL_SUCCESS,
+    CONFIRM_EMAIL_FAILURE,
+
+    FORGET_PASSWORD,
+    FORGET_PASSWORD_INIT_STATE,
+    FORGET_PASSWORD_SUCCESS,
+    FORGET_PASSWORD_FAILURE,
 
     VALIDATE_PASSWORD_RESET_TOKEN,
+    VALIDATE_PASSWORD_RESET_TOKEN_INIT_STATE,
     VALIDATE_PASSWORD_RESET_TOKEN_SUCCESS,
     VALIDATE_PASSWORD_RESET_TOKEN_FAILURE,
 
+    RESET_PASSWORD,
+    RESET_PASSWORD_INIT_STATE,
+    RESET_PASSWORD_SUCCESS,
+    RESET_PASSWORD_FAILURE,
+
+    CHANGE_PASSWORD,
+    CHANGE_PASSWORD_INIT_STATE,
+    CHANGE_PASSWORD_SUCCESS,
+    CHANGE_PASSWORD_FAILURE,
+
     REFRESH_TOKEN_UPDATE,
+    REFRESH_TOKEN_UPDATE_INIT_STATE,
     REFRESH_TOKEN_UPDATE_SUCCESS,
     REFRESH_TOKEN_UPDATE_FAILURE,
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
-    
-    CHANGE_PASSWORD,
-    CHANGE_PASSWORD_SUCCESS,
-    HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
-    CHANGE_PASSWORD_FAILURE
 } from './constants';
 
-export const changePassword = (oldPassword, newPassword) => {
-    return {
-        type: CHANGE_PASSWORD,
-        payload: {oldPassword, newPassword}
-    }
-};
-
-export const changePasswordSuccess = () => {
-    return {
-        type: CHANGE_PASSWORD_SUCCESS,
-    }
-};
-
-export const hideChangePasswordSuccessMessage = () => {
-    return {
-        type: HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
-    }
-};
-
-export const changePasswordFailure = (errors) => {
-    return {
-        type: CHANGE_PASSWORD_FAILURE,
-        payload: errors
-    }
-};
-
-export const refreshTokenUpdate = () => {
-    return {
-        type: REFRESH_TOKEN_UPDATE,
-    }
-};
-
-export const refreshTokenUpdateSuccess = (accessToken) => {
-    return {
-        type: REFRESH_TOKEN_UPDATE_SUCCESS,
-        payload: accessToken
-    }
-};
-
-export const refreshTokenUpdateFailure = (errors) => {
-    return {
-        type: REFRESH_TOKEN_UPDATE_FAILURE,
-        payload: errors
-    }
-};
-
 export const loginUser = (email, password ) => {
-    console.log('Actions', 'loginUser', 'email, password ', email, password );
     return {
         type: LOGIN_USER,
         payload: { email, password }
+    }
+};
+
+export const loginUserInitState = () => {
+    return {
+        type: LOGIN_USER_INIT_STATE
     }
 };
 
@@ -114,28 +81,17 @@ export const loginUserFailure = (errors) => {
     }
 };
 
-export const registerUser = (email, password ) => {
-    console.log('Actions', 'registerUser', 'email, password ', email, password );
-    return {
-        type: REGISTER_USER,
-        payload: { email, password }
-    }
-};
-
-export const registerUserSuccess = (user) => ({
-    type: REGISTER_USER_SUCCESS,
-    payload: user
-});
-
-export const registerUserFailure = (errors) => ({
-    type: REGISTER_USER_FAILURE,
-    payload: errors
-});
 
 export const logoutUser = (history) => {
     return {
         type: LOGOUT_USER,
         payload: { history }
+    }
+};
+
+export const logoutUserInitState = () => {
+    return {
+        type: LOGOUT_USER_INIT_STATE
     }
 };
 
@@ -152,9 +108,72 @@ export const logoutUserFailure = (errors) => {
     };
 };
 
+export const registerUser = (email, password ) => {
+    console.log('Actions', 'registerUser', 'email, password ', email, password );
+    return {
+        type: REGISTER_USER,
+        payload: { email, password }
+    }
+};
+
+export const registerUserInitState = () => {
+    return {
+        type: REGISTER_USER_INIT_STATE,
+    }
+};
+
+export const registerUserSuccess = (user) => ({
+    type: REGISTER_USER_SUCCESS,
+    payload: user
+});
+
+export const registerUserFailure = (errors) => ({
+    type: REGISTER_USER_FAILURE,
+    payload: errors
+});
+
+export const sendConfirmationEmail = () => ({
+    type: SEND_CONFIRMATION_EMAIL,
+});
+
+export const sendConfirmationEmailInitState = () => ({
+    type: SEND_CONFIRMATION_EMAIL_INIT_STATE,
+});
+  
+export const sendConfirmationEmailSuccess = () => ({
+    type: SEND_CONFIRMATION_EMAIL_SUCCESS
+});
+
+export const sendConfirmationEmailFailure = (errors) => ({
+    type: SEND_CONFIRMATION_EMAIL_FAILURE,
+    payload: errors
+});
+
+export const confirmEmail = (token) => ({
+    type: CONFIRM_EMAIL,
+    payload: { token }
+});
+
+export const confirmEmailInitState = () => ({
+    type: CONFIRM_EMAIL_INIT_STATE,
+});
+  
+export const confirmEmailSuccess = () => ({
+    type: CONFIRM_EMAIL_SUCCESS
+});
+
+export const confirmEmailFailure = (errors) => ({
+    type: CONFIRM_EMAIL_FAILURE,
+    payload: errors
+});
+
 export const forgetPassword = (email) => ({
     type: FORGET_PASSWORD,
     payload: { email }
+});
+
+export const forgetPasswordInitState = () => ({
+    type: FORGET_PASSWORD_INIT_STATE,
 });
 
 export const forgetPasswordSuccess = (passwordResetStatus) => ({
@@ -167,49 +186,13 @@ export const forgetPasswordFailure = (errors) => ({
     payload: errors
 });
 
-export const confirmEmail = (token) => ({
-    type: CONFIRM_EMAIL,
-    payload: { token }
-});
-  
-export const confirmEmailSuccess = () => ({
-    type: CONFIRM_EMAIL_SUCCESS
-});
-
-export const confirmEmailFailure = (errors) => ({
-    type: CONFIRM_EMAIL_FAILURE,
-    payload: errors
-});
-
-export const sendConfirmationEmail = () => ({
-    type: SEND_CONFIRMATION_EMAIL,
-});
-  
-export const sendConfirmationEmailSuccess = () => ({
-    type: SEND_CONFIRMATION_EMAIL_SUCCESS
-});
-
-export const sendConfirmationEmailFailure = (errors) => ({
-    type: SEND_CONFIRMATION_EMAIL_FAILURE,
-    payload: errors
-});
-
-export const resetPassword = (password, token) => ({
-    type: RESET_PASSWORD,
-    payload: { password, token }
-});
-
-export const resetPasswordSuccess = () => ({
-    type: RESET_PASSWORD_SUCCESS
-});
-
-export const resetPasswordFailure = (errors) => ({
-    type: RESET_PASSWORD_FAILURE
-});
-
 export const validatePasswordResetToken = (token) => ({
     type: VALIDATE_PASSWORD_RESET_TOKEN,
     payload: { token }
+});
+
+export const validatePasswordResetTokenInitState = () => ({
+    type: VALIDATE_PASSWORD_RESET_TOKEN_INIT_STATE
 });
 
 export const validatePasswordResetTokenSuccess = () => ({
@@ -220,6 +203,75 @@ export const validatePasswordResetTokenFailure = (errors) => ({
     type: VALIDATE_PASSWORD_RESET_TOKEN_FAILURE,
     paylod: errors
 });
+
+export const resetPassword = (password, token) => ({
+    type: RESET_PASSWORD,
+    payload: { password, token }
+});
+
+export const resetPasswordInitState = () => ({
+    type: RESET_PASSWORD
+});
+
+export const resetPasswordSuccess = () => ({
+    type: RESET_PASSWORD_SUCCESS
+});
+
+export const resetPasswordFailure = (errors) => ({
+    type: RESET_PASSWORD_FAILURE
+});
+
+export const changePassword = (oldPassword, newPassword) => {
+    return {
+        type: CHANGE_PASSWORD,
+        payload: {oldPassword, newPassword}
+    }
+};
+
+export const changePasswordInitState = () => {
+    return {
+        type: CHANGE_PASSWORD_INIT_STATE,
+    }
+};
+
+export const changePasswordSuccess = () => {
+    return {
+        type: CHANGE_PASSWORD_SUCCESS,
+    }
+};
+
+export const changePasswordFailure = (errors) => {
+    return {
+        type: CHANGE_PASSWORD_FAILURE,
+        payload: errors
+    }
+};
+
+export const refreshTokenUpdate = () => {
+    return {
+        type: REFRESH_TOKEN_UPDATE,
+    }
+};
+
+export const refreshTokenUpdateInitState = () => {
+    return {
+        type: REFRESH_TOKEN_UPDATE_INIT_STATE,
+    }
+};
+
+export const refreshTokenUpdateSuccess = (accessToken) => {
+    return {
+        type: REFRESH_TOKEN_UPDATE_SUCCESS,
+        payload: accessToken
+    }
+};
+
+export const refreshTokenUpdateFailure = (errors) => {
+    return {
+        type: REFRESH_TOKEN_UPDATE_FAILURE,
+        payload: errors
+    }
+};
 
 export const addAuthenticatedApiRequest = (requestPromise) => ({
     type: ADD_AUTHENTICATED_API_REQUEST,
