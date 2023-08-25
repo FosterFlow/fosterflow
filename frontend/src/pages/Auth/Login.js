@@ -190,7 +190,7 @@ if (loginErrors === null) {
                                                 <Button color="primary" disabled={loginLoading} type="submit">
                                                     {loginLoading &&
                                                         <div className='pe-2 d-inline-block'>
-                                                            <Spinner color="primary" size="sm"/>
+                                                            <Spinner size="sm"/>
                                                         </div>
                                                     }
                                                     {t('Sign in')}

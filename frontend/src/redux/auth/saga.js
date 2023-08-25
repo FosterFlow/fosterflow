@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeEvery, delay } from 'redux-saga/effects';
+import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import apiClient from '../../helpers/apiClient';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
@@ -50,12 +50,10 @@ function* loginUserSaga({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
         console.log("redux aux saga", "login response", response );
-        yield delay(10000);
         //we store isAuthenticated param into Local Storage for the case if user reloaded the page
         yield localStorage.setItem("isAuthenticated", true);
         yield put(loginUserSuccess(response.access));            
     } catch (errors) {
-        yield delay(10000);
         yield put(loginUserFailure(errors));
     }
 }
