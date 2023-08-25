@@ -20,38 +20,22 @@ import withRouter from "../../components/withRouter";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { loginUser, authError  } from '../../redux/actions';
+import { loginUser, loginUserFailed  } from '../../redux/actions';
 
 /**
  * Login component
  * @param {*} props 
  */
 const Login = (props) => {
-    /* intilize t variable for multi language implementation */
+    const { loading, loginErrors } = props;
     const { t } = useTranslation();
-    const [formAlertError, setformAlertError] = useState(null);
 
-    //resetting previeous errors
     useEffect(() => {
-            props.authError(null);
+            props.loginUserFailed(null);
     }, []);
 
-    useEffect(() => {
-        if (props.error && props.error.errors) {
-            const propsErrors = props.error.errors;
-            if (propsErrors.details){
-                setformAlertError(propsErrors.details);
-            }
-            let formErrors = {};
-            for (let key in propsErrors) {
-                formErrors[key] = propsErrors[key][0];
-            }
-            formik.setErrors(formErrors);
-        }
-    }, [props.error]);
-
     // validation
-    const formik = useFormik({
+    const loginForm = useFormik({
         initialValues: {
             email: '',
             password: ''
@@ -68,23 +52,44 @@ const Login = (props) => {
         },
     });
 
-    
+    //TODO: reduce number of invokes
+    function getEmailErrors () {
+        let errors = [];
+        if (loginForm.errors && loginForm.errors.email) {
+            errors.push(loginForm.errors.email);
+        }
+
+        if (loginErrors !== null && loginErrors.email) {
+            errors = [...errors, ...loginErrors.email]
+        }
+
+        return errors
+    }
+
     return (
         <React.Fragment>
 
             <div className="account-pages my-5 pt-sm-5">
-                <Container>
+                <Container className='login-page'>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} >
                             <Card>
                                 <CardBody className="p-4">
                                     {
-                                        formAlertError &&
-                                         <Alert color="danger">{formAlertError}</Alert>
+                                        loginErrors  && loginErrors.details &&
+                                        (
+                                            <Alert color="danger">
+                                                <ul>
+                                                    {loginErrors.details.map((error, index) => (
+                                                        <li key={index}>{error}</li>
+                                                    ))}
+                                                </ul>
+                                            </Alert>
+                                        )
                                     }
                                     <div className="p-3">
 
-                                        <Form onSubmit={formik.handleSubmit}>
+                                        <Form onSubmit={loginForm.handleSubmit}>
 
                                             <div className="mb-3">
                                                 <Label className="form-label">{t('Email')}</Label>
@@ -98,15 +103,23 @@ const Login = (props) => {
                                                         name="email"
                                                         className="form-control form-control-lg border-light bg-soft-light"
                                                         placeholder={t('Enter email')}
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}                                                        
-                                                        value={formik.values.email}
+                                                        onChange={loginForm.handleChange}
+                                                        onBlur={loginForm.handleBlur}                                                        
+                                                        value={loginForm.values.email}
                                                         autoComplete="username"                                                        
-                                                        invalid={formik.touched.email && formik.errors.email ? true : false}
+                                                        invalid={loginForm.touched.email && loginForm.errors.email ? true : false}
                                                     />
-                                                    {formik.touched.email && formik.errors.email ? (
-                                                        <FormFeedback type="invalid">{formik.errors.email}</FormFeedback>
-                                                    ) : null}
+                                                    <FormFeedback>
+                                                        {
+                                                            getEmailErrors().length > 0 && (
+                                                                <ul>
+                                                                    {getEmailErrors().map((error, index) => (
+                                                                        <li key={index}>{error}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            )
+                                                        }
+                                                    </FormFeedback>
                                                 </InputGroup>
                                             </div>
 
@@ -125,14 +138,14 @@ const Login = (props) => {
                                                         name="password"
                                                         className="form-control form-control-lg border-light bg-soft-light"
                                                         placeholder={t('Enter password')}
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}                                                        
-                                                        value={formik.values.password}
+                                                        onChange={loginForm.handleChange}
+                                                        onBlur={loginForm.handleBlur}                                                        
+                                                        value={loginForm.values.password}
                                                         autoComplete="current-password"
-                                                        invalid={formik.touched.password && formik.errors.password ? true : false}
+                                                        invalid={loginForm.touched.password && loginForm.errors.password ? true : false}
                                                     />
-                                                    {formik.touched.password && formik.errors.password ? (
-                                                        <FormFeedback type="invalid">{formik.errors.password}</FormFeedback>
+                                                    {loginForm.touched.password && loginForm.errors.password ? (
+                                                        <FormFeedback type="invalid">{loginForm.errors.password}</FormFeedback>
                                                     ) : null}
 
                                                 </InputGroup>
@@ -166,8 +179,8 @@ const Login = (props) => {
 
 const mapStateToProps = (state) => {
     //TODO: show loading
-    const { user, loading, error } = state.Auth;
-    return { user, loading, error };
+    const { loading, loginErrors } = state.Auth;
+    return { loading, loginErrors };
 };
 
-export default withRouter(connect(mapStateToProps, { loginUser, authError })(Login));
+export default withRouter(connect(mapStateToProps, { loginUser, loginUserFailed })(Login));

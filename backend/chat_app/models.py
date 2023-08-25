@@ -17,13 +17,11 @@ class Chat(models.Model):
         Agent,
         on_delete=models.CASCADE,
         related_name='owner_id',
-        null=True,
     )
     addressee_id = models.ForeignKey(
         Agent,
         on_delete=models.CASCADE,
         related_name='addressee_id',
-        null=True,
     )
     name = models.TextField(max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -51,7 +49,6 @@ class Message(models.Model):
     owner_id = models.ForeignKey(
         Agent,
         on_delete=models.CASCADE,
-        null=True
     )
     created_at = models.DateTimeField(auto_now_add=True)
 

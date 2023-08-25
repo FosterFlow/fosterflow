@@ -1,6 +1,7 @@
 import { all, call, fork, put, takeEvery, delay } from 'redux-saga/effects';
 import apiClient from '../../helpers/apiClient';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
+import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 
 import {
     LOGIN_USER,
@@ -18,6 +19,7 @@ import {
 
 import {
     loginUserSuccess,
+    loginUserFailed,
     registerUserSuccess,
     forgetPasswordSuccess,
     authError,
@@ -47,7 +49,7 @@ function* login({ payload: { email, password } }) {
         yield localStorage.setItem("isAuthenticated", true);
         yield put(loginUserSuccess(response.access));            
     } catch (error) {
-        yield put(authError(error));
+        yield put(loginUserFailed(error));
     }
 }
 
@@ -143,6 +145,7 @@ function* refreshTokenUpdate() {
         const response = yield call(apiClient.post, '/token/refresh/');
         yield put(refreshTokenUpdateSuccess(response.access));
         yield call(apiAuthorizedClient.resolve);
+        yield call(webSocketsAuthorizedClient.resolve);
     } catch (error) {
         yield put(refreshTokenUpdateFailure(error));
     }
@@ -165,6 +168,7 @@ function* changePassword({ payload: { oldPassword, newPassword } }) {
     }
 }
 
+//TODO: redevelop like in chat/saga
 export function* watchRefreshTokenUpdate() {
     yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdate);
 }

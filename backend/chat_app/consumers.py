@@ -55,21 +55,45 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        prompt = text_data_json['message']
-        self.send(text_data=json.dumps({"message": prompt}))
+        try:
+            prompt = text_data_json['prompt']
+            chat_id = Chat.objects.get(id=text_data_json['chat_id'])
+            owner_id = Agent.objects.get(id=text_data_json['owner_id'])
+            method = text_data_json['method']
+            if prompt and method == 'request' and chat_id == self.chat and Agent.objects.filter(id=owner_id.id).exists():
+                message1 = Message.objects.create(chat_id=chat_id,
+                                                  message_text=prompt,
+                                                  owner_id=owner_id)
+                self.send(text_data=json.dumps(
+                    {
+                        "id": message1.id,
+                        "message_text": message1.message_text,
+                        "created_at": str(message1.created_at),
+                        "chat_id": message1.chat_id.id,
+                        "owner_id": message1.owner_id.id,
+                        "method": "response"
+                    }
+                ))
 
-        if prompt:
-            complete = self.ask_gpt_stream(prompt)
-            Message.objects.create(chat_id=self.chat,
-                                   message_text=prompt,
-                                   owner_id=self.owner_chat)
-            Message.objects.create(chat_id=self.chat,
-                                   message_text=complete,
-                                   owner_id=self.addressee)
-
+                message2 = Message.objects.create(chat_id=self.chat,
+                                                  message_text='',
+                                                  owner_id=self.addressee)
+                complete = self.ask_gpt_stream(prompt, message2)
+                message2.message_text = complete
+                message2.save()
+            elif method != 'request' or method != 'response':
+                self.send(text_data=json.dumps(
+                    {
+                        'error': 'Not request or response'
+                    }))
+        except Exception as e:
+            self.send(text_data=json.dumps(
+                {
+                    'error': str(e)
+                }))
 
     # Receive message from room group
-    def ask_gpt_stream(self, prompt):
+    def ask_gpt_stream(self, prompt, main_message):
         previous_messages = Message.objects.filter(chat_id=self.chat_id).order_by('-id')[:5]
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}
@@ -92,24 +116,40 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         complete = ""
+        self.send(text_data=json.dumps({
+            'chat_id': main_message.chat_id.id,
+            'created_at': str(main_message.created_at),
+            'id': main_message.id,
+            'message_chunk': "",
+            'owner_id': main_message.owner_id.id,
+            'status': "start"
+        }))
         # iterate through the stream of events
         for event in response:
             print(event)
             try:
                 if event['choices'][0]['finish_reason'] != 'stop':
                     event_text = event['choices'][0]['delta']['content']  # extract the text
-                    self.send(text_data=json.dumps({"message": event_text, "finish_reason": "null"}))
+                    self.send(text_data=json.dumps(
+                        {
+                            'id': main_message.id,
+                            "message_chunk": event_text,
+                            "status": "progress"
+                        }))
                     complete += event_text
                 else:
-                    self.send(text_data=json.dumps({"message": '', "finish_reason": "stop"}))
-            except:
-                pass
+                    self.send(text_data=json.dumps(
+                        {
+                            'id': main_message.id,
+                            "message_chunk": '',
+                            "status": "done"
+                        }))
+            except Exception as e:
+                self.send(text_data=json.dumps(
+                    {
+                        'id': main_message.id,
+                        "message_chunk": '',
+                        "status": "error"
+                    }))
 
         return complete
-
-    # Receive message from room group
-    def chat_message(self, event):
-        message = event["message"]
-
-        # Send message to WebSocket
-        self.send(text_data=json.dumps({"message": message}))

@@ -13,13 +13,12 @@ import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
 function LeftSidebarMenu(props) {
-    /* intilize t variable for multi language implementation */
+    const { agent } = props;
     const { t } = useTranslation();
 
     function getAgentAvatar (){
-        if (props.agent && props.agent.avatar) {
-          const agent = props.agent;
-          return agent.avatar;
+        if (agent) {
+            return agent.avatar;
         }
         return "";
     }
@@ -50,7 +49,7 @@ function LeftSidebarMenu(props) {
                     </NavItem>
 
                     {/* TODO: Languages move to settings */}
-                    <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup profile-user-dropdown" toggle={toggleChangeLanguge}>
+                    <Dropdown nav isOpen={dropdownChangeLanguge} className="btn-group dropup" toggle={toggleChangeLanguge}>
                         <DropdownToggle nav title={t('Change Language')}>
                             <i className="ri-global-line"></i>
                         </DropdownToggle>

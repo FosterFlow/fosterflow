@@ -1,6 +1,7 @@
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
+    LOGIN_USER_FAILED,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILED,
@@ -25,7 +26,9 @@ import {
     CHANGE_PASSWORD,
     CHANGE_PASSWORD_SUCCESS,
     HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
-    CHANGE_PASSWORD_FAILED
+    CHANGE_PASSWORD_FAILED,
+    ADD_WEB_SOCKET_REQUEST,
+    CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 } from './constants';
 
 export const changePassword = (oldPassword, newPassword) => {
@@ -87,6 +90,13 @@ export const loginUserSuccess = (accessToken) => {
     return {
         type: LOGIN_USER_SUCCESS,
         payload: accessToken
+    }
+};
+
+export const loginUserFailed = (errors) => {
+    return {
+        type: LOGIN_USER_FAILED,
+        payload: errors
     }
 };
 
@@ -182,4 +192,13 @@ export const addAuthenticatedApiRequest = (requestPromise) => ({
 
 export const clearAuthenticatedApiRequestsQueue = () => ({
     type: CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
+});
+
+export const addWebSocketRequest = (requestPromise) => ({
+    type: ADD_WEB_SOCKET_REQUEST,
+    payload: requestPromise
+});
+
+export const clearWebSocketsApiRequestsQueue = () => ({
+    type: CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 });

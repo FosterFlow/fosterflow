@@ -12,6 +12,7 @@ import {
     UPDATE_AGENT_AVATAR_FAILED
 } from './constants';
 import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
+import config from '../../config';
 
 const INIT_STATE = {
     errors: null,
@@ -32,7 +33,13 @@ const Agent = (state = INIT_STATE, action) => {
             return { ...state, loading: true }
         
         case GET_AGENT_SUCCESS:
-            return { ...state, agent: action.payload, loading: false, error: null };
+            return { 
+                ...state, 
+                agent: action.payload,
+                avatar: config.BACKEND_URL + action.payload.avatar, 
+                loading: false, 
+                error: null 
+            };
 
         case GET_AGENT_FAILED:
             return { ...state, loading: false, errors: action.payload };
@@ -79,7 +86,7 @@ const Agent = (state = INIT_STATE, action) => {
         case UPDATE_AGENT_AVATAR_SUCCESS:
             return { 
                 ...state, 
-                avatar: action.payload, 
+                avatar: config.BACKEND_URL + action.payload, 
                 avatarLoading: false, 
                 avatarErrors: null,
                 avatarSuccess: true 

@@ -1,6 +1,7 @@
 import {
     LOGIN_USER,
     LOGIN_USER_SUCCESS,
+    LOGIN_USER_FAILED,
     LOGOUT_USER,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILED,
@@ -25,7 +26,9 @@ import {
     CHANGE_PASSWORD,
     CHANGE_PASSWORD_SUCCESS,
     HIDE_CHANGE_PASSWORD_SUCCESS_MESSAGE,
-    CHANGE_PASSWORD_FAILED
+    CHANGE_PASSWORD_FAILED,
+    ADD_WEB_SOCKET_REQUEST,
+    CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 } from './constants';
 
 const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -33,10 +36,12 @@ const INIT_STATE = {
     accessToken: undefined,
     loading: false,
     error: null,
+    loginErrors: null,
     confirmationEmailSent: false,
     isAuthenticated: JSON.parse(isAuthenticated ) || false,
     refreshTokenLoading: false,
     authenticatedApiRequestsQueue: [],
+    webSocketsRequestsQueue: [],
     changePasswordLoading: false,
     changePassswordErrors: null,
     changePasswordSuccess: false
@@ -44,7 +49,7 @@ const INIT_STATE = {
 
 
 const Auth = (state = INIT_STATE, action) => {
-    console.log("reducers", "Auth", "action", action);
+    // console.log("reducers", "Auth", "action", action);
     switch (action.type) {
         case REFRESH_TOKEN_UPDATE:
             return { ...state, refreshTokenLoading: true };
@@ -57,7 +62,8 @@ const Auth = (state = INIT_STATE, action) => {
                 ...state,
                 refreshTokenLoading: false,
                 error: action.payload,
-                authenticatedApiRequestsQueue: []
+                authenticatedApiRequestsQueue: [],
+                webSocketsRequestsQueue: []
             };
 
         case ADD_AUTHENTICATED_API_REQUEST:
@@ -68,6 +74,15 @@ const Auth = (state = INIT_STATE, action) => {
 
         case CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE:
             return { ...state, authenticatedApiRequestsQueue: [] };
+
+        case ADD_WEB_SOCKET_REQUEST:
+            return { 
+                ...state,
+                webSocketsRequestsQueue : [...state.webSocketsRequestsQueue, action.payload]
+            };
+    
+        case CLEAR_WEB_SOCKET_REQUESTS_QUEUE:
+            return { ...state, webSocketsRequestsQueue: [] };
         
         case LOGIN_USER:
             return { ...state, loading: true };
@@ -78,7 +93,15 @@ const Auth = (state = INIT_STATE, action) => {
                 isAuthenticated: true,
                 accessToken: action.payload,
                 loading: false,
-                error: null
+                loginErrors: null
+            };
+
+        case LOGIN_USER_FAILED:
+            return { 
+                ...state,
+                isAuthenticated: false,
+                loading: false,
+                loginErrors: action.payload
             };
 
         case REGISTER_USER:

@@ -18,10 +18,6 @@ apiClient.interceptors.response.use(
     const errorsData = (error.response && error.response.data && error.response.data.errors) || null;
     
     if (errorsData !== null) {
-      if (errorsData.details !== undefined) {
-        return Promise.reject(errorsData.details);
-      }
-
       return Promise.reject(errorsData);
     }
     
