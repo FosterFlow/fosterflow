@@ -31,8 +31,8 @@ import {
     forgetPasswordFailure,
     validatePasswordResetTokenSuccess,
     validatePasswordResetTokenFailure,
-    resetPasswordConfirmSuccess,
-    resetPasswordConfirmFailure,
+    resetPasswordSuccess,
+    resetPasswordFailure,
     changePasswordSuccess,
     changePasswordFailure,
     changePasswordInitState,
@@ -133,12 +133,12 @@ function* validatePasswordResetTokenSaga({ payload: { token } }) {
     }
 }
 
-function* resetPasswordConfirmSaga({ payload: { password, token } }) {
+function* resetPasswordSaga({ payload: { password, token } }) {
     try {
         yield call(apiClient.post, '/password-reset/confirm/', { password, token });
-        yield put(resetPasswordConfirmSuccess());
+        yield put(resetPasswordSuccess());
     } catch (errors) {
-        yield put(resetPasswordConfirmFailure(errors));
+        yield put(resetPasswordFailure(errors));
     }
 }
 
@@ -178,7 +178,7 @@ export default function* chatSaga() {
     yield takeEvery(CONFIRM_EMAIL, confirmEmailSaga);
     yield takeEvery(FORGET_PASSWORD, forgetPasswordSaga);
     yield takeEvery(VALIDATE_PASSWORD_RESET_TOKEN, validatePasswordResetTokenSaga);
-    yield takeEvery(RESET_PASSWORD, resetPasswordConfirmSaga);
+    yield takeEvery(RESET_PASSWORD, resetPasswordSaga);
     yield takeEvery(CHANGE_PASSWORD, changePasswordSaga);
     yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdateSaga);
 }
