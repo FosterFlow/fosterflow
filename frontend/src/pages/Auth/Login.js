@@ -12,7 +12,8 @@ import {
     Button, 
     FormFeedback, 
     Label, 
-    InputGroup
+    InputGroup,
+    Spinner
 } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -37,7 +38,7 @@ const Login = (props) => {
     } = props;
     const { t } = useTranslation();
 
-    // validation
+    // TODO: Formik cause redundant re-rendering
     const loginForm = useFormik({
         validateOnChange: false,
         initialValues: {
@@ -61,7 +62,7 @@ const Login = (props) => {
         const errors = {};
 
         if (_.isEmpty(loginFormErrors)) {
-            if (loginErrors === null) {
+if (loginErrors === null) {
                 return;
             }
 
@@ -126,10 +127,14 @@ const Login = (props) => {
                                                         onChange={loginForm.handleChange}
                                                         onBlur={loginForm.handleBlur}                                                        
                                                         value={loginForm.values.email}
-                                                        autoComplete="username"                                                        
-                                                        invalid={loginErrors && loginErrors.email ? true : false}
+                                                        autoComplete="username"
+                                                        disabled={loginLoading}                                                        
+                                                        invalid={
+                                                            (loginForm.touched.email && 
+                                                            loginErrors &&
+                                                            loginErrors.email) ? true : false}
                                                     />
-                                                    {loginErrors && loginErrors.email &&
+                                                    {loginForm.touched.email && loginErrors && loginErrors.email &&
                                                         (<FormFeedback>
                                                             <ul>
                                                                 {loginErrors.email.map((error, index) => (
@@ -159,9 +164,13 @@ const Login = (props) => {
                                                         onBlur={loginForm.handleBlur}                                                        
                                                         value={loginForm.values.password}
                                                         autoComplete="current-password"
-                                                        invalid={loginErrors && loginErrors.password ? true : false}
+                                                        disabled={loginLoading}   
+                                                        invalid={(
+                                                            loginForm.touched.password &&
+                                                            loginErrors &&
+                                                            loginErrors.password) ? true : false}
                                                     />
-                                                    {loginErrors && loginErrors.password &&
+                                                    {loginForm.touched.password && loginErrors && loginErrors.password &&
                                                         (<FormFeedback>
                                                             <ul>
                                                                 {loginErrors.password.map((error, index) => (
@@ -178,7 +187,14 @@ const Login = (props) => {
                                             </div> */}
 
                                             <div className="d-grid">
-                                                <Button color="primary" block type="submit">{t('Sign in')}</Button>
+                                                <Button color="primary" disabled={loginLoading} type="submit">
+                                                    {loginLoading &&
+                                                        <div className='pe-2 d-inline-block'>
+                                                            <Spinner color="primary" size="sm"/>
+                                                        </div>
+                                                    }
+                                                    {t('Sign in')}
+                                                </Button>
                                             </div>
 
                                         </Form>
