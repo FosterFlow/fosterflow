@@ -1,12 +1,24 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { GET_USERS, GET_USER, UPDATE_USER, DELETE_USER, GET_AUTHORIZED_USER } from './constants';
-import { getUserSuccess, updateUserSuccess, userError, getAuthorizedUserSuccess } from './actions';
+import { 
+    GET_USERS, 
+    GET_USER, 
+    UPDATE_USER, 
+    DELETE_USER, 
+    GET_AUTHORIZED_USER 
+} from './constants';
+import { 
+    getUserSuccess, 
+    updateUserSuccess, 
+    userError, 
+    getAuthorizedUserSuccess 
+} from './actions';
 const api = apiAuthorizedClient;
 
-function* getAuthorizedUser({ payload }) {
+function* getAuthorizedUser() {
     try {
-        const response = yield call(api.get, `/user/`, payload);
+        const response = yield call(api.get, `/user/`);
+        console.log("After API call", response);
         yield put(getAuthorizedUserSuccess(response));
     } catch (error) {
         yield put(userError(error));

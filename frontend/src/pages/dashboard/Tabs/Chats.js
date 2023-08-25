@@ -7,7 +7,6 @@ import UserChat from "../UserChat/";
 import NewUserChat from "../NewUserChat";
 import { 
     fetchChats,
-    fetchMessages,
     setActiveChat,
     setActiveNewChat,
     showChatWindow 
@@ -66,9 +65,6 @@ const Chats = (props) => {
         props.showChatWindow(true);
         props.setActiveChat(id);
         props.setActiveNewChat(false);
-
-        //TODO: we have to check if we already have actual messages into state
-        props.fetchMessages(id);
     }, [id]);
 
     const handleSearchChange = useCallback((event) => {
@@ -156,7 +152,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     fetchChats,
-    fetchMessages,
     setActiveChat,
     setActiveNewChat,
     showChatWindow

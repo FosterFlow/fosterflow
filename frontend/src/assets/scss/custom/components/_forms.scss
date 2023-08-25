@@ -125,3 +125,19 @@ $value in $theme-colors {
 .invalid-feedback ul li:not(:only-child) {
   list-style-type: disc;
 }
+
+/* By default, don't show bullets */
+.alert-danger ul {
+  list-style-type: none;
+  margin-bottom: 0;
+}
+
+/* If there's only one list item, don't show bullets */
+.alert-danger ul li:only-child {
+  list-style-type: none;
+}
+
+/* If there are multiple list items, show bullets */
+.alert-danger ul li:not(:only-child) {
+  list-style-type: disc;
+}

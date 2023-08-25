@@ -51,6 +51,9 @@ import {
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
+
+    ADD_WEB_SOCKET_REQUEST,
+    CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 } from './constants';
 
 const isAuthenticated = localStorage.getItem("isAuthenticated");
@@ -99,11 +102,12 @@ const INIT_STATE = {
     
     isAuthenticated: JSON.parse(isAuthenticated ) || false,
     authenticatedApiRequestsQueue: [],
+    webSocketsRequestsQueue: [],
 };
 
 
 const Auth = (state = INIT_STATE, action) => {
-    console.log("reducers", "Auth", "action", action);
+    // console.log("reducers", "Auth", "action", action);
     switch (action.type) {
         case LOGIN_USER:
             return { 
@@ -438,7 +442,8 @@ const Auth = (state = INIT_STATE, action) => {
                 refreshTokenUpdateLoading: false,
                 refreshTokenUpdateSuccess: false,
                 refreshTokenUpdateErrors: action.payload, 
-                authenticatedApiRequestsQueue: []
+                authenticatedApiRequestsQueue: [],
+                webSocketsRequestsQueue: []
             };
 
         case ADD_AUTHENTICATED_API_REQUEST:
@@ -451,6 +456,18 @@ const Auth = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 authenticatedApiRequestsQueue: [] 
+            };
+
+        case ADD_WEB_SOCKET_REQUEST:
+            return { 
+                ...state,
+                webSocketsRequestsQueue : [...state.webSocketsRequestsQueue, action.payload]
+            };
+    
+        case CLEAR_WEB_SOCKET_REQUESTS_QUEUE:
+            return { 
+                ...state, 
+                webSocketsRequestsQueue: [] 
             };
 
         default: return { ...state };
