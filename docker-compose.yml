@@ -22,6 +22,8 @@ services:
     command: redis-server --save 20 1
     volumes: 
       - redis:/data
+    networks:
+      - myNetwork
        
   backend:
     container_name: backend
@@ -29,6 +31,8 @@ services:
     ports:
       - 8000:8000
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - REDIS_HOST=redis
     depends_on:
       - db
       - redis
