@@ -93,8 +93,8 @@ function* registerSaga({ payload: { email, password } }) {
  */
   function* sendConfirmationEmailSaga() {
     try {
-      yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
-      yield put(sendConfirmationEmailSuccess());
+        yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
+        yield put(sendConfirmationEmailSuccess());
     } catch (errors) {
         yield put(sendConfirmationEmailFailure(errors));
     }
@@ -105,9 +105,11 @@ function* registerSaga({ payload: { email, password } }) {
  */
 function* confirmEmailSaga({ payload: { token } }) {
     try {
-      yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
-      yield put(confirmEmailSuccess());
+    //   yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
+        yield delay(10000);
+        yield put(confirmEmailSuccess());
     } catch (errors) {
+        yield delay(10000);
         yield put(confirmEmailFailure(errors));
     }
   }
@@ -153,7 +155,7 @@ function* changePasswordSaga({ payload: { oldPassword, newPassword } }) {
                 new_password: newPassword 
             });
         yield put(changePasswordSuccess(response.message));
-        yield delay(10000);
+        
         yield put(changePasswordInitState());
     } catch (errors) {
         yield put(changePasswordFailure(errors));
