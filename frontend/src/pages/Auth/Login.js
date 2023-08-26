@@ -62,7 +62,7 @@ const Login = (props) => {
         const errors = {};
 
         if (_.isEmpty(loginFormErrors)) {
-if (loginErrors === null) {
+            if (loginErrors === null) {
                 return;
             }
 
@@ -107,7 +107,8 @@ if (loginErrors === null) {
                                                     <li key={index}>{error}</li>
                                                 ))}
                                             </ul>
-                                        </Alert>)}
+                                        </Alert>)
+                                    }
                                     <div className="p-3">
 
                                         <Form onSubmit={loginForm.handleSubmit}>
@@ -134,7 +135,9 @@ if (loginErrors === null) {
                                                             loginErrors &&
                                                             loginErrors.email) ? true : false}
                                                     />
-                                                    {loginForm.touched.email && loginErrors && loginErrors.email &&
+                                                    {loginForm.touched.email &&
+                                                     loginErrors &&
+                                                     loginErrors.email &&
                                                         (<FormFeedback>
                                                             <ul>
                                                                 {loginErrors.email.map((error, index) => (
@@ -215,8 +218,15 @@ if (loginErrors === null) {
 
 
 const mapStateToProps = (state) => {
-    const { loginLoading, loginErrors } = state.Auth;
-    return { loginLoading, loginErrors };
+    const { 
+        loginLoading, 
+        loginErrors 
+    } = state.Auth;
+    
+    return { 
+        loginLoading, 
+        loginErrors 
+    };
 };
 
 const mapDispatchToProps = {

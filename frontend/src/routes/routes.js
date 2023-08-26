@@ -10,7 +10,7 @@ const Settings = React.lazy(() => import("../pages/dashboard/Tabs/Settings"));
 const Login = React.lazy(() => import("../pages/Auth/Login"));
 const Logout = React.lazy(() => import("../pages/Auth/Logout"));
 // const ForgetPassword = React.lazy(() => import("../pages/Auth/ForgetPassword"));
-// const Register = React.lazy(() => import("../pages/Auth/Register"));
+const Register = React.lazy(() => import("../pages/Auth/Register"));
 // const EmailVerification = React.lazy(() => import("../pages/Auth/EmailVerification"));
 // const PasswordReset = React.lazy(() => import("../pages/Auth/PasswordReset"));
 
@@ -40,7 +40,7 @@ const publicRoutes = [
 
 const authRoutes = [
   { path: "/login", component: <Login /> },
-  // { path: "/register", component: <Register /> },
+  { path: "/register", component: <Register /> },
 ];
 
 export { authProtectedRoutes, authRoutes, publicRoutes };
