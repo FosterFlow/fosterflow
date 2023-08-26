@@ -212,7 +212,7 @@ const Auth = (state = INIT_STATE, action) => {
         case REGISTER_USER_FAILURE:
             return { 
                 ...state,
-                isAuthenticated: true,
+                isAuthenticated: false,
                 accessToken: undefined,
                 registerLoading: false,
                 registerSuccess: false,

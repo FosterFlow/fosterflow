@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { 
     Container,
     Row, 
@@ -94,7 +94,7 @@ const Login = (props) => {
     return (
         <React.Fragment>
 
-            <div className="account-pages my-5 pt-sm-5">
+            <div className="account-pages pt-sm-5">
                 <Container className='login-page'>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} >
@@ -205,7 +205,7 @@ const Login = (props) => {
                                 </CardBody>
                             </Card>
 
-                            <div className="mt-5 text-center">
+                            <div className="text-center">
                                 <p>{t("Don't have an account")} ? <Link to="/register" className="font-weight-medium text-primary"> {t('Signup now')} </Link> </p>
                             </div>
                         </Col>
