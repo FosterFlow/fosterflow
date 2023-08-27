@@ -104,14 +104,20 @@ function* registerSaga({ payload: { email, password } }) {
  * Confirm the email
  */
 function* confirmEmailSaga({ payload: { token } }) {
-    try {
+    yield delay(10000);
+    // try {
     //   yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
-        yield delay(10000);
-        yield put(confirmEmailSuccess());
-    } catch (errors) {
-        yield delay(10000);
-        yield put(confirmEmailFailure(errors));
-    }
+        // yield delay(10000);
+        // yield put(confirmEmailSuccess());
+    // } catch (errors) {
+        // yield delay(10000);
+        // yield put(confirmEmailFailure(errors));
+        yield put(confirmEmailFailure( {
+            "details": [
+              "Bad Request."
+            ]
+          }));
+    // }
   }
 
 

@@ -152,10 +152,12 @@ export const sendConfirmationEmailFailure = (errors) => ({
     payload: errors
 });
 
-export const confirmEmail = (token) => ({
-    type: CONFIRM_EMAIL,
-    payload: { token }
-});
+export const confirmEmail = (token) => {
+    return {
+        type: CONFIRM_EMAIL,
+        payload: { token }
+    }
+};
 
 export const confirmEmailInitState = () => ({
     type: CONFIRM_EMAIL_INIT_STATE,

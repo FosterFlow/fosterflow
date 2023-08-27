@@ -107,7 +107,7 @@ const INIT_STATE = {
 
 
 const Auth = (state = INIT_STATE, action) => {
-    // console.log("reducers", "Auth", "action", action);
+    console.log("reducers", "Auth", "action", action);
     switch (action.type) {
         case LOGIN_USER:
             return { 

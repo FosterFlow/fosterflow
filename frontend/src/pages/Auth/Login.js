@@ -216,7 +216,6 @@ const Login = (props) => {
     )
 }
 
-
 const mapStateToProps = (state) => {
     const { 
         loginLoading, 
