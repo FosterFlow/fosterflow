@@ -1,15 +1,26 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Alert } from 'reactstrap';
 import withRouter from '../components/withRouter';
+import config from '../config';
+import { useTranslation } from 'react-i18next';
 
 const NonAuth = (props) => {
+    const { t } = useTranslation();
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
+    const supportEmail =  config.SUPPORT_EMAIL;
+    const {
+        confirmEmailLoading,
+        confirmEmailSuccess,
+        confirmEmailErrors,
+        layoutMode
+    } = props;
 
-    if (props.layoutMode){
+    if (layoutMode){
         //TODO: move to jsx template
-        document.body.setAttribute("data-bs-theme", props.layoutMode);
+        document.body.setAttribute("data-bs-theme", layoutMode);
     }
 
     useEffect(() => {
@@ -19,13 +30,68 @@ const NonAuth = (props) => {
 
     return (
         <React.Fragment>
+            {confirmEmailErrors && (
+                <Alert color="danger">
+                    <h4>
+                        {t('Confirmation failed')}.
+                    </h4>
+                    {confirmEmailErrors.details &&
+                        (<p>
+                            {t('Errors details')}:
+                            <ul>
+                                {confirmEmailErrors.details.map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                        </p>)
+                    }
+                    <p>
+                        {t('Try to login and resend confirmation email')}
+                    </p>
+                    <p>
+                        {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                    </p>
+                </Alert>
+            )}
+
+            {confirmEmailErrors && (
+                <Alert color="danger">
+                    <h4>
+                        {t('Confirmation failed')}.
+                    </h4>
+                    {confirmEmailErrors.details &&
+                        (<p>
+                            {t('Errors details')}:
+                            <ul>
+                                {confirmEmailErrors.details.map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                        </p>)
+                    }
+                    <p>
+                        {t('Try to login and resend confirmation email')}
+                    </p>
+                    <p>
+                        {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                    </p>
+                </Alert>
+            )}
             {props.children}
         </React.Fragment>
     );
 };
 
 const mapStateToProps = state => {
-    return { 
+    const {
+        confirmEmailLoading,
+        confirmEmailSuccess,
+        confirmEmailErrors,
+    } = state.Auth;
+    return {
+        confirmEmailLoading,
+        confirmEmailSuccess,
+        confirmEmailErrors,
         layoutMode: state.Layout.layoutMode
     };
 };
