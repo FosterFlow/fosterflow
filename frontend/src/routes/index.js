@@ -1,5 +1,10 @@
 import React, { Suspense } from 'react';
-import { Routes as SwitchRoute, Route, Navigate, useLocation } from 'react-router-dom';
+import { 
+    Routes as SwitchRoute,
+    Route, 
+    Navigate, 
+    useLocation, 
+} from 'react-router-dom';
 import { authProtectedRoutes, authRoutes, publicRoutes } from './routes';
 import { connect } from "react-redux";
 import NonAuthLayout from "../layouts/NonAuth";
@@ -10,18 +15,28 @@ import AuthLayout from "../layouts/AuthLayout/";
  */
 const Routes = (props) => {
     const location = useLocation();
-
-    // Check if the current route is in either authRoutes or authProtectedRoutes
+    const { isAuthenticated } = props;
+    const emailVerifyPattern = /\/email-verify\/([^/]+)/;
+    const matchEmailVerifyPattern = location.pathname.match(emailVerifyPattern);
     const isAuthRoute = authRoutes.some(route => route.path === location.pathname);
     const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === location.pathname);
 
+    //Email verification
+    if (matchEmailVerifyPattern) {
+        const token = matchEmailVerifyPattern[1];
+        if (isAuthenticated) {
+            return <Navigate to={{ pathname: `/chats/email-verify-token/${token}`, state: { from: location } }} />;
+        }
+        return <Navigate to={{ pathname: `/login/email-verify-token/${token}`, state: { from: location } }} />;
+    }
+    
     //Redirect in case if user not authenticated and tried to reach protected route
-    if (!props.isAuthenticated && isAuthProtectedRoute) {
+    if (!isAuthenticated && isAuthProtectedRoute) {
         return <Navigate to={{ pathname: "/login", state: { from: location } }} />;
     }
 
     //Redirect in case if user is authenticated and tried to reach auth route like login or register
-    if (props.isAuthenticated && isAuthRoute) {
+    if (isAuthenticated && isAuthRoute) {
         return <Navigate to={{ pathname: "/chats", state: { from: location } }} />;
     }
 

@@ -5,29 +5,32 @@ import {
     Spinner,
 } from 'reactstrap';
 import withRouter from '../../components/withRouter';
-import { 
+import {
+    confirmEmail, 
     sendConfirmationEmail, 
     getAuthorizedUser, 
     getAgent 
 } from '../../redux/actions';
-
-//i18n
+import config from '../../config';
 import { useTranslation } from 'react-i18next';
-
-//Import Components
 import SidebarMenuDesktop from "./SidebarMenuDesktop";
+import { useParams } from 'react-router-dom';
 
 const Index = (props) => {
-    /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+    const supportEmail =  config.SUPPORT_EMAIL;
+    const { token: emailVerifyToken } = useParams();
     const {
         children,
         sendConfirmationEmailLoading,
         sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
+
+        confirmEmail,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
+        
         authorizedUser,
         layoutMode,
         getAuthorizedUser,
@@ -45,6 +48,12 @@ const Index = (props) => {
         getAuthorizedUser();
     }, []);
 
+    useEffect(() => {
+        if (emailVerifyToken === undefined) {
+            return;
+        } 
+        confirmEmail(emailVerifyToken);
+    }, [emailVerifyToken]);
 
     useEffect(() => {
         if (authorizedUser && authorizedUser.id){
@@ -54,34 +63,92 @@ const Index = (props) => {
 
     return (
         <React.Fragment>
-            
             <div className="auth-layout">
-                
-                {authorizedUser && !authorizedUser.is_email_confirmed &&
+                {confirmEmailLoading && (
                     <Alert className="auth-layout-alert" color="info">
-                        {confirmEmailLoading ? (
-                            <span>
-                                <Spinner size="sm"/>
-                                {t('Sending')}...
-                            </span>
-                            
-                        ):(
-                            <span>
-                                {t('We have sent you an email to confirm your account. Please check your inbox')}.
-                                <a href="#" onClick={sendConfirmationEmail}> 
-                                    {t('Click here')}
-                                </a>
-                                {t('to send again')}.
-                            </span>
-                        )}
-                    </Alert>
-                }
-                {sendConfirmationEmailSuccess && (
+                    <span>
+                        <Spinner size="sm"/>&nbsp;
+                        {t('Validating your email address...')}...
+                    </span>
+                </Alert>
+                )}
+                {confirmEmailSuccess && (
                     <Alert color="success">
-                        <h4>
-                            {t('Email was successfully re-send to your email')}.
-                        </h4>
+                            {t('Email was successfully confirmed')}.
                     </Alert>)
+                }
+                {sendConfirmationEmailErrors && (
+                    <Alert color="danger">
+                        <h5>
+                            {t('Sending of confirmation email failed')}.
+                        </h5>
+                        {sendConfirmationEmailErrors.details &&
+                            (<div>
+                                {t('Errors details')}:
+                                <ul>
+                                    {sendConfirmationEmailErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>)
+                        }
+                        <div>
+                            <a href="#" onClick={sendConfirmationEmail}> 
+                                {t('Try resend confirmation email')}.
+                            </a>&nbsp;
+                            {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                        </div>
+                    </Alert>)
+                }
+                {confirmEmailErrors && (
+                    <Alert color="danger">
+                        <h4>
+                            {t('Confirmation failed')}.
+                        </h4>
+                        {confirmEmailErrors.details &&
+                            (<div>
+                                {t('Errors details')}:
+                                <ul>
+                                    {confirmEmailErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>)
+                        }
+                        <div>
+                            {t('Try resend confirmation email')}.
+                            <a href="#" onClick={sendConfirmationEmail}> 
+                                {t('Click here')}&nbsp;
+                                </a>
+                            {t('to send again')}.
+                        </div>
+                        <div>
+                            {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                        </div>
+                    </Alert>
+                )}
+                {authorizedUser && 
+                !authorizedUser.is_email_confirmed &&
+                !confirmEmailLoading && 
+                sendConfirmationEmailErrors === null && 
+                confirmEmailErrors === null && 
+                    <Alert className="auth-layout-alert" color="info">
+                        <span>
+                            {sendConfirmationEmailLoading ? (
+                                <span>
+                                    <Spinner size="sm"/>&nbsp;
+                                    {t('Sending email confirmation')}...
+                                </span>) : (
+                                <>
+                                    {t('We have sent you an email to confirm your account. Please check your inbox')}.
+                                    <a href="#" onClick={sendConfirmationEmail}> 
+                                        {t('Click here')}&nbsp;
+                                    </a>
+                                    {t('to send again')}.
+                                </>) 
+                            }
+                        </span>
+                    </Alert>
                 }
                 <div className="auth-layout-content">
                     {/* left sidebar menu */}
@@ -105,13 +172,21 @@ const mapStateToProps = state => {
         confirmEmailErrors,
     } = state.Auth;
     return {
-        
+        sendConfirmationEmailLoading,
+        sendConfirmationEmailSuccess,
+        sendConfirmationEmailErrors,
+
+        confirmEmailLoading,
+        confirmEmailSuccess,
+        confirmEmailErrors,
+
         authorizedUser: state.User.authorizedUser,
         layoutMode: state.Layout.layoutMode
     };
 };
 
 const mapDispatchToProps = {
+    confirmEmail,
     sendConfirmationEmail,
     getAuthorizedUser,
     getAgent

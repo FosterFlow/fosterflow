@@ -11,13 +11,13 @@ const Login = React.lazy(() => import("../pages/Auth/Login"));
 const Logout = React.lazy(() => import("../pages/Auth/Logout"));
 // const ForgetPassword = React.lazy(() => import("../pages/Auth/ForgetPassword"));
 const Register = React.lazy(() => import("../pages/Auth/Register"));
-const EmailVerification = React.lazy(() => import("../pages/Auth/EmailVerification"));
 // const PasswordReset = React.lazy(() => import("../pages/Auth/PasswordReset"));
 
 // declare all routes
 const authProtectedRoutes = [
   { path: "/chats/", component: <Chats /> },
   { path: "/chats/:id", component: <Chats /> },
+  { path: "/chats/email-verify-token/:token", component: <Chats /> },
   { path: "/profile", component: <Profile /> },
   { path: "/settings", component: <Settings /> },
   //TODO:  don't render the page
@@ -33,7 +33,7 @@ const authProtectedRoutes = [
 ];
 
 const publicRoutes = [
-  { path: "/email-verify/:token", component: <EmailVerification/> },
+  // { path: "/email-verify/:token", component: <EmailVerification/> },
   // { path: "/password-reset/:token", component: <PasswordReset/> },
   // { path: "/forget-password", component: <ForgetPassword /> },
 ];

@@ -24,8 +24,10 @@ import {
     logoutUserFailure,
     registerUserSuccess,
     registerUserFailure,
+    sendConfirmationEmailInitState,
     sendConfirmationEmailSuccess,
     sendConfirmationEmailFailure,
+    confirmEmailInitState,
     confirmEmailSuccess,
     confirmEmailFailure,
     forgetPasswordSuccess,
@@ -92,31 +94,40 @@ function* registerSaga({ payload: { email, password } }) {
  * Send a link with confirmation email
  */
   function* sendConfirmationEmailSaga() {
-    try {
-        yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
-        yield put(sendConfirmationEmailSuccess());
-    } catch (errors) {
-        yield put(sendConfirmationEmailFailure(errors));
-    }
+    yield delay(5000);
+    // try {
+        // yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
+        // yield put(sendConfirmationEmailSuccess());
+        // yield delay(5000);
+        // yield put(sendConfirmationEmailInitState());
+    // } catch (errors) {
+        yield put(sendConfirmationEmailFailure({
+            "details": [
+              "Bad Request."
+            ]
+          }));
+    // }
   }
 
 /**
  * Confirm the email
  */
 function* confirmEmailSaga({ payload: { token } }) {
-    yield delay(10000);
+    yield delay(5000);
     // try {
     //   yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
         // yield delay(10000);
-        // yield put(confirmEmailSuccess());
+        yield put(confirmEmailSuccess());
+        yield delay(5000);
+        yield put(confirmEmailInitState());
     // } catch (errors) {
         // yield delay(10000);
         // yield put(confirmEmailFailure(errors));
-        yield put(confirmEmailFailure( {
-            "details": [
-              "Bad Request."
-            ]
-          }));
+        // yield put(confirmEmailFailure( {
+        //     "details": [
+        //       "Bad Request."
+        //     ]
+        //   }));
     // }
   }
 
