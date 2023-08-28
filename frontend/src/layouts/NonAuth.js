@@ -30,53 +30,40 @@ const NonAuth = (props) => {
 
     return (
         <React.Fragment>
-            {confirmEmailErrors && (
-                <Alert color="danger">
-                    <h4>
-                        {t('Confirmation failed')}.
-                    </h4>
-                    {confirmEmailErrors.details &&
-                        (<p>
-                            {t('Errors details')}:
-                            <ul>
-                                {confirmEmailErrors.details.map((error, index) => (
-                                    <li key={index}>{error}</li>
-                                ))}
-                            </ul>
-                        </p>)
-                    }
-                    <p>
-                        {t('Try to login and resend confirmation email')}
-                    </p>
-                    <p>
-                        {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
-                    </p>
+                {confirmEmailLoading && (
+                    <Alert className="auth-layout-alert" color="info">
+                    <span>
+                        <Spinner size="sm"/>&nbsp;
+                        {t('Validating your email address')}...
+                    </span>
                 </Alert>
-            )}
-
-            {confirmEmailErrors && (
-                <Alert color="danger">
-                    <h4>
-                        {t('Confirmation failed')}.
-                    </h4>
-                    {confirmEmailErrors.details &&
-                        (<p>
-                            {t('Errors details')}:
-                            <ul>
-                                {confirmEmailErrors.details.map((error, index) => (
-                                    <li key={index}>{error}</li>
-                                ))}
-                            </ul>
-                        </p>)
-                    }
-                    <p>
-                        {t('Try to login and resend confirmation email')}
-                    </p>
-                    <p>
-                        {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
-                    </p>
-                </Alert>
-            )}
+                )}
+                {confirmEmailSuccess && (
+                    <Alert color="success">
+                            {t('Email was successfully confirmed')}.
+                    </Alert>)
+                }
+                {confirmEmailErrors && (
+                    <Alert color="danger">
+                        <h4>
+                            {t('Confirmation failed')}.
+                        </h4>
+                        {confirmEmailErrors.details &&
+                            (<div>
+                                {t('Errors details')}:
+                                <ul>
+                                    {confirmEmailErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>)
+                        }
+                        <div>
+                            {t('Try to login and re-send confirmation email')}.&nbsp;
+                            {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                        </div>
+                    </Alert>
+                )}
             {props.children}
         </React.Fragment>
     );

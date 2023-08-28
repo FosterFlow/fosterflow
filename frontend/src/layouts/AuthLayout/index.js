@@ -68,7 +68,7 @@ const Index = (props) => {
                     <Alert className="auth-layout-alert" color="info">
                     <span>
                         <Spinner size="sm"/>&nbsp;
-                        {t('Validating your email address...')}...
+                        {t('Validating your email address')}...
                     </span>
                 </Alert>
                 )}
