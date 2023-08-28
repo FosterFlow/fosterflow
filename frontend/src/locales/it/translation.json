@@ -126,5 +126,12 @@
     "Photo": "Foto",
     "Personal information has been successfully updated": "Le informazioni personali sono state aggiornate con successo",
     "The photo has been successfully updated": "La foto è stata aggiornata con successo",
-    "The password has been successfully changed": "La password è stata modificata con successo"
+    "The password has been successfully changed": "La password è stata modificata con successo",
+    "Validating your email address": "Validando il tuo indirizzo email",
+    "Email was successfully confirmed": "L'email è stata confermata con successo",
+    "Errors details": "Dettagli degli errori",
+    "Try to login and re-send confirmation email": "Prova ad accedere e a reinviare l'email di conferma",
+    "Or contact our support by email": "O contatta il nostro supporto via email",
+    "Sending of confirmation email failed": "L'invio dell'email di conferma non è riuscito",
+    "Try resend confirmation email": "Prova a reinviare l'email di conferma"
 }

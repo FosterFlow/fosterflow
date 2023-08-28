@@ -126,5 +126,12 @@
     "Photo": "Фото",
     "Personal information has been successfully updated": "Персональная информация была успешно изменена",
     "The photo has been successfully updated": "Фотография была успешно изменена",
-    "The password has been successfully changed": "Пароль был успешно изменен"
+    "The password has been successfully changed": "Пароль был успешно изменен",
+    "Validating your email address": "Подтверждение вашего адреса электронной почты",
+    "Email was successfully confirmed": "Электронная почта была успешно подтверждена",
+    "Errors details": "Детали ошибки",
+    "Try to login and re-send confirmation email": "Попробуйте войти и повторно отправить письмо с подтверждением",
+    "Or contact our support by email": "Или свяжитесь с нашей службой поддержки по электронной почте",
+    "Sending of confirmation email failed": "Не удалось отправить письмо с подтверждением",
+    "Try resend confirmation email": "Попробуйте повторно отправить письмо с подтверждением"
 }
