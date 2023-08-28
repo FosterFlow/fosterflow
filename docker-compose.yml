@@ -33,6 +33,9 @@ services:
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     environment:
       - REDIS_HOST=redis
+    restart: always
+    volumes:
+      - ./backend:/backend
     depends_on:
       - db
       - redis
