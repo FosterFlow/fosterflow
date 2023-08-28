@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Alert } from 'reactstrap';
+import { Alert, Spinner } from 'reactstrap';
 import withRouter from '../components/withRouter';
 import config from '../config';
 import { useTranslation } from 'react-i18next';
