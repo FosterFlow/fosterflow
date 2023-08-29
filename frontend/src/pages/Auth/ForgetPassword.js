@@ -97,12 +97,39 @@ const ForgetPassword = (props) => {
                                     <div className="p-3">
                                         {
                                             forgetPasswordErrors && forgetPasswordErrors.details &&
-                                            <Alert color="danger">{forgetPasswordErrors.details}</Alert>
+                                            (<Alert color="danger">
+                                                <ul>
+                                                    {forgetPasswordErrors.details.map((error, index) => (
+                                                        <li key={index}>{error}</li>
+                                                    ))}
+                                                </ul>
+                                            </Alert>)
                                         }
                                         {
-                                            forgetPasswordSuccess ? 
-                                            <Alert color="success" className="text-center mb-4">{t('Email and instructions was sent to your email')}.</Alert>
-                                            : <Alert color="info" className="text-center mb-4">{t('Enter your Email and instructions will be sent to you')}.</Alert>
+                                            forgetPasswordSuccess && 
+                                            <Alert color="success" className="text-center mb-4">
+                                                {t('Email with instructions was sent to you')}.
+                                            </Alert>
+                                        
+                                        }
+
+                                        {
+                                            forgetPasswordLoading &&
+                                            <Alert color="info" className="text-center mb-4">
+                                                <div className='pe-2 d-inline-block'>
+                                                    <Spinner size="sm"/>
+                                                </div>
+                                                {t('Sending email instruction to you')}...
+                                            </Alert>
+                                        }
+
+                                        { (!forgetPasswordSuccess &&
+                                            forgetPasswordErrors === null &&
+                                            !forgetPasswordLoading
+                                            ) &&
+                                            <Alert color="info" className="text-center mb-4">
+                                                {t('Enter your email and instructions will be sent to you')}.
+                                            </Alert>
                                         }
                                         <Form onSubmit={forgetPasswordForm.handleSubmit}>
 
@@ -128,9 +155,15 @@ const ForgetPassword = (props) => {
                                                     />
                                                     {forgetPasswordForm.touched.email && 
                                                     forgetPasswordErrors && 
-                                                    forgetPasswordErrors.email && (
-                                                        <FormFeedback type="invalid">{forgetPasswordErrors.email}</FormFeedback>
-                                                    )}
+                                                    forgetPasswordErrors.email &&
+                                                            (<FormFeedback>
+                                                            <ul>
+                                                                {forgetPasswordErrors.email.map((error, index) => (
+                                                                    <li key={index}>{error}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </FormFeedback>)
+                                                    }
                                                 </InputGroup>
                                             </FormGroup>
 

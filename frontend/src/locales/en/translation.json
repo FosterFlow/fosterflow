@@ -74,7 +74,7 @@
     "Start the Chat with GPT-3.5 Model": "Start the Chat with GPT-3.5 Model",
     "Sign in now": "Sign in now",
     "Confirmation failed": "Confirmation failed",
-    "Email and instructions was sent to your email": "Email and instructions was sent to your email",
+    "Email with instructions was sent to you": "Email with instructions was sent to you",
     "Enter your Email and instructions will be sent to you" : "Enter your Email and instructions will be sent to you",
     "Remember It": "Remember It",
     "Enter email": "Enter email",
@@ -133,5 +133,6 @@
     "Try to login and re-send confirmation email":"Try to login and re-send confirmation email",
     "Or contact our support by email":"Or contact our support by email",
     "Sending of confirmation email failed":"Sending of confirmation email failed",
-    "Try resend confirmation email":"Try resend confirmation email"
+    "Try resend confirmation email":"Try resend confirmation email",
+    "Sending email instruction to you": "Sending email instruction to you"
 }

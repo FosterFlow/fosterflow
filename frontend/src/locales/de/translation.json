@@ -74,8 +74,8 @@
     "Start the Chat with GPT-3.5 Model": "Starten Sie den Chat mit dem GPT-3.5 Modell",
     "Sign in now": "Jetzt anmelden",
     "Confirmation failed": "Bestätigung fehlgeschlagen",
-    "Email and instructions was sent to your email": "E-Mail und Anweisungen wurden an Ihre E-Mail gesendet",
-    "Enter your Email and instructions will be sent to you" : "Geben Sie Ihre E-Mail ein und Anweisungen werden Ihnen zugesendet",
+    "Email with instructions was sent to you": "Eine E-Mail mit Anweisungen wurde an dich gesendet",
+    "Enter your email and instructions will be sent to you" : "Geben Sie Ihre e-mail ein und Anweisungen werden Ihnen zugesendet",
     "Remember It": "Merken Sie es sich",
     "Enter email": "E-Mail eingeben",
     "Forgot password": "Passwort vergessen",
@@ -133,5 +133,6 @@
     "Try to login and re-send confirmation email": "Versuchen Sie sich anzumelden und das Bestätigungs-E-Mail erneut zu senden",
     "Or contact our support by email": "Oder kontaktieren Sie unseren Support per E-Mail",
     "Sending of confirmation email failed": "Senden der Bestätigungs-E-Mail fehlgeschlagen",
-    "Try resend confirmation email": "Versuchen Sie, das Bestätigungs-E-Mail erneut zu senden"
+    "Try resend confirmation email": "Versuchen Sie, das Bestätigungs-E-Mail erneut zu senden",
+    "Sending email instruction to you": "Sende E-Mail-Anweisung an dich"
 }

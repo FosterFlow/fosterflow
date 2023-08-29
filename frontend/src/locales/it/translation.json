@@ -74,8 +74,8 @@
     "Start the Chat with GPT-3.5 Model": "Inizia la chat con il modello GPT-3.5",
     "Sign in now": "Accedi ora",
     "Confirmation failed": "Conferma fallita",
-    "Email and instructions was sent to your email": "L'email e le istruzioni sono state inviate al tuo indirizzo email",
-    "Enter your Email and instructions will be sent to you" : "Inserisci il tuo indirizzo email e le istruzioni ti verranno inviate",
+    "Email with instructions was sent to you": "È stata inviata un'email con istruzioni a te",
+    "Enter your email and instructions will be sent to you" : "Inserisci il tuo indirizzo email e le istruzioni ti verranno inviate",
     "Remember It": "Ricordalo",
     "Enter email": "Inserisci l'email",
     "Forgot password": "Password dimenticata",
@@ -133,5 +133,6 @@
     "Try to login and re-send confirmation email": "Prova ad accedere e a reinviare l'email di conferma",
     "Or contact our support by email": "O contatta il nostro supporto via email",
     "Sending of confirmation email failed": "L'invio dell'email di conferma non è riuscito",
-    "Try resend confirmation email": "Prova a reinviare l'email di conferma"
+    "Try resend confirmation email": "Prova a reinviare l'email di conferma",
+    "Sending email instruction to you": "Invio di istruzione tramite email"
 }

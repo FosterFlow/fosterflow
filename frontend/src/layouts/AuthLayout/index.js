@@ -68,14 +68,20 @@ const Index = (props) => {
     return (
         <React.Fragment>
             <div className="auth-layout">
-                {confirmEmailLoading && (
+                {confirmEmailLoading && 
                     <Alert color="info">
+                        <span>
+                            <Spinner size="sm"/>&nbsp;
+                            {t('Validating your email address')}...
+                        </span>
+                    </Alert>
+                }
+                {sendConfirmationEmailLoading && 
                     <span>
                         <Spinner size="sm"/>&nbsp;
-                        {t('Validating your email address')}...
+                        {t('Sending email confirmation')}...
                     </span>
-                </Alert>
-                )}
+                }   
                 {confirmEmailSuccess && (
                     <Alert color="success">
                             {t('Email was successfully confirmed')}.
@@ -136,21 +142,14 @@ const Index = (props) => {
                 !confirmEmailLoading && 
                 sendConfirmationEmailErrors === null && 
                 confirmEmailErrors === null && 
+                !sendConfirmationEmailLoading &&
                     <Alert color="info">
                         <span>
-                            {sendConfirmationEmailLoading ? (
-                                <span>
-                                    <Spinner size="sm"/>&nbsp;
-                                    {t('Sending email confirmation')}...
-                                </span>) : (
-                                <>
-                                    {t('We have sent you an email to confirm your account. Please check your inbox')}.
-                                    <a href="#" onClick={sendConfirmationEmailHandler}> 
-                                        {t('Click here')}&nbsp;
-                                    </a>
-                                    {t('to send again')}.
-                                </>) 
-                            }
+                            {t('We have sent you an email to confirm your account. Please check your inbox')}.
+                                <a href="#" onClick={sendConfirmationEmailHandler}> 
+                                    {t('Click here')}&nbsp;
+                                </a>
+                            {t('to send again')}.
                         </span>
                     </Alert>
                 }
