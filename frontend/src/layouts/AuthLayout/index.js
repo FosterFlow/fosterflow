@@ -41,6 +41,11 @@ const Index = (props) => {
         //TODO: move to jsx template
         document.body.setAttribute("data-bs-theme", props.layoutMode);
     }
+
+    function sendConfirmationEmailHandler (event) {
+        event.preventDefault();
+        sendConfirmationEmail();
+    }
     
     useEffect(() => {
         document.title = "FosterFlow Chat";
@@ -92,7 +97,7 @@ const Index = (props) => {
                             </div>)
                         }
                         <div>
-                            <a href="#" onClick={sendConfirmationEmail}> 
+                            <a href="#" onClick={sendConfirmationEmailHandler}> 
                                 {t('Try resend confirmation email')}.
                             </a>&nbsp;
                             {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
@@ -116,7 +121,7 @@ const Index = (props) => {
                         }
                         <div>
                             {t('Try resend confirmation email')}.
-                            <a href="#" onClick={sendConfirmationEmail}> 
+                            <a href="#" onClick={sendConfirmationEmailHandler}> 
                                 {t('Click here')}&nbsp;
                                 </a>
                             {t('to send again')}.
@@ -140,7 +145,7 @@ const Index = (props) => {
                                 </span>) : (
                                 <>
                                     {t('We have sent you an email to confirm your account. Please check your inbox')}.
-                                    <a href="#" onClick={sendConfirmationEmail}> 
+                                    <a href="#" onClick={sendConfirmationEmailHandler}> 
                                         {t('Click here')}&nbsp;
                                     </a>
                                     {t('to send again')}.

@@ -15,9 +15,14 @@ import AuthLayout from "../layouts/AuthLayout/";
  */
 const Routes = (props) => {
     const location = useLocation();
-    const { isAuthenticated } = props;
+    const { 
+        isAuthenticated,
+        confirmEmailSuccess
+    } = props;
     const emailVerifyPattern = /\/email-verify\/([^/]+)/;
+    const emailVerifyTokenPattern = /\/email-verify-token\/([^/]+)/;
     const matchEmailVerifyPattern = location.pathname.match(emailVerifyPattern);
+    const matchEmailVerifyTokenPattern = location.pathname.match(emailVerifyTokenPattern);
     const isAuthRoute = authRoutes.some(route => route.path === location.pathname);
     const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === location.pathname);
 
@@ -25,9 +30,27 @@ const Routes = (props) => {
     if (matchEmailVerifyPattern) {
         const token = matchEmailVerifyPattern[1];
         if (isAuthenticated) {
+            if (confirmEmailSuccess) {
+                return <Navigate to={{ pathname: `/chats`, state: { from: location } }} />;
+            }
             return <Navigate to={{ pathname: `/chats/email-verify-token/${token}`, state: { from: location } }} />;
         }
+        if (confirmEmailSuccess) {
+            return <Navigate to={{ pathname: `/login`, state: { from: location } }} />;
+        }
         return <Navigate to={{ pathname: `/login/email-verify-token/${token}`, state: { from: location } }} />;
+    }
+
+    //After successfull email validation
+    if (matchEmailVerifyTokenPattern) {
+        if (isAuthenticated) {
+            if (confirmEmailSuccess) {
+                return <Navigate to={{ pathname: `/chats`, state: { from: location } }} />;
+            }
+        }
+        if (confirmEmailSuccess) {
+            return <Navigate to={{ pathname: `/login`, state: { from: location } }} />;
+        }
     }
     
     //Redirect in case if user not authenticated and tried to reach protected route
@@ -84,7 +107,8 @@ const Routes = (props) => {
 const mapStateToProps = (state) => {
     return {
         //cause re-render of the router if user was authenticated or logout
-        isAuthenticated: state.Auth.isAuthenticated
+        isAuthenticated: state.Auth.isAuthenticated,
+        confirmEmailSuccess: state.Auth.confirmEmailSuccess
     }
 };
 
