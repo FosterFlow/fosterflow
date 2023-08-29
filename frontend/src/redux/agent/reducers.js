@@ -32,15 +32,22 @@ const Agent = (state = INIT_STATE, action) => {
         case GET_AGENT:
             return { ...state, loading: true }
         
-        case GET_AGENT_SUCCESS:
+        case GET_AGENT_SUCCESS: {
+            const serverAvatar = action.payload.avatar;
+            let avatar = defaultAvatarImage; 
+            
+            if (serverAvatar) {
+                avatar = config.BACKEND_URL + serverAvatar
+            }
+
             return { 
                 ...state, 
                 agent: action.payload,
-                avatar: config.BACKEND_URL + action.payload.avatar, 
+                avatar: avatar, 
                 loading: false, 
                 error: null 
             };
-
+        }
         case GET_AGENT_FAILED:
             return { ...state, loading: false, errors: action.payload };
         
@@ -83,15 +90,22 @@ const Agent = (state = INIT_STATE, action) => {
                 avatarSuccess: false 
             };
             
-        case UPDATE_AGENT_AVATAR_SUCCESS:
+        case UPDATE_AGENT_AVATAR_SUCCESS: {
+            const serverAvatar = action.payload;
+            let avatar = defaultAvatarImage; 
+            
+            if (serverAvatar) {
+                avatar = config.BACKEND_URL + serverAvatar
+            }
+            
             return { 
                 ...state, 
-                avatar: config.BACKEND_URL + action.payload, 
+                avatar: avatar, 
                 avatarLoading: false, 
                 avatarErrors: null,
                 avatarSuccess: true 
             };
-
+        }
         case HIDE_AGENT_AVATAR_SUCCESS_MESSAGE:
             return { 
                 ...state, 

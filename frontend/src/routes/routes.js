@@ -33,7 +33,6 @@ const authProtectedRoutes = [
 ];
 
 const publicRoutes = [
-  // { path: "/email-verify/:token", component: <EmailVerification/> },
   // { path: "/password-reset/:token", component: <PasswordReset/> },
   // { path: "/forget-password", component: <ForgetPassword /> },
 ];

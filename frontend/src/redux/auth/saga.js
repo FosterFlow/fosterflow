@@ -94,41 +94,28 @@ function* registerSaga({ payload: { email, password } }) {
  * Send a link with confirmation email
  */
   function* sendConfirmationEmailSaga() {
-    yield delay(5000);
-    // try {
-        // yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
-        // yield put(sendConfirmationEmailSuccess());
-        // yield delay(5000);
-        // yield put(sendConfirmationEmailInitState());
-    // } catch (errors) {
-        yield put(sendConfirmationEmailFailure({
-            "details": [
-              "Bad Request."
-            ]
-          }));
-    // }
+    try {
+        yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
+        yield put(sendConfirmationEmailSuccess());
+        yield delay(5000);
+        yield put(sendConfirmationEmailInitState());
+    } catch (errors) {
+        yield put(sendConfirmationEmailFailure(errors));
+    }
   }
 
 /**
  * Confirm the email
  */
 function* confirmEmailSaga({ payload: { token } }) {
-    yield delay(5000);
-    // try {
-    //   yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
-        // yield delay(10000);
+    try {
+      yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
         yield put(confirmEmailSuccess());
         yield delay(5000);
         yield put(confirmEmailInitState());
-    // } catch (errors) {
-        // yield delay(10000);
-        // yield put(confirmEmailFailure(errors));
-        // yield put(confirmEmailFailure( {
-        //     "details": [
-        //       "Bad Request."
-        //     ]
-        //   }));
-    // }
+    } catch (errors) {
+        yield put(confirmEmailFailure(errors));
+    }
   }
 
 

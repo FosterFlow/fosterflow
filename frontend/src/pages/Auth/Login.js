@@ -30,6 +30,7 @@ import _ from 'lodash';
  */
 const Login = (props) => {
     const {
+        confirmEmailLoading,
         loginLoading, 
         loginErrors, 
         loginUser,
@@ -129,7 +130,7 @@ const Login = (props) => {
                                                         onBlur={loginForm.handleBlur}                                                        
                                                         value={loginForm.values.email}
                                                         autoComplete="username"
-                                                        disabled={loginLoading}                                                        
+                                                        disabled={loginLoading || confirmEmailLoading}                                                        
                                                         invalid={
                                                             (loginForm.touched.email && 
                                                             loginErrors &&
@@ -167,7 +168,7 @@ const Login = (props) => {
                                                         onBlur={loginForm.handleBlur}                                                        
                                                         value={loginForm.values.password}
                                                         autoComplete="current-password"
-                                                        disabled={loginLoading}   
+                                                        disabled={loginLoading || confirmEmailLoading}   
                                                         invalid={(
                                                             loginForm.touched.password &&
                                                             loginErrors &&
@@ -190,8 +191,8 @@ const Login = (props) => {
                                             </div> */}
 
                                             <div className="d-grid">
-                                                <Button color="primary" disabled={loginLoading} type="submit">
-                                                    {loginLoading &&
+                                                <Button color="primary" disabled={loginLoading || confirmEmailLoading} type="submit">
+                                                    {(loginLoading || confirmEmailLoading) &&
                                                         <div className='pe-2 d-inline-block'>
                                                             <Spinner size="sm"/>
                                                         </div>
@@ -217,12 +218,14 @@ const Login = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    const { 
+    const {
+        confirmEmailLoading, 
         loginLoading, 
         loginErrors 
     } = state.Auth;
     
-    return { 
+    return {
+        confirmEmailLoading, 
         loginLoading, 
         loginErrors 
     };
