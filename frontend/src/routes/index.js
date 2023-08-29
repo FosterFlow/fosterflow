@@ -5,7 +5,11 @@ import {
     Navigate, 
     useLocation, 
 } from 'react-router-dom';
-import { authProtectedRoutes, authRoutes, publicRoutes } from './routes';
+import { 
+    authProtectedRoutes, 
+    authRoutes, 
+    publicRoutes 
+} from './routes';
 import { connect } from "react-redux";
 import NonAuthLayout from "../layouts/NonAuth";
 import AuthLayout from "../layouts/AuthLayout/";
@@ -19,10 +23,12 @@ const Routes = (props) => {
         isAuthenticated,
         confirmEmailSuccess
     } = props;
+    
     const emailVerifyPattern = /\/email-verify\/([^/]+)/;
     const emailVerifyTokenPattern = /\/email-verify-token\/([^/]+)/;
     const matchEmailVerifyPattern = location.pathname.match(emailVerifyPattern);
     const matchEmailVerifyTokenPattern = location.pathname.match(emailVerifyTokenPattern);
+    
     const isAuthRoute = authRoutes.some(route => route.path === location.pathname);
     const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === location.pathname);
 
@@ -30,29 +36,20 @@ const Routes = (props) => {
     if (matchEmailVerifyPattern) {
         const token = matchEmailVerifyPattern[1];
         if (isAuthenticated) {
-            if (confirmEmailSuccess) {
-                return <Navigate to={{ pathname: `/chats`, state: { from: location } }} />;
-            }
             return <Navigate to={{ pathname: `/chats/email-verify-token/${token}`, state: { from: location } }} />;
         }
-        if (confirmEmailSuccess) {
-            return <Navigate to={{ pathname: `/login`, state: { from: location } }} />;
-        }
+     
         return <Navigate to={{ pathname: `/login/email-verify-token/${token}`, state: { from: location } }} />;
     }
 
     //After successfull email validation
-    if (matchEmailVerifyTokenPattern) {
+    if (matchEmailVerifyTokenPattern && confirmEmailSuccess) {
         if (isAuthenticated) {
-            if (confirmEmailSuccess) {
-                return <Navigate to={{ pathname: `/chats`, state: { from: location } }} />;
-            }
+            return <Navigate to={{ pathname: `/chats`, state: { from: location } }} />;
         }
-        if (confirmEmailSuccess) {
-            return <Navigate to={{ pathname: `/login`, state: { from: location } }} />;
-        }
+        return <Navigate to={{ pathname: `/login`, state: { from: location } }} />;
     }
-    
+
     //Redirect in case if user not authenticated and tried to reach protected route
     if (!isAuthenticated && isAuthProtectedRoute) {
         return <Navigate to={{ pathname: "/login", state: { from: location } }} />;

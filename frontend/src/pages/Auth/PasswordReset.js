@@ -20,7 +20,6 @@ import withRouter from "../../components/withRouter";
 const ResetPassword = (props) => {
     /* initialize t variable for multi language implementation */
     const { t } = useTranslation();
-    const [errors, setErrors] = useState(null);
     let { token } = useParams();
 
     useEffect(() => {
@@ -29,19 +28,8 @@ const ResetPassword = (props) => {
         props.validateResetToken(token);
     }, []);
 
-    useEffect(() => {
-        if (props.error && props.error.errors) {
-            const propsErrors = props.error.errors;
-            setErrors(propsErrors);
-            let formErrors = {};
-            for (let key in propsErrors) {
-                formErrors[key] = propsErrors[key][0];
-            }
-            formik.setErrors(formErrors);
-        }
-    }, [props.error]);
-
     const formik = useFormik({
+        validateOnChange: false,
         initialValues: {
             password: '',
             confirmPassword: ''

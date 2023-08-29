@@ -9,7 +9,7 @@ const Settings = React.lazy(() => import("../pages/dashboard/Tabs/Settings"));
 // auth
 const Login = React.lazy(() => import("../pages/Auth/Login"));
 const Logout = React.lazy(() => import("../pages/Auth/Logout"));
-// const ForgetPassword = React.lazy(() => import("../pages/Auth/ForgetPassword"));
+const ForgetPassword = React.lazy(() => import("../pages/Auth/ForgetPassword"));
 const Register = React.lazy(() => import("../pages/Auth/Register"));
 // const PasswordReset = React.lazy(() => import("../pages/Auth/PasswordReset"));
 
@@ -34,7 +34,7 @@ const authProtectedRoutes = [
 
 const publicRoutes = [
   // { path: "/password-reset/:token", component: <PasswordReset/> },
-  // { path: "/forget-password", component: <ForgetPassword /> },
+  { path: "/forget-password", component: <ForgetPassword /> },
 ];
 
 const authRoutes = [

@@ -131,10 +131,9 @@ const Login = (props) => {
                                                         value={loginForm.values.email}
                                                         autoComplete="username"
                                                         disabled={loginLoading || confirmEmailLoading}                                                        
-                                                        invalid={
-                                                            (loginForm.touched.email && 
-                                                            loginErrors &&
-                                                            loginErrors.email) ? true : false}
+                                                        invalid={!!(loginForm.touched.email && 
+                                                                    loginErrors &&
+                                                                    loginErrors.email)}
                                                     />
                                                     {loginForm.touched.email &&
                                                      loginErrors &&
@@ -169,10 +168,9 @@ const Login = (props) => {
                                                         value={loginForm.values.password}
                                                         autoComplete="current-password"
                                                         disabled={loginLoading || confirmEmailLoading}   
-                                                        invalid={(
-                                                            loginForm.touched.password &&
-                                                            loginErrors &&
-                                                            loginErrors.password) ? true : false}
+                                                        invalid={!!(loginForm.touched.password &&
+                                                                    loginErrors &&
+                                                                    loginErrors.password)}
                                                     />
                                                     {loginForm.touched.password && loginErrors && loginErrors.password &&
                                                         (<FormFeedback>

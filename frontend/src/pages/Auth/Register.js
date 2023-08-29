@@ -144,10 +144,9 @@ const Register = (props) => {
                                                         onBlur={registerForm.handleBlur}
                                                         value={registerForm.values.email}
                                                         disabled={registerLoading}
-                                                        invalid={
-                                                            registerForm.touched.email 
-                                                            && registerErrors
-                                                            && registerErrors.email ? true : false}
+                                                        invalid={!!(registerForm.touched.email 
+                                                                    && registerErrors
+                                                                    && registerErrors.email)}
                                                     />
                                                     {registerForm.touched.email 
                                                     && registerErrors
@@ -180,9 +179,9 @@ const Register = (props) => {
                                                         onBlur={registerForm.handleBlur}
                                                         value={registerForm.values.password}
                                                         disabled={registerLoading}
-                                                        invalid={registerForm.touched.password 
-                                                                && registerErrors
-                                                                && registerErrors.password ? true : false}
+                                                        invalid={!!(registerForm.touched.password 
+                                                                    && registerErrors
+                                                                    && registerErrors.password)}
                                                     />
                                                     {registerForm.touched.password
                                                     && registerErrors 

@@ -5,38 +5,49 @@ import { Link } from 'react-router-dom';
 //Import formik validation
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Container, Row, Col, Card, CardBody, FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
+import { 
+    Container,
+    Row, 
+    Col, 
+    Card, 
+    CardBody, 
+    FormGroup, 
+    Alert, 
+    Form, 
+    Input, 
+    Button, 
+    FormFeedback, 
+    Label, 
+    InputGroup,
+    Spinner 
+} from 'reactstrap';
 
-//Import actions and helpers
-import { forgetPassword, authError } from '../../redux/actions';
-
-//i18n
+import { 
+    forgetPassword,
+    forgetPasswordInitState,
+    forgetPasswordFailure
+} from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
+import _ from 'lodash';
 
 /**
  * Forget Password component
  * @param {*} props 
  */
 const ForgetPassword = (props) => {
-    const [errors, setErrors] = useState(null);
-
-    /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
-
-    useEffect(() => {
-        if (props.error && props.error.errors) {
-            const propsErrors = props.error.errors;
-            setErrors(propsErrors);
-            let formErrors = {};
-            for (let key in propsErrors) {
-                formErrors[key] = propsErrors[key][0];
-            }
-            formik.setErrors(formErrors);
-        }
-    }, [props.error]);
+    const { 
+        forgetPassword,
+        forgetPasswordInitState,
+        forgetPasswordFailure,
+        forgetPasswordLoading,
+        forgetPasswordSuccess,
+        forgetPasswordErrors,
+    } = props;
 
     // validation
-    const formik = useFormik({
+    const forgetPasswordForm = useFormik({
+        validateOnChange: false,
         initialValues: {
             email: ''
         },
@@ -46,9 +57,34 @@ const ForgetPassword = (props) => {
             .required(t('Please enter your email'))
         }),
         onSubmit: values => {
-            props.forgetPassword(values.email);
+            forgetPassword(values.email);
         },
     });
+
+    useEffect(() => {
+        const forgetPasswordFormErrors = forgetPasswordForm.errors;
+        const errors = {};
+
+        if (_.isEmpty(forgetPasswordFormErrors)) {
+            if (forgetPasswordErrors === null) {
+                return;
+            }
+
+            forgetPasswordInitState();
+            return;
+        }
+
+        const emailErrors = forgetPasswordFormErrors.email;
+        if (emailErrors) {
+            if (Array.isArray(emailErrors)){
+                errors.email = [...emailErrors];
+            } else {
+                errors.email = [emailErrors];
+            }
+        }
+
+        forgetPasswordFailure (errors);
+    }, [forgetPasswordForm.errors]);
 
     return (
         <React.Fragment>
@@ -60,15 +96,15 @@ const ForgetPassword = (props) => {
                                 <CardBody className="p-4">
                                     <div className="p-3">
                                         {
-                                            errors && errors.details &&
-                                            <Alert color="danger">{errors.details}</Alert>
+                                            forgetPasswordErrors && forgetPasswordErrors.details &&
+                                            <Alert color="danger">{forgetPasswordErrors.details}</Alert>
                                         }
                                         {
-                                            props.passwordResetStatus ? 
+                                            forgetPasswordSuccess ? 
                                             <Alert color="success" className="text-center mb-4">{t('Email and instructions was sent to your email')}.</Alert>
                                             : <Alert color="info" className="text-center mb-4">{t('Enter your Email and instructions will be sent to you')}.</Alert>
                                         }
-                                        <Form onSubmit={formik.handleSubmit}>
+                                        <Form onSubmit={forgetPasswordForm.handleSubmit}>
 
                                             <FormGroup className="mb-4">
                                                 <Label className="form-label">{t('Email')}</Label>
@@ -82,19 +118,31 @@ const ForgetPassword = (props) => {
                                                         name="email"
                                                         className="form-control form-control-lg border-light bg-soft-light"
                                                         placeholder="Enter Email"
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}
-                                                        value={formik.values.email}
-                                                        invalid={formik.touched.email && formik.errors.email ? true : false}
+                                                        onChange={forgetPasswordForm.handleChange}
+                                                        onBlur={forgetPasswordForm.handleBlur}
+                                                        value={forgetPasswordForm.values.email}
+                                                        disabled={forgetPasswordLoading} 
+                                                        invalid={!!(forgetPasswordForm.touched.email && 
+                                                                    forgetPasswordErrors && 
+                                                                    forgetPasswordErrors.email)}
                                                     />
-                                                    {formik.touched.email && formik.errors.email ? (
-                                                        <FormFeedback type="invalid">{formik.errors.email}</FormFeedback>
-                                                    ) : null}
+                                                    {forgetPasswordForm.touched.email && 
+                                                    forgetPasswordErrors && 
+                                                    forgetPasswordErrors.email && (
+                                                        <FormFeedback type="invalid">{forgetPasswordErrors.email}</FormFeedback>
+                                                    )}
                                                 </InputGroup>
                                             </FormGroup>
 
                                             <div className="d-grid">
-                                                <Button color="primary" block type="submit">{t('Reset')}</Button>
+                                                <Button disabled={forgetPasswordLoading} color="primary" type="submit">
+                                                    {forgetPasswordLoading &&
+                                                        <div className='pe-2 d-inline-block'>
+                                                            <Spinner size="sm"/>
+                                                        </div>
+                                                    }
+                                                        {t('Reset')}
+                                                </Button>
                                             </div>
 
                                         </Form>
@@ -115,8 +163,23 @@ const ForgetPassword = (props) => {
 
 
 const mapStateToProps = (state) => {
-    const { user, loading, error, passwordResetStatus } = state.Auth;
-    return { user, loading, error, passwordResetStatus };
+    const {
+        forgetPasswordLoading,
+        forgetPasswordSuccess,
+        forgetPasswordErrors,
+    } = state.Auth;
+    
+    return {
+        forgetPasswordLoading,
+        forgetPasswordSuccess,
+        forgetPasswordErrors,
+    };
 };
 
-export default connect(mapStateToProps, { forgetPassword, authError })(ForgetPassword);
+const mapDispatchToProps = {
+    forgetPassword,
+    forgetPasswordInitState,
+    forgetPasswordFailure
+}
+
+export default connect(mapStateToProps, { forgetPassword, mapDispatchToProps  })(ForgetPassword);
