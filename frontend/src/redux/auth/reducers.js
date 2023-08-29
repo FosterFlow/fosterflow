@@ -88,9 +88,9 @@ const INIT_STATE = {
     validatePasswordResetTokenSuccess: false,
     validatePasswordResetTokenErrors: null,
 
-    resetPaswordLoading: false,
-    resetPaswordSuccess: false,
-    resetPaswordErrors: null,
+    resetPasswordLoading: false,
+    resetPasswordSuccess: false,
+    resetPasswordErrors: null,
 
     changePasswordLoading: false,
     changePasswordSuccess: false,
@@ -350,33 +350,33 @@ const Auth = (state = INIT_STATE, action) => {
         case RESET_PASSWORD:
             return { 
                 ...state, 
-                resetPaswordLoading: true,
-                resetPaswordSuccess: false,
-                resetPaswordErrors: null,
+                resetPasswordLoading: true,
+                resetPasswordSuccess: false,
+                resetPasswordErrors: null,
             };
 
         case RESET_PASSWORD_INIT_STATE:
             return { 
                 ...state, 
-                resetPaswordLoading: false,
-                resetPaswordSuccess: false,
-                resetPaswordErrors: null,
+                resetPasswordLoading: false,
+                resetPasswordSuccess: false,
+                resetPasswordErrors: null,
             };
     
         case RESET_PASSWORD_SUCCESS:
             return { 
                 ...state, 
-                resetPaswordLoading: false,
-                resetPaswordSuccess: false,
-                resetPaswordErrors: null,
+                resetPasswordLoading: false,
+                resetPasswordSuccess: false,
+                resetPasswordErrors: null,
             };
 
         case RESET_PASSWORD_FAILURE:
             return { 
                 ...state, 
-                resetPaswordLoading: false,
-                resetPaswordSuccess: false,
-                resetPaswordErrors: action.payload,
+                resetPasswordLoading: false,
+                resetPasswordSuccess: false,
+                resetPasswordErrors: action.payload,
             };
 
         case CHANGE_PASSWORD:

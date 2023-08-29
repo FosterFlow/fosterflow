@@ -45,11 +45,9 @@ const NonAuth = (props) => {
         <React.Fragment>
                 {confirmEmailLoading && (
                     <Alert color="info">
-                    <span>
                         <Spinner size="sm"/>&nbsp;
                         {t('Validating your email address')}...
-                    </span>
-                </Alert>
+                    </Alert>
                 )}
                 {confirmEmailSuccess && (
                     <Alert color="success">

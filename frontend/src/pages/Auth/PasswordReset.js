@@ -1,34 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Card, CardBody, FormGroup, Alert, Form, Input, Button, FormFeedback, Label, InputGroup } from 'reactstrap';
+import { 
+    Container, 
+    Row, 
+    Col, 
+    Card, 
+    CardBody, 
+    FormGroup, 
+    Alert, 
+    Form, 
+    Input, 
+    Button, 
+    FormFeedback, 
+    Label, 
+    InputGroup,
+    Spinner  
+} from 'reactstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useParams } from 'react-router-dom';
 import * as Yup from 'yup';
-
-//i18n
 import { useTranslation } from 'react-i18next';
-
-//redux store
-import { validateResetToken, resetPasswordConfirm, authError  } from '../../redux/actions';
+import { 
+    validatePasswordResetToken,
+    validatePasswordResetTokenInitState,
+    validatePasswordResetTokenFailure,
+    
+    resetPassword,
+    resetPasswordInitState,
+    resetPasswordFailure 
+} from '../../redux/actions';
 import withRouter from "../../components/withRouter";
+import config from '../../config';
+import _ from 'lodash';
 
 /**
  * ResetPassword component
  * @param {*} props 
  */
 const ResetPassword = (props) => {
-    /* initialize t variable for multi language implementation */
     const { t } = useTranslation();
+    const supportEmail =  config.SUPPORT_EMAIL;
     let { token } = useParams();
+    const {
+        validatePasswordResetTokenLoading,
+        validatePasswordResetTokenSuccess,
+        validatePasswordResetTokenErrors,
+        
+        resetPasswordLoading,
+        resetPasswordSuccess,
+        resetPasswordErrors,
+
+        validatePasswordResetToken,
+        
+        resetPassword,
+        resetPasswordInitState,
+        resetPasswordFailure 
+    } = props;
 
     useEffect(() => {
-        props.authError(null);
-        //TODO: show errors of validation
-        props.validateResetToken(token);
-    }, []);
+        validatePasswordResetToken(token);
+    }, [token]);
 
-    const formik = useFormik({
+    const passwordResetForm = useFormik({
         validateOnChange: false,
         initialValues: {
             password: '',
@@ -41,10 +75,43 @@ const ResetPassword = (props) => {
                 .required(t('Please confirm your new password'))
         }),
         onSubmit: values => {
-            console.log('ResetPassword page', 'onSubmit', values.password, token );
-            props.resetPasswordConfirm(values.password, token);
+            resetPassword(values.password, token);
         },
     });
+
+    useEffect(() => {
+        const passwordResetFormErrors = passwordResetForm.errors;
+        const errors = {};
+
+        if (_.isEmpty(passwordResetFormErrors)) {
+            if (resetPasswordErrors === null) {
+                return;
+            }
+
+            resetPasswordInitState();
+            return;
+        }
+
+        const passwordErrors = passwordResetFormErrors.password;
+        if (passwordErrors) {
+            if (Array.isArray(passwordErrors)){
+                errors.password = [...passwordErrors];
+            } else {
+                errors.password = [passwordErrors];
+            }
+        }
+
+        const confirmPasswordErrors = passwordResetFormErrors.confirmPassword;
+        if (confirmPasswordErrors) {
+            if (Array.isArray(confirmPasswordErrors)){
+                errors.confirmPassword = [...confirmPasswordErrors];
+            } else {
+                errors.confirmPassword = [confirmPasswordErrors];
+            }
+        }
+
+        resetPasswordFailure(errors);
+    }, [passwordResetForm.errors]);
 
     return (
         <React.Fragment>
@@ -54,19 +121,56 @@ const ResetPassword = (props) => {
                         <Col md={8} lg={6} xl={5} >
                             <Card>
                                 <CardBody className="p-4">
-                                    {/* TODO: need to manage 3 cases: loading, error */}
-                                    { props.resetPasswordConfirmed &&
-                                        <Alert color="success" className="text-center mb-4">{t('Password was updated successfully')}. 
-                                            <Link to="/login" className="font-weight-medium text-primary"> {t('Login now')} </Link> 
+                                    {validatePasswordResetTokenLoading && (
+                                        <Alert color="info">
+                                            <Spinner size="sm"/>&nbsp;
+                                            {t('Validating your email address')}...
+                                        </Alert>
+                                    )}
+                                    { resetPasswordSuccess &&
+                                        <Alert color="success" className="text-center mb-4">
+                                            {t('Password was updated successfully')}. 
+                                            <Link to="/login" className="font-weight-medium text-primary"> 
+                                                {t('Login now')} 
+                                            </Link> 
                                         </Alert>
                                     }
-                                    {
-                                        errors && errors.details &&
-                                         <Alert color="danger">{errors.details}</Alert>
+                                    { validatePasswordResetTokenSuccess &&
+                                        <Alert color="success" className="text-center mb-4">
+                                            {t('Email was successfully confirmed')}. 
+                                        </Alert>
+                                    }
+                                    {resetPasswordErrors &&
+                                     resetPasswordErrors.details &&
+                                        (<Alert color="danger">
+                                            <ul>
+                                                {resetPasswordErrors.details.map((error, index) => (
+                                                    <li key={index}>{error}</li>
+                                                ))}
+                                            </ul>
+                                            {t('You can contact our support by email')}:&nbsp; 
+                                            <a href={`mailto:${supportEmail}`}>
+                                                {supportEmail}
+                                            </a>.
+                                        </Alert>)
+                                    }
+                                    {validatePasswordResetTokenErrors &&
+                                     validatePasswordResetTokenErrors.details &&
+                                        (<Alert color="danger">
+                                            <ul>
+                                                {validatePasswordResetTokenErrors.details.map((error, index) => (
+                                                    <li key={index}>{error}</li>
+                                                ))}
+                                            </ul>
+                                            {t('You can contact our support by email')}:&nbsp; 
+                                            <a href={`mailto:${supportEmail}`}>
+                                                {supportEmail}
+                                            </a>.
+                                        </Alert>)
                                     }
                                     <div className="p-3">
 
-                                        <Form onSubmit={formik.handleSubmit}>
+                                        <Form onSubmit={passwordResetForm.handleSubmit}>
 
                                             <FormGroup className="mb-4">
                                                 <Label className="form-label">{t('New Password')}</Label>
@@ -80,14 +184,28 @@ const ResetPassword = (props) => {
                                                         name="password"
                                                         className="form-control form-control-lg border-light bg-soft-light"
                                                         placeholder="Enter New Password"
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}                                                        
-                                                        value={formik.values.password}
-                                                        invalid={formik.touched.password && formik.errors.password ? true : false}
+                                                        onChange={passwordResetForm.handleChange}
+                                                        onBlur={passwordResetForm.handleBlur}                                                        
+                                                        value={passwordResetForm.values.password}
+                                                        disabled={validatePasswordResetTokenLoading ||
+                                                            resetPasswordLoading}
+                                                        invalid={
+                                                            !!(passwordResetForm.touched.password &&
+                                                            resetPasswordErrors &&
+                                                            resetPasswordErrors.password)
+                                                        }
                                                     />
-                                                    {formik.touched.password && formik.errors.password ? (
-                                                        <FormFeedback type="invalid">{formik.errors.password}</FormFeedback>
-                                                    ) : null}
+                                                    {passwordResetForm.touched.password &&
+                                                     resetPasswordErrors &&
+                                                     resetPasswordErrors.password && (
+                                                        (<FormFeedback>
+                                                            <ul>
+                                                                {resetPasswordErrors.password.map((error, index) => (
+                                                                    <li key={index}>{error}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </FormFeedback>)
+                                                    ) }
                                                 </InputGroup>
                                             </FormGroup>
 
@@ -103,28 +221,55 @@ const ResetPassword = (props) => {
                                                         name="confirmPassword"
                                                         className="form-control form-control-lg border-light bg-soft-light"
                                                         placeholder="Confirm New Password"
-                                                        onChange={formik.handleChange}
-                                                        onBlur={formik.handleBlur}                                                        
-                                                        value={formik.values.confirmPassword}
-                                                        invalid={formik.touched.confirmPassword && formik.errors.confirmPassword ? true : false}
+                                                        onChange={passwordResetForm.handleChange}
+                                                        onBlur={passwordResetForm.handleBlur}                                                        
+                                                        value={passwordResetForm.values.confirmPassword}
+                                                        disabled={validatePasswordResetTokenLoading ||
+                                                            resetPasswordLoading}
+                                                        invalid={!!(passwordResetForm.touched.confirmPassword &&
+                                                                resetPasswordErrors &&
+                                                                resetPasswordErrors.confirmPassword)}
                                                     />
-                                                    {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                                                        <FormFeedback type="invalid">{formik.errors.confirmPassword}</FormFeedback>
-                                                    ) : null}
+                                                    {passwordResetForm.touched.password &&
+                                                     resetPasswordErrors &&
+                                                     resetPasswordErrors.confirmPassword && (
+                                                        (<FormFeedback>
+                                                            <ul>
+                                                                {resetPasswordErrors.confirmPassword.map((error, index) => (
+                                                                    <li key={index}>{error}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </FormFeedback>)
+                                                    ) }
                                                 </InputGroup>
                                             </FormGroup>
 
                                             <div className="d-grid">
-                                                <Button color="primary" block type="submit">{t('Reset Password')}</Button>
+                                                <Button 
+                                                    color="primary" 
+                                                    disabled={
+                                                        validatePasswordResetTokenLoading ||
+                                                        resetPasswordLoading} 
+                                                    type="submit">
+                                                        {(validatePasswordResetTokenLoading ||
+                                                        resetPasswordLoading) &&
+                                                            <>
+                                                                <Spinner size="sm"/>&nbsp;
+                                                            </>
+                                                        }
+                                                        {t('Reset Password')}
+                                                </Button>
                                             </div>
-
                                         </Form>
                                     </div>
                                 </CardBody>
                             </Card>
 
                             <div className="mt-5 text-center">
-                                <p>{t("Remember your password")}? <Link to="/login" className="font-weight-medium text-primary"> {t('Sign in now')} </Link> </p>
+                                <p>{t("Remember your password")}?&nbsp; 
+                                <Link to="/login" className="font-weight-medium text-primary">
+                                     {t('Sign in now')}
+                                </Link> </p>
                             </div>
                         </Col>
                     </Row>
@@ -136,14 +281,32 @@ const ResetPassword = (props) => {
 
 
 const mapStateToProps = (state) => {
-    const { user, loading, error, resetPasswordConfirmed } = state.Auth;
-    return { user, loading, error, resetPasswordConfirmed };
+    const { 
+        validatePasswordResetTokenLoading,
+        validatePasswordResetTokenSuccess,
+        validatePasswordResetTokenErrors,
+        resetPasswordLoading,
+        resetPasswordSuccess,
+        resetPasswordErrors
+    } = state.Auth;
+    return { 
+        validatePasswordResetTokenLoading,
+        validatePasswordResetTokenSuccess,
+        validatePasswordResetTokenErrors,
+        resetPasswordLoading,
+        resetPasswordSuccess,
+        resetPasswordErrors
+    };
 };
 
 const mapDispatchToProps = {
-    validateResetToken,
-    resetPasswordConfirm,
-    authError
+    validatePasswordResetToken,
+    validatePasswordResetTokenInitState,
+    validatePasswordResetTokenFailure,
+    
+    resetPassword,
+    resetPasswordInitState,
+    resetPasswordFailure
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResetPassword));

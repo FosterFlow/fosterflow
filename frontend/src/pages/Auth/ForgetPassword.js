@@ -29,6 +29,7 @@ import {
 } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
+import config from '../../config';
 
 /**
  * Forget Password component
@@ -44,8 +45,7 @@ const ForgetPassword = (props) => {
         forgetPasswordSuccess,
         forgetPasswordErrors,
     } = props;
-
-    // validation
+    const supportEmail =  config.SUPPORT_EMAIL;
     const forgetPasswordForm = useFormik({
         validateOnChange: false,
         initialValues: {
@@ -103,6 +103,10 @@ const ForgetPassword = (props) => {
                                                         <li key={index}>{error}</li>
                                                     ))}
                                                 </ul>
+                                                {t('You can contact our support by email')}:&nbsp; 
+                                                <a href={`mailto:${supportEmail}`}>
+                                                    {supportEmail}
+                                                </a>.
                                             </Alert>)
                                         }
                                         {
@@ -112,7 +116,6 @@ const ForgetPassword = (props) => {
                                             </Alert>
                                         
                                         }
-
                                         {
                                             forgetPasswordLoading &&
                                             <Alert color="info" className="text-center mb-4">
@@ -156,7 +159,7 @@ const ForgetPassword = (props) => {
                                                     {forgetPasswordForm.touched.email && 
                                                     forgetPasswordErrors && 
                                                     forgetPasswordErrors.email &&
-                                                            (<FormFeedback>
+                                                        (<FormFeedback>
                                                             <ul>
                                                                 {forgetPasswordErrors.email.map((error, index) => (
                                                                     <li key={index}>{error}</li>

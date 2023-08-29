@@ -20,25 +20,36 @@ import {
 import {
     loginUserSuccess,
     loginUserFailure,
+    
     logoutUserSuccess,
     logoutUserFailure,
+    
     registerUserSuccess,
     registerUserFailure,
+    
     sendConfirmationEmailInitState,
     sendConfirmationEmailSuccess,
     sendConfirmationEmailFailure,
+    
     confirmEmailInitState,
     confirmEmailSuccess,
     confirmEmailFailure,
+    
     forgetPasswordSuccess,
     forgetPasswordFailure,
+    
     validatePasswordResetTokenSuccess,
     validatePasswordResetTokenFailure,
+    validatePasswordResetTokenInitState,
+    
     resetPasswordSuccess,
     resetPasswordFailure,
+    resetPasswordInitState,
+    
     changePasswordSuccess,
     changePasswordFailure,
     changePasswordInitState,
+    
     refreshTokenUpdateSuccess,
     refreshTokenUpdateFailure,
 } from './actions';
@@ -133,8 +144,10 @@ function* forgetPasswordSaga({ payload: { email } }) {
 
 function* validatePasswordResetTokenSaga({ payload: { token } }) {
     try {
-        yield call(apiClient.post, '/password-reset/validate_token/', { token });
+        // yield call(apiClient.post, '/password-reset/validate_token/', { token });
         yield put(validatePasswordResetTokenSuccess());
+        yield delay(5000);
+        yield put(validatePasswordResetTokenInitState());
     } catch (errors) {
         yield put(validatePasswordResetTokenFailure(errors));
     }
@@ -142,8 +155,10 @@ function* validatePasswordResetTokenSaga({ payload: { token } }) {
 
 function* resetPasswordSaga({ payload: { password, token } }) {
     try {
-        yield call(apiClient.post, '/password-reset/confirm/', { password, token });
+        // yield call(apiClient.post, '/password-reset/confirm/', { password, token });
         yield put(resetPasswordSuccess());
+        yield delay(5000);
+        yield put(resetPasswordInitState());
     } catch (errors) {
         yield put(resetPasswordFailure(errors));
     }
