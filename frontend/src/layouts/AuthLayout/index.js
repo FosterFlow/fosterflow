@@ -23,7 +23,6 @@ const Index = (props) => {
     const {
         children,
         sendConfirmationEmailLoading,
-        sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
 
         confirmEmail,
@@ -65,7 +64,7 @@ const Index = (props) => {
         <React.Fragment>
             <div className="auth-layout">
                 {confirmEmailLoading && (
-                    <Alert className="auth-layout-alert" color="info">
+                    <Alert color="info">
                     <span>
                         <Spinner size="sm"/>&nbsp;
                         {t('Validating your email address')}...
@@ -132,7 +131,7 @@ const Index = (props) => {
                 !confirmEmailLoading && 
                 sendConfirmationEmailErrors === null && 
                 confirmEmailErrors === null && 
-                    <Alert className="auth-layout-alert" color="info">
+                    <Alert color="info">
                         <span>
                             {sendConfirmationEmailLoading ? (
                                 <span>

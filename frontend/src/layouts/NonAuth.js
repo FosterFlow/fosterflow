@@ -4,6 +4,10 @@ import { Alert, Spinner } from 'reactstrap';
 import withRouter from '../components/withRouter';
 import config from '../config';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+import {
+    confirmEmail, 
+} from '../redux/actions';
 
 const NonAuth = (props) => {
     const { t } = useTranslation();
@@ -11,7 +15,9 @@ const NonAuth = (props) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
     const supportEmail =  config.SUPPORT_EMAIL;
+    const { token: emailVerifyToken } = useParams();
     const {
+        confirmEmail,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
@@ -28,10 +34,17 @@ const NonAuth = (props) => {
         document.title = currentPage;
     }, []);
 
+    useEffect(() => {
+        if (emailVerifyToken === undefined) {
+            return;
+        } 
+        confirmEmail(emailVerifyToken);
+    }, [emailVerifyToken]);
+
     return (
         <React.Fragment>
                 {confirmEmailLoading && (
-                    <Alert className="auth-layout-alert" color="info">
+                    <Alert color="info">
                     <span>
                         <Spinner size="sm"/>&nbsp;
                         {t('Validating your email address')}...
@@ -83,4 +96,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default withRouter(connect(mapStateToProps)(NonAuth));
+export default withRouter(connect(mapStateToProps, { confirmEmail })(NonAuth));

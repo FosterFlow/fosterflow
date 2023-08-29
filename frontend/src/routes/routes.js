@@ -40,6 +40,7 @@ const publicRoutes = [
 
 const authRoutes = [
   { path: "/login", component: <Login /> },
+  { path: "/login/email-verify-token/:token", component: <Login /> },
   { path: "/register", component: <Register /> },
 ];
 
