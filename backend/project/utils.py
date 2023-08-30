@@ -5,8 +5,12 @@ def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
     if response is not None and response.status_code == 400:
+        errors = []
+        for key, value in response.data.items():
+            for ind in value:
+                errors.append({ind: str(value[ind][0])})
         response.data = {
-            "errors": response.data
+            "errors": errors
         }
 
     if response is not None and response.status_code == 401:
@@ -18,7 +22,6 @@ def custom_exception_handler(exc, context):
                     'unauthorized': value
                 }
             }
-        print(response.data)
 
     if response is not None and response.status_code == 404:
         response.data = {

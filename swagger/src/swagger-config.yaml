@@ -119,6 +119,18 @@ paths:
           description: 'Successful operation'
           schema:
             $ref: '#/definitions/ChatModel'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "name": [
+                    "This field is required."
+                  ],
+                  "addressee_id": [
+                    "This field is required."
+                  ]
+                }
+              }
 
         400:
           description: Bad request.

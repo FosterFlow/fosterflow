@@ -1,3 +1,5 @@
+import os
+
 import environ
 from django.middleware import csrf
 from django.template.loader import render_to_string
@@ -65,6 +67,8 @@ class UserLoginAPIView(GenericAPIView):
 
         serializer = self.get_serializer(data=request.data)
         response = Response()
+        ACCESS_TOKEN_LIFETIME_MINUTES = os.environ.get('ACCESS_TOKEN_LIFETIME_MINUTES')
+        print(ACCESS_TOKEN_LIFETIME_MINUTES)
         if serializer.is_valid():
             user = serializer.validated_data
             token = RefreshToken.for_user(user)

@@ -126,7 +126,7 @@ class ChatConsumer(WebsocketConsumer):
         }))
         # iterate through the stream of events
         for event in response:
-            print(event)
+
             try:
                 if event['choices'][0]['finish_reason'] != 'stop':
                     event_text = event['choices'][0]['delta']['content']  # extract the text
