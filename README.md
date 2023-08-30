@@ -34,13 +34,23 @@ There are the upcoming tasks and features on our todo list that we plan to imple
 * **Access to different types of LLM/ML models**: Allow users to smoothly switch to the best model for solving an exact
   task using model name @model_name like we do with real users into chats.
 
-## Installation and use
+## Installation
 
-Since the project is divided into multiple parts, each installation can be found in the respective section:
+The project is launched via Docker-Compose. Docker works with [volumes](https://docs.docker.com/storage/volumes/), so
+any changes will be automatically applied. To install Docker Desktop, follow the instructions on the official website,
+depending on your platform, [link](https://docs.docker.com/desktop/).
 
-* [Link to Backend](backend/README.md)
-* [Link to Frontend](frontend/README.md)
-* [Link to Swagger](swagger/README.md)
+The following are the steps to launch:
+
+1. Download the project
+2. Go to the project directory
+3. Rename .env.template to .env (make changes if you need it)
+4. Run Docker Desktop application
+5. In the command line, write:
+```
+docker-compose build
+docker-compose up
+```
 
 ## Contributing
 
@@ -58,6 +68,7 @@ our project:
   request, or any other input, please don't hesitate to reach out to us via email at hello@fosterflow.com
 
 ## We are in social media
+
 * [Twitter](https://twitter.com/fosterflow_com)
 * [Linkedin](https://www.linkedin.com/company/fosterflow/)
 * [Facebook](https://www.facebook.com/fosterflowcom)
