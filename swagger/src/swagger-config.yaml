@@ -4,7 +4,7 @@ info:
   description: Authorization must take place via token. Enter the token with the `Bearer` prefix, e.g. "Bearer abcde12345".
   termsOfService: https://www.google.com/policies/terms/
   version: v1
-host: 0.0.0.0:8000
+host: localhost:8000
 basePath: /api
 consumes:
   - application/json
@@ -1144,7 +1144,18 @@ definitions:
         type: string
         minLength: 1
         example:
-          "details": [ "Given token not valid for any token type" ]
+          [
+            {
+              "unauthorized": "Token is invalid or expired"
+            },
+            {
+              "unauthorized": "Given token not valid for any token type"
+            },
+            {
+              "unauthorized": "Authentication credentials were not provided."
+            }
+          ]
+
   Forbidden:
     type: object
     properties:

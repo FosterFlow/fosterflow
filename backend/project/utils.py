@@ -10,11 +10,15 @@ def custom_exception_handler(exc, context):
         }
 
     if response is not None and response.status_code == 401:
-        response.data = {
-            "errors": {
-                key: [value] for key, value in response.data.items()
+        for key, value in response.data.items():
+            if 'message' in value[0]:
+                value = 'Token is invalid or expired'
+            response.data = {
+                "errors": {
+                    'unauthorized': value
+                }
             }
-        }
+        print(response.data)
 
     if response is not None and response.status_code == 404:
         response.data = {
