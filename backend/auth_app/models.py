@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from user_app.models import User
 
 
@@ -20,6 +21,7 @@ class EmailConfirmationToken(models.Model):
         verbose_name_plural = "Email Confirm Tokens"
 
     created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(default=(timezone.now() + timezone.timedelta(hours=2)))
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     key = models.CharField(
         max_length=64,
