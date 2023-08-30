@@ -367,7 +367,7 @@ const Auth = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 resetPasswordLoading: false,
-                resetPasswordSuccess: false,
+                resetPasswordSuccess: true,
                 resetPasswordErrors: null,
             };
 

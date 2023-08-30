@@ -134,5 +134,8 @@
     "Or contact our support by email": "Или свяжитесь с нашей службой поддержки по электронной почте",
     "Sending of confirmation email failed": "Не удалось отправить письмо с подтверждением",
     "Try resend confirmation email": "Попробуйте повторно отправить письмо с подтверждением",
-    "Sending email instruction to you": "Отправка инструкции по электронной почте"
+    "Sending email instruction to you": "Отправка инструкции по электронной почте",
+    "Validating your credentials": "Проверка ваших учетных данных",
+    "You can update your password now": "Теперь вы можете обновить свой пароль"
+
 }

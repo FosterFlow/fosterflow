@@ -41,7 +41,7 @@ import _ from 'lodash';
 const ResetPassword = (props) => {
     const { t } = useTranslation();
     const supportEmail =  config.SUPPORT_EMAIL;
-    let { token } = useParams();
+    let { passwordResetToken } = useParams();
     const {
         validatePasswordResetTokenLoading,
         validatePasswordResetTokenSuccess,
@@ -59,8 +59,8 @@ const ResetPassword = (props) => {
     } = props;
 
     useEffect(() => {
-        validatePasswordResetToken(token);
-    }, [token]);
+        validatePasswordResetToken(passwordResetToken);
+    }, [passwordResetToken]);
 
     const passwordResetForm = useFormik({
         validateOnChange: false,
@@ -69,13 +69,18 @@ const ResetPassword = (props) => {
             confirmPassword: ''
         },
         validationSchema: Yup.object({
-            password: Yup.string().required(t('Please enter your new password')),
+            password: Yup.string()
+            .required(t('Please enter your password'))
+            .matches(
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+                t('The password must meet the requirements below')  
+            ),
             confirmPassword: Yup.string()
                 .oneOf([Yup.ref('password'), null], t('Passwords must match'))
                 .required(t('Please confirm your new password'))
         }),
         onSubmit: values => {
-            resetPassword(values.password, token);
+            resetPassword(values.password, passwordResetToken);
         },
     });
 
@@ -115,7 +120,7 @@ const ResetPassword = (props) => {
 
     return (
         <React.Fragment>
-            <div className="account-pages my-5 pt-sm-5">
+            <div className="account-pages pt-sm-5">
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} >
@@ -124,20 +129,20 @@ const ResetPassword = (props) => {
                                     {validatePasswordResetTokenLoading && (
                                         <Alert color="info">
                                             <Spinner size="sm"/>&nbsp;
-                                            {t('Validating your email address')}...
+                                            {t('Validating your credentials')}...
                                         </Alert>
                                     )}
                                     { resetPasswordSuccess &&
                                         <Alert color="success" className="text-center mb-4">
-                                            {t('Password was updated successfully')}. 
+                                            {t('Password was updated successfully')}.&nbsp; 
                                             <Link to="/login" className="font-weight-medium text-primary"> 
-                                                {t('Login now')} 
+                                                {t('Login now')}. 
                                             </Link> 
                                         </Alert>
                                     }
                                     { validatePasswordResetTokenSuccess &&
                                         <Alert color="success" className="text-center mb-4">
-                                            {t('Email was successfully confirmed')}. 
+                                            {t('You can update your password now')}. 
                                         </Alert>
                                     }
                                     {resetPasswordErrors &&
@@ -206,7 +211,15 @@ const ResetPassword = (props) => {
                                                             </ul>
                                                         </FormFeedback>)
                                                     ) }
+                                                    
                                                 </InputGroup>
+                                                <ul>
+                                                    <li>{t('At least one lowercase character')}.</li>
+                                                    <li>{t('At least one uppercase character')}.</li>
+                                                    <li>{t('At least one digit')}.</li>
+                                                    <li>{t('At least one special character (in this set: @ $ ! % * ? & #)')}.</li>
+                                                    <li>{t('At least 8 characters in total')}.</li>
+                                                </ul>
                                             </FormGroup>
 
                                             <FormGroup className="mb-4">
@@ -230,7 +243,7 @@ const ResetPassword = (props) => {
                                                                 resetPasswordErrors &&
                                                                 resetPasswordErrors.confirmPassword)}
                                                     />
-                                                    {passwordResetForm.touched.password &&
+                                                    {passwordResetForm.touched.confirmPassword &&
                                                      resetPasswordErrors &&
                                                      resetPasswordErrors.confirmPassword && (
                                                         (<FormFeedback>

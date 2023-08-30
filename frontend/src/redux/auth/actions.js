@@ -223,7 +223,8 @@ export const resetPasswordSuccess = () => ({
 });
 
 export const resetPasswordFailure = (errors) => ({
-    type: RESET_PASSWORD_FAILURE
+    type: RESET_PASSWORD_FAILURE,
+    payload: errors
 });
 
 export const changePassword = (oldPassword, newPassword) => {

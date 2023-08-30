@@ -134,5 +134,8 @@
     "Or contact our support by email": "O contacta a nuestro soporte por correo electrónico",
     "Sending of confirmation email failed": "El envío del correo de confirmación ha fallado",
     "Try resend confirmation email": "Intenta reenviar el correo de confirmación",
-    "Sending email instruction to you": "Enviando instrucción por correo electrónico"
+    "Sending email instruction to you": "Enviando instrucción por correo electrónico",
+    "Validating your credentials": "Validando sus credenciales",
+    "You can update your password now": "Ahora puedes actualizar tu contraseña"
+
 }

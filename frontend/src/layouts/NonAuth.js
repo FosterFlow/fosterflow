@@ -6,7 +6,7 @@ import config from '../config';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import {
-    confirmEmail, 
+    confirmEmail
 } from '../redux/actions';
 
 const NonAuth = (props) => {
@@ -15,9 +15,10 @@ const NonAuth = (props) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     };
     const supportEmail =  config.SUPPORT_EMAIL;
-    const { token: emailVerifyToken } = useParams();
+    const { emailVerifyToken } = useParams();
     const {
         confirmEmail,
+        confirmEmailInitState,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
@@ -29,10 +30,8 @@ const NonAuth = (props) => {
         document.body.setAttribute("data-bs-theme", layoutMode);
     }
 
-    useEffect(() => {
-        let currentPage = capitalizeFirstLetter(props.router.location.pathname);
-        document.title = currentPage;
-    }, []);
+    let currentPage = capitalizeFirstLetter(props.router.location.pathname);
+    document.title = currentPage;
 
     useEffect(() => {
         if (emailVerifyToken === undefined) {
@@ -56,9 +55,9 @@ const NonAuth = (props) => {
                 }
                 {confirmEmailErrors && (
                     <Alert color="danger">
-                        <h4>
+                        <h6>
                             {t('Confirmation failed')}.
-                        </h4>
+                        </h6>
                         {confirmEmailErrors.details &&
                             (<div>
                                 {t('Errors details')}:
@@ -94,4 +93,8 @@ const mapStateToProps = state => {
     };
 };
 
-export default withRouter(connect(mapStateToProps, { confirmEmail })(NonAuth));
+const mapDispatchToProps = {
+    confirmEmail
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NonAuth));

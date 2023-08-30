@@ -19,7 +19,7 @@ import { useParams } from 'react-router-dom';
 const Index = (props) => {
     const { t } = useTranslation();
     const supportEmail =  config.SUPPORT_EMAIL;
-    const { token: emailVerifyToken } = useParams();
+    const { "email-verify-token": emailVerifyToken } = useParams();
     const {
         children,
         sendConfirmationEmailLoading,

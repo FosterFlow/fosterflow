@@ -35,6 +35,7 @@ import {
     confirmEmailSuccess,
     confirmEmailFailure,
     
+    forgetPasswordInitState,
     forgetPasswordSuccess,
     forgetPasswordFailure,
     
@@ -112,6 +113,8 @@ function* registerSaga({ payload: { email, password } }) {
         yield put(sendConfirmationEmailInitState());
     } catch (errors) {
         yield put(sendConfirmationEmailFailure(errors));
+        yield delay(15000);
+        yield put(sendConfirmationEmailInitState());
     }
   }
 
@@ -126,6 +129,8 @@ function* confirmEmailSaga({ payload: { token } }) {
         yield put(confirmEmailInitState());
     } catch (errors) {
         yield put(confirmEmailFailure(errors));
+        yield delay(15000);
+        yield put(confirmEmailInitState());
     }
   }
 
@@ -137,6 +142,8 @@ function* forgetPasswordSaga({ payload: { email } }) {
     try {
         const response = yield call(apiClient.post, '/password-reset/', { email });
         yield put(forgetPasswordSuccess(response.status));
+        yield delay(5000);
+        yield put(forgetPasswordInitState());
     } catch (errors) {
         yield put(forgetPasswordFailure(errors));
     }
@@ -144,21 +151,21 @@ function* forgetPasswordSaga({ payload: { email } }) {
 
 function* validatePasswordResetTokenSaga({ payload: { token } }) {
     try {
-        // yield call(apiClient.post, '/password-reset/validate_token/', { token });
+        yield call(apiClient.post, '/password-reset/validate_token/', { token });
         yield put(validatePasswordResetTokenSuccess());
         yield delay(5000);
         yield put(validatePasswordResetTokenInitState());
     } catch (errors) {
         yield put(validatePasswordResetTokenFailure(errors));
+        yield delay(15000);
+        yield put(validatePasswordResetTokenInitState());
     }
 }
 
 function* resetPasswordSaga({ payload: { password, token } }) {
     try {
-        // yield call(apiClient.post, '/password-reset/confirm/', { password, token });
+        yield call(apiClient.post, '/password-reset/confirm/', { password, token });
         yield put(resetPasswordSuccess());
-        yield delay(5000);
-        yield put(resetPasswordInitState());
     } catch (errors) {
         yield put(resetPasswordFailure(errors));
     }
@@ -174,7 +181,7 @@ function* changePasswordSaga({ payload: { oldPassword, newPassword } }) {
                 new_password: newPassword 
             });
         yield put(changePasswordSuccess(response.message));
-        
+        yield delay(5000);
         yield put(changePasswordInitState());
     } catch (errors) {
         yield put(changePasswordFailure(errors));
