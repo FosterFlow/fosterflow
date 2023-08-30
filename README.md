@@ -52,6 +52,8 @@ docker-compose build
 docker-compose up
 ```
 
+After following this instruction, the interaction is available at ```localhost:3000```
+
 ## Contributing
 
 We welcome and encourage contributions from the community to enhance our project. Whether you're a developer, designer,
