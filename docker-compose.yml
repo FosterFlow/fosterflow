@@ -1,0 +1,82 @@
+version: '3.1'
+services:
+  db:
+    container_name: postgres
+    image: postgres:13.1
+    privileged: true
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    networks:
+      - myNetwork
+ 
+  redis:
+    image: redis:6.2-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass REDIS_PASSWORD
+    volumes: 
+      - redis:/data
+    networks:
+      - myNetwork
+       
+  backend:
+    container_name: backend
+    build: ./backend
+    ports:
+      - 8000:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - REDIS_HOST=redis
+    restart: always
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    networks:
+      - myNetwork
+  
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend
+      - '/frontend/node_modules'
+    command: bash -c "yarn start"
+    networks:
+      - myNetwork
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - backend
+
+  swagger:
+    container_name: swagger
+    build: ./swagger
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./swagger:/swagger
+    command: bash -c "npm install && npm start"
+    networks:
+      - myNetwork
+    depends_on:
+      - db
+      - backend
+
+volumes:
+  redis:
+    driver: local
+    
+networks:
+  myNetwork:
+    driver: bridge

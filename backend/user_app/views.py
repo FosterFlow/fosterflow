@@ -54,7 +54,6 @@ class SelfUserAPIView(APIView):
             many=False
         )
 
-        print(user_serializer)
         return Response(user_serializer.data, status.HTTP_200_OK)
 
 

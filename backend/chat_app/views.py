@@ -48,7 +48,6 @@ class ChatModelViewSet(ModelViewSet):
 
         owner_queryset = self.queryset.filter(
             Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
-        print(owner_queryset)
         return owner_queryset
 
     def destroy(self, request, *args, **kwargs):

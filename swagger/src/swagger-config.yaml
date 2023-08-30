@@ -119,6 +119,18 @@ paths:
           description: 'Successful operation'
           schema:
             $ref: '#/definitions/ChatModel'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "name": [
+                    "This field is required."
+                  ],
+                  "addressee_id": [
+                    "This field is required."
+                  ]
+                }
+              }
 
         400:
           description: Bad request.
@@ -1144,7 +1156,18 @@ definitions:
         type: string
         minLength: 1
         example:
-          "details": [ "Given token not valid for any token type" ]
+          [
+            {
+              "unauthorized": "Token is invalid or expired"
+            },
+            {
+              "unauthorized": "Given token not valid for any token type"
+            },
+            {
+              "unauthorized": "Authentication credentials were not provided."
+            }
+          ]
+
   Forbidden:
     type: object
     properties:

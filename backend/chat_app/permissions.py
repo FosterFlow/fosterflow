@@ -75,7 +75,6 @@ class IsOwnerMessage(permissions.BasePermission):
                 else:
                     return False
             except Exception as e:
-                print(e)
                 return False
         if request.user.is_authenticated:
             return True

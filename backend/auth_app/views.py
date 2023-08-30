@@ -1,6 +1,9 @@
+import os
+
 import environ
 from django.middleware import csrf
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.html import strip_tags
 from django_rest_passwordreset.tokens import get_token_generator
 from rest_framework.generics import GenericAPIView
@@ -64,6 +67,8 @@ class UserLoginAPIView(GenericAPIView):
 
         serializer = self.get_serializer(data=request.data)
         response = Response()
+        ACCESS_TOKEN_LIFETIME_MINUTES = os.environ.get('ACCESS_TOKEN_LIFETIME_MINUTES')
+        print(ACCESS_TOKEN_LIFETIME_MINUTES)
         if serializer.is_valid():
             user = serializer.validated_data
             token = RefreshToken.for_user(user)
@@ -319,6 +324,10 @@ class ConfirmEmailGenericAPIView(GenericAPIView):
         token = serializer['email_confirm_token'].value
         email_token = EmailConfirmationToken.objects.filter(key=token).first()
         try:
+            if timezone.now() > email_token.expires_at:
+                return Response({
+                    "message": "Token is expired"
+                }, status=status.HTTP_400_BAD_REQUEST)
             user = email_token.user
             user.is_email_confirmed = True
             user.is_active = True
@@ -326,6 +335,7 @@ class ConfirmEmailGenericAPIView(GenericAPIView):
             data = {
                 "message": "The user is confirmed"
             }
+            email_token.delete()
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(status=status.HTTP_404_NOT_FOUND)
