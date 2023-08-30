@@ -39,18 +39,19 @@ import {
     forgetPasswordSuccess,
     forgetPasswordFailure,
     
+    validatePasswordResetTokenInitState,
     validatePasswordResetTokenSuccess,
     validatePasswordResetTokenFailure,
-    validatePasswordResetTokenInitState,
     
+    resetPasswordInitState,
     resetPasswordSuccess,
     resetPasswordFailure,
-    resetPasswordInitState,
     
+    changePasswordInitState,
     changePasswordSuccess,
     changePasswordFailure,
-    changePasswordInitState,
     
+    refreshTokenUpdateInitState,
     refreshTokenUpdateSuccess,
     refreshTokenUpdateFailure,
 } from './actions';
@@ -191,12 +192,15 @@ function* changePasswordSaga({ payload: { oldPassword, newPassword } }) {
 
 function* refreshTokenUpdateSaga() {
     try {
-        const response = yield call(apiClient.post, '/token/refresh/');
-        yield put(refreshTokenUpdateSuccess(response.access));
-        yield call(apiAuthorizedClient.resolve);
-        yield call(webSocketsAuthorizedClient.resolve);
+    const response = yield call(apiClient.post, '/token/refresh/');
+    yield put(refreshTokenUpdateSuccess(response.access));
+    yield call(apiAuthorizedClient.resolve);
+    yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
+        localStorage.setItem("isAuthenticated", false);
         yield put(refreshTokenUpdateFailure(errors));
+        yield delay(15000);
+        yield put(refreshTokenUpdateInitState());
     }
 }
 

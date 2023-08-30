@@ -15,13 +15,14 @@ const PasswordReset = React.lazy(() => import("../pages/Auth/PasswordReset"));
 
 // declare all routes
 const authProtectedRoutes = [
-  { path: "/chats/", component: <Chats /> },
+  { path: "/chats", component: <Chats /> },
   { path: "/chats/:id", component: <Chats /> },
   { path: "/chats/email-verify-token/:emailVerifyToken", component: <Chats /> },
   { path: "/profile", component: <Profile /> },
   { path: "/settings", component: <Settings /> },
   //TODO:  don't render the page
   { path: "/logout", component: <Logout /> },
+  //TODO: make 404 page
 
     // this route should be at the end of all other routes
   // eslint-disable-next-line react/display-name
@@ -41,6 +42,7 @@ const authRoutes = [
   { path: "/login", component: <Login /> },
   { path: "/login/email-verify-token/:emailVerifyToken", component: <Login /> },
   { path: "/register", component: <Register /> },
+  //TODO: add 404 page
 ];
 
 export { authProtectedRoutes, authRoutes, publicRoutes };

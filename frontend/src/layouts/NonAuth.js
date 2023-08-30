@@ -17,6 +17,7 @@ const NonAuth = (props) => {
     const supportEmail =  config.SUPPORT_EMAIL;
     const { emailVerifyToken } = useParams();
     const {
+        refreshTokenUpdateErrors,
         confirmEmail,
         confirmEmailInitState,
         confirmEmailLoading,
@@ -53,10 +54,31 @@ const NonAuth = (props) => {
                             {t('Email was successfully confirmed')}.
                     </Alert>)
                 }
+                {refreshTokenUpdateErrors && (
+                    <Alert color="danger">
+                        <h6>
+                            {t('Authentification error')}
+                        </h6>
+                        {refreshTokenUpdateErrors.details &&
+                            (<div>
+                                {t('Errors details')}:
+                                <ul>
+                                    {refreshTokenUpdateErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>)
+                        }
+                        <div>
+                            {t('Try to login once again')}.&nbsp;
+                            {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                        </div>
+                    </Alert>
+                )}
                 {confirmEmailErrors && (
                     <Alert color="danger">
                         <h6>
-                            {t('Confirmation failed')}.
+                            {t('Confirmation failed')}
                         </h6>
                         {confirmEmailErrors.details &&
                             (<div>
@@ -81,11 +103,13 @@ const NonAuth = (props) => {
 
 const mapStateToProps = state => {
     const {
+        refreshTokenUpdateErrors,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
     } = state.Auth;
     return {
+        refreshTokenUpdateErrors,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,

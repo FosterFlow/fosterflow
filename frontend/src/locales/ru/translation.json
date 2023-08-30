@@ -136,6 +136,9 @@
     "Try resend confirmation email": "Попробуйте повторно отправить письмо с подтверждением",
     "Sending email instruction to you": "Отправка инструкции по электронной почте",
     "Validating your credentials": "Проверка ваших учетных данных",
-    "You can update your password now": "Теперь вы можете обновить свой пароль"
+    "You can update your password now": "Теперь вы можете обновить свой пароль",
+    "Authentification error": "Ошибка аутентификации",
+    "Try to login once again": "Попробуйте войти еще раз"
+
 
 }

@@ -28,9 +28,12 @@ const Routes = (props) => {
     const emailVerifyTokenPattern = /\/email-verify-token\/([^/]+)/;
     const matchEmailVerifyPattern = location.pathname.match(emailVerifyPattern);
     const matchEmailVerifyTokenPattern = location.pathname.match(emailVerifyTokenPattern);
-    
-    const isAuthRoute = authRoutes.some(route => route.path === location.pathname);
-    const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === location.pathname);
+    const normalizePath = (path) => {
+        return path.endsWith('/') ? path.slice(0, -1) : path;
+    };
+    const normalizedPathname = normalizePath(location.pathname);
+    const isAuthRoute = authRoutes.some(route => route.path === normalizedPathname);
+    const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === normalizedPathname);
 
     //Email verification
     if (matchEmailVerifyPattern) {

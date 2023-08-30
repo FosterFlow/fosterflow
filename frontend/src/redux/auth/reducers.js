@@ -166,6 +166,7 @@ const Auth = (state = INIT_STATE, action) => {
             return { 
                 ...state,
                 accessToken: undefined,
+                isAuthenticated: false,
                 refreshTokenLoading: false,
                 authenticatedApiRequestsQueue: [],
                 logoutLoading: false,
@@ -439,6 +440,8 @@ const Auth = (state = INIT_STATE, action) => {
         case REFRESH_TOKEN_UPDATE_FAILURE:
             return { 
                 ...state,
+                accessToken: undefined,
+                isAuthenticated: false,
                 refreshTokenUpdateLoading: false,
                 refreshTokenUpdateSuccess: false,
                 refreshTokenUpdateErrors: action.payload, 

@@ -136,5 +136,7 @@
     "Try resend confirmation email": "Versuchen Sie, das Bestätigungs-E-Mail erneut zu senden",
     "Sending email instruction to you": "Sende E-Mail-Anweisung an dich",
     "Validating your credentials": "Validierung Ihrer Anmeldeinformationen",
-    "You can update your password now": "Sie können jetzt Ihr Passwort aktualisieren"
+    "You can update your password now": "Sie können jetzt Ihr Passwort aktualisieren",
+    "Authentification error": "Authentifizierungsfehler",
+    "Try to login once again": "Versuchen Sie erneut, sich anzumelden"
 }

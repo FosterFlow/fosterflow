@@ -89,9 +89,9 @@ const Index = (props) => {
                 }
                 {sendConfirmationEmailErrors && (
                     <Alert color="danger">
-                        <h5>
-                            {t('Sending of confirmation email failed')}.
-                        </h5>
+                        <h6>
+                            {t('Sending of confirmation email failed')}
+                        </h6>
                         {sendConfirmationEmailErrors.details &&
                             (<div>
                                 {t('Errors details')}:
@@ -112,9 +112,9 @@ const Index = (props) => {
                 }
                 {confirmEmailErrors && (
                     <Alert color="danger">
-                        <h4>
-                            {t('Confirmation failed')}.
-                        </h4>
+                        <h6>
+                            {t('Confirmation failed')}
+                        </h6>
                         {confirmEmailErrors.details &&
                             (<div>
                                 {t('Errors details')}:
@@ -166,7 +166,7 @@ const Index = (props) => {
 
 const mapStateToProps = state => {
     const {
-        sendConfirmationEmailLoading,
+                sendConfirmationEmailLoading,
         sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
 
@@ -175,7 +175,7 @@ const mapStateToProps = state => {
         confirmEmailErrors,
     } = state.Auth;
     return {
-        sendConfirmationEmailLoading,
+                sendConfirmationEmailLoading,
         sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
 

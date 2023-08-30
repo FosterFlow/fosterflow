@@ -136,5 +136,7 @@
     "Try resend confirmation email":"Try resend confirmation email",
     "Sending email instruction to you": "Sending email instruction to you",
     "Validating your credentials": "Validating your credentials",
-    "You can update your password now": "You can update your password now"
+    "You can update your password now": "You can update your password now",
+    "Authentification error": "Authentification error",
+    "Try to login once again": "Try to login once again"
 }
