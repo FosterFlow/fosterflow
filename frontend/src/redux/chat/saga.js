@@ -1,44 +1,82 @@
 import { eventChannel } from 'redux-saga';
-import { call, put, take, takeEvery } from 'redux-saga/effects';
-import {
-  FETCH_CHATS_REQUEST,
-  ADD_CHAT_REQUEST,
-  DELETE_CHAT_REQUEST,
-  FETCH_MESSAGES_REQUEST,
-  DELETE_MESSAGE_REQUEST,
-  WS_CONNECTION_START
-} from './constants';
+import { 
+  call, 
+  put, 
+  take, 
+  takeEvery,
+  delay 
+} from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 import {
-  addChatSuccess,
+  FETCH_CHATS,
+  ADD_CHAT,
+  DELETE_CHAT,
+  FETCH_MESSAGES,
+  DELETE_MESSAGE,
+    
+  SET_ACTIVE_CHAT,
+  SHOW_CHAT_WINDOW,
+  SET_ACTIVE_NEW_CHAT,
+
+  WS_CONNECTION_START,
+  WS_CONNECTION_ERROR,
+  WS_CONNECTION_CLOSED,
+  WS_RECEIVE_MESSAGE,
+} from './constants';
+import {
+  setActiveChat,
+  showChatWindow,
+  setActiveNewChat,
+
+  fetchChatsInitState,
   fetchChatsSuccess,
+  fetchChatsFailed,
+
+  addChatInitState,
+  addChatSuccess,
+  addChatFailed,
+
+  deleteChatInitState,
   deleteChatSuccess,
+  deleteChatFailed,
+
+  fetchMessagesInitState,
   fetchMessagesSuccess,
+  fetchMessagesFailed,
+
+  deleteMessageInitState,
   deleteMessageSuccess,
+  deleteMessageFailed,
+
   startWsConnection,
   wsConnectionSuccess,
-  wsReceiveMessage,
   wsConnectionError,
-  wsConnectionClosed
+  wsConnectionClosed,
+  wsReceiveMessage
 } from './actions';
 const api = apiAuthorizedClient;
 
-function* fetchChats() {
+function* fetchChatsSaga() {
   try {
     const chats = yield call(api.get, '/chats/');
     yield put(fetchChatsSuccess(chats));
-  } catch (error) {
-    console.log(error);
+    yield delay(5000);
+    yield put(fetchChatsInitState());
+  } catch (errors) {
+    fetchChatsFailed(errors);
+    yield delay(10000);
+    yield put(fetchChatsFailed());
   }
 }
 
-function* addChat(action) {
+function* addChatSaga(action) {
   const data = action.payload;
   try {
       const chat = yield call(api.post, '/chats/', {
-          "user_id": data.user_id,
-          "name": data.name
+          "owner_id": data.user_id,
+          "name": data.name,
+          "addressee_id": 100
       });
       yield put(addChatSuccess, chat);
       if (data.message) {
@@ -48,41 +86,57 @@ function* addChat(action) {
         //   "chat_id": chat.id
         // }});    
       }
-  } catch (error) {
-    console.log(error);
+      yield delay(5000);
+      yield put(addChatInitState());
+  } catch (errors) {
+    addChatFailed(errors);
+    yield delay(10000);
+    yield put(addChatInitState());
   }
 }
 
-function* deleteChat(action) {
+function* deleteChatSaga(action) {
   console.log("chat saga deleteChat action ", action);
   try {
     yield call(api.delete, `/chats/${action.payload}/`);
     yield put(deleteChatSuccess(action.payload));
-  } catch (error) {
-    console.log(error);
+    yield delay(5000);
+    yield put(deleteChatInitState());
+  } catch (errors) {
+    yield put(deleteChatFailed(errors));
+    yield delay(10000);
+    yield put(deleteChatInitState());
   }
 }
 
-function* fetchMessages(action) {
+function* fetchMessagesSaga(action) {
   try {
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
     yield put(startWsConnection(action.payload));
-  } catch (error) {
-    console.log(error);
+    yield delay(5000);
+    yield put(fetchMessagesInitState());
+  } catch (errors) {
+    yield put(fetchMessagesFailed(errors));
+    yield delay(10000);
+    yield put(fetchMessagesInitState());
   }
 }
 
-function* deleteMessage(action) {
+function* deleteMessageSaga(action) {
   try {
     yield call(api.delete, `/messages/${action.payload}/`);
     yield put(deleteMessageSuccess(action.payload));
-  } catch (error) {
-    console.log(error);
+    yield delay(5000);
+    yield put(deleteMessageInitState());
+  } catch (errors) {
+    yield put(deleteMessageFailed(errors));
+    yield delay(10000);
+    yield put(deleteMessageInitState());
   }
 }
 
-function createWebSocketChannel(socket) {
+function createWebSocketChannelSaga(socket) {
   return eventChannel(emit => {
     socket.onopen = () => {
       emit(wsConnectionSuccess(socket));
@@ -107,7 +161,7 @@ function createWebSocketChannel(socket) {
 
 function* webSocketSaga(action) {
   const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${action.payload}/`);
-  const socketChannel = yield call(createWebSocketChannel, socket);
+  const socketChannel = yield call(createWebSocketChannelSaga, socket);
 
   while (true) {
     const action = yield take(socketChannel);
@@ -116,10 +170,10 @@ function* webSocketSaga(action) {
 }
 
 export default function* chatSaga() {
-  yield takeEvery(FETCH_CHATS_REQUEST, fetchChats);
-  yield takeEvery(ADD_CHAT_REQUEST, addChat);
-  yield takeEvery(DELETE_CHAT_REQUEST, deleteChat);
-  yield takeEvery(FETCH_MESSAGES_REQUEST, fetchMessages);
-  yield takeEvery(DELETE_MESSAGE_REQUEST, deleteMessage);
+  yield takeEvery(FETCH_CHATS, fetchChatsSaga);
+  yield takeEvery(ADD_CHAT, addChatSaga);
+  yield takeEvery(DELETE_CHAT, deleteChatSaga);
+  yield takeEvery(FETCH_MESSAGES, fetchMessagesSaga);
+  yield takeEvery(DELETE_MESSAGE, deleteMessageSaga);
   yield takeEvery(WS_CONNECTION_START, webSocketSaga);
 }
