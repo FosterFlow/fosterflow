@@ -1,14 +1,33 @@
 import {
-    FETCH_CHATS_REQUEST,
+    FETCH_CHATS,
+    FETCH_CHATS_INIT_STATE,
     FETCH_CHATS_SUCCESS,
-    ADD_CHAT_SUCCESS, 
+    FETCH_CHATS_FAILED,
+
+    ADD_CHAT,
+    ADD_CHAT_INIT_STATE,
+    ADD_CHAT_SUCCESS,
+    ADD_CHAT_FAILED,
+
+    DELETE_CHAT,
+    DELETE_CHAT_INIT_STATE,
     DELETE_CHAT_SUCCESS,
-    FETCH_MESSAGES_REQUEST,
-    FETCH_MESSAGES_SUCCESS, 
+    DELETE_CHAT_FAILED,
+    
+    FETCH_MESSAGES,
+    FETCH_MESSAGES_INIT_STATE,
+    FETCH_MESSAGES_SUCCESS,
+    FETCH_MESSAGES_FAILED, 
+    
+    DELETE_MESSAGE,
+    DELETE_MESSAGE_INIT_STATE,
     DELETE_MESSAGE_SUCCESS,
+    DELETE_MESSAGE_FAILED,
+    
     SET_ACTIVE_CHAT,
     SHOW_CHAT_WINDOW,
     SET_ACTIVE_NEW_CHAT,
+    
     WS_CONNECTION_START,
     WS_CONNECTION_SUCCESS,
     WS_CONNECTION_ERROR,
@@ -17,15 +36,36 @@ import {
 } from './constants';
 
 const INIT_STATE = {
-  chats: [],
-  messages: [],
-  chatsLoading: true,
-  activeChatId: 0,
-  chatWindow: false,
-  newChat: false,
-  wsConnection: null,
-  wsConnected: false,
-  wsConnectionError: null
+    chats: [],
+    activeChatId: 0,
+    chatWindow: false,
+    newChat: false,
+
+    fetchChatsLoading: false,
+    fetchChatsSuccess: false,
+    fetchChatsErrors: null,
+
+    addChatLoading: false,
+    addChatSuccess: false,
+    addChatErrors: null,
+
+    deleteChatLoading: false,
+    deleteChatSuccess: false,
+    deleteChatErrors: null,
+
+    messages: [],
+
+    fetchMessagesLoading: false,
+    fetchMessagesSuccess: false,
+    fetchMessagesErrors: null,
+
+    deleteMessageLoading: false,
+    deleteMessageSuccess: false,
+    deleteMessageErrors: null,
+  
+    wsConnection: null,
+    wsConnected: false,
+    wsConnectionError: null
 };
 
 const Chat = (state = INIT_STATE, action) => {
@@ -36,67 +76,198 @@ const Chat = (state = INIT_STATE, action) => {
                 ...state,
                 activeChatId: Number(action.payload)
             };
+
         case SHOW_CHAT_WINDOW:
             return { 
                 ...state,
                 chatWindow: action.payload
             };
+
         case SET_ACTIVE_NEW_CHAT:
             return { 
                 ...state,
                 newChat: action.payload
             };
-        case FETCH_CHATS_REQUEST:
-        return { 
-            ...state,
-            chatsLoading: true
-        };  
+   
+        case FETCH_CHATS:
+            return {
+                ...state,
+                fetchChatsLoading: true,
+                fetchChatsSuccess: false,
+                fetchChatsErrors: null,
+            };
+
+        case FETCH_CHATS_INIT_STATE:
+            return {
+                ...state,
+                fetchChatsLoading: false,
+                fetchChatsSuccess: false,
+                fetchChatsErrors: null,
+            };
+
         case FETCH_CHATS_SUCCESS:
-            return { 
+            return {
                 ...state,
                 chats: action.payload,
-                chatsLoading: false
+                fetchChatsLoading: false,
+                fetchChatsSuccess: true,
+                fetchChatsErrors: null,
             };
-        case ADD_CHAT_SUCCESS:
-            return { 
+
+        case FETCH_CHATS_FAILED:
+            return {
                 ...state,
+                fetchChatsLoading: false,
+                fetchChatsSuccess: false,
+                fetchChatsErrors: action.payload,
+            };
+
+        case ADD_CHAT:
+            return {
+                ...state,
+                addChatLoading: true,
+                addChatSuccess: false,
+                addChatErrors: null,
+            };
+
+        case ADD_CHAT_INIT_STATE:
+            return {
+                ...state,
+                addChatLoading: false,
+                addChatSuccess: false,
+                addChatErrors: null,
+            };
+
+        case ADD_CHAT_SUCCESS:
+            return {
+                ...state,
+                addChatLoading: false,
+                addChatSuccess: true,
+                addChatErrors: null,
                 chats: [...state.chats, action.payload],
                 activeChatId: Number(action.payload.id),
                 chatWindow: true,
                 newChat: false
             };
-        case DELETE_CHAT_SUCCESS:
-            return { 
+
+        case ADD_CHAT_FAILED:
+            return {
                 ...state,
+                addChatLoading: false,
+                addChatSuccess: false,
+                addChatErrors: action.payload,
+            };
+        
+        case DELETE_CHAT: 
+            return {
+                ...state,
+                deleteChatLoading: true,
+                deleteChatSuccess: false,
+                deleteChatErrors: null,
+            };
+
+        case DELETE_CHAT_INIT_STATE:
+            return {
+                ...state,
+                deleteChatLoading: false,
+                deleteChatSuccess: false,
+                deleteChatErrors: null,
+            };
+
+        case DELETE_CHAT_SUCCESS:
+            return {
+                ...state,
+                deleteChatLoading: false,
+                deleteChatSuccess: true,
+                deleteChatErrors: null,
                 chats: state.chats.filter(chat => chat.id !== action.payload)
             };
-          
-        case FETCH_MESSAGES_REQUEST:
-            return { 
+
+        case DELETE_CHAT_FAILED:
+            return {
                 ...state,
+                deleteChatLoading: false,
+                deleteChatSuccess: false,
+                deleteChatErrors: action.payload,
+            };
+            
+        case FETCH_MESSAGES:
+            return {
+                ...state,
+                fetchMessagesLoading: true,
+                fetchMessagesSuccess: false,
+                fetchMessagesErrors: null,
                 activeChatId: Number(action.payload)
             };
-        case FETCH_MESSAGES_SUCCESS:
-            const existingMessagesMap = state.messages.reduce((map, message) => {
-                map[message.id] = message;
-                return map;
-            }, {});
-    
-            action.payload.forEach(newMessage => {
-                existingMessagesMap[newMessage.id] = newMessage;
-            });
-    
-            const updatedMessages = Object.values(existingMessagesMap);
-    
-            return { 
+
+        case FETCH_MESSAGES_INIT_STATE:
+            return {
                 ...state,
-                messages: updatedMessages
+                fetchMessagesLoading: false,
+                fetchMessagesSuccess: false,
+                fetchMessagesErrors: null,
             };
+
+        case FETCH_MESSAGES_SUCCESS:
+            {
+                const existingMessagesMap = state.messages.reduce((map, message) => {
+                    map[message.id] = message;
+                    return map;
+                }, {});
     
-        case DELETE_MESSAGE_SUCCESS:
-            return { 
+                action.payload.forEach(newMessage => {
+                    existingMessagesMap[newMessage.id] = newMessage;
+                });
+    
+                const updatedMessages = Object.values(existingMessagesMap);
+                return {
+                    ...state,
+                    fetchMessagesLoading: false,
+                    fetchMessagesSuccess: true,
+                    fetchMessagesErrors: null,
+                    messages: updatedMessages
+                }
+            };
+
+        case FETCH_MESSAGES_FAILED:
+            return {
                 ...state,
+                fetchMessagesLoading: false,
+                fetchMessagesSuccess: false,
+                fetchMessagesErrors: action.payload,
+            };
+            
+        case DELETE_MESSAGE: 
+            return {
+                ...state,
+                deleteMessageLoading: true,
+                deleteMessageSuccess: false,
+                deleteMessageErrors: null,
+            };
+
+        case DELETE_MESSAGE_INIT_STATE:
+            return {
+                ...state,
+                deleteMessageLoading: false,
+                deleteMessageSuccess: false,
+                deleteMessageErrors: null,
+            };
+        
+        case DELETE_MESSAGE_SUCCESS:
+            return {
+                ...state,
+                deleteMessageLoading: false,
+                deleteMessageSuccess: true,
+                deleteMessageErrors: null,
                 messages: state.messages.filter(message => message.id !== action.payload.id)
+            };
+            
+        case DELETE_MESSAGE_FAILED: 
+            return {
+                ...state,
+                deleteMessageLoading: false,
+                deleteMessageSuccess: false,
+                deleteMessageErrors: action.payload,
             };
 
         case WS_CONNECTION_START:
@@ -104,18 +275,21 @@ const Chat = (state = INIT_STATE, action) => {
                 ...state,
                 wsConnected: false
             };
+
         case WS_CONNECTION_SUCCESS:
             return {
                 ...state,
                 wsConnected: true,
                 wsConnection: action.payload
             };
+
         case WS_CONNECTION_ERROR:
             return {
                 ...state,
                 wsConnected: false,
                 wsConnectionError: action.payload
             };
+
         case WS_CONNECTION_CLOSED:
             return {
                 ...state,
@@ -123,6 +297,7 @@ const Chat = (state = INIT_STATE, action) => {
                 wsConnection: null,
                 wsConnectionError: null
             };
+            
         case WS_RECEIVE_MESSAGE:
             // Assuming the WebSocket message contains a new chat message
             return {

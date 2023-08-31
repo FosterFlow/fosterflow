@@ -148,7 +148,6 @@ const Auth = (state = INIT_STATE, action) => {
             return { 
                 ...state,
                 isAuthenticated: false,
-                user: null,
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
