@@ -345,6 +345,21 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "chat_id": [
+                    "This field is required."
+                  ],
+                  "owner_id": [
+                    "This field is required."
+                  ],
+                  "message_text": [
+                    "This field is required."
+                  ],
+                }
+              }
         401:
           description: Unauthorized
           schema:
