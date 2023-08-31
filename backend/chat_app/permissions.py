@@ -3,7 +3,7 @@ from .models import Chat
 
 
 class IsOwnerChat(permissions.BasePermission):
-    message = {"errors": {"details": "Available only for the owner"}}
+    message = {"errors": {"details": ["Available only for the owner"]}}
 
     def has_permission(self, request, view):
         """
@@ -47,7 +47,7 @@ class IsOwnerChat(permissions.BasePermission):
 
 
 class IsOwnerMessage(permissions.BasePermission):
-    message = {"errors": {"details": "Available only for the owner"}}
+    message = {"errors": {"details": ["Available only for the owner"]}}
 
     def has_permission(self, request, view):
         """

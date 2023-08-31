@@ -17,7 +17,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-secretkey")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == 'True'
 
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env.list("BASE_HOST")
 ASGI_APPLICATION = "project.asgi.application"
 
 REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
