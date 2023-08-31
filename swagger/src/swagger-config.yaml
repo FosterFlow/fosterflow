@@ -464,6 +464,20 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "email": [
+                    "Duplicate"
+                  ],
+                  "password": [
+                    "This password is too short. It must contain at least 8 characters.",
+                    "This password is too common.",
+                    "This password is entirely numeric."
+                  ]
+                }
+              }
       tags:
         - register
   /token/:
@@ -497,6 +511,21 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "details": [
+                    "Incorrect email or password"
+                  ],
+                  "email": [
+                    "This field is required."
+                  ],
+                  "password": [
+                    "This field is required."
+                  ]
+                }
+              }
       tags:
         - token
     parameters: [ ]
@@ -519,6 +548,15 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "details": [
+                    "Refresh is None"
+                  ]
+                }
+              }
       tags:
         - token
     parameters: [ ]
@@ -633,6 +671,16 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "first_name": [
+                  "Ensure this field has no more than 32 characters."
+                ],
+                "last_name": [
+                  "Ensure this field has no more than 32 characters."
+                ]
+              }
         401:
           description: Unauthorized
           schema:
@@ -860,6 +908,16 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "old_password": [
+                  "This field is required."
+                ],
+                "new_password": [
+                  "This field is required."
+                ]
+              }
         401:
           description: Unauthorized
           schema:
@@ -916,6 +974,15 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "email": [
+                    "This field is required."
+                  ]
+                }
+              }
       tags:
         - password-reset
     parameters: [ ]
@@ -941,6 +1008,18 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "password": [
+                    "This field is required."
+                  ],
+                  "token": [
+                    "This field is required."
+                  ]
+                }
+              }
         404:
           description: Not found.
           schema:
@@ -970,6 +1049,15 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "token": [
+                    "This field is required."
+                  ]
+                }
+              }
         404:
           description: Not found.
           schema:
@@ -999,6 +1087,15 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "email_confirm_token": [
+                    "This field is required."
+                  ]
+                }
+              }
         404:
           description: Not found.
           schema:
