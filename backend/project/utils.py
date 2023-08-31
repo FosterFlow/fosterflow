@@ -5,10 +5,10 @@ def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
     if response is not None and response.status_code == 400:
-        errors = []
+        errors = {}
         for key, value in response.data.items():
             for ind in value:
-                errors.append({ind: str(value[ind][0])})
+                errors[key] = ind
         response.data = {
             "errors": errors
         }
