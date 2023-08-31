@@ -783,6 +783,15 @@ paths:
           description: Bad request.
           schema:
             $ref: '#/definitions/BadRequest'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "username": [
+                    "Incorrect username"
+                  ]
+                }
+              }
         401:
           description: Unauthorized
           schema:
