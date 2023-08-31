@@ -111,7 +111,7 @@ class MessageModelViewSet(ModelViewSet):
             raise rest_framework.exceptions.PermissionDenied(
                 {
                     "errors": {
-                        "details": "Available only for the owner"
+                        "details": ["Available only for the owner"]
                     }
                 }
             )
