@@ -119,10 +119,17 @@ paths:
           description: 'Successful operation'
           schema:
             $ref: '#/definitions/ChatModel'
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
           examples:
             application/json:
               {
                 "errors": {
+                  "owner_id": [
+                    "This field is required."
+                  ],
                   "name": [
                     "This field is required."
                   ],
@@ -131,11 +138,6 @@ paths:
                   ]
                 }
               }
-
-        400:
-          description: Bad request.
-          schema:
-            $ref: '#/definitions/BadRequest'
         401:
           description: Unauthorized
           schema:
@@ -1156,17 +1158,7 @@ definitions:
         type: string
         minLength: 1
         example:
-          [
-            {
-              "unauthorized": "Token is invalid or expired"
-            },
-            {
-              "unauthorized": "Given token not valid for any token type"
-            },
-            {
-              "unauthorized": "Authentication credentials were not provided."
-            }
-          ]
+          "details": [ "Authentication credentials were not provided." ]
 
   Forbidden:
     type: object
