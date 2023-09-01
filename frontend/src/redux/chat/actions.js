@@ -33,7 +33,7 @@ import {
   WS_CONNECTION_SUCCESS,
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
-  WS_RECEIVE_MESSAGE,
+  WS_RECEIVE_MESSAGE_CHUNK,
 } from './constants';
   
   /**
@@ -200,6 +200,6 @@ import {
   });
   
   export const wsReceiveMessage = (messageChunk) => ({
-    type: WS_RECEIVE_MESSAGE,
+    type: WS_RECEIVE_MESSAGE_CHUNK,
     payload: messageChunk
   });

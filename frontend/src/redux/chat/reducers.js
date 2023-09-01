@@ -32,7 +32,7 @@ import {
     WS_CONNECTION_SUCCESS,
     WS_CONNECTION_ERROR,
     WS_CONNECTION_CLOSED,
-    WS_RECEIVE_MESSAGE
+    WS_RECEIVE_MESSAGE_CHUNK
 } from './constants';
 
 const INIT_STATE = {
@@ -298,12 +298,39 @@ const Chat = (state = INIT_STATE, action) => {
                 wsConnectionError: null
             };
             
-        case WS_RECEIVE_MESSAGE:
-            // Assuming the WebSocket message contains a new chat message
-            return {
-                ...state,
-                messages: [...state.messages, action.payload]
-            };
+            /**
+             * TODO:
+             * Add to a buffer chunks with "start" and "process" status.
+             * And write them to the global messages store when we get "done" status.
+             * The issue is how to show them correctly then into the right order.
+             * 
+             */
+            case WS_RECEIVE_MESSAGE_CHUNK:
+                {
+                    const receivedMessage = action.payload;
+                    const messagesList = [...state.messages];
+            
+                    // Find the message by its id
+                    const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
+            
+                    // If the message already exists, update its content
+                    if (messageIndex !== -1) {
+                        const existingMessage = messagesList[messageIndex];
+                        existingMessage.message_text += receivedMessage.message_chunk;
+                        messagesList[messageIndex] = existingMessage;
+                    } else {
+                        // If the message doesn't exist, simply add it to the list
+                        if (receivedMessage.message_chunk !== undefined) {
+                            receivedMessage.message_text = receivedMessage.message_chunk;
+                        }
+                        messagesList.push(receivedMessage);
+                    }
+            
+                    return {
+                        ...state,
+                        messages: messagesList
+                    };
+                }
 
         default: return { ...state };
     }
