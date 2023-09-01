@@ -9,6 +9,13 @@ function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
     const textAreaRef = useRef(null);
     const { t } = useTranslation();
+    const {
+        activeChatId,
+        wsConnection,
+        authorizedUser,
+        newChat,
+        addChat
+    } = props;
 
     function isMobileDevice() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -42,27 +49,35 @@ function ChatInput(props) {
 
     //function for send data to onaddMessage function(in userChat/index.js component)
     const addMessage = (textMessage) => {
-        if (props.authorizedUser === null){
+        if (authorizedUser === null){
             return;
         }
 
-        if (props.authorizedUser.is_email_confirmed === false){
+        if (authorizedUser.is_email_confirmed === false){
             return;
         }
 
         //if text value is not empty then call onaddMessage function
         if (textMessage !== "") {
-            if (props.newChat){
-                props.addChat({
-                    "user_id": props.authorizedUser.id,
+            if (newChat){
+                addChat({
+                    "user_id": authorizedUser.id,
                     "name": textMessage.substring(0, 32),
                     "message": textMessage
                 });
                 settextMessage("");
+                //TODO: need to make web socket request once we get chatId
                 return;        
             }
 
-            props.wsChatConnection.send(JSON.stringify({'message': textMessage }));
+            wsConnection.send(JSON.stringify(
+                {
+                    "chat_id": activeChatId,
+                    "prompt": textMessage,
+                    "owner_id": authorizedUser.id,
+                    "method": "request" 
+                }
+            ));
             settextMessage("");
         }
     }
@@ -83,18 +98,18 @@ function ChatInput(props) {
         <React.Fragment>
             <div className="chat-input">
                 <Form onSubmit={(e) => formSubmit(e, textMessage)} >
-                                <textarea
-                                    ref={textAreaRef} 
-                                    value={textMessage} 
-                                    onChange={handleChange} 
-                                    onKeyDown={handleKeyDown}
-                                    className="form-control form-control-lg bg-light border-light" 
-                                    placeholder={t('Enter Message') + '...'} 
-                                    style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
-                                />
-                                        <Button onClick={(e) => handleButtonClick(e, textMessage)} type="submit" color="primary" className="font-size-16 btn-sm chat-send">
-                                            <i className="ri-send-plane-2-fill"></i>
-                                        </Button>
+                    <textarea
+                        ref={textAreaRef} 
+                        value={textMessage} 
+                        onChange={handleChange} 
+                        onKeyDown={handleKeyDown}
+                        className="form-control form-control-lg bg-light border-light" 
+                        placeholder={t('Enter Message') + '...'} 
+                        style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
+                    />
+                        <Button onClick={(e) => handleButtonClick(e, textMessage)} type="submit" color="primary" className="font-size-16 btn-sm chat-send">
+                            <i className="ri-send-plane-2-fill"></i>
+                        </Button>
                 </Form>
             </div>
         </React.Fragment>
@@ -102,17 +117,16 @@ function ChatInput(props) {
 }
 
 const mapStateToProps = (state) => {
-    console.log("Dashabord Tabs ChatsInput mapStateToProps state", state);
     return { 
         activeChatId: state.Chat.activeChatId,
+        wsConnection: state.Chat.wsConnection,
         authorizedUser: state.User.authorizedUser,
         newChat: state.Chat.newChat,
-        wsChatConnection: state.Chat.wsConnection
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ addChat }, dispatch);
-}
+const mapDispatchToProps = {
+    addChat
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatInput);

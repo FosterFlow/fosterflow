@@ -1,3 +1,4 @@
+//TODO: it renders 8 times, figure it out
 import React, { useRef, useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
@@ -37,7 +38,11 @@ function CodeBlock({node, inline, className, children, ...props}) {
 function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
-    const { messages, activeChatId, authorizedUser} = props;
+    const { 
+        messages, 
+        activeChatId, 
+        authorizedUser
+    } = props;
     //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
     const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
