@@ -58,21 +58,16 @@ import {
 const api = apiAuthorizedClient;
 
 function* fetchChatsSaga() {
-  // try {
-    yield delay(1000);
-  //   const chats = yield call(api.get, '/chats/');
-  //   yield put(fetchChatsSuccess(chats));
-  //   yield delay(5000);
-  //   yield put(fetchChatsInitState());
-  // } catch (errors) {
-    yield fetchChatsFailed({
-      "details": [
-        "Authentication credentials were not provided."
-      ]
-    });
-    // yield delay(10000);
-    // yield put(fetchChatsInitState());
-  // }
+  try {
+    const chats = yield call(api.get, '/chats/');
+    yield put(fetchChatsSuccess(chats));
+    yield delay(5000);
+    yield put(fetchChatsInitState());
+  } catch (errors) {
+    yield put(fetchChatsFailed(errors));
+    yield delay(10000);
+    yield put(fetchChatsInitState());
+  }
 }
 
 function* addChatSaga(action) {
@@ -94,7 +89,7 @@ function* addChatSaga(action) {
       yield delay(5000);
       yield put(addChatInitState());
   } catch (errors) {
-    yield addChatFailed(errors);
+    yield put(addChatFailed(errors));
     yield delay(10000);
     yield put(addChatInitState());
   }

@@ -138,7 +138,9 @@
     "Validating your credentials": "Проверка ваших учетных данных",
     "You can update your password now": "Теперь вы можете обновить свой пароль",
     "Authentification error": "Ошибка аутентификации",
-    "Try to login once again": "Попробуйте войти еще раз"
+    "Try to login once again": "Попробуйте войти еще раз",
+    "If you do not know what to do with the error, write to us by mail": "Если вы не знаете, что делать с ошибкой, напишите нам на почту",
+    "Loading dependencies": "Загрузка зависимостей"
 
 
 }

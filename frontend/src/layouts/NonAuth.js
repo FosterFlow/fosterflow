@@ -51,7 +51,7 @@ const NonAuth = (props) => {
                 )}
                 {confirmEmailSuccess && (
                     <Alert color="success">
-                            {t('Email was successfully confirmed')}.
+                        {t('Email was successfully confirmed')}.
                     </Alert>)
                 }
                 {refreshTokenUpdateErrors && (
@@ -70,6 +70,7 @@ const NonAuth = (props) => {
                             </div>)
                         }
                         <div>
+                            <hr/>
                             {t('Try to login once again')}.&nbsp;
                             {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                         </div>
@@ -91,6 +92,7 @@ const NonAuth = (props) => {
                             </div>)
                         }
                         <div>
+                            <hr/>
                             {t('Try to login and re-send confirmation email')}.&nbsp;
                             {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                         </div>

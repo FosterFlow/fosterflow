@@ -138,5 +138,7 @@
     "Validating your credentials": "Validando sus credenciales",
     "You can update your password now": "Ahora puedes actualizar tu contraseña",
     "Authentification error": "Error de autenticación",
-    "Try to login once again": "Intenta iniciar sesión de nuevo"
+    "Try to login once again": "Intenta iniciar sesión de nuevo",
+    "If you do not know what to do with the error, write to us by mail": "Si no sabe qué hacer con el error, escríbanos por correo",
+    "Loading dependencies": "Cargando dependencias"
 }

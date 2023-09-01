@@ -146,17 +146,14 @@ const Chats = (props) => {
                     }
                     { fetchChatsErrors && (
                         <Alert color="danger">
-                            (<div>
-                                {t('Errors details')}:
-                                <ul>
-                                    {fetchChatsErrors.details.map((error, index) => (
-                                        <li key={index}>{error}</li>
-                                    ))}
-                                </ul>
-                            </div>)
-                            <div>
-                                {t("if you can't solve problems, please contact us by email")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
-                            </div>
+                            {t('Errors details')}:
+                            <ul>
+                                {fetchChatsErrors.details.map((error, index) => (
+                                    <li key={index}>{error}</li>
+                                ))}
+                            </ul>
+                            <hr/>
+                            {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                         </Alert>
                     )}
                     <ul className="list-unstyled chats-list" id="chat-list">
