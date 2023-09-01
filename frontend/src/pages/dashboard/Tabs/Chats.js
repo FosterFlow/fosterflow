@@ -1,17 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Input, InputGroup } from "reactstrap";
+import { 
+    Input, 
+    InputGroup,
+    Spinner,
+    Alert 
+} from "reactstrap";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import UserChat from "../UserChat/";
 import NewUserChat from "../NewUserChat";
+import config from '../../../config';
 import { 
     fetchChats,
     setActiveChat,
     setActiveNewChat,
     showChatWindow 
 } from "../../../redux/actions";
-//i18n
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
@@ -19,79 +24,95 @@ const Chats = (props) => {
     const id = Number(props.router.params.id) || 0;
     const [searchChat, setSearchChat] = useState("");
     const [recentChatList, setRecentChatList] = useState([]);
+    const supportEmail =  config.SUPPORT_EMAIL;
     /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
+    const {
+        router,
+
+        fetchChats,
+        setActiveChat,
+        setActiveNewChat,
+        showChatWindow,
+
+        chats,
+        fetchChatsLoading,
+        fetchChatsErrors,
+
+        activeChatId,
+        chatWindow,
+        newChat,
+        authorizedUser
+    } = props;
 
     useEffect(() => {
-        if (props.authorizedUser === null){
+        if (authorizedUser === null){
             return;
         }
 
-        if (props.authorizedUser.is_email_confirmed === false){
+        if (authorizedUser.is_email_confirmed === false){
             return;
         }
 
-        props.fetchChats();
-    }, [props.authorizedUser]);
+        fetchChats();
+    }, [authorizedUser]);
 
     useEffect(() => {
-        const chats = props.chats; 
         if (chats && chats.length === 0) {
             return;
         }
 
         setRecentChatList(chats.reverse());
         
-        const activeChatId = props.activeChatId;
         if (id === 0 && activeChatId > 0) {
             //added new chats
-            props.router.navigate(`/chats/${activeChatId}`);
+            router.navigate(`/chats/${activeChatId}`);
         }
-    }, [props.chats]);
+    }, [chats]);
 
     useEffect(() => {
         if (id === 0) {
-            props.setActiveChat(0);
-            props.showChatWindow(false);
-            props.setActiveNewChat(true);
+            setActiveChat(0);
+            showChatWindow(false);
+            setActiveNewChat(true);
             return;
         }
 
-        if (props.activeChatId === id){
+        if (activeChatId === id){
             return;
         }
         
         //Opened specific chat by id in url
-        props.showChatWindow(true);
-        props.setActiveChat(id);
-        props.setActiveNewChat(false);
+        showChatWindow(true);
+        setActiveChat(id);
+        setActiveNewChat(false);
     }, [id]);
 
     const handleSearchChange = useCallback((event) => {
         const search = event.target.value.toLowerCase();
         setSearchChat(search);
-        const filteredChats = props.chats.filter(
+        const filteredChats = chats.filter(
             chat => chat.latest_message && chat.latest_message.toString().toLowerCase().includes(search)
         );
         setRecentChatList(filteredChats);
-    }, [props.chats]);
+    }, [chats]);
 
 
     const newChatHandleLinkClick = useCallback(() => {
         //TODO: do we need to make check that param is not already the same?
-        if (props.newChat){
+        if (newChat){
             return;
         }
 
-        props.setActiveNewChat(true);
+        setActiveNewChat(true);
     });
 
     const chatHandleLinkClick = useCallback(() => {
         //TODO: do we need to make check that param is not already the same?
-        if (props.chatWindow){
+        if (chatWindow){
             return;
         }
-        props.showChatWindow(true);
+        showChatWindow(true);
     });
 
     return (
@@ -106,18 +127,45 @@ const Chats = (props) => {
                             <span className="input-group-text text-muted bg-light pe-1 ps-3" id="basic-addon1">
                                 <i className="ri-search-line search-icon font-size-18"></i>
                             </span>
-                            <Input type="text" value={searchChat} onChange={handleSearchChange} className="form-control bg-light" placeholder={t('Search in chats')} />
+                            <Input 
+                                type="text" 
+                                value={searchChat} 
+                                onChange={handleSearchChange} 
+                                className="form-control bg-light" 
+                                placeholder={t('Search in chats')}
+                                disabled={fetchChatsLoading} 
+                            />
                         </InputGroup>
                     </div>
                 </div>
                 <div className="chats-list-wrapper">
-                        <ul className="list-unstyled chats-list" id="chat-list">
-                            {
-                                recentChatList.map((chat, key) =>
-                                    <li 
-                                        key={key} 
-                                        id={"conversation"+ chat.id} 
-                                        className={`px-2 pt-2 ${props.activeChatId === chat.id ? 'active' : ''}`}
+                    {  fetchChatsLoading &&
+                        <div className="d-flex justify-content-center">
+                            <Spinner size="sm"/>
+                        </div>
+                    }
+                    { fetchChatsErrors && (
+                        <Alert color="danger">
+                            (<div>
+                                {t('Errors details')}:
+                                <ul>
+                                    {fetchChatsErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>)
+                            <div>
+                                {t("if you can't solve problems, please contact us by email")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                            </div>
+                        </Alert>
+                    )}
+                    <ul className="list-unstyled chats-list" id="chat-list">
+                        {
+                            recentChatList.map((chat, key) =>
+                                <li 
+                                    key={key} 
+                                    id={"conversation"+ chat.id} 
+                                    className={`px-2 pt-2 ${activeChatId === chat.id ? 'active' : ''}`}
                                     >
                                         <Link to={`/chats/${chat.id}`} onClick={chatHandleLinkClick}>
                                         {chat.latest_message 
@@ -128,7 +176,7 @@ const Chats = (props) => {
                                                 {t('Click to open chat')}
                                             </p>
                                         </Link>
-                                    </li>
+                                </li>
                                 )
                             }
                         </ul>
@@ -141,14 +189,26 @@ const Chats = (props) => {
 }
 
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
-const mapStateToProps = (state) => ({
-    chats: state.Chat.chats,
-    activeChatId: state.Chat.activeChatId,
-    chatWindow: state.Chat.chatWindow,
-    newChat: state.Chat.newChat,
-    //TODO: cause redundun re-render
-    authorizedUser: state.User.authorizedUser
-});
+const mapStateToProps = state => {
+    const {
+        chats,
+        activeChatId,
+        chatWindow,
+        newChat,
+        fetchChatsLoading,
+        fetchChatsErrors
+    } = state.Chat;
+    return {
+        chats,
+        activeChatId,
+        chatWindow,
+        newChat,
+        fetchChatsLoading,
+        fetchChatsErrors,
+        //TODO: cause redundun re-render
+        authorizedUser: state.User.authorizedUser,
+    };
+};
 
 const mapDispatchToProps = {
     fetchChats,

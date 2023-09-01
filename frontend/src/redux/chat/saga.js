@@ -58,16 +58,21 @@ import {
 const api = apiAuthorizedClient;
 
 function* fetchChatsSaga() {
-  try {
-    const chats = yield call(api.get, '/chats/');
-    yield put(fetchChatsSuccess(chats));
-    yield delay(5000);
-    yield put(fetchChatsInitState());
-  } catch (errors) {
-    fetchChatsFailed(errors);
-    yield delay(10000);
-    yield put(fetchChatsFailed());
-  }
+  // try {
+    yield delay(1000);
+  //   const chats = yield call(api.get, '/chats/');
+  //   yield put(fetchChatsSuccess(chats));
+  //   yield delay(5000);
+  //   yield put(fetchChatsInitState());
+  // } catch (errors) {
+    yield fetchChatsFailed({
+      "details": [
+        "Authentication credentials were not provided."
+      ]
+    });
+    // yield delay(10000);
+    // yield put(fetchChatsInitState());
+  // }
 }
 
 function* addChatSaga(action) {
@@ -89,7 +94,7 @@ function* addChatSaga(action) {
       yield delay(5000);
       yield put(addChatInitState());
   } catch (errors) {
-    addChatFailed(errors);
+    yield addChatFailed(errors);
     yield delay(10000);
     yield put(addChatInitState());
   }
@@ -160,7 +165,8 @@ function createWebSocketChannelSaga(socket) {
 
 
 function* webSocketSaga(action) {
-  const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${action.payload}/`);
+  const chatId = action.payload;
+  const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${chatId}/`);
   const socketChannel = yield call(createWebSocketChannelSaga, socket);
 
   while (true) {

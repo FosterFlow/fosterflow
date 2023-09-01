@@ -5,6 +5,7 @@ import {
     Navigate, 
     useLocation, 
 } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
     authProtectedRoutes, 
     authRoutes, 
@@ -18,6 +19,7 @@ import AuthLayout from "../layouts/AuthLayout/";
  * Main Route component
  */
 const Routes = (props) => {
+    const { t } = useTranslation();
     const location = useLocation();
     const { 
         isAuthenticated,
@@ -66,8 +68,10 @@ const Routes = (props) => {
     return (
         // rendering the router with layout
         <React.Fragment>
-            {/* TODO add styled loading page */}
-            <Suspense fallback={<div>Loading...</div>} >
+            <Suspense fallback={
+                <div className='p-2'>
+                    {t('Loading dependencies')}...
+                </div>} >
                 <SwitchRoute>
                     {/* public routes */}
                     {authRoutes.map((route, idx) =>
