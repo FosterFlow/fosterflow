@@ -10,8 +10,7 @@ import _ from 'lodash';
 import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
 import { 
-    fetchMessages,
-    startWsConnection
+    fetchMessages
 } from "../../../redux/chat/actions";
 
 // Here's the custom component to render the code blocks
@@ -163,8 +162,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    fetchMessages,
-    startWsConnection
+    fetchMessages
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));

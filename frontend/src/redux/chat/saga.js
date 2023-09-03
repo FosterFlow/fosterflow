@@ -4,7 +4,8 @@ import {
   put, 
   take, 
   takeEvery,
-  delay 
+  delay,
+  select 
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
@@ -20,6 +21,7 @@ import {
   SET_ACTIVE_NEW_CHAT,
 
   WS_CONNECTION_START,
+  WS_CONNECTION_SUCCESS,
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
   WS_RECEIVE_MESSAGE,
@@ -55,7 +57,11 @@ import {
   wsConnectionClosed,
   wsReceiveMessage
 } from './actions';
+
 const api = apiAuthorizedClient;
+const getActiveChatId = (state) => state.Chat.activeChatId;
+const getWsConnection = (state) => state.Chat.wsConnection;
+const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function* fetchChatsSaga() {
   try {
@@ -78,16 +84,8 @@ function* addChatSaga(action) {
           "name": data.name,
           "addressee_id": 100
       });
-      yield put(addChatSuccess, chat);
-      if (data.message) {
-        //TODO: case for new chat
-        // yield put({ type: ADD_MESSAGE_REQUEST, payload: {
-        //   "message_text": data.message,
-        //   "chat_id": chat.id
-        // }});    
-      }
-      yield delay(5000);
-      yield put(addChatInitState());
+      yield put(addChatSuccess(chat));
+      yield put(startWsConnection(chat.id));      
   } catch (errors) {
     yield put(addChatFailed(errors));
     yield delay(10000);
@@ -172,6 +170,26 @@ function* webSocketSaga(action) {
   }
 }
 
+function* webSocketSuccessSaga(action) {
+  const chatId = action.payload;
+  yield put(addChatInitState());
+
+  const activeChatId = yield select(getActiveChatId);
+  const wsConnection = yield select(getWsConnection);
+  const authorizedUser = yield select(getAuthorizedUser);
+  //TODO: need to move message to this method from saga of new chat creating 
+  yield put(wsConnection.send(JSON.stringify(
+          {
+            "chat_id": activeChatId,
+            // "prompt": textMessage,
+            "owner_id": authorizedUser.id,
+            "method": "request" 
+          }
+        )));
+}
+
+
+
 export default function* chatSaga() {
   yield takeEvery(FETCH_CHATS, fetchChatsSaga);
   yield takeEvery(ADD_CHAT, addChatSaga);
@@ -179,4 +197,5 @@ export default function* chatSaga() {
   yield takeEvery(FETCH_MESSAGES, fetchMessagesSaga);
   yield takeEvery(DELETE_MESSAGE, deleteMessageSaga);
   yield takeEvery(WS_CONNECTION_START, webSocketSaga);
+  yield takeEvery(WS_CONNECTION_SUCCESS, webSocketSuccessSaga);
 }
