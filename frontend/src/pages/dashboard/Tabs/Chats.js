@@ -59,7 +59,7 @@ const Chats = (props) => {
             return;
         }
 
-        setRecentChatList(chats.reverse());
+        setRecentChatList(chats);
         
         if (id === 0 && activeChatId > 0) {
             //added new chats

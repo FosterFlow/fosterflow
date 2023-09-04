@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
     FETCH_CHATS,
     FETCH_CHATS_INIT_STATE,
@@ -106,14 +107,22 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsErrors: null,
             };
 
-        case FETCH_CHATS_SUCCESS:
+        case FETCH_CHATS_SUCCESS: {
+            const chats = action.payload;
+            let filteredChats = (Array.isArray(chats) && chats) || [];
+
+            filteredChats = filteredChats.reverse();
+
             return {
                 ...state,
-                chats: action.payload,
+                chats: filteredChats,
                 fetchChatsLoading: false,
                 fetchChatsSuccess: true,
                 fetchChatsErrors: null,
             };
+        }
+            
+        
 
         case FETCH_CHATS_FAILED:
             return {
@@ -152,7 +161,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatLoading: false,
                 addChatSuccess: true,
                 addChatErrors: null,
-                chats: [...state.chats, action.payload],
+                chats: [action.payload, ...state.chats],
                 activeChatId: Number(action.payload.id),
                 chatWindow: true,
                 newChat: false
