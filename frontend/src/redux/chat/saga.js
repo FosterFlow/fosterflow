@@ -59,8 +59,8 @@ import {
 } from './actions';
 
 const api = apiAuthorizedClient;
-const getActiveChatId = (state) => state.Chat.activeChatId;
 const getWsConnection = (state) => state.Chat.wsConnection;
+const getAddChatRequest = (state) => state.Chat.addChatRequest;
 const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function* fetchChatsSaga() {
@@ -161,8 +161,13 @@ function createWebSocketChannelSaga(socket) {
 
 function* webSocketSaga(action) {
   const chatId = action.payload;
+  const wsConnection = yield select(getWsConnection);
+
+  if (wsConnection !== null) {
+    wsConnection.close();
+  }
   const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${chatId}/`);
-  const socketChannel = yield call(createWebSocketChannelSaga, socket);
+  const socketChannel = createWebSocketChannelSaga(socket);
 
   while (true) {
     const action = yield take(socketChannel);
@@ -173,19 +178,23 @@ function* webSocketSaga(action) {
 function* webSocketSuccessSaga(action) {
   const chatId = action.payload;
   yield put(addChatInitState());
+  const addChatRequest = yield select(getAddChatRequest);
+  
+  if (addChatRequest === null) {
+    return;
+  }
 
-  const activeChatId = yield select(getActiveChatId);
   const wsConnection = yield select(getWsConnection);
   const authorizedUser = yield select(getAuthorizedUser);
-  //TODO: need to move message to this method from saga of new chat creating 
-  yield put(wsConnection.send(JSON.stringify(
-          {
-            "chat_id": activeChatId,
-            // "prompt": textMessage,
-            "owner_id": authorizedUser.id,
-            "method": "request" 
-          }
-        )));
+  const chatMessage = addChatRequest.message;
+  wsConnection.send(JSON.stringify(
+    {
+      "chat_id": chatId,
+      "prompt": chatMessage,
+      "owner_id": authorizedUser.id,
+      "method": "request" 
+    }
+  ));
 }
 
 

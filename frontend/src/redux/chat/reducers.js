@@ -45,6 +45,7 @@ const INIT_STATE = {
     fetchChatsSuccess: false,
     fetchChatsErrors: null,
 
+    addChatRequest: null,
     addChatLoading: false,
     addChatSuccess: false,
     addChatErrors: null,
@@ -128,6 +129,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatLoading: true,
                 addChatSuccess: false,
                 addChatErrors: null,
+                addChatRequest: action.payload
             };
 
         case ADD_CHAT_INIT_STATE:
@@ -136,6 +138,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatLoading: false,
                 addChatSuccess: false,
                 addChatErrors: null,
+                addChatRequest: null,
             };
 
         case ADD_CHAT_SUCCESS:
@@ -276,12 +279,14 @@ const Chat = (state = INIT_STATE, action) => {
                 wsConnected: false
             };
 
-        case WS_CONNECTION_SUCCESS:
+        case WS_CONNECTION_SUCCESS: {
             return {
                 ...state,
                 wsConnected: true,
                 wsConnection: action.payload
             };
+        }
+            
 
         case WS_CONNECTION_ERROR:
             return {

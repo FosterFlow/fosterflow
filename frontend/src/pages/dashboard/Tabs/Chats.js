@@ -72,6 +72,8 @@ const Chats = (props) => {
 
     useEffect(() => {
         if (id === 0) {
+            
+            //TODO: we can do it using one action, update fields into reducer
             setActiveChat(0);
             showChatWindow(false);
             setActiveNewChat(true);
@@ -83,6 +85,7 @@ const Chats = (props) => {
         }
         
         //Opened specific chat by id in url
+        //TODO: we can do it using one action, update fields into reducer
         showChatWindow(true);
         setActiveChat(id);
         setActiveNewChat(false);
