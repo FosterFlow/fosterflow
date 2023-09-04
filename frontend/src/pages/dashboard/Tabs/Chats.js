@@ -46,11 +46,8 @@ const Chats = (props) => {
     } = props;
 
     useEffect(() => {
-        if (authorizedUser === null){
-            return;
-        }
-
-        if (authorizedUser.is_email_confirmed === false){
+        if (authorizedUser === null ||
+            authorizedUser.is_email_confirmed === false){
             return;
         }
 

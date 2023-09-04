@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form } from "reactstrap";
 import { connect } from "react-redux";
 import { addChat} from "../../../redux/chat/actions";
-import { bindActionCreators } from "redux";
 import { useTranslation } from 'react-i18next';
 
 function ChatInput(props) {
@@ -32,16 +31,20 @@ function ChatInput(props) {
 
     const formSubmit = (event, textMessage) => {
         if (isMobileDevice()) {
+            //Form submit happen when user clicks to Enter button.
+            //On mobile devices, Enter button makes a new line.
             event.preventDefault();
             return;
         }
          
         addMessage(textMessage);
+        event.preventDefault();
     }
-    
 
     const handleButtonClick = (event, textMessage) => {
         if (isMobileDevice()) {
+            //Form submit happen when user clicks to Enter button.
+            //On mobile devices, Enter button makes a new line.
             event.preventDefault();
             addMessage(textMessage);
         }
@@ -49,37 +52,31 @@ function ChatInput(props) {
 
     //function for send data to onaddMessage function(in userChat/index.js component)
     const addMessage = (textMessage) => {
-        if (authorizedUser === null){
+        if (authorizedUser === null ||
+            authorizedUser.is_email_confirmed === false ||
+            textMessage === ""){
             return;
         }
 
-        if (authorizedUser.is_email_confirmed === false){
-            return;
-        }
-
-        //if text value is not empty then call onaddMessage function
-        if (textMessage !== "") {
-            if (newChat){
-                addChat({
-                    "user_id": authorizedUser.id,
-                    "name": textMessage.substring(0, 32),
-                    "message": textMessage
-                });
-                settextMessage("");
-                //TODO: need to make web socket request once we get chatId
-                return;        
-            }
-
-            wsConnection.send(JSON.stringify(
-                {
-                    "chat_id": activeChatId,
-                    "prompt": textMessage,
-                    "owner_id": authorizedUser.id,
-                    "method": "request" 
-                }
-            ));
+        if (newChat){
+            addChat({
+                "user_id": authorizedUser.id,
+                "name": textMessage.substring(0, 32),
+                "message": textMessage
+            });
             settextMessage("");
+            return;        
         }
+
+        wsConnection.send(JSON.stringify(
+            {
+                "chat_id": activeChatId,
+                "prompt": textMessage,
+                "owner_id": authorizedUser.id,
+                "method": "request" 
+            }
+        ));
+        settextMessage("");
     }
 
     //function for handling 'Enter' key press
@@ -97,7 +94,7 @@ function ChatInput(props) {
     return (
         <React.Fragment>
             <div className="chat-input">
-                <Form onSubmit={(e) => formSubmit(e, textMessage)} >
+                <Form onSubmit={(event) => formSubmit(event, textMessage)} >
                     <textarea
                         ref={textAreaRef} 
                         value={textMessage} 
@@ -107,7 +104,7 @@ function ChatInput(props) {
                         placeholder={t('Enter Message') + '...'} 
                         style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
                     />
-                        <Button onClick={(e) => handleButtonClick(e, textMessage)} type="submit" color="primary" className="font-size-16 btn-sm chat-send">
+                        <Button onClick={(event) => handleButtonClick(event, textMessage)} type="submit" color="primary" className="font-size-16 btn-sm chat-send">
                             <i className="ri-send-plane-2-fill"></i>
                         </Button>
                 </Form>

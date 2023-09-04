@@ -40,7 +40,10 @@ function UserChat(props) {
     const { 
         messages, 
         activeChatId, 
-        authorizedUser
+        authorizedUser,
+        addChatRequestMessage,
+        fetchMessages,
+        chatWindow
     } = props;
     //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
@@ -89,24 +92,18 @@ function UserChat(props) {
     }, []);
 
     useEffect(() => {
-        if (activeChatId === 0) {
-            return;
-        }
+        if (activeChatId === 0 ||
+            authorizedUser === null ||
+            authorizedUser.is_email_confirmed === false ||
+            addChatRequestMessage !== undefined
+        ) { return; }
 
-        if (authorizedUser === null){
-            return;
-        }
-
-        if (authorizedUser.is_email_confirmed === false){
-            return;
-        }
-
-        props.fetchMessages(activeChatId);
+        fetchMessages(activeChatId);
     }, [authorizedUser, activeChatId]);
 
     return (
         <React.Fragment>
-            <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat ${chatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <UserHead />
                     <div
@@ -153,10 +150,18 @@ function UserChat(props) {
 }
 
 const mapStateToProps = (state) => {
+    const {
+        messages,
+        activeChatId,
+        chatWindow,
+        addChatRequestMessage
+    } = state.Chat;
+
     return {
-        messages: state.Chat.messages,
-        activeChatId: state.Chat.activeChatId,
-        chatWindow: state.Chat.chatWindow,
+        messages,
+        activeChatId,
+        chatWindow,
+        addChatRequestMessage,
         authorizedUser: state.User.authorizedUser
     }
 };

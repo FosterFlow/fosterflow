@@ -59,8 +59,9 @@ import {
 } from './actions';
 
 const api = apiAuthorizedClient;
+const getActiveChatId = (state) => state.Chat.activeChatId;
 const getWsConnection = (state) => state.Chat.wsConnection;
-const getAddChatRequest = (state) => state.Chat.addChatRequest;
+const getAddChatRequestMessage = (state) => state.Chat.addChatRequestMessage;
 const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function* fetchChatsSaga() {
@@ -175,26 +176,26 @@ function* webSocketSaga(action) {
   }
 }
 
-function* webSocketSuccessSaga(action) {
-  const chatId = action.payload;
-  yield put(addChatInitState());
-  const addChatRequest = yield select(getAddChatRequest);
+function* webSocketSuccessSaga() {
+  const addChatRequestMessage = yield select(getAddChatRequestMessage);
   
-  if (addChatRequest === null) {
+  if (addChatRequestMessage === undefined) {
+    yield put(addChatInitState());
     return;
   }
 
+  const activeChatId = yield select(getActiveChatId);
   const wsConnection = yield select(getWsConnection);
   const authorizedUser = yield select(getAuthorizedUser);
-  const chatMessage = addChatRequest.message;
   wsConnection.send(JSON.stringify(
     {
-      "chat_id": chatId,
-      "prompt": chatMessage,
+      "chat_id":  activeChatId,
+      "prompt": addChatRequestMessage,
       "owner_id": authorizedUser.id,
       "method": "request" 
     }
   ));
+  yield put(addChatInitState());
 }
 
 

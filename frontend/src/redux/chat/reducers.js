@@ -45,7 +45,7 @@ const INIT_STATE = {
     fetchChatsSuccess: false,
     fetchChatsErrors: null,
 
-    addChatRequest: null,
+    addChatRequestMessage: undefined,
     addChatLoading: false,
     addChatSuccess: false,
     addChatErrors: null,
@@ -123,14 +123,19 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsErrors: action.payload,
             };
 
-        case ADD_CHAT:
+        case ADD_CHAT: {
+            const actionPayload = action.payload;
+            const messageRequest = (actionPayload && actionPayload.message) || undefined;
+            
             return {
                 ...state,
                 addChatLoading: true,
                 addChatSuccess: false,
                 addChatErrors: null,
-                addChatRequest: action.payload
+                addChatRequestMessage: messageRequest 
             };
+        }
+            
 
         case ADD_CHAT_INIT_STATE:
             return {
@@ -138,7 +143,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatLoading: false,
                 addChatSuccess: false,
                 addChatErrors: null,
-                addChatRequest: null,
+                addChatRequestMessage: undefined,
             };
 
         case ADD_CHAT_SUCCESS:
