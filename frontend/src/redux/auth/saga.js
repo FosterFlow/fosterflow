@@ -23,7 +23,7 @@ import {
     
     logoutUserSuccess,
     logoutUserFailure,
-    
+
     registerUserSuccess,
     registerUserFailure,
     
@@ -56,6 +56,10 @@ import {
     refreshTokenUpdateFailure,
 } from './actions';
 
+import {
+    killWsConnection, 
+} from '../chat/actions';
+
 /**
  * Login the user
  * @param {*} payload - email and password 
@@ -82,6 +86,7 @@ function* logoutSaga() {
     try {
         //we use isAuthorized param for the case if user reloaded the page
         localStorage.setItem("isAuthenticated", false);
+        yield put(killWsConnection());
         yield call(apiAuthorizedClient.post, '/logout/');
         yield put(logoutUserSuccess());
     } catch (errors) {

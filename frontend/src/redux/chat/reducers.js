@@ -30,6 +30,7 @@ import {
     SET_ACTIVE_NEW_CHAT,
     
     WS_CONNECTION_START,
+    WS_CONNECTION_KILL,
     WS_CONNECTION_SUCCESS,
     WS_CONNECTION_ERROR,
     WS_CONNECTION_CLOSED,
@@ -293,6 +294,12 @@ const Chat = (state = INIT_STATE, action) => {
                 wsConnected: false
             };
 
+        case WS_CONNECTION_KILL:
+            return {
+                ...state,
+                wsConnected: false,
+            };
+
         case WS_CONNECTION_SUCCESS: {
             return {
                 ...state,
@@ -301,7 +308,6 @@ const Chat = (state = INIT_STATE, action) => {
             };
         }
             
-
         case WS_CONNECTION_ERROR:
             return {
                 ...state,
@@ -317,39 +323,42 @@ const Chat = (state = INIT_STATE, action) => {
                 wsConnectionError: null
             };
             
-            /**
-             * TODO:
-             * Add to a buffer chunks with "start" and "process" status.
-             * And write them to the global messages store when we get "done" status.
-             * The issue is how to show them correctly then into the right order.
-             * 
-             */
-            case WS_RECEIVE_MESSAGE_CHUNK:
-                {
-                    const receivedMessage = action.payload;
-                    const messagesList = [...state.messages];
+        /**
+        * TODO:
+        * Add to a buffer chunks with "start" and "process" status.
+        * And write them to the global messages store when we get "done" status.
+        * The issue is how to show them correctly then into the right order.
+        * 
+        * TODO:    
+        * Add handling of statuses for "start" and "done"   
+        * 
+        */
+        case WS_RECEIVE_MESSAGE_CHUNK:
+            {
+                const receivedMessage = action.payload;
+                const messagesList = [...state.messages];
             
-                    // Find the message by its id
-                    const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
+                // Find the message by its id
+                const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
             
-                    // If the message already exists, update its content
-                    if (messageIndex !== -1) {
-                        const existingMessage = messagesList[messageIndex];
-                        existingMessage.message_text += receivedMessage.message_chunk;
-                        messagesList[messageIndex] = existingMessage;
-                    } else {
-                        // If the message doesn't exist, simply add it to the list
-                        if (receivedMessage.message_chunk !== undefined) {
-                            receivedMessage.message_text = receivedMessage.message_chunk;
-                        }
-                        messagesList.push(receivedMessage);
+                // If the message already exists, update its content
+                if (messageIndex !== -1) {
+                    const existingMessage = messagesList[messageIndex];
+                    existingMessage.message_text += receivedMessage.message_chunk;
+                    messagesList[messageIndex] = existingMessage;
+                } else {
+                    // If the message doesn't exist, simply add it to the list
+                    if (receivedMessage.message_chunk !== undefined) {
+                        receivedMessage.message_text = receivedMessage.message_chunk;
                     }
-            
-                    return {
-                        ...state,
-                        messages: messagesList
-                    };
+                    messagesList.push(receivedMessage);
                 }
+            
+                return {
+                    ...state,
+                    messages: messagesList
+                };
+            }
 
         default: return { ...state };
     }

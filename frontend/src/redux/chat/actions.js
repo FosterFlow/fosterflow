@@ -30,6 +30,7 @@ import {
   SET_ACTIVE_NEW_CHAT,
 
   WS_CONNECTION_START,
+  WS_CONNECTION_KILL,
   WS_CONNECTION_SUCCESS,
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
@@ -183,6 +184,10 @@ import {
   export const startWsConnection = (chatId) => ({
     type: WS_CONNECTION_START,
     payload: chatId
+  });
+
+  export const killWsConnection = () => ({
+    type: WS_CONNECTION_KILL,
   });
   
   export const wsConnectionSuccess = (socket) => ({

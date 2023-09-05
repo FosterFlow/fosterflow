@@ -21,6 +21,7 @@ import {
   SET_ACTIVE_NEW_CHAT,
 
   WS_CONNECTION_START,
+  WS_CONNECTION_KILL,
   WS_CONNECTION_SUCCESS,
   WS_CONNECTION_ERROR,
   WS_CONNECTION_CLOSED,
@@ -166,7 +167,7 @@ function createWebSocketChannelSaga(socket) {
 }
 
 
-function* webSocketSaga(action) {
+function* startWebSocketSaga(action) {
   const chatId = action.payload;
   const wsConnection = yield select(getWsConnection);
 
@@ -179,6 +180,15 @@ function* webSocketSaga(action) {
   while (true) {
     const action = yield take(socketChannel);
     yield put(action);
+  }
+}
+
+function* killWebSocketSaga(action) {
+  const chatId = action.payload;
+  const wsConnection = yield select(getWsConnection);
+
+  if (wsConnection !== null) {
+    wsConnection.close();
   }
 }
 
@@ -212,6 +222,7 @@ export default function* chatSaga() {
   yield takeEvery(DELETE_CHAT, deleteChatSaga);
   yield takeEvery(FETCH_MESSAGES, fetchMessagesSaga);
   yield takeEvery(DELETE_MESSAGE, deleteMessageSaga);
-  yield takeEvery(WS_CONNECTION_START, webSocketSaga);
+  yield takeEvery(WS_CONNECTION_START, startWebSocketSaga);
+  yield takeEvery(WS_CONNECTION_KILL, killWebSocketSaga);
   yield takeEvery(WS_CONNECTION_SUCCESS, webSocketSuccessSaga);
 }
