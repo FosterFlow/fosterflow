@@ -1,3 +1,6 @@
+/**
+ * Layout for pages for non authorized users like login, register
+ */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Spinner } from 'reactstrap';
