@@ -25,7 +25,6 @@ const Chats = (props) => {
     const [searchChat, setSearchChat] = useState("");
     const [recentChatList, setRecentChatList] = useState([]);
     const supportEmail =  config.SUPPORT_EMAIL;
-    /* intilize t variable for multi language implementation */
     const { t } = useTranslation();
     const {
         router,

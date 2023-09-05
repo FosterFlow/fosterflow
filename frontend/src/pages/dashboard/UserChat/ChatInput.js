@@ -13,7 +13,8 @@ function ChatInput(props) {
         wsConnection,
         authorizedUser,
         newChat,
-        addChat
+        fetchMessagesLoading,
+        addChat,
     } = props;
 
     function isMobileDevice() {
@@ -103,9 +104,14 @@ function ChatInput(props) {
                         className="form-control form-control-lg bg-light border-light" 
                         placeholder={t('Enter Message') + '...'} 
                         style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
+                        disabled={fetchMessagesLoading}
                     />
-                        <Button onClick={(event) => handleButtonClick(event, textMessage)} type="submit" color="primary" className="font-size-16 btn-sm chat-send">
-                            <i className="ri-send-plane-2-fill"></i>
+                        <Button 
+                            onClick={(event) => handleButtonClick(event, textMessage)} 
+                            type="submit" color="primary" 
+                            disabled={fetchMessagesLoading}
+                            className="font-size-16 btn-sm chat-send">
+                                <i className="ri-send-plane-2-fill"></i>
                         </Button>
                 </Form>
             </div>
@@ -114,11 +120,19 @@ function ChatInput(props) {
 }
 
 const mapStateToProps = (state) => {
+    const {
+        activeChatId,
+        wsConnection,
+        newChat,
+        fetchMessagesLoading
+    } = state.Chat;
+
     return { 
-        activeChatId: state.Chat.activeChatId,
-        wsConnection: state.Chat.wsConnection,
+        activeChatId,
+        wsConnection,
+        newChat,
+        fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
-        newChat: state.Chat.newChat,
     }
 };
 

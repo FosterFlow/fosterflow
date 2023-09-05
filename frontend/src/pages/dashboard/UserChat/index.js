@@ -1,5 +1,9 @@
 //TODO: it renders 8 times, figure it out
 import React, { useRef, useEffect, useState } from 'react';
+import { 
+    Spinner,
+    Alert 
+} from "reactstrap";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
@@ -7,8 +11,10 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gfm from 'remark-gfm';
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
 import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
+import config from '../../../config';
 import { 
     fetchMessages
 } from "../../../redux/chat/actions";
@@ -38,18 +44,22 @@ function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
     const { 
-        messages, 
+        messages,
+        fetchMessagesLoading,
+        fetchMessagesErrors, 
         activeChatId, 
         authorizedUser,
         addChatRequestMessage,
         fetchMessages,
         chatWindow
     } = props;
+    const { t } = useTranslation();
     //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
     const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
     const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
+    const supportEmail =  config.SUPPORT_EMAIL;
 
     function handleChatScroll() {
         const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
@@ -111,6 +121,23 @@ function UserChat(props) {
                         onScroll={debouncedHandleChatScroll} 
                         className="user-chat-conversation"
                         id="messages">
+                            {  fetchMessagesLoading &&
+                                <div className="d-flex justify-content-center">
+                                    <Spinner size="sm"/>
+                                </div>
+                            }
+                            { fetchMessagesErrors && (
+                                <Alert color="danger">
+                                    {t('Errors details')}:
+                                    <ul>
+                                        {fetchMessagesErrors.details.map((error, index) => (
+                                            <li key={index}>{error}</li>
+                                        ))}
+                                    </ul>
+                                    <hr/>
+                                    {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                                </Alert>
+                            )}
                             <ul className="user-chat-conversation-list">
                                 {
                                     relevantMessages.map((message, key) =>
@@ -152,6 +179,8 @@ function UserChat(props) {
 const mapStateToProps = (state) => {
     const {
         messages,
+        fetchMessagesLoading,
+        fetchMessagesErrors,
         activeChatId,
         chatWindow,
         addChatRequestMessage
@@ -159,6 +188,8 @@ const mapStateToProps = (state) => {
 
     return {
         messages,
+        fetchMessagesLoading,
+        fetchMessagesErrors,
         activeChatId,
         chatWindow,
         addChatRequestMessage,

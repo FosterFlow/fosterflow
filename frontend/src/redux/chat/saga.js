@@ -65,6 +65,7 @@ const getAddChatRequestMessage = (state) => state.Chat.addChatRequestMessage;
 const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function* fetchChatsSaga() {
+  yield put(fetchChatsInitState());
   try {
     const chats = yield call(api.get, '/chats/');
     yield put(fetchChatsSuccess(chats));
@@ -72,8 +73,6 @@ function* fetchChatsSaga() {
     yield put(fetchChatsInitState());
   } catch (errors) {
     yield put(fetchChatsFailed(errors));
-    yield delay(10000);
-    yield put(fetchChatsInitState());
   }
 }
 
@@ -109,16 +108,20 @@ function* deleteChatSaga(action) {
 }
 
 function* fetchMessagesSaga(action) {
+  yield put(fetchMessagesInitState());
   try {
+    
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
     yield put(startWsConnection(action.payload));
     yield delay(5000);
     yield put(fetchMessagesInitState());
   } catch (errors) {
-    yield put(fetchMessagesFailed(errors));
-    yield delay(10000);
-    yield put(fetchMessagesInitState());
+    yield put(fetchMessagesFailed({
+      "details": [
+        "Bad Request."
+      ]
+    }));
   }
 }
 
