@@ -142,5 +142,6 @@
     "If you do not know what to do with the error, write to us by mail": "If you do not know what to do with the error, write to us by mail",
     "Loading dependencies": "Loading dependencies",
     "Your session key was expired": "Your session key was expired",
-    "Details": "Details"
+    "Details": "Details",
+    "The password must meet the requirements below": "The password must meet the requirements below"
 }

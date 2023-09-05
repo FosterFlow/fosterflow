@@ -142,5 +142,6 @@
     "If you do not know what to do with the error, write to us by mail": "Se non sai cosa fare con l'errore, scrivici per e-mail",
     "Loading dependencies": "Caricamento dipendenze",
     "Your session key was expired": "La tua chiave di sessione è scaduta",
-    "Details": "Dettagli"
+    "Details": "Dettagli",
+    "The password must meet the requirements below": "La password deve soddisfare i requisiti sottostanti"
 }
