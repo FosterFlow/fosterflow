@@ -190,9 +190,9 @@ import {
     payload: socket
   });
   
-  export const wsConnectionError = (error) => ({
+  export const wsConnectionError = (errors) => ({
     type: WS_CONNECTION_ERROR,
-    payload: error
+    payload: errors
   });
   
   export const wsConnectionClosed = () => ({

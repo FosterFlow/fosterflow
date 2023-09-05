@@ -145,13 +145,16 @@ function createWebSocketChannelSaga(socket) {
     };
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      console.log("Chat saga reateWebSocketChannel onmessage", data);
+      // if (data.error) {
+
+      // }
       //TODO: add handling errors data.error
       //{"error": "'prompt'"}
       emit(wsReceiveMessage(data));
     };
     socket.onerror = (event) => {
-      emit(wsConnectionError(event));
+      //TODO check error format in this case
+      // emit(wsConnectionError(event));
     };
     socket.onclose = () => {
       emit(wsConnectionClosed());
