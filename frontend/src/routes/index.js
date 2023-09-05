@@ -21,7 +21,8 @@ import AuthLayout from "../layouts/AuthLayout/";
 const Routes = (props) => {
     const { t } = useTranslation();
     const location = useLocation();
-    const { 
+    const {
+        refreshTokenUpdateErrors, 
         isAuthenticated,
         confirmEmailSuccess
     } = props;
@@ -109,10 +110,15 @@ const Routes = (props) => {
 }
 
 const mapStateToProps = (state) => {
+    const {
+        isAuthenticated,
+        confirmEmailSuccess
+    } = state.Auth;
+
     return {
         //cause re-render of the router if user was authenticated or logout
-        isAuthenticated: state.Auth.isAuthenticated,
-        confirmEmailSuccess: state.Auth.confirmEmailSuccess
+        isAuthenticated,
+        confirmEmailSuccess
     }
 };
 

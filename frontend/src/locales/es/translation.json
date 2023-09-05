@@ -140,5 +140,7 @@
     "Authentification error": "Error de autenticación",
     "Try to login once again": "Intenta iniciar sesión de nuevo",
     "If you do not know what to do with the error, write to us by mail": "Si no sabe qué hacer con el error, escríbanos por correo",
-    "Loading dependencies": "Cargando dependencias"
+    "Loading dependencies": "Cargando dependencias",
+    "Your session key was expired": "Tu clave de sesión ha expirado",
+    "Details": "Detalles"
 }

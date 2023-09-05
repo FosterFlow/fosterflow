@@ -140,5 +140,7 @@
     "Authentification error": "Authentification error",
     "Try to login once again": "Try to login once again",
     "If you do not know what to do with the error, write to us by mail": "If you do not know what to do with the error, write to us by mail",
-    "Loading dependencies": "Loading dependencies"
+    "Loading dependencies": "Loading dependencies",
+    "Your session key was expired": "Your session key was expired",
+    "Details": "Details"
 }

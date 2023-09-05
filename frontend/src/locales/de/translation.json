@@ -140,5 +140,7 @@
     "Authentification error": "Authentifizierungsfehler",
     "Try to login once again": "Versuchen Sie erneut, sich anzumelden",
     "If you do not know what to do with the error, write to us by mail": "Wenn Sie nicht wissen, was Sie mit dem Fehler anfangen sollen, schreiben Sie uns per E-Mail",
-    "Loading dependencies": "Abhängigkeiten werden geladen"
+    "Loading dependencies": "Abhängigkeiten werden geladen",
+    "Your session key was expired": "Ihr Sitzungsschlüssel ist abgelaufen",
+    "Details": "Details"
 }

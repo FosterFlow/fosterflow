@@ -61,7 +61,7 @@ import {
  * @param {*} payload - email and password 
  */
 function* loginUserSaga({ payload: { email, password } }) {
-    console.log("redux aux saga", "login", "email, password", email, password );
+    yield put(refreshTokenUpdateInitState());
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
         console.log("redux aux saga", "login response", response );
@@ -191,16 +191,15 @@ function* changePasswordSaga({ payload: { oldPassword, newPassword } }) {
 
 
 function* refreshTokenUpdateSaga() {
+    yield put(refreshTokenUpdateInitState());
     try {
-    const response = yield call(apiClient.post, '/token/refresh/');
-    yield put(refreshTokenUpdateSuccess(response.access));
-    yield call(apiAuthorizedClient.resolve);
-    yield call(webSocketsAuthorizedClient.resolve);
+        const response = yield call(apiClient.post, '/token/refresh/');
+        yield put(refreshTokenUpdateSuccess(response.access));
+        yield call(apiAuthorizedClient.resolve);
+        yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
         localStorage.setItem("isAuthenticated", false);
         yield put(refreshTokenUpdateFailure(errors));
-        yield delay(15000);
-        yield put(refreshTokenUpdateInitState());
     }
 }
 

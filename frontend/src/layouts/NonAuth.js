@@ -55,13 +55,13 @@ const NonAuth = (props) => {
                     </Alert>)
                 }
                 {refreshTokenUpdateErrors && (
-                    <Alert color="danger">
+                    <Alert color="info">
                         <h6>
-                            {t('Authentification error')}
+                            {t('Your session key was expired')}
                         </h6>
                         {refreshTokenUpdateErrors.details &&
                             (<div>
-                                {t('Errors details')}:
+                                {t('Details')}:
                                 <ul>
                                     {refreshTokenUpdateErrors.details.map((error, index) => (
                                         <li key={index}>{error}</li>

@@ -140,7 +140,7 @@
     "Authentification error": "Ошибка аутентификации",
     "Try to login once again": "Попробуйте войти еще раз",
     "If you do not know what to do with the error, write to us by mail": "Если вы не знаете, что делать с ошибкой, напишите нам на почту",
-    "Loading dependencies": "Загрузка зависимостей"
-
-
+    "Loading dependencies": "Загрузка зависимостей",
+    "Your session key was expired": "Ваш ключ сессии истёк",
+    "Details": "Подробности"
 }

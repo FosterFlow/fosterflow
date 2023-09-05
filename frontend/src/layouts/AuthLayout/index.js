@@ -9,7 +9,8 @@ import {
     confirmEmail, 
     sendConfirmationEmail, 
     getAuthorizedUser, 
-    getAgent 
+    getAgent,
+    logoutUser 
 } from '../../redux/actions';
 import config from '../../config';
 import { useTranslation } from 'react-i18next';
@@ -30,11 +31,14 @@ const Index = (props) => {
         confirmEmailSuccess,
         confirmEmailErrors,
         
+        refreshTokenUpdateErrors,
         authorizedUser,
         layoutMode,
+
         getAuthorizedUser,
         getAgent,
-        sendConfirmationEmail
+        sendConfirmationEmail,
+        logoutUser
     } = props;
 
     if (layoutMode){
@@ -64,6 +68,12 @@ const Index = (props) => {
             getAgent(authorizedUser.id);
         }
     }, [authorizedUser]);
+
+    useEffect(() => {
+        if (refreshTokenUpdateErrors !== null){
+            logoutUser();
+        }
+    }, [refreshTokenUpdateErrors]);
 
     return (
         <React.Fragment>
@@ -166,7 +176,9 @@ const Index = (props) => {
 
 const mapStateToProps = state => {
     const {
-                sendConfirmationEmailLoading,
+        refreshTokenUpdateErrors,
+
+        sendConfirmationEmailLoading,
         sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
 
@@ -175,7 +187,9 @@ const mapStateToProps = state => {
         confirmEmailErrors,
     } = state.Auth;
     return {
-                sendConfirmationEmailLoading,
+        refreshTokenUpdateErrors,
+
+        sendConfirmationEmailLoading,
         sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
 
@@ -192,7 +206,8 @@ const mapDispatchToProps = {
     confirmEmail,
     sendConfirmationEmail,
     getAuthorizedUser,
-    getAgent
+    getAgent,
+    logoutUser
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));
