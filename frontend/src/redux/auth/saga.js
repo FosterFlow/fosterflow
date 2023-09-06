@@ -200,6 +200,8 @@ function* refreshTokenUpdateSaga() {
     } catch (errors) {
         yield put(refreshTokenUpdateFailure(errors));
         yield put(logoutForce());
+        yield delay(10000);
+        yield put(refreshTokenUpdateInitState());
     }
 }
 
