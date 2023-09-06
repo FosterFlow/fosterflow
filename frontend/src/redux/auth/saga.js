@@ -22,6 +22,7 @@ import {
     loginUserFailure,
     
     logoutUser,
+    logoutForce,
     logoutUserSuccess,
     logoutUserFailure,
 
@@ -198,7 +199,7 @@ function* refreshTokenUpdateSaga() {
         yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
         yield put(refreshTokenUpdateFailure(errors));
-        yield put(logoutUser());
+        yield put(logoutForce());
     }
 }
 

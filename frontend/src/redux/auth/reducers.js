@@ -5,6 +5,7 @@ import {
     LOGIN_USER_FAILURE,
 
     LOGOUT_USER,
+    LOGOUT_FORCE,
     LOGOUT_USER_INIT_STATE,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILURE,
@@ -147,7 +148,9 @@ const Auth = (state = INIT_STATE, action) => {
                 loginErrors: action.payload, 
             };
 
-        case LOGOUT_USER:
+        case LOGOUT_USER: {
+            localStorage.setItem("isAuthenticated", false);
+
             return { 
                 ...state,
                 isAuthenticated: false,
@@ -155,6 +158,21 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutSuccess: false,
                 logoutErrors: null,
             };
+        }
+           
+        case LOGOUT_FORCE: {
+            localStorage.setItem("isAuthenticated", false);
+
+            return { 
+                ...state,
+                isAuthenticated: false,
+                logoutLoading: true,
+                logoutSuccess: false,
+                logoutErrors: null,
+                authenticatedApiRequestsQueue: [],
+                webSocketsRequestsQueue: [],
+            };
+        }
 
         case LOGOUT_USER_INIT_STATE:
             return { 
@@ -165,14 +183,10 @@ const Auth = (state = INIT_STATE, action) => {
             };
     
         case LOGOUT_USER_SUCCESS: {
-            localStorage.setItem("isAuthenticated", false);
-
             return INIT_STATE;
         }
-    
-        case LOGOUT_USER_FAILURE: {
-            localStorage.setItem("isAuthenticated", false);
 
+        case LOGOUT_USER_FAILURE: {
             return { 
                 accessToken: undefined,
                 isAuthenticated: false,

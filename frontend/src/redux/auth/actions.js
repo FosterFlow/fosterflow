@@ -5,6 +5,7 @@ import {
     LOGIN_USER_FAILURE,
 
     LOGOUT_USER,
+    LOGOUT_FORCE,
     LOGOUT_USER_INIT_STATE,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILURE,
@@ -88,6 +89,18 @@ export const loginUserFailure = (errors) => {
 export const logoutUser = () => {
     return {
         type: LOGOUT_USER
+    }
+};
+
+/**
+ * Method uses in cases if refresh token already expeired and we can't get actual 
+ * accessToken to make logout using API
+ * 
+ * @returns 
+ */
+export const logoutForce = () => {
+    return {
+        type: LOGOUT_FORCE
     }
 };
 
