@@ -85,10 +85,9 @@ export const loginUserFailure = (errors) => {
 };
 
 
-export const logoutUser = (history) => {
+export const logoutUser = () => {
     return {
-        type: LOGOUT_USER,
-        payload: { history }
+        type: LOGOUT_USER
     }
 };
 

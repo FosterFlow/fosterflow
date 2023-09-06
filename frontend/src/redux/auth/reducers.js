@@ -125,7 +125,9 @@ const Auth = (state = INIT_STATE, action) => {
                 loginErrors: null, 
             };
         
-        case LOGIN_USER_SUCCESS:
+        case LOGIN_USER_SUCCESS: {
+            localStorage.setItem("isAuthenticated", true);
+
             return { 
                 ...state,
                 isAuthenticated: true,
@@ -134,6 +136,7 @@ const Auth = (state = INIT_STATE, action) => {
                 loginSuccess: true,
                 loginErrors: null, 
             };
+        }
 
         case LOGIN_USER_FAILURE:
             return { 
@@ -161,7 +164,9 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutErrors: null,
             };
     
-        case LOGOUT_USER_SUCCESS:
+        case LOGOUT_USER_SUCCESS: {
+            localStorage.setItem("isAuthenticated", false);
+
             return { 
                 ...state,
                 accessToken: undefined,
@@ -172,18 +177,23 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutSuccess: true,
                 logoutErrors: null,
             };
+        }
     
-        case LOGOUT_USER_FAILURE:
+        case LOGOUT_USER_FAILURE: {
+            localStorage.setItem("isAuthenticated", false);
+
             return { 
                 accessToken: undefined,
+                isAuthenticated: false,
                 refreshTokenLoading: false,
                 authenticatedApiRequestsQueue: [],
                 logoutLoading: false,
                 logoutSuccess: false,
                 logoutErrors: action.payload,
             };
+        }
 
-        case REGISTER_USER:
+        case REGISTER_USER: 
             return { 
                 ...state,
                 registerLoading: true,
@@ -199,7 +209,10 @@ const Auth = (state = INIT_STATE, action) => {
                 registerErrors: null,
             };
         
-        case REGISTER_USER_SUCCESS:
+        case REGISTER_USER_SUCCESS: {
+            //we store isAuthenticated param into Local Storage for the case if user reloaded the page
+            localStorage.setItem("isAuthenticated", true);
+
             return { 
                 ...state,
                 isAuthenticated: true,
@@ -208,6 +221,7 @@ const Auth = (state = INIT_STATE, action) => {
                 registerSuccess: true,
                 registerErrors: null,
             };
+        }
         
         case REGISTER_USER_FAILURE:
             return { 
@@ -439,8 +453,6 @@ const Auth = (state = INIT_STATE, action) => {
         case REFRESH_TOKEN_UPDATE_FAILURE:
             return { 
                 ...state,
-                accessToken: undefined,
-                isAuthenticated: false,
                 refreshTokenUpdateLoading: false,
                 refreshTokenUpdateSuccess: false,
                 refreshTokenUpdateErrors: action.payload, 

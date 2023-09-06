@@ -21,6 +21,7 @@ import {
     loginUserSuccess,
     loginUserFailure,
     
+    logoutUser,
     logoutUserSuccess,
     logoutUserFailure,
 
@@ -68,9 +69,7 @@ function* loginUserSaga({ payload: { email, password } }) {
     yield put(refreshTokenUpdateInitState());
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
-        console.log("redux aux saga", "login response", response );
-        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
-        yield localStorage.setItem("isAuthenticated", true);
+        
         yield put(loginUserSuccess(response.access));            
     } catch (errors) {
         yield put(loginUserFailure(errors));
@@ -84,8 +83,6 @@ function* loginUserSaga({ payload: { email, password } }) {
 function* logoutSaga() {
     console.log ("Auth saga logout");
     try {
-        //we use isAuthorized param for the case if user reloaded the page
-        localStorage.setItem("isAuthenticated", false);
         yield put(killWsConnection());
         yield call(apiAuthorizedClient.post, '/logout/');
         yield put(logoutUserSuccess());
@@ -100,8 +97,6 @@ function* logoutSaga() {
 function* registerSaga({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/register/', { email, password });
-        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
-        localStorage.setItem("isAuthenticated", true);
         yield put(registerUserSuccess(response.access));
     } catch (errors) {
         yield put(registerUserFailure(errors));
@@ -202,8 +197,8 @@ function* refreshTokenUpdateSaga() {
         yield call(apiAuthorizedClient.resolve);
         yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
-        localStorage.setItem("isAuthenticated", false);
         yield put(refreshTokenUpdateFailure(errors));
+        yield put(logoutUser());
     }
 }
 
