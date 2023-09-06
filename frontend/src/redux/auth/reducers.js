@@ -167,16 +167,7 @@ const Auth = (state = INIT_STATE, action) => {
         case LOGOUT_USER_SUCCESS: {
             localStorage.setItem("isAuthenticated", false);
 
-            return { 
-                ...state,
-                accessToken: undefined,
-                isAuthenticated: false,
-                refreshTokenLoading: false,
-                authenticatedApiRequestsQueue: [],
-                logoutLoading: false,
-                logoutSuccess: true,
-                logoutErrors: null,
-            };
+            return INIT_STATE;
         }
     
         case LOGOUT_USER_FAILURE: {
@@ -187,6 +178,7 @@ const Auth = (state = INIT_STATE, action) => {
                 isAuthenticated: false,
                 refreshTokenLoading: false,
                 authenticatedApiRequestsQueue: [],
+                webSocketsRequestsQueue: [],
                 logoutLoading: false,
                 logoutSuccess: false,
                 logoutErrors: action.payload,
@@ -456,8 +448,6 @@ const Auth = (state = INIT_STATE, action) => {
                 refreshTokenUpdateLoading: false,
                 refreshTokenUpdateSuccess: false,
                 refreshTokenUpdateErrors: action.payload, 
-                authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: []
             };
 
         case ADD_AUTHENTICATED_API_REQUEST:
