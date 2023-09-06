@@ -196,7 +196,6 @@ function* changePasswordSaga({ payload: { oldPassword, newPassword } }) {
 
 
 function* refreshTokenUpdateSaga() {
-    yield put(refreshTokenUpdateInitState());
     try {
         const response = yield call(apiClient.post, '/token/refresh/');
         yield put(refreshTokenUpdateSuccess(response.access));
