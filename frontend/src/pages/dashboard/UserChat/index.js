@@ -62,8 +62,15 @@ function UserChat(props) {
     const supportEmail =  config.SUPPORT_EMAIL;
 
     function handleChatScroll() {
-        const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
-        userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+        if (chatWindowRef.current !== null &&
+            userWasAtBottomRef.current !== null){
+                const { 
+                    scrollHeight, 
+                    scrollTop, 
+                    clientHeight 
+                } = chatWindowRef.current;
+                userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+        }
     };
 
     function handleWindowResize () {
@@ -86,10 +93,11 @@ function UserChat(props) {
     // Add useEffect to auto scroll to bottom when messages update
     useEffect(() => {
         if (Array.isArray(messages) && messages.length > 0){
-        const { scrollHeight } = chatWindowRef.current;
-        if (userWasAtBottomRef.current){
-        chatWindowRef.current.scrollTop = scrollHeight;
-        }
+            
+            if (userWasAtBottomRef.current){
+                const scrollHeight = chatWindowRef.current.scrollHeight;
+                chatWindowRef.current.scrollTop = scrollHeight;
+            }
         }
     }, [messages]);
 
