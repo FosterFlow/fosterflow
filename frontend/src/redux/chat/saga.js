@@ -67,7 +67,7 @@ const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function* fetchChatsSaga() {
   try {
-        const chats = yield call(api.get, '/chats/');
+    const chats = yield call(api.get, '/chats/');
     yield put(fetchChatsSuccess(chats));
     yield delay(5000);
     yield put(fetchChatsInitState());
@@ -115,11 +115,7 @@ function* fetchMessagesSaga(action) {
     yield delay(5000);
     yield put(fetchMessagesInitState());
   } catch (errors) {
-    yield put(fetchMessagesFailed({
-      "details": [
-        "Bad Request."
-      ]
-    }));
+    yield put(fetchMessagesFailed(errors));
   }
 }
 

@@ -139,7 +139,7 @@ const Register = (props) => {
                                                         id="email"
                                                         name="email"
                                                         className="form-control form-control-lg bg-soft-light border-light"
-                                                        placeholder={t('Enter Email')}
+                                                        placeholder={t('Enter email')}
                                                         onChange={registerForm.handleChange}
                                                         onBlur={registerForm.handleBlur}
                                                         value={registerForm.values.email}
@@ -174,7 +174,7 @@ const Register = (props) => {
                                                         id="password"
                                                         name="password"
                                                         className="form-control form-control-lg bg-soft-light border-light"
-                                                        placeholder={t('Enter Password')}
+                                                        placeholder={t('Enter password')}
                                                         onChange={registerForm.handleChange}
                                                         onBlur={registerForm.handleBlur}
                                                         value={registerForm.values.password}

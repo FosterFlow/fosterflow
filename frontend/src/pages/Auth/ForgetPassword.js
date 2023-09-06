@@ -147,7 +147,7 @@ const ForgetPassword = (props) => {
                                                         id="email"
                                                         name="email"
                                                         className="form-control form-control-lg border-light bg-soft-light"
-                                                        placeholder="Enter Email"
+                                                        placeholder="Enter email"
                                                         onChange={forgetPasswordForm.handleChange}
                                                         onBlur={forgetPasswordForm.handleBlur}
                                                         value={forgetPasswordForm.values.email}
