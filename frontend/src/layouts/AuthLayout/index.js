@@ -53,6 +53,15 @@ const Index = (props) => {
     
     useEffect(() => {
         document.title = "FosterFlow Chat";
+
+        if (!document.body.classList.contains('mobileStickUrlBar')) {
+            document.body.classList.add('mobileStickUrlBar');
+        }
+
+        if (!document.documentElement.classList.contains('overscrollYnone')) {
+            document.documentElement.classList.add('overscrollYnone');
+        }
+
         getAuthorizedUser();
     }, []);
 

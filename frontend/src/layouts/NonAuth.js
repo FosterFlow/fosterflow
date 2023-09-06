@@ -38,6 +38,16 @@ const NonAuth = (props) => {
     document.title = currentPage;
 
     useEffect(() => {
+        if (document.body.classList.contains('mobileStickUrlBar')) {
+            document.body.classList.remove('mobileStickUrlBar');
+        }
+
+        if (document.documentElement.classList.contains('overscrollYnone')) {
+            document.documentElement.remove('overscrollYnone');
+        }
+    }, []);
+
+    useEffect(() => {
         if (emailVerifyToken === undefined) {
             return;
         } 
