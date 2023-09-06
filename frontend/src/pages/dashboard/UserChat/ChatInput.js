@@ -102,7 +102,13 @@ function ChatInput(props) {
                         onChange={handleChange} 
                         onKeyDown={handleKeyDown}
                         className="form-control form-control-lg bg-light border-light" 
-                        placeholder={t('Enter Message') + '...'} 
+                        placeholder={
+                            fetchMessagesLoading ? (
+                                t('Loading chat history') + '...'
+                            ) : (
+                                t('Enter message') + '...'   
+                            )
+                        } 
                         style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
                         disabled={fetchMessagesLoading}
                     />

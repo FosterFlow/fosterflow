@@ -178,7 +178,7 @@ const ResetPassword = (props) => {
                                         <Form onSubmit={passwordResetForm.handleSubmit}>
 
                                             <FormGroup className="mb-4">
-                                                <Label className="form-label">{t('New Password')}</Label>
+                                                <Label className="form-label">{t('New password')}</Label>
                                                 <InputGroup className="mb-3 bg-soft-light rounded-3">
                                                     <span className="input-group-text text-muted">
                                                         <i className="ri-lock-2-line"></i>
@@ -188,7 +188,7 @@ const ResetPassword = (props) => {
                                                         id="password"
                                                         name="password"
                                                         className="form-control form-control-lg border-light bg-soft-light"
-                                                        placeholder="Enter New Password"
+                                                        placeholder="Enter new password"
                                                         onChange={passwordResetForm.handleChange}
                                                         onBlur={passwordResetForm.handleBlur}                                                        
                                                         value={passwordResetForm.values.password}
@@ -223,7 +223,7 @@ const ResetPassword = (props) => {
                                             </FormGroup>
 
                                             <FormGroup className="mb-4">
-                                                <Label className="form-label">{t('Confirm New Password')}</Label>
+                                                <Label className="form-label">{t('Confirm new password')}</Label>
                                                 <InputGroup className="mb-3 bg-soft-light rounded-3">
                                                     <span className="input-group-text text-muted">
                                                         <i className="ri-lock-2-line"></i>

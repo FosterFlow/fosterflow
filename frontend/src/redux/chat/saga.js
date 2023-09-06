@@ -111,7 +111,7 @@ function* deleteChatSaga(action) {
 function* fetchMessagesSaga(action) {
   yield put(fetchMessagesInitState());
   try {
-    
+    yield delay(10000);
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
     yield put(startWsConnection(action.payload));
