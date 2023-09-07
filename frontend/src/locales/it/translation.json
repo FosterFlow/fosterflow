@@ -144,5 +144,7 @@
     "Details": "Dettagli",
     "The password must meet the requirements below": "La password deve soddisfare i requisiti sottostanti",
     "Loading chat history": "Caricamento cronologia chat",
-    "Clearing cache": "Svuotando la cache"
+    "Clearing cache": "Svuotando la cache",
+    "An error occurred when exiting the application": "Si è verificato un errore durante l'uscita dall'applicazione",
+    "Сontact our support by email": "Contatta il nostro supporto via email"
 }

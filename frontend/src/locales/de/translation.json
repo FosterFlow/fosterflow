@@ -144,5 +144,7 @@
     "Details": "Einzelheiten",
     "Loading chat history": "Chatverlauf wird geladen",
     "The password must meet the requirements below": "Das Passwort muss die unten aufgeführten Anforderungen erfüllen",
-    "Clearing cache": "Cache leeren"
+    "Clearing cache": "Cache leeren",
+    "An error occurred when exiting the application": "Beim Beenden der Anwendung ist ein Fehler aufgetreten",
+    "Сontact our support by email": "Kontaktieren Sie unseren Support per E-Mail"
 }

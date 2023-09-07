@@ -21,8 +21,8 @@ const NonAuth = (props) => {
     const { emailVerifyToken } = useParams();
     const {
         refreshTokenUpdateErrors,
+        logoutErrors,
         confirmEmail,
-        confirmEmailInitState,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
@@ -67,6 +67,27 @@ const NonAuth = (props) => {
                         {t('Email was successfully confirmed')}.
                     </Alert>)
                 }
+                {logoutErrors && (
+                    <Alert color="danger">
+                        <h6>
+                            {t('An error occurred when exiting the application')}
+                        </h6>
+                        {logoutErrors.details &&
+                            (<div>
+                                {t('Details')}:
+                                <ul>
+                                    {logoutErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>)
+                        }
+                        <div>
+                            <hr/>
+                            {t('Сontact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                        </div>
+                    </Alert>
+                )}
                 {refreshTokenUpdateErrors && (
                     <Alert color="info">
                         <h6>
@@ -122,12 +143,14 @@ const mapStateToProps = state => {
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
+        logoutErrors
     } = state.Auth;
     return {
         refreshTokenUpdateErrors,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
+        logoutErrors,
         layoutMode: state.Layout.layoutMode
     };
 };

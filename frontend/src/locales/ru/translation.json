@@ -144,5 +144,7 @@
     "Details": "Подробности",
     "The password must meet the requirements below": "Пароль должен соответствовать приведенным ниже требованиям",
     "Loading chat history": "Загрузка истории чата",
-    "Clearing cache": "Очистка кэша"
+    "Clearing cache": "Очистка кэша",
+    "An error occurred when exiting the application": "При выходе из приложения произошла ошибка",
+    "Сontact our support by email": "Свяжитесь с нашей службой поддержки по электронной почте"
 }
