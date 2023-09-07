@@ -43,7 +43,7 @@ const NonAuth = (props) => {
         }
 
         if (document.documentElement.classList.contains('overscrollYnone')) {
-            document.documentElement.remove('overscrollYnone');
+            document.documentElement.classList.remove('overscrollYnone');
         }
     }, []);
 
