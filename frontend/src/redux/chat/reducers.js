@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import {
+    CHAT_INIT,
+    
     FETCH_CHATS,
     FETCH_CHATS_INIT_STATE,
     FETCH_CHATS_SUCCESS,
@@ -74,6 +76,9 @@ const INIT_STATE = {
 const Chat = (state = INIT_STATE, action) => {
     console.log("reducers", "Chat", "action", action);
     switch (action.type) {
+        case CHAT_INIT:
+            return INIT_STATE;
+
         case SET_ACTIVE_CHAT:
             return { 
                 ...state,

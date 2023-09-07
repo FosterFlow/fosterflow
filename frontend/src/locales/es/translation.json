@@ -143,5 +143,6 @@
     "Your session key was expired": "Tu clave de sesión ha expirado",
     "Details": "Detalles",
     "The password must meet the requirements below": "La contraseña debe cumplir con los requisitos que se detallan a continuación",
-    "Loading chat history": "Cargando historial de chat"
+    "Loading chat history": "Cargando historial de chat",
+    "Clearing cache": "Borrando caché"
 }

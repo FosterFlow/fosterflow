@@ -1,5 +1,7 @@
 // actions.js
 import {
+  CHAT_INIT,
+  
   FETCH_CHATS,
   FETCH_CHATS_INIT_STATE,
   FETCH_CHATS_SUCCESS,
@@ -36,6 +38,10 @@ import {
   WS_CONNECTION_CLOSED,
   WS_RECEIVE_MESSAGE_CHUNK,
 } from './constants';
+
+export const chatInit = () => ({
+  type: CHAT_INIT,
+});
   
   /**
    * Specify an id of currently active chat. 

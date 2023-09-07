@@ -1,4 +1,5 @@
 import {
+    AGENT_INIT,
     GET_AGENT,
     GET_AGENT_SUCCESS,
     GET_AGENT_FAILED,
@@ -11,6 +12,10 @@ import {
     HIDE_AGENT_AVATAR_SUCCESS_MESSAGE,
     UPDATE_AGENT_AVATAR_FAILED
 } from './constants';
+
+export const agentInit = () => ({
+    type: AGENT_INIT,
+});
 
 export const getAgent = (id) => ({
     type: GET_AGENT,

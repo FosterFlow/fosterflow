@@ -59,8 +59,18 @@ import {
 } from './actions';
 
 import {
-    killWsConnection, 
+    killWsConnection,
+    chatInit
 } from '../chat/actions';
+
+import {
+    agentInit 
+} from '../agent/actions';
+
+import {
+    userInit
+} from '../user/actions';
+    
 
 /**
  * Login the user
@@ -82,10 +92,14 @@ function* loginUserSaga({ payload: { email, password } }) {
  * Logout the user
  */
 function* logoutSaga() {
-    console.log ("Auth saga logout");
     try {
         yield put(killWsConnection());
+        yield put(chatInit());
+        yield put(userInit());
+        yield put(agentInit());
         yield call(apiAuthorizedClient.post, '/logout/');
+        //Time for showing loader, otherwise page 
+        yield delay(1000);
         yield put(logoutUserSuccess());
     } catch (errors) {
         yield put(logoutUserFailure(errors));

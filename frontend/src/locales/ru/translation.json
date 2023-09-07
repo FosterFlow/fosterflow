@@ -143,5 +143,6 @@
     "Your session key was expired": "Ваш ключ сессии истёк",
     "Details": "Подробности",
     "The password must meet the requirements below": "Пароль должен соответствовать приведенным ниже требованиям",
-    "Loading chat history": "Загрузка истории чата"
+    "Loading chat history": "Загрузка истории чата",
+    "Clearing cache": "Очистка кэша"
 }

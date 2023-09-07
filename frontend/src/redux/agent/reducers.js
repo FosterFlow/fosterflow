@@ -1,4 +1,5 @@
 import {
+    AGENT_INIT,
     GET_AGENT,
     GET_AGENT_SUCCESS,
     GET_AGENT_FAILED,
@@ -29,6 +30,9 @@ const INIT_STATE = {
 
 const Agent = (state = INIT_STATE, action) => {
     switch (action.type) {
+        case AGENT_INIT:
+            return INIT_STATE;
+            
         case GET_AGENT:
             return { ...state, loading: true }
         

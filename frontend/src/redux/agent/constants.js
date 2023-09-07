@@ -1,3 +1,4 @@
+export const AGENT_INIT = "AGENT_INIT";
 export const GET_AGENT = "GET_AGENT";
 export const GET_AGENT_SUCCESS = "GET_AGENT_SUCCESS";
 export const GET_AGENT_FAILED = "GET_AGENT_FAILED";

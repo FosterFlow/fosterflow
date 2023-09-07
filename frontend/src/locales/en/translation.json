@@ -143,5 +143,6 @@
     "Your session key was expired": "Your session key was expired",
     "Details": "Details",
     "The password must meet the requirements below": "The password must meet the requirements below",
-    "Loading chat history": "Loading chat history"
+    "Loading chat history": "Loading chat history",
+    "Clearing cache": "Clearing cache"
 }

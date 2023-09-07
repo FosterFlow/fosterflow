@@ -149,11 +149,8 @@ const Auth = (state = INIT_STATE, action) => {
             };
 
         case LOGOUT_USER: {
-            localStorage.setItem("isAuthenticated", false);
-
             return { 
                 ...state,
-                isAuthenticated: false,
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
@@ -165,7 +162,9 @@ const Auth = (state = INIT_STATE, action) => {
 
             return { 
                 ...state,
+                accessToken: undefined,
                 isAuthenticated: false,
+                refreshTokenLoading: false,
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
@@ -183,10 +182,13 @@ const Auth = (state = INIT_STATE, action) => {
             };
     
         case LOGOUT_USER_SUCCESS: {
+            localStorage.setItem("isAuthenticated", false);
             return INIT_STATE;
         }
 
         case LOGOUT_USER_FAILURE: {
+            localStorage.setItem("isAuthenticated", false);
+            
             return { 
                 accessToken: undefined,
                 isAuthenticated: false,

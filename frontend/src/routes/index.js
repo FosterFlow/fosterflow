@@ -38,6 +38,13 @@ const Routes = (props) => {
     const isAuthProtectedRoute = authProtectedRoutes.some(route => matchRoute(route.path, normalizedPathname));
 
 
+    /**
+     * TODO: check if build-in React methods can do the same 
+     *  
+     * @param {String} routePattern 
+     * @param {String} url 
+     * @returns 
+     */
     function matchRoute (routePattern, url) {
         const routeParts = routePattern.split('/');
         const urlParts = url.split('/');
