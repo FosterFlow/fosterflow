@@ -65,6 +65,7 @@
     background-color: $chat-secondary-bg;
     border-radius: 8px 8px 8px 0;
     color: var(--#{$prefix}dark);
+    overflow-y: auto;
 
     ul {
         margin-bottom: 0.5rem; 

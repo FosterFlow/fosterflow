@@ -40,6 +40,14 @@ function CodeBlock({node, inline, className, children, ...props}) {
   )
 }
 
+function TableWrapper({node, ...props}) {
+    return (
+      <div style={{overflowY: 'auto'}}>
+        <table {...props} />
+      </div>
+    );
+  }
+
 function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
@@ -164,8 +172,11 @@ function UserChat(props) {
                                                             style={{maxWidth: `${messageMaxWidth}px`}}
                                                         >
                                                             <ReactMarkdown 
-                                                                remarkPlugins={[gfm]} 
-                                                                components={{code: CodeBlock}}>
+                                                                remarkPlugins={[gfm]}
+                                                                components={{
+                                                                    code: CodeBlock,
+                                                                    table: TableWrapper 
+                                                                    }}>
                                                                 {message.message_text}
                                                             </ReactMarkdown>
                                                         </div>
