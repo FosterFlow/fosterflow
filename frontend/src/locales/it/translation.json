@@ -146,5 +146,9 @@
     "Loading chat history": "Caricamento cronologia chat",
     "Clearing cache": "Svuotando la cache",
     "An error occurred when exiting the application": "Si è verificato un errore durante l'uscita dall'applicazione",
-    "Сontact our support by email": "Contatta il nostro supporto via email"
+    "Сontact our support by email": "Contatta il nostro supporto via email",
+    "Copy": "Copia",
+    "Copied to buffer": "Copiato negli appunti",
+    "Error": "Errore"
+
 }

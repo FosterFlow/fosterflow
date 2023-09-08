@@ -146,5 +146,8 @@
     "Loading chat history": "Loading chat history",
     "Clearing cache": "Clearing cache",
     "An error occurred when exiting the application": "An error occurred when exiting the application",
-    "Сontact our support by email": "Сontact our support by email"
+    "Сontact our support by email": "Сontact our support by email",
+    "Copy": "Copy",
+    "Copied to buffer": "Copied to buffer",
+    "Error": "Error"
 }

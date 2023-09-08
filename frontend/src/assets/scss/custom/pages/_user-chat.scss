@@ -87,6 +87,30 @@
         border: $table-border-width solid $table-border-color;
         text-align: center;
     }
+
+    .code-block {
+        pre {
+            margin-top: 0 !important;
+        }
+    }
+
+    .code-block-head {
+        color: $white;
+        flex-direction: row;
+        display: flex;
+        padding: 0.2em 1em;
+        background-color: $chat-primary-bg;
+    }
+
+    .code-block-head-language {
+        flex-grow: 1;
+    }
+
+    .code-block-head-copy-to-clipboard {
+        a {
+            color: $white;
+        }
+    }
 }
 
 .right .user-chat-message {
