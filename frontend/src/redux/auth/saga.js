@@ -123,6 +123,7 @@ function* registerSaga({ payload: { email, password } }) {
  */
   function* sendConfirmationEmailSaga() {
     try {
+        yield put(confirmEmailInitState());
         yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
         yield put(sendConfirmationEmailSuccess());
         yield delay(5000);
@@ -145,8 +146,6 @@ function* confirmEmailSaga({ payload: { token } }) {
         yield put(confirmEmailInitState());
     } catch (errors) {
         yield put(confirmEmailFailure(errors));
-        yield delay(15000);
-        yield put(confirmEmailInitState());
     }
   }
 

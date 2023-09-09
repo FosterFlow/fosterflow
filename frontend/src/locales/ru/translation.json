@@ -155,5 +155,9 @@
     "Welcome to": "Добро пожаловать в",
     "Create your account": "Создать вашу учетную запись",
     "Remember password?": "Помните пароль?",
-    "Forgot password?": "Забыли пароль?" 
+    "Forgot password?": "Забыли пароль?",
+    "We have sent you an email to confirm your account. Please check your inbox": "Мы отправили вам электронное письмо для подтверждения вашего аккаунта. Пожалуйста, проверьте вашу почту",
+    "Click here": "Нажмите здесь,",
+    "to send again": "чтобы отправить снова",
+    "Sending email confirmation": "Отправка подтверждения по электронной почте" 
 }

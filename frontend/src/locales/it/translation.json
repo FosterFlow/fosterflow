@@ -155,5 +155,9 @@
     "Welcome to": "Benvenuto in",
     "Create your account": "Crea il tuo account",
     "Remember password?": "Ricordi la password?",
-    "Forgot password?": "Hai dimenticato la password?"
+    "Forgot password?": "Hai dimenticato la password?",
+    "We have sent you an email to confirm your account. Please check your inbox": "Abbiamo inviato un'email per confermare il tuo account. Per favore, controlla la tua casella di posta",
+    "Click here": "Clicca qui",
+    "to send again": "per inviare di nuovo",
+    "Sending email confirmation": "Invio conferma via email"
 }

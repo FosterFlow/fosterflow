@@ -22,7 +22,7 @@ import { useParams } from 'react-router-dom';
 const Index = (props) => {
     const { t } = useTranslation();
     const supportEmail =  config.SUPPORT_EMAIL;
-    const { "email-verify-token": emailVerifyToken } = useParams();
+    const { emailVerifyToken } = useParams();
     const {
         children,
         sendConfirmationEmailLoading,
@@ -90,10 +90,12 @@ const Index = (props) => {
                     </Alert>
                 }
                 {sendConfirmationEmailLoading && 
-                    <span>
-                        <Spinner size="sm"/>&nbsp;
-                        {t('Sending email confirmation')}...
-                    </span>
+                    <Alert color="info">
+                        <span>
+                            <Spinner size="sm"/>&nbsp;
+                            {t('Sending email confirmation')}...
+                        </span>
+                    </Alert>
                 }   
                 {confirmEmailSuccess && (
                     <Alert color="success">
@@ -139,7 +141,7 @@ const Index = (props) => {
                             </div>)
                         }
                         <div>
-                            {t('Try resend confirmation email')}.
+                            {t('Try resend confirmation email')}.&nbsp;
                             <a href="#" onClick={sendConfirmationEmailHandler}> 
                                 {t('Click here')}&nbsp;
                                 </a>
@@ -158,7 +160,7 @@ const Index = (props) => {
                 !sendConfirmationEmailLoading &&
                     <Alert color="info">
                         <span>
-                            {t('We have sent you an email to confirm your account. Please check your inbox')}.
+                            {t('We have sent you an email to confirm your account. Please check your inbox')}.&nbsp;
                                 <a href="#" onClick={sendConfirmationEmailHandler}> 
                                     {t('Click here')}&nbsp;
                                 </a>

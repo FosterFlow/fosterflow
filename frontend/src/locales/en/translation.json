@@ -154,5 +154,9 @@
     "Restore your password": "Restore your password",
     "Welcome to": "Welcome to",
     "Create your account": "Create your account",
-    "Remember password?": "Remember password?"
+    "Remember password?": "Remember password?",
+    "We have sent you an email to confirm your account. Please check your inbox": "We have sent you an email to confirm your account. Please check your inbox",
+    "Click here": "Click here",
+    "to send again": "to send again",
+    "Sending email confirmation": "Sending email confirmation"
 }
