@@ -75,7 +75,7 @@
     "Sign in now": "Jetzt anmelden",
     "Confirmation failed": "Bestätigung fehlgeschlagen",
     "Email with instructions was sent to you": "Eine E-Mail mit Anweisungen wurde an dich gesendet",
-    "Enter your email and instructions will be sent to you" : "Geben Sie Ihre e-mail ein und Anweisungen werden Ihnen zugesendet",
+    "Enter your email address and instructions will be sent to your email": "Geben Sie Ihre E-Mail-Adresse ein, und Anweisungen werden an Ihre E-Mail gesendet",
     "Remember It": "Merken Sie es sich",
     "Enter email": "E-Mail eingeben",
     "Forgot password": "Passwort vergessen",
@@ -149,5 +149,11 @@
     "Сontact our support by email": "Kontaktieren Sie unseren Support per E-Mail",
     "Copy": "Kopieren",
     "Copied to buffer": "In Zwischenablage kopiert",
-    "Error": "Fehler"
+    "Error": "Fehler",
+    "Create a new password": "Erstellen Sie ein neues Passwort",
+    "Restore your password": "Stellen Sie Ihr Passwort wieder her",
+    "Welcome to": "Willkommen bei",
+    "Create your account": "Erstellen Sie Ihr Konto",
+    "Remember password?": "Passwort erinnern?",
+    "Forgot password?": "Passwort vergessen?" 
 }

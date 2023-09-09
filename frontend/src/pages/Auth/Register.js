@@ -27,6 +27,7 @@ import {
     registerUserFailure
  } from '../../redux/actions';
 import { useTranslation } from 'react-i18next';
+import logo from "../../assets/images/logo192.png";
 
 /**
  * Register component
@@ -103,12 +104,18 @@ const Register = (props) => {
     return (
         <React.Fragment>
 
-            <div className="account-pages pt-sm-5">
+            <div className="account-pages pt-sm-3">
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5}>
+                            <div className="text-center mb-3">
+                                <Link to="/" className="auth-logo mb-3 d-block">
+                                    <img src={logo} alt="" height="60" className="logo" />
+                                </Link>
+                                <h4>{t('Create your account')}</h4>
+                            </div>
                             <Card>
-                                <CardBody className="p-4">
+                                <CardBody className="p-3">
                                     {registerErrors  && registerErrors.details &&
                                         (<Alert color="danger">
                                             <ul>

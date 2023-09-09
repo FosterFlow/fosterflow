@@ -75,7 +75,7 @@
     "Sign in now": "Sign in now",
     "Confirmation failed": "Confirmation failed",
     "Email with instructions was sent to you": "Email with instructions was sent to you",
-    "Enter your Email and instructions will be sent to you" : "Enter your Email and instructions will be sent to you",
+    "Enter your email address and instructions will be sent to your email" : "Enter your email address and instructions will be sent to your email",
     "Remember It": "Remember It",
     "Enter email": "Enter email",
     "Forgot password": "Forgot password",
@@ -149,5 +149,10 @@
     "Сontact our support by email": "Сontact our support by email",
     "Copy": "Copy",
     "Copied to buffer": "Copied to buffer",
-    "Error": "Error"
+    "Error": "Error",
+    "Create a new password": "Create a new password",
+    "Restore your password": "Restore your password",
+    "Welcome to": "Welcome to",
+    "Create your account": "Create your account",
+    "Remember password?": "Remember password?"
 }

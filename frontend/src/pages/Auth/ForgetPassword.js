@@ -30,6 +30,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import config from '../../config';
+import logo from "../../assets/images/logo192.png";
 
 /**
  * Forget Password component
@@ -88,12 +89,18 @@ const ForgetPassword = (props) => {
 
     return (
         <React.Fragment>
-            <div className="account-pages pt-sm-5">
+            <div className="account-pages pt-sm-3">
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5}>
+                            <div className="text-center mb-3">
+                                <Link to="/" className="auth-logo mb-3 d-block">
+                                    <img src={logo} alt="" height="60" className="logo" />
+                                </Link>
+                                <h4>{t('Restore your password')}</h4>
+                            </div>
                             <Card>
-                                <CardBody className="p-4">
+                                <CardBody className="p-3">
                                     <div className="p-3">
                                         {
                                             forgetPasswordErrors && forgetPasswordErrors.details &&
@@ -131,7 +138,7 @@ const ForgetPassword = (props) => {
                                             !forgetPasswordLoading
                                             ) &&
                                             <Alert color="info" className="text-center mb-4">
-                                                {t('Enter your email and instructions will be sent to you')}.
+                                                {t('Enter your email address and instructions will be sent to your email')}.
                                             </Alert>
                                         }
                                         <Form onSubmit={forgetPasswordForm.handleSubmit}>
@@ -147,7 +154,7 @@ const ForgetPassword = (props) => {
                                                         id="email"
                                                         name="email"
                                                         className="form-control form-control-lg border-light bg-soft-light"
-                                                        placeholder="Enter email"
+                                                        placeholder={t('Enter email')}
                                                         onChange={forgetPasswordForm.handleChange}
                                                         onBlur={forgetPasswordForm.handleBlur}
                                                         value={forgetPasswordForm.values.email}
@@ -177,7 +184,7 @@ const ForgetPassword = (props) => {
                                                             <Spinner size="sm"/>
                                                         </div>
                                                     }
-                                                        {t('Reset')}
+                                                        {t('Reset password')}
                                                 </Button>
                                             </div>
 
@@ -186,8 +193,8 @@ const ForgetPassword = (props) => {
                                 </CardBody>
                             </Card>
 
-                            <div className="mt-5 text-center">
-                                {t('Remember It')}? <Link to="/login" className="font-weight-medium text-primary"> {t('Signin')} </Link>
+                            <div className="text-center">
+                                {t('Remember password?')} <Link to="/login" className="font-weight-medium text-primary"> {t('Signin')} </Link>
                             </div>
                         </Col>
                     </Row>

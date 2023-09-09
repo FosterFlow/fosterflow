@@ -75,7 +75,7 @@
     "Sign in now": "Iniciar sesión ahora",
     "Confirmation failed": "La confirmación ha fallado",
     "Email with instructions was sent to you": "Se ha enviado un correo con instrucciones a tu dirección de correo electrónico",
-    "Enter your email and instructions will be sent to you" : "Introduce tu correo electrónico y las instrucciones te serán enviadas",
+    "Enter your email address and instructions will be sent to your email": "Ingrese su dirección de correo electrónico y las instrucciones serán enviadas a su correo",
     "Remember It": "Recuérdalo",
     "Enter email": "Introducir correo electrónico",
     "Forgot password": "Contraseña olvidada",
@@ -149,6 +149,11 @@
     "Сontact our support by email": "Contacta con nuestro soporte por correo electrónico",
     "Copy": "Copiar",
     "Copied to buffer": "Copiado al portapapeles",
-    "Error": "Error"
-
+    "Error": "Error",
+    "Create a new password": "Crea una nueva contraseña",
+    "Restore your password": "Restaura tu contraseña",
+    "Welcome to": "Bienvenido a",
+    "Create your account": "Crea tu cuenta",
+    "Remember password?": "¿Recuerda la contraseña?",
+    "Forgot password?": "¿Olvidó la contraseña?"
 }

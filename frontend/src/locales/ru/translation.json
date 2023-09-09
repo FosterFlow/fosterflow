@@ -75,7 +75,7 @@
     "Sign in now": "Войти сейчас",
     "Confirmation failed": "Подтверждение не удалось",
     "Email with instructions was sent to you": "На вашу электронную почту отправлено письмо с инструкциями",
-    "Enter your email and instructions will be sent to you" : "Введите ваш электронный адрес и инструкции будут отправлены вам",
+    "Enter your email address and instructions will be sent to your email": "Введите ваш электронный адрес и инструкция будет отправлена на вашу электронную почту",
     "Remember It": "Запомните это",
     "Enter email": "Введите электронную почту",
     "Forgot password": "Забыли пароль",
@@ -149,5 +149,11 @@
     "Сontact our support by email": "Свяжитесь с нашей службой поддержки по электронной почте",
     "Copy": "Копировать",
     "Copied to buffer": "Скопировано в буфер",
-    "Error": "Ошибка"
+    "Error": "Ошибка",
+    "Create a new password": "Создать новый пароль",
+    "Restore your password": "Восстановить ваш пароль",
+    "Welcome to": "Добро пожаловать в",
+    "Create your account": "Создать вашу учетную запись",
+    "Remember password?": "Помните пароль?",
+    "Forgot password?": "Забыли пароль?" 
 }
