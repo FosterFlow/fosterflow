@@ -8,7 +8,6 @@
 .side-menu {
     width: 75px;
     background-color: var(--#{$prefix}sidebar-bg);
-    box-shadow: 0 2px 4px rgba(15,34,58,.12);
     
     @media (min-width: 992px) {
         height: 100%;

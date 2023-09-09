@@ -109,13 +109,13 @@ function ChatInput(props) {
                                 t('Enter message') + '...'   
                             )
                         } 
-                        style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
                         disabled={fetchMessagesLoading}
                     />
                         <Button 
                             onClick={(event) => handleButtonClick(event, textMessage)} 
-                            type="submit" color="primary" 
-                            disabled={fetchMessagesLoading || !textMessage.trim()}
+                            type="submit" 
+                            color={textMessage.trim() && "primary"}
+                            disabled={!textMessage.trim()}
                             className="font-size-16 btn-sm chat-send">
                                 <i className="ri-send-plane-2-fill"></i>
                         </Button>

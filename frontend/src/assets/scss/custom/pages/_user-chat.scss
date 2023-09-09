@@ -6,7 +6,6 @@
 
 .user-chat {
     background-color: var(--#{$prefix}white);
-    box-shadow: 0 2px 4px rgba(15,34,58,.12);
     transition: all 0.4s;
     display: flex;
     flex-direction: column;
@@ -155,6 +154,10 @@
 
 .user-chat-header {
     font-size: 20px;
+    background-color: $sidebar-sub-bg;
+    box-shadow: 0 2px 4px rgba(15, 34, 58, .12);
+    position: relative;
+    z-index: 1;
 }
 
 .user-chat-back {
@@ -180,11 +183,19 @@
 
 .chat-input {
     background-color: var(--#{$prefix}white);
+    box-shadow: 0 -2px 4px rgba(15, 34, 58, .12);
     position: relative;
+    z-index: 1;
     
     textarea {
         border-radius: 0;
         padding-right: 53px;
+        resize: none;
+        overflow: auto;
+        min-height: 50px;
+        max-height: 200px;
+        padding-top: 5px;
+        padding-bottom: 3px;
 
         @media (max-width: 991.98px) {
             padding-right: 43px;
