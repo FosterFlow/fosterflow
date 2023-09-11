@@ -45,10 +45,10 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     CHANGE_PASSWORD_FAILURE,
 
-    REFRESH_TOKEN_UPDATE,
-    REFRESH_TOKEN_UPDATE_INIT_STATE,
-    REFRESH_TOKEN_UPDATE_SUCCESS,
-    REFRESH_TOKEN_UPDATE_FAILURE,
+    ACCESS_TOKEN_UPDATE,
+    ACCESS_TOKEN_UPDATE_INIT_STATE,
+    ACCESS_TOKEN_UPDATE_SUCCESS,
+    ACCESS_TOKEN_UPDATE_FAILURE,
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
@@ -97,9 +97,9 @@ const INIT_STATE = {
     changePasswordSuccess: false,
     changePassswordErrors: null,
 
-    refreshTokenUpdateLoading: false,
-    refreshTokenUpdateSuccess: false,
-    refreshTokenUpdateErrors: null,
+    accessTokenUpdateLoading: false,
+    accessTokenUpdateSuccess: false,
+    accessTokenUpdateErrors: null,
     
     isAuthenticated: JSON.parse(isAuthenticated ) || false,
     authenticatedApiRequestsQueue: [],
@@ -433,37 +433,37 @@ const Auth = (state = INIT_STATE, action) => {
                 changePassswordErrors: action.payload,
             };
         
-        case REFRESH_TOKEN_UPDATE:
+        case ACCESS_TOKEN_UPDATE:
             return { 
                 ...state,
-                refreshTokenUpdateLoading: true,
-                refreshTokenUpdateSuccess: false,
-                refreshTokenUpdateErrors: null,
+                accessTokenUpdateLoading: true,
+                accessTokenUpdateSuccess: false,
+                accessTokenUpdateErrors: null,
             };
 
-        case REFRESH_TOKEN_UPDATE_INIT_STATE:
+        case ACCESS_TOKEN_UPDATE_INIT_STATE:
             return { 
                 ...state,
-                refreshTokenUpdateLoading: false,
-                refreshTokenUpdateSuccess: false,
-                refreshTokenUpdateErrors: null,
+                accessTokenUpdateLoading: false,
+                accessTokenUpdateSuccess: false,
+                accessTokenUpdateErrors: null,
             };
         
-        case REFRESH_TOKEN_UPDATE_SUCCESS:
+        case ACCESS_TOKEN_UPDATE_SUCCESS:
             return { 
                 ...state, 
                 accessToken: action.payload,
-                refreshTokenUpdateLoading: false,
-                refreshTokenUpdateSuccess: true,
-                refreshTokenUpdateErrors: null, 
+                accessTokenUpdateLoading: false,
+                accessTokenUpdateSuccess: true,
+                accessTokenUpdateErrors: null, 
             };
 
-        case REFRESH_TOKEN_UPDATE_FAILURE:
+        case ACCESS_TOKEN_UPDATE_FAILURE:
             return { 
                 ...state,
-                refreshTokenUpdateLoading: false,
-                refreshTokenUpdateSuccess: false,
-                refreshTokenUpdateErrors: action.payload, 
+                accessTokenUpdateLoading: false,
+                accessTokenUpdateSuccess: false,
+                accessTokenUpdateErrors: action.payload, 
             };
 
         case ADD_AUTHENTICATED_API_REQUEST:

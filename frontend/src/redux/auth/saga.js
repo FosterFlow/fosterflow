@@ -13,7 +13,7 @@ import {
     VALIDATE_PASSWORD_RESET_TOKEN,
     RESET_PASSWORD,
     CHANGE_PASSWORD,
-    REFRESH_TOKEN_UPDATE
+    ACCESS_TOKEN_UPDATE
 } from './constants';
 
 
@@ -53,9 +53,9 @@ import {
     changePasswordSuccess,
     changePasswordFailure,
     
-    refreshTokenUpdateInitState,
-    refreshTokenUpdateSuccess,
-    refreshTokenUpdateFailure,
+    accessTokenUpdateInitState,
+    accessTokenUpdateSuccess,
+    accessTokenUpdateFailure,
 } from './actions';
 
 import {
@@ -77,7 +77,7 @@ import {
  * @param {*} payload - email and password 
  */
 function* loginUserSaga({ payload: { email, password } }) {
-    yield put(refreshTokenUpdateInitState());
+    yield put(accessTokenUpdateInitState());
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
         
@@ -204,17 +204,17 @@ function* changePasswordSaga({ payload: { oldPassword, newPassword } }) {
 }
 
 
-function* refreshTokenUpdateSaga() {
+function* accessTokenUpdateSaga() {
     try {
         const response = yield call(apiClient.post, '/token/refresh/');
-        yield put(refreshTokenUpdateSuccess(response.access));
+        yield put(accessTokenUpdateSuccess(response.access));
         yield call(apiAuthorizedClient.resolve);
         yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
-        yield put(refreshTokenUpdateFailure(errors));
+        yield put(accessTokenUpdateFailure(errors));
         yield put(logoutForce());
         yield delay(10000);
-        yield put(refreshTokenUpdateInitState());
+        yield put(accessTokenUpdateInitState());
     }
 }
 
@@ -228,5 +228,5 @@ export default function* chatSaga() {
     yield takeEvery(VALIDATE_PASSWORD_RESET_TOKEN, validatePasswordResetTokenSaga);
     yield takeEvery(RESET_PASSWORD, resetPasswordSaga);
     yield takeEvery(CHANGE_PASSWORD, changePasswordSaga);
-    yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdateSaga);
+    yield takeEvery(ACCESS_TOKEN_UPDATE, accessTokenUpdateSaga);
 }

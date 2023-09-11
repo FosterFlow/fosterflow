@@ -34,8 +34,14 @@ import {
   WS_CONNECTION_START,
   WS_CONNECTION_KILL,
   WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_ERROR,
+  WS_CONNECTION_FAILED,
   WS_CONNECTION_CLOSED,
+
+  WS_MESSAGE_SEND,
+  WS_MESSAGE_SEND_INIT_STATE,
+  WS_MESSAGE_SEND_SUCCESS,
+  WS_MESSAGE_SEND_FAILED,
+
   WS_RECEIVE_MESSAGE_CHUNK,
 } from './constants';
 
@@ -201,13 +207,30 @@ export const chatInit = () => ({
     payload: socket
   });
   
-  export const wsConnectionError = (errors) => ({
-    type: WS_CONNECTION_ERROR,
+  export const wsConnectionFailed = (errors) => ({
+    type: WS_CONNECTION_FAILED,
     payload: errors
   });
   
   export const wsConnectionClosed = () => ({
     type: WS_CONNECTION_CLOSED
+  });
+
+  export const wsMessageSend = () => ({
+    type: WS_MESSAGE_SEND
+  });
+
+  export const wsMessageSendInitState = () => ({
+    type: WS_MESSAGE_SEND_INIT_STATE
+  });
+
+  export const wsMessageSendSuccess = () => ({
+    type: WS_MESSAGE_SEND_SUCCESS
+  });
+  
+  export const wsMessageSendFailed = (errors) => ({
+    type: WS_MESSAGE_SEND_FAILED,
+    payload: errors
   });
   
   export const wsReceiveMessage = (messageChunk) => ({

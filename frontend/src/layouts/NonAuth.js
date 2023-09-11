@@ -20,7 +20,7 @@ const NonAuth = (props) => {
     const supportEmail =  config.SUPPORT_EMAIL;
     const { emailVerifyToken } = useParams();
     const {
-        refreshTokenUpdateErrors,
+        accessTokenUpdateErrors,
         logoutErrors,
         confirmEmail,
         confirmEmailLoading,
@@ -88,16 +88,16 @@ const NonAuth = (props) => {
                         </div>
                     </Alert>
                 )}
-                {refreshTokenUpdateErrors && (
+                {accessTokenUpdateErrors && (
                     <Alert color="info">
                         <h6>
                             {t('Your session key was expired')}
                         </h6>
-                        {refreshTokenUpdateErrors.details &&
+                        {accessTokenUpdateErrors.details &&
                             (<div>
                                 {t('Details')}:
                                 <ul>
-                                    {refreshTokenUpdateErrors.details.map((error, index) => (
+                                    {accessTokenUpdateErrors.details.map((error, index) => (
                                         <li key={index}>{error}</li>
                                     ))}
                                 </ul>
@@ -139,14 +139,14 @@ const NonAuth = (props) => {
 
 const mapStateToProps = state => {
     const {
-        refreshTokenUpdateErrors,
+        accessTokenUpdateErrors,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
         logoutErrors
     } = state.Auth;
     return {
-        refreshTokenUpdateErrors,
+        accessTokenUpdateErrors,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,

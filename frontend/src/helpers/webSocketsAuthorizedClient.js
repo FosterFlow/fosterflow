@@ -1,6 +1,6 @@
 import { store } from '../redux/store';
 import { 
-  refreshTokenUpdate,
+  accessTokenUpdate,
   addWebSocketRequest,
   clearWebSocketsApiRequestsQueue
 } from '../redux/auth/actions';
@@ -37,9 +37,9 @@ function resolveWebSocketsQueue() {
 
   const accessToken = state.Auth.accessToken;
   if (isTokenExpired(accessToken)) {
-    store.dispatch(refreshTokenUpdate());
-    return;
-  }
+    store.dispatch(accessTokenUpdate());
+          return;
+    }
 
   const webSocketsRequestsQueue = state.Auth.webSocketsRequestsQueue;
   if (webSocketsRequestsQueue.length > 0 ) {
@@ -69,12 +69,12 @@ function resolveWebSocketsQueue() {
  * request an update, once token is  updated - resolve all reuests from the queue. 
  * 
  * @param {string} method new web socket connection or resolve
- * @param {string} url  
- * 
+ * @param {string} url
+  * 
  * @returns {Object} returns promise 
  */
 function webSocketManager (method, url) {
-  let resolve;
+let resolve;
   
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.

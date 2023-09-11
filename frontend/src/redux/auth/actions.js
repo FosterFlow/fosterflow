@@ -45,10 +45,10 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     CHANGE_PASSWORD_FAILURE,
 
-    REFRESH_TOKEN_UPDATE,
-    REFRESH_TOKEN_UPDATE_INIT_STATE,
-    REFRESH_TOKEN_UPDATE_SUCCESS,
-    REFRESH_TOKEN_UPDATE_FAILURE,
+    ACCESS_TOKEN_UPDATE,
+    ACCESS_TOKEN_UPDATE_INIT_STATE,
+    ACCESS_TOKEN_UPDATE_SUCCESS,
+    ACCESS_TOKEN_UPDATE_FAILURE,
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
@@ -265,28 +265,28 @@ export const changePasswordFailure = (errors) => {
     }
 };
 
-export const refreshTokenUpdate = () => {
+export const accessTokenUpdate = () => {
     return {
-        type: REFRESH_TOKEN_UPDATE,
+        type: ACCESS_TOKEN_UPDATE,
     }
 };
 
-export const refreshTokenUpdateInitState = () => {
+export const accessTokenUpdateInitState = () => {
     return {
-        type: REFRESH_TOKEN_UPDATE_INIT_STATE,
+        type: ACCESS_TOKEN_UPDATE_INIT_STATE,
     }
 };
 
-export const refreshTokenUpdateSuccess = (accessToken) => {
+export const accessTokenUpdateSuccess = (accessToken) => {
     return {
-        type: REFRESH_TOKEN_UPDATE_SUCCESS,
+        type: ACCESS_TOKEN_UPDATE_SUCCESS,
         payload: accessToken
     }
 };
 
-export const refreshTokenUpdateFailure = (errors) => {
+export const accessTokenUpdateFailure = (errors) => {
     return {
-        type: REFRESH_TOKEN_UPDATE_FAILURE,
+        type: ACCESS_TOKEN_UPDATE_FAILURE,
         payload: errors
     }
 };
