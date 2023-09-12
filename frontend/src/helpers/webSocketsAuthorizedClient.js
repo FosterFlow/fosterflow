@@ -29,9 +29,9 @@ function isTokenExpired (accessToken) {
  */
 function resolveWebSocketsQueue() {
   const state = store.getState();
-  const refreshTokenLoading = state.Auth.refreshTokenLoading; 
+  const accessTokenLoading = state.Auth.accessTokenLoading; 
   
-  if (refreshTokenLoading){
+  if (accessTokenLoading){
     return;
   }
 
@@ -63,7 +63,7 @@ function resolveWebSocketsQueue() {
 
 /**
  * Using this method I'm trying to solve an issue when app makes a few requests 
- * same time, but access token was already expired. And axios makes a few requests for refresh token update.
+ * same time, but access token was already expired. And axios makes a few requests for access token update.
  * 
  * Solution: add all incoming reuqets to a queue. Check access token, if it was expired - 
  * request an update, once token is  updated - resolve all reuests from the queue. 

@@ -164,7 +164,7 @@ const Auth = (state = INIT_STATE, action) => {
                 ...state,
                 accessToken: undefined,
                 isAuthenticated: false,
-                refreshTokenLoading: false,
+                accessTokenLoading: false,
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
@@ -192,7 +192,7 @@ const Auth = (state = INIT_STATE, action) => {
             return { 
                 accessToken: undefined,
                 isAuthenticated: false,
-                refreshTokenLoading: false,
+                accessTokenLoading: false,
                 authenticatedApiRequestsQueue: [],
                 webSocketsRequestsQueue: [],
                 logoutLoading: false,

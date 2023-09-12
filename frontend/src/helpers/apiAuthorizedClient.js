@@ -65,9 +65,9 @@ function getAccessTokenFromAxios() {
  */
 function resolveRequestsQueue() {
   const state = store.getState();
-  const refreshTokenLoading = state.Auth.accessTokenUpdateLoading; 
+  const accessTokenLoading = state.Auth.accessTokenUpdateLoading; 
   
-  if (refreshTokenLoading){
+  if (accessTokenLoading){
     return;
   }
 
