@@ -125,6 +125,7 @@ function* registerSaga({ payload: { email, password } }) {
     try {
         yield put(confirmEmailInitState());
         yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(sendConfirmationEmailSuccess());
         yield delay(5000);
         yield put(sendConfirmationEmailInitState());
@@ -140,7 +141,8 @@ function* registerSaga({ payload: { email, password } }) {
  */
 function* confirmEmailSaga({ payload: { token } }) {
     try {
-      yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
+        yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(confirmEmailSuccess());
         yield delay(5000);
         yield put(confirmEmailInitState());
@@ -156,6 +158,7 @@ function* confirmEmailSaga({ payload: { token } }) {
 function* forgetPasswordSaga({ payload: { email } }) {
     try {
         const response = yield call(apiClient.post, '/password-reset/', { email });
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(forgetPasswordSuccess(response.status));
         yield delay(5000);
         yield put(forgetPasswordInitState());
@@ -167,6 +170,7 @@ function* forgetPasswordSaga({ payload: { email } }) {
 function* validatePasswordResetTokenSaga({ payload: { token } }) {
     try {
         yield call(apiClient.post, '/password-reset/validate_token/', { token });
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(validatePasswordResetTokenSuccess());
         yield delay(5000);
         yield put(validatePasswordResetTokenInitState());
