@@ -57,7 +57,6 @@ import {
     CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 } from './constants';
 
-const isAuthenticated = localStorage.getItem("isAuthenticated");
 const INIT_STATE = {
     accessToken: undefined,
     
@@ -101,14 +100,14 @@ const INIT_STATE = {
     accessTokenUpdateSuccess: false,
     accessTokenUpdateErrors: null,
     
-    isAuthenticated: JSON.parse(isAuthenticated ) || false,
+    isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated")) || false,
     authenticatedApiRequestsQueue: [],
     webSocketsRequestsQueue: [],
 };
 
 
 const Auth = (state = INIT_STATE, action) => {
-    console.log("reducers", "Auth", "action", action);
+    console.log("reducers", "Auth", "action", action );
     switch (action.type) {
         case LOGIN_USER:
             return { 
@@ -189,7 +188,8 @@ const Auth = (state = INIT_STATE, action) => {
         case LOGOUT_USER_FAILURE: {
             localStorage.setItem("isAuthenticated", false);
             
-            return { 
+            return {
+                ...state, 
                 accessToken: undefined,
                 isAuthenticated: false,
                 accessTokenLoading: false,

@@ -86,7 +86,6 @@ const INIT_STATE = {
 };
 
 const Chat = (state = INIT_STATE, action) => {
-    console.log("reducers", "Chat", "action", action);
     switch (action.type) {
         case CHAT_INIT:
             return INIT_STATE;
