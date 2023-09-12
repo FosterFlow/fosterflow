@@ -93,15 +93,20 @@ function* loginUserSaga({ payload: { email, password } }) {
  */
 function* logoutSaga() {
     try {
+        yield call(apiAuthorizedClient.post, '/logout/');
         yield put(killWsConnection());
         yield put(chatInit());
         yield put(userInit());
         yield put(agentInit());
-        yield call(apiAuthorizedClient.post, '/logout/');
         //Time for showing loader, otherwise page 
         yield delay(1000);
         yield put(logoutUserSuccess());
     } catch (errors) {
+        yield put(killWsConnection());
+        yield put(chatInit());
+        yield put(userInit());
+        yield put(agentInit());
+        yield delay(1000);
         yield put(logoutUserFailure(errors));
     }
 }

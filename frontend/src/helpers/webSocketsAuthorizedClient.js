@@ -29,7 +29,7 @@ function isTokenExpired (accessToken) {
  */
 function resolveWebSocketsQueue() {
   const state = store.getState();
-  const accessTokenLoading = state.Auth.accessTokenLoading; 
+  const accessTokenLoading = state.Auth.accessTokenUpdateLoading; 
   
   if (accessTokenLoading){
     return;
