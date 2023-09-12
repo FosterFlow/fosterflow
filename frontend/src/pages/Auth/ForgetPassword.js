@@ -194,7 +194,7 @@ const ForgetPassword = (props) => {
                             </Card>
 
                             <div className="text-center">
-                                {t('Remember password?')} <Link to="/login" className="font-weight-medium text-primary"> {t('Signin')} </Link>
+                                {t('Remember password?')} <Link to="/login" className="font-weight-medium"> {t('Signin')} </Link>
                             </div>
                         </Col>
                     </Row>

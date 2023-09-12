@@ -142,7 +142,7 @@ const ResetPassword = (props) => {
                                     { resetPasswordSuccess &&
                                         <Alert color="success" className="text-center mb-4">
                                             {t('Password was updated successfully')}.&nbsp; 
-                                            <Link to="/login" className="font-weight-medium text-primary"> 
+                                            <Link to="/login" className="font-weight-medium"> 
                                                 {t('Login now')}. 
                                             </Link> 
                                         </Alert>
@@ -287,7 +287,7 @@ const ResetPassword = (props) => {
 
                             <div className="text-center">
                                 <p>{t("Remember your password")}?&nbsp; 
-                                <Link to="/login" className="font-weight-medium text-primary">
+                                <Link to="/login" className="font-weight-medium">
                                      {t('Sign in now')}
                                 </Link> </p>
                             </div>

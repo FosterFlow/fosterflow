@@ -229,7 +229,7 @@ const Register = (props) => {
                             </Card>
 
                             <div className="text-center">
-                                <p>{t('Already have an account')} ? <Link to="/login" className="font-weight-medium text-primary"> {t('Signin')} </Link> </p>
+                                <p>{t('Already have an account')} ? <Link to="/login" className="font-weight-medium"> {t('Signin')} </Link> </p>
                             </div>
                         </Col>
                     </Row>

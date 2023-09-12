@@ -85,13 +85,13 @@
 
             &.active{
                 background-color: $sidebar-menu-item-active-bg;
-                color: $primary;
+                color: tint-color($primary, 20%);
             }
         }
 
         &.show>.nav-link{
             background-color: $sidebar-menu-item-active-bg;
-            color: $primary;
+            color: tint-color($primary, 20%);
         }
     }
 
@@ -107,16 +107,16 @@
     .dropdown-item {
         padding: 0;
 
-        &.active {
-          color: $white;
-          text-decoration: none;
-          background-color: $primary;
-        }
-
         a {
-            color: $secondary;
+            color: $text-muted;
             display: block;
             padding: var(--#{$prefix}dropdown-item-padding-y) var(--#{$prefix}dropdown-item-padding-x);
+
+            &.active {
+                color: $white;
+                text-decoration: none;
+                background-color: $primary;
+              }
         }
       }
 
