@@ -211,7 +211,7 @@ const Login = (props) => {
                                 </CardBody>
                             </Card>
 
-                            <div className="text-center">
+                            <div className="text-center pb-3">
                                 <p>{t("Don't have an account")} ? <Link to="/register" className="font-weight-medium"> {t('Signup now')} </Link> </p>
                             </div>
                         </Col>
