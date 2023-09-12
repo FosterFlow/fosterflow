@@ -100,7 +100,9 @@ const INIT_STATE = {
     accessTokenUpdateSuccess: false,
     accessTokenUpdateErrors: null,
     
-    isAuthenticated: JSON.parse(localStorage.getItem("isAuthenticated")) || false,
+    isAuthenticated: JSON.parse(
+        localStorage.getItem("isAuthenticated")
+        ) || false,
     authenticatedApiRequestsQueue: [],
     webSocketsRequestsQueue: [],
 };
