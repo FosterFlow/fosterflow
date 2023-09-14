@@ -121,12 +121,12 @@ const ResetPassword = (props) => {
 
     return (
         <React.Fragment>
-            <div className="account-pages pt-sm-3">
+            <div className="account-pages py-5">
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} >
                             <div className="text-center mb-3">
-                                <Link to="/" className="auth-logo mb-3 d-block">
+                                <Link to="/" className="auth-logo mb-4 d-block">
                                     <img src={logo} alt="" height="60" className="logo" />
                                 </Link>
                                 <h4>{t('Create a new password')}</h4>
@@ -285,7 +285,7 @@ const ResetPassword = (props) => {
                                 </CardBody>
                             </Card>
 
-                            <div className="text-center pb-3">
+                            <div className="text-center">
                                 <p>{t("Remember your password")}?&nbsp; 
                                 <Link to="/login" className="font-weight-medium">
                                      {t('Sign in now')}

@@ -95,12 +95,12 @@ const Login = (props) => {
 
     return (
         <React.Fragment>
-            <div className="account-pages pt-sm-3">
+            <div className="account-pages py-5 px-1">
                 <Container className='login-page'>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} >
                             <div className="text-center mb-3">
-                                <Link to="/" className="auth-logo mb-3 d-block">
+                                <Link to="/" className="auth-logo mb-4 d-block">
                                     <img src={logo} alt="" height="60" className="logo" />
                                 </Link>
                                 <h4>{t('Welcome to')} FosterFlow</h4>
@@ -211,7 +211,7 @@ const Login = (props) => {
                                 </CardBody>
                             </Card>
 
-                            <div className="text-center pb-3">
+                            <div className="text-center">
                                 <p>{t("Don't have an account")} ? <Link to="/register" className="font-weight-medium"> {t('Signup now')} </Link> </p>
                             </div>
                         </Col>

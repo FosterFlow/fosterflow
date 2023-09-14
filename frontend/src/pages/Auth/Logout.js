@@ -25,7 +25,7 @@ const Logout = (props) => {
 
         return (
                 <React.Fragment>
-                        <div className="account-pages p-sm-5">
+                        <div className="account-pages p-3">
                                 {logoutLoading &&
                                         <Alert color="info">
                                                 <span>
