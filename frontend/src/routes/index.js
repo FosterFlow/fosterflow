@@ -101,7 +101,7 @@ const Routes = (props) => {
         // rendering the router with layout
         <React.Fragment>
             <Suspense fallback={
-                <div className='p-2'>
+                <div className='p-3'>
                     {t('Loading dependencies')}...
                 </div>} >
                 <SwitchRoute>
