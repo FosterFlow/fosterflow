@@ -18,38 +18,32 @@ openai.api_key = env('OPENAI_API_KEY')
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["chat_id"]
-        self.chat_id = int(self.room_name)
-        self.chat = Chat.objects.get(id=self.chat_id)
+        self.user_channel = 'None'
 
         if self.scope["user"] == AnonymousUser():
             self.close()
             return False
+        else:
+            self.user_channel = str(self.scope["user"].id)
 
         self.agents = Agent.objects.filter(user_id=self.scope["user"])
-        available_chats = list(
+        self.available_chats = list(
             # Chat.objects.filter(Q(owner_id__in=self.agents) | Q(addressee_id__in=self.agents)) # To feature
             Chat.objects.filter(owner_id__in=self.agents)
             .values_list('id', flat=True)
         )
 
-        if self.chat_id not in available_chats:
-            self.close()
-            return False
-
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            self.room_name, self.channel_name
+            self.user_channel, self.channel_name
         )
-        self.owner_chat = Agent.objects.get(id=self.chat.owner_id.id)
-        self.addressee = Agent.objects.get(id=self.chat.addressee_id.id)
 
         self.accept()
 
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_name, self.channel_name
+            self.user_channel, self.channel_name
         )
 
     # Receive message from WebSocket

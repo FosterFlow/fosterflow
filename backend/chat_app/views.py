@@ -138,13 +138,3 @@ class MessageModelViewSet(ModelViewSet):
 
         return Response(response, status=status.HTTP_200_OK)
 
-
-from django.shortcuts import render
-
-
-def index(request):
-    return render(request, "chat/index.html")
-
-
-def room(request, room_name):
-    return render(request, "chat/room.html", {"room_name": room_name})
