@@ -56,7 +56,7 @@ class ChatConsumer(WebsocketConsumer):
             owner_id = Agent.objects.get(id=text_data_json['owner_id'])
             method = text_data_json['method']
             if prompt and method == 'request' and chat_id.id in self.available_chats and Agent.objects.filter(
-                    id=owner_id.id).exists():
+                    id=owner_id.id).exists() and send_type == 'chat':
                 message1 = Message.objects.create(chat_id=chat_id,
                                                   message_text=prompt,
                                                   owner_id=owner_id)
