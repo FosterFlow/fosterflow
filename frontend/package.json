@@ -30,8 +30,10 @@
     "remark-gfm": "^3.0.1"
   },
   "scripts": {
-    "start": "set \"GENERATE_SOURCEMAP=false\" && WATCHPACK_POLLING=true ./node_modules/.bin/react-scripts start",
+    "start": "GENERATE_SOURCEMAP=false && WATCHPACK_POLLING=true react-scripts start",
+    "winStart": "set \"GENERATE_SOURCEMAP=false\" && react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

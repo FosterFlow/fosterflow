@@ -110,7 +110,7 @@ function UserChat(props) {
                     scrollTop, 
                     clientHeight 
                 } = chatWindowRef.current;
-                userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+                userWasAtBottomRef.current = (Math.ceil(scrollHeight - Math.floor(scrollTop)) >= clientHeight);
         }
     };
 
@@ -132,6 +132,7 @@ function UserChat(props) {
     }
 
     // Add useEffect to auto scroll to bottom when messages update
+    //TODO: handles for every chunk of the message. We can add debounce method here or optimize it another way
     useEffect(() => {
         if (Array.isArray(messages) && messages.length > 0){
             
