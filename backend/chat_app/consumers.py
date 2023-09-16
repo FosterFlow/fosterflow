@@ -55,8 +55,18 @@ class ChatConsumer(WebsocketConsumer):
             chat_id = Chat.objects.get(id=text_data_json['chat_id'])
             owner_id = Agent.objects.get(id=text_data_json['owner_id'])
             method = text_data_json['method']
-            if prompt and method == 'request' and chat_id.id in self.available_chats and Agent.objects.filter(
-                    id=owner_id.id).exists() and send_type == 'chat':
+
+            if method != 'request':
+                self.send(text_data=json.dumps({'error': 'Not request or response'}))
+            elif not prompt:
+                self.send(text_data=json.dumps({'error': 'Prompt is empty'}))
+            elif chat_id.id not in self.available_chats:
+                self.send(text_data=json.dumps({'error': 'Chat is not available'}))
+            elif not self.agents.filter(id=owner_id.id).exists():
+                self.send(text_data=json.dumps({'error': 'Agent is not exists'}))
+            elif send_type != 'chat':
+                self.send(text_data=json.dumps({'error': 'send_type is not correct'}))
+            else:
                 message1 = Message.objects.create(chat_id=chat_id,
                                                   message_text=prompt,
                                                   owner_id=owner_id)
@@ -78,19 +88,12 @@ class ChatConsumer(WebsocketConsumer):
                 complete = self.ask_gpt_stream(prompt, message2, chat_id)
                 message2.message_text = complete
                 message2.save()
-
-            elif method != 'request' or method != 'response':
-                self.send(text_data=json.dumps(
-                    {
-                        'error': 'Not request or response'
-                    }))
         except Exception as e:
             self.send(text_data=json.dumps(
                 {
                     'error': str(e)
                 }))
 
-    # Receive message from room group
     def ask_gpt_stream(self, prompt, main_message, chat_id):
         previous_messages = Message.objects.filter(chat_id=chat_id).order_by('-id')[:5]
         messages = [
