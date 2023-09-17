@@ -31,12 +31,6 @@ import {
   SHOW_CHAT_WINDOW,
   SET_ACTIVE_NEW_CHAT,
 
-  WS_CONNECTION_START,
-  WS_CONNECTION_KILL,
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_FAILED,
-  WS_CONNECTION_CLOSED,
-
   WS_MESSAGE_SEND,
   WS_MESSAGE_SEND_INIT_STATE,
   WS_MESSAGE_SEND_SUCCESS,
@@ -191,29 +185,6 @@ export const chatInit = () => ({
   export const deleteMessageFailed = (errors) => ({
     type: DELETE_MESSAGE_FAILED,
     payload: errors
-  });
-
-  export const startWsConnection = (chatId) => ({
-    type: WS_CONNECTION_START,
-    payload: chatId
-  });
-
-  export const killWsConnection = () => ({
-    type: WS_CONNECTION_KILL,
-  });
-  
-  export const wsConnectionSuccess = (socket) => ({
-    type: WS_CONNECTION_SUCCESS,
-    payload: socket
-  });
-  
-  export const wsConnectionFailed = (errors) => ({
-    type: WS_CONNECTION_FAILED,
-    payload: errors
-  });
-  
-  export const wsConnectionClosed = () => ({
-    type: WS_CONNECTION_CLOSED
   });
 
   export const wsMessageSend = () => ({
