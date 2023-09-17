@@ -1,14 +1,9 @@
 import React from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../components/withRouter";
-import SimpleBar from "simplebar-react";
-
-// Import Components
 import ChatInput from "./UserChat/ChatInput";
 import UserHead from "./UserChat/UserHead";
-//i18n
 import { useTranslation } from 'react-i18next';
-
 
 function UserChat(props) {
     const { t } = useTranslation();

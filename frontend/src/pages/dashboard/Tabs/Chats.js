@@ -118,7 +118,7 @@ const Chats = (props) => {
         <React.Fragment>
             <div className="chat-leftsidebar me-lg-1">
                 <div className="px-2 pt-2">
-                    <Link to="/chats" className="btn btn-primary w-100 text-start" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
+                    <Link to="/chats" className="btn btn-primary w-100 text-start new-chat-button" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
                 </div>
                 <div className="px-2 pt-2">
                     <div className="search-box chat-search-box">

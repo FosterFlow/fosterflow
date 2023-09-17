@@ -1,6 +1,6 @@
 import { store } from '../redux/store';
 import { 
-  refreshTokenUpdate,
+  accessTokenUpdate,
   addAuthenticatedApiRequest,
   clearAuthenticatedApiRequestsQueue
 } from '../redux/auth/actions';
@@ -65,15 +65,15 @@ function getAccessTokenFromAxios() {
  */
 function resolveRequestsQueue() {
   const state = store.getState();
-  const refreshTokenLoading = state.Auth.refreshTokenLoading; 
+  const accessTokenLoading = state.Auth.accessTokenUpdateLoading; 
   
-  if (refreshTokenLoading){
+  if (accessTokenLoading){
     return;
   }
 
   const accessToken = state.Auth.accessToken;
   if (isTokenExpired(accessToken)) {
-    store.dispatch(refreshTokenUpdate());
+    store.dispatch(accessTokenUpdate());
     return;
   }
 

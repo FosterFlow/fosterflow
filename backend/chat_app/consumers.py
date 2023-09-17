@@ -18,54 +18,61 @@ openai.api_key = env('OPENAI_API_KEY')
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.room_name = self.scope["url_route"]["kwargs"]["chat_id"]
-        self.chat_id = int(self.room_name)
-        self.chat = Chat.objects.get(id=self.chat_id)
+        self.user_channel = 'None'
 
         if self.scope["user"] == AnonymousUser():
             self.close()
             return False
+        else:
+            self.user_channel = str(self.scope["user"].id)
 
         self.agents = Agent.objects.filter(user_id=self.scope["user"])
-        available_chats = list(
+        self.available_chats = list(
             # Chat.objects.filter(Q(owner_id__in=self.agents) | Q(addressee_id__in=self.agents)) # To feature
             Chat.objects.filter(owner_id__in=self.agents)
             .values_list('id', flat=True)
         )
 
-        if self.chat_id not in available_chats:
-            self.close()
-            return False
-
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            self.room_name, self.channel_name
+            self.user_channel, self.channel_name
         )
-        self.owner_chat = Agent.objects.get(id=self.chat.owner_id.id)
-        self.addressee = Agent.objects.get(id=self.chat.addressee_id.id)
 
         self.accept()
 
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            self.room_name, self.channel_name
+            self.user_channel, self.channel_name
         )
 
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         try:
+            send_type = text_data_json['send_type']
             prompt = text_data_json['prompt']
             chat_id = Chat.objects.get(id=text_data_json['chat_id'])
             owner_id = Agent.objects.get(id=text_data_json['owner_id'])
             method = text_data_json['method']
-            if prompt and method == 'request' and chat_id == self.chat and Agent.objects.filter(id=owner_id.id).exists():
+
+            if method != 'request':
+                self.send(text_data=json.dumps({'error': 'Not request method'}))
+            elif not prompt:
+                self.send(text_data=json.dumps({'error': 'Prompt is empty'}))
+            elif chat_id.id not in self.available_chats:
+                self.send(text_data=json.dumps({'error': 'Chat is not available'}))
+            elif not self.agents.filter(id=owner_id.id).exists():
+                self.send(text_data=json.dumps({'error': 'Agent is not exists'}))
+            elif send_type != 'chat':
+                self.send(text_data=json.dumps({'error': 'send_type is not correct'}))
+            else:
                 message1 = Message.objects.create(chat_id=chat_id,
                                                   message_text=prompt,
                                                   owner_id=owner_id)
                 self.send(text_data=json.dumps(
                     {
+                        "send_type": "chat",
                         "id": message1.id,
                         "message_text": message1.message_text,
                         "created_at": str(message1.created_at),
@@ -75,32 +82,26 @@ class ChatConsumer(WebsocketConsumer):
                     }
                 ))
 
-                message2 = Message.objects.create(chat_id=self.chat,
+                message2 = Message.objects.create(chat_id=chat_id,
                                                   message_text='',
-                                                  owner_id=self.addressee)
-                complete = self.ask_gpt_stream(prompt, message2)
+                                                  owner_id=chat_id.addressee_id)
+                complete = self.ask_gpt_stream(prompt, message2, chat_id)
                 message2.message_text = complete
                 message2.save()
-            elif method != 'request' or method != 'response':
-                self.send(text_data=json.dumps(
-                    {
-                        'error': 'Not request or response'
-                    }))
         except Exception as e:
             self.send(text_data=json.dumps(
                 {
                     'error': str(e)
                 }))
 
-    # Receive message from room group
-    def ask_gpt_stream(self, prompt, main_message):
-        previous_messages = Message.objects.filter(chat_id=self.chat_id).order_by('-id')[:5]
+    def ask_gpt_stream(self, prompt, main_message, chat_id):
+        previous_messages = Message.objects.filter(chat_id=chat_id).order_by('-id')[:5]
         messages = [
             {"role": "system", "content": "You are a helpful assistant."}
         ]
 
         for message in previous_messages:
-            if message.owner_id == self.owner_chat:
+            if message.owner_id != main_message.owner_id:
                 mes = {"role": "user", "content": message.message_text}
             else:
                 mes = {"role": "assistant", "content": message.message_text}
@@ -117,6 +118,7 @@ class ChatConsumer(WebsocketConsumer):
 
         complete = ""
         self.send(text_data=json.dumps({
+            "send_type": "chat",
             'chat_id': main_message.chat_id.id,
             'created_at': str(main_message.created_at),
             'id': main_message.id,
@@ -132,6 +134,7 @@ class ChatConsumer(WebsocketConsumer):
                     event_text = event['choices'][0]['delta']['content']  # extract the text
                     self.send(text_data=json.dumps(
                         {
+                            'type': 'chat_message',
                             'id': main_message.id,
                             "message_chunk": event_text,
                             "status": "progress"
@@ -140,6 +143,7 @@ class ChatConsumer(WebsocketConsumer):
                 else:
                     self.send(text_data=json.dumps(
                         {
+                            "send_type": "chat",
                             'id': main_message.id,
                             "message_chunk": '',
                             "status": "done"

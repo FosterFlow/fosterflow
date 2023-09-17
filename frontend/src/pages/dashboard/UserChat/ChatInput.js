@@ -70,12 +70,12 @@ function ChatInput(props) {
         }
 
         wsConnection.send(JSON.stringify(
-            {
+        {
                 "chat_id": activeChatId,
-                "prompt": textMessage,
-                "owner_id": authorizedUser.id,
-                "method": "request" 
-            }
+        "prompt": textMessage,
+        "owner_id": authorizedUser.id,
+        "method": "request" 
+        }
         ));
         settextMessage("");
     }
@@ -102,14 +102,20 @@ function ChatInput(props) {
                         onChange={handleChange} 
                         onKeyDown={handleKeyDown}
                         className="form-control form-control-lg bg-light border-light" 
-                        placeholder={t('Enter Message') + '...'} 
-                        style={{resize: 'none', overflow: 'auto', minHeight: '50px', maxHeight: '200px'}}
+                        placeholder={
+                            fetchMessagesLoading ? (
+                                t('Loading chat history') + '...'
+                            ) : (
+                                t('Enter message') + '...'   
+                            )
+                        } 
                         disabled={fetchMessagesLoading}
                     />
                         <Button 
                             onClick={(event) => handleButtonClick(event, textMessage)} 
-                            type="submit" color="primary" 
-                            disabled={fetchMessagesLoading || !textMessage.trim()}
+                            type="submit" 
+                            color={textMessage.trim() && "primary"}
+                            disabled={!textMessage.trim()}
                             className="font-size-16 btn-sm chat-send">
                                 <i className="ri-send-plane-2-fill"></i>
                         </Button>

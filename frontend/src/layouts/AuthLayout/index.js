@@ -12,8 +12,7 @@ import {
     confirmEmail, 
     sendConfirmationEmail, 
     getAuthorizedUser, 
-    getAgent,
-    logoutUser 
+    getAgent
 } from '../../redux/actions';
 import config from '../../config';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +22,7 @@ import { useParams } from 'react-router-dom';
 const Index = (props) => {
     const { t } = useTranslation();
     const supportEmail =  config.SUPPORT_EMAIL;
-    const { "email-verify-token": emailVerifyToken } = useParams();
+    const { emailVerifyToken } = useParams();
     const {
         children,
         sendConfirmationEmailLoading,
@@ -34,14 +33,12 @@ const Index = (props) => {
         confirmEmailSuccess,
         confirmEmailErrors,
         
-        refreshTokenUpdateErrors,
         authorizedUser,
         layoutMode,
 
         getAuthorizedUser,
         getAgent,
-        sendConfirmationEmail,
-        logoutUser
+        sendConfirmationEmail
     } = props;
 
     if (layoutMode){
@@ -56,6 +53,15 @@ const Index = (props) => {
     
     useEffect(() => {
         document.title = "FosterFlow Chat";
+
+        if (!document.body.classList.contains('mobileStickUrlBar')) {
+            document.body.classList.add('mobileStickUrlBar');
+        }
+
+        if (!document.documentElement.classList.contains('overscrollYnone')) {
+            document.documentElement.classList.add('overscrollYnone');
+        }
+
         getAuthorizedUser();
     }, []);
 
@@ -72,12 +78,6 @@ const Index = (props) => {
         }
     }, [authorizedUser]);
 
-    useEffect(() => {
-        if (refreshTokenUpdateErrors !== null){
-            logoutUser();
-        }
-    }, [refreshTokenUpdateErrors]);
-
     return (
         <React.Fragment>
             <div className="auth-layout">
@@ -90,10 +90,12 @@ const Index = (props) => {
                     </Alert>
                 }
                 {sendConfirmationEmailLoading && 
-                    <span>
-                        <Spinner size="sm"/>&nbsp;
-                        {t('Sending email confirmation')}...
-                    </span>
+                    <Alert color="info">
+                        <span>
+                            <Spinner size="sm"/>&nbsp;
+                            {t('Sending email confirmation')}...
+                        </span>
+                    </Alert>
                 }   
                 {confirmEmailSuccess && (
                     <Alert color="success">
@@ -139,7 +141,7 @@ const Index = (props) => {
                             </div>)
                         }
                         <div>
-                            {t('Try resend confirmation email')}.
+                            {t('Try resend confirmation email')}.&nbsp;
                             <a href="#" onClick={sendConfirmationEmailHandler}> 
                                 {t('Click here')}&nbsp;
                                 </a>
@@ -158,7 +160,7 @@ const Index = (props) => {
                 !sendConfirmationEmailLoading &&
                     <Alert color="info">
                         <span>
-                            {t('We have sent you an email to confirm your account. Please check your inbox')}.
+                            {t('We have sent you an email to confirm your account. Please check your inbox')}.&nbsp;
                                 <a href="#" onClick={sendConfirmationEmailHandler}> 
                                     {t('Click here')}&nbsp;
                                 </a>
@@ -179,8 +181,6 @@ const Index = (props) => {
 
 const mapStateToProps = state => {
     const {
-        refreshTokenUpdateErrors,
-
         sendConfirmationEmailLoading,
         sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
@@ -190,8 +190,6 @@ const mapStateToProps = state => {
         confirmEmailErrors,
     } = state.Auth;
     return {
-        refreshTokenUpdateErrors,
-
         sendConfirmationEmailLoading,
         sendConfirmationEmailSuccess,
         sendConfirmationEmailErrors,
@@ -209,8 +207,7 @@ const mapDispatchToProps = {
     confirmEmail,
     sendConfirmationEmail,
     getAuthorizedUser,
-    getAgent,
-    logoutUser
+    getAgent
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));

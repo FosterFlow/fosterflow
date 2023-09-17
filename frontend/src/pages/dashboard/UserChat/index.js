@@ -19,26 +19,7 @@ import {
     fetchMessages
 } from "../../../redux/chat/actions";
 
-// Here's the custom component to render the code blocks
-function CodeBlock({node, inline, className, children, ...props}) {
-  const match = /language-(\w+)/.exec(className || '')
-  return !inline && match ? (
-    <SyntaxHighlighter 
-        style={materialDark} 
-        customStyle={{
-            fontSize: "0.875rem",
-        }} 
-        language={match[1]} 
-        {...props}
-    >
-        {String(children).replace(/\n$/, '')}
-    </SyntaxHighlighter>
-  ) : (
-    <code className={className} {...props}>
-      {children}
-    </code>
-  )
-}
+
 
 function UserChat(props) {
     const chatWindowRef = useRef();
@@ -61,9 +42,76 @@ function UserChat(props) {
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
     const supportEmail =  config.SUPPORT_EMAIL;
 
+    function CodeBlock({node, inline, className, children, ...props}) {
+        const [copyStatus, setCopyStatus] = useState(t('Copy')); // 'Copy', 'Copied'
+        const match = /language-(\w+)/.exec(className || '');
+        const language = match ? match[1] : '';
+        
+        const copyCodeToClipboard = (event) => {
+          event.preventDefault();
+          setCopyStatus(t('Copied to buffer') + '!');
+          navigator.clipboard.writeText(String(children).replace(/\n$/, ''))
+            .then(() => {
+                // Clipboard successfully set
+                setTimeout(() => setCopyStatus(t('Copy')), 2000);
+            }, (error) => {
+                // Clipboard write failed
+                setCopyStatus(t('Error') + ': ' + error);
+                setTimeout(() => setCopyStatus(t('Copy')), 3000);
+            });
+        };
+        
+        return !inline && !!language ? (
+          <div className="code-block">
+            <div className="code-block-head">
+                <div className="code-block-head-language">
+                    {language}
+                </div>
+                <div className="code-block-head-copy-to-clipboard">
+                    {copyStatus === t('Copy') ? (
+                        <a href="#" onClick={copyCodeToClipboard}>{copyStatus}</a>
+                    ) : (
+                        <span>{copyStatus}</span>
+                    )}
+                </div>
+            </div>
+            
+            <SyntaxHighlighter 
+                style={materialDark} 
+                customStyle={{
+                    fontSize: "0.875rem",
+                }} 
+                language={language} 
+                {...props}
+            >
+                {String(children).replace(/\n$/, '')}
+            </SyntaxHighlighter>
+          </div>
+        ) : (
+          <code className={className} {...props}>
+            {children}
+          </code>
+        );
+      }
+    
+    function TableWrapper({node, ...props}) {
+        return (
+          <div style={{overflowY: 'auto'}}>
+            <table {...props} />
+          </div>
+        );
+      }
+
     function handleChatScroll() {
-        const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
-        userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+        if (chatWindowRef.current !== null &&
+            userWasAtBottomRef.current !== null){
+                const { 
+                    scrollHeight, 
+                    scrollTop, 
+                    clientHeight 
+                } = chatWindowRef.current;
+                userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+        }
     };
 
     function handleWindowResize () {
@@ -86,10 +134,11 @@ function UserChat(props) {
     // Add useEffect to auto scroll to bottom when messages update
     useEffect(() => {
         if (Array.isArray(messages) && messages.length > 0){
-        const { scrollHeight } = chatWindowRef.current;
-        if (userWasAtBottomRef.current){
-        chatWindowRef.current.scrollTop = scrollHeight;
-        }
+            
+            if (userWasAtBottomRef.current){
+                const scrollHeight = chatWindowRef.current.scrollHeight;
+                chatWindowRef.current.scrollTop = scrollHeight;
+            }
         }
     }, [messages]);
 
@@ -156,8 +205,11 @@ function UserChat(props) {
                                                             style={{maxWidth: `${messageMaxWidth}px`}}
                                                         >
                                                             <ReactMarkdown 
-                                                                remarkPlugins={[gfm]} 
-                                                                components={{code: CodeBlock}}>
+                                                                remarkPlugins={[gfm]}
+                                                                components={{
+                                                                    code: CodeBlock,
+                                                                    table: TableWrapper 
+                                                                    }}>
                                                                 {message.message_text}
                                                             </ReactMarkdown>
                                                         </div>

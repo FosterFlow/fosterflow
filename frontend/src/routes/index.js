@@ -22,7 +22,6 @@ const Routes = (props) => {
     const { t } = useTranslation();
     const location = useLocation();
     const {
-        refreshTokenUpdateErrors, 
         isAuthenticated,
         confirmEmailSuccess
     } = props;
@@ -35,8 +34,40 @@ const Routes = (props) => {
         return path.endsWith('/') ? path.slice(0, -1) : path;
     };
     const normalizedPathname = normalizePath(location.pathname);
-    const isAuthRoute = authRoutes.some(route => route.path === normalizedPathname);
-    const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === normalizedPathname);
+    const isAuthRoute = authRoutes.some(route => matchRoute(route.path, normalizedPathname));
+    const isAuthProtectedRoute = authProtectedRoutes.some(route => matchRoute(route.path, normalizedPathname));
+
+
+    /**
+     * TODO: check if build-in React methods can do the same 
+     *  
+     * @param {String} routePattern 
+     * @param {String} url 
+     * @returns 
+     */
+    function matchRoute (routePattern, url) {
+        const routeParts = routePattern.split('/');
+        const urlParts = url.split('/');
+      
+        if (routeParts.length !== urlParts.length) {
+            return false;
+        }
+      
+        for (let i = 0; i < routeParts.length; i++) {
+            const routePart = routeParts[i];
+            const urlPart = urlParts[i];
+        
+            if (routePart.startsWith(':')) {
+                continue; // this is a dynamic part of the route, so we don't check it
+            }
+        
+            if (routePart !== urlPart) {
+                return false; // static parts of the route don't match
+            }
+        }
+      
+        return true;
+    };
 
     //Email verification
     if (matchEmailVerifyPattern) {
@@ -70,7 +101,7 @@ const Routes = (props) => {
         // rendering the router with layout
         <React.Fragment>
             <Suspense fallback={
-                <div className='p-2'>
+                <div className='p-3'>
                     {t('Loading dependencies')}...
                 </div>} >
                 <SwitchRoute>

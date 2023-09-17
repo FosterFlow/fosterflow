@@ -66,7 +66,6 @@ const getAddChatRequestMessage = (state) => state.Chat.addChatRequestMessage;
 const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function* fetchChatsSaga() {
-  yield put(fetchChatsInitState());
   try {
     const chats = yield call(api.get, '/chats/');
     yield put(fetchChatsSuccess(chats));
@@ -86,7 +85,7 @@ function* addChatSaga(action) {
           "addressee_id": 100
       });
       yield put(addChatSuccess(chat));
-      yield put(startWsConnection(chat.id));      
+yield put(startWsConnection(chat.id));      
   } catch (errors) {
     yield put(addChatFailed(errors));
     yield delay(10000);
@@ -109,20 +108,14 @@ function* deleteChatSaga(action) {
 }
 
 function* fetchMessagesSaga(action) {
-  yield put(fetchMessagesInitState());
   try {
-    
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
-    yield put(startWsConnection(action.payload));
+yield put(startWsConnection(action.payload));
     yield delay(5000);
     yield put(fetchMessagesInitState());
   } catch (errors) {
-    yield put(fetchMessagesFailed({
-      "details": [
-        "Bad Request."
-      ]
-    }));
+    yield put(fetchMessagesFailed(errors));
   }
 }
 
@@ -154,12 +147,14 @@ function createWebSocketChannelSaga(socket) {
       emit(wsReceiveMessage(data));
     };
     socket.onerror = (event) => {
-      //TODO check error format in this case
-      // emit(wsConnectionError(event));
+      //TODO: check error format in this case
+      // emit(wsConnectionFailed(event));
     };
     socket.onclose = () => {
       emit(wsConnectionClosed());
     };
+
+    //TODO: check how it works
     return () => {
       socket.close();
     };
@@ -204,12 +199,12 @@ function* webSocketSuccessSaga() {
   const wsConnection = yield select(getWsConnection);
   const authorizedUser = yield select(getAuthorizedUser);
   wsConnection.send(JSON.stringify(
-    {
+  {
       "chat_id":  activeChatId,
-      "prompt": addChatRequestMessage,
-      "owner_id": authorizedUser.id,
-      "method": "request" 
-    }
+  "prompt": addChatRequestMessage,
+  "owner_id": authorizedUser.id,
+  "method": "request" 
+  }
   ));
   yield put(addChatInitState());
 }

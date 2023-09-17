@@ -23,6 +23,7 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { loginUser, loginUserInitState, loginUserFailure } from '../../redux/actions';
 import _ from 'lodash';
+import logo from "../../assets/images/logo192.png";
 
 /**
  * Login component
@@ -94,12 +95,18 @@ const Login = (props) => {
 
     return (
         <React.Fragment>
-            <div className="account-pages pt-sm-5">
+            <div className="account-pages py-5 px-1">
                 <Container className='login-page'>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} >
+                            <div className="text-center mb-3">
+                                <Link to="/" className="auth-logo mb-4 d-block">
+                                    <img src={logo} alt="" height="60" className="logo" />
+                                </Link>
+                                <h4>{t('Welcome to')} FosterFlow</h4>
+                            </div>
                             <Card>
-                                <CardBody className="p-4">
+                                <CardBody className="p-3">
                                     
                                     {loginErrors  && loginErrors.details &&
                                         (<Alert color="danger">
@@ -150,7 +157,7 @@ const Login = (props) => {
 
                                             <FormGroup className="mb-4">
                                                 <div className="float-end">
-                                                    <Link to="/forget-password" className="text-muted font-size-13">{t('Forgot password')}?</Link>
+                                                    <Link to="/forget-password" className="text-muted font-size-13">{t('Forgot password?')}</Link>
                                                 </div>
                                                 <Label className="form-label">{t('Password')}</Label>
                                                 <InputGroup className="mb-3 bg-soft-light rounded-3">
@@ -205,7 +212,7 @@ const Login = (props) => {
                             </Card>
 
                             <div className="text-center">
-                                <p>{t("Don't have an account")} ? <Link to="/register" className="font-weight-medium text-primary"> {t('Signup now')} </Link> </p>
+                                <p>{t("Don't have an account")} ? <Link to="/register" className="font-weight-medium"> {t('Signup now')} </Link> </p>
                             </div>
                         </Col>
                     </Row>

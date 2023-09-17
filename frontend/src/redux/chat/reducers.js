@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import {
+    CHAT_INIT,
+    
     FETCH_CHATS,
     FETCH_CHATS_INIT_STATE,
     FETCH_CHATS_SUCCESS,
@@ -32,9 +34,16 @@ import {
     WS_CONNECTION_START,
     WS_CONNECTION_KILL,
     WS_CONNECTION_SUCCESS,
-    WS_CONNECTION_ERROR,
+    WS_CONNECTION_FAILED,
     WS_CONNECTION_CLOSED,
-    WS_RECEIVE_MESSAGE_CHUNK
+
+    WS_MESSAGE_SEND,
+    WS_MESSAGE_SEND_INIT_STATE,
+    WS_MESSAGE_SEND_SUCCESS,
+    WS_MESSAGE_SEND_FAILED,
+
+    WS_RECEIVE_MESSAGE_CHUNK,
+    WS_MESSAGE_SEND_SUCCCESS
 } from './constants';
 
 const INIT_STATE = {
@@ -67,13 +76,20 @@ const INIT_STATE = {
     deleteMessageErrors: null,
   
     wsConnection: null,
-    wsConnected: false,
-    wsConnectionError: null
+    wsConnectionLoading: null,
+    wsConnectionSuccess: false,
+    wsConnectionErrors: null,
+
+    wsMessageSendLoading: false,
+    wsMessageSendSuccess: false,
+    wsMessageSendErrors: null,
 };
 
 const Chat = (state = INIT_STATE, action) => {
-    console.log("reducers", "Chat", "action", action);
     switch (action.type) {
+        case CHAT_INIT:
+            return INIT_STATE;
+
         case SET_ACTIVE_CHAT:
             return { 
                 ...state,
@@ -123,8 +139,6 @@ const Chat = (state = INIT_STATE, action) => {
             };
         }
             
-        
-
         case FETCH_CHATS_FAILED:
             return {
                 ...state,
@@ -291,36 +305,79 @@ const Chat = (state = INIT_STATE, action) => {
         case WS_CONNECTION_START:
             return {
                 ...state,
-                wsConnected: false
+                wsConnection: null,
+                wsConnectionLoading: true,
+                wsConnectionSuccess: false,
+                wsConnectionErrors: null,
             };
 
         case WS_CONNECTION_KILL:
             return {
                 ...state,
-                wsConnected: false,
+                wsConnection: null,
+                wsConnectionLoading: false,
+                wsConnectionSuccess: false,
+                wsConnectionErrors: null,
             };
 
         case WS_CONNECTION_SUCCESS: {
             return {
                 ...state,
-                wsConnected: true,
-                wsConnection: action.payload
+                wsConnection: action.payload,
+                wsConnectionLoading: false,
+                wsConnectionSuccess: true,
+                wsConnectionErrors: null,
             };
         }
             
-        case WS_CONNECTION_ERROR:
+        case WS_CONNECTION_FAILED:
             return {
                 ...state,
-                wsConnected: false,
-                wsConnectionError: action.payload
+                wsConnection: action.payload,
+                wsConnectionLoading: false,
+                wsConnectionSuccess: true,
+                wsConnectionErrors: null,
             };
 
         case WS_CONNECTION_CLOSED:
             return {
                 ...state,
-                wsConnected: false,
                 wsConnection: null,
-                wsConnectionError: null
+                wsConnectionLoading: false,
+                wsConnectionSuccess: true,
+                wsConnectionErrors: null,
+            };
+
+        case WS_MESSAGE_SEND:
+            return {
+                ...state,
+                wsMessageSendLoading: true,
+                wsMessageSendSuccess: false,
+                wsMessageSendErrors: null
+            };
+
+        case WS_MESSAGE_SEND_INIT_STATE:
+            return {
+                ...state,
+                wsMessageSendLoading: false,
+                wsMessageSendSuccess: false,
+                wsMessageSendErrors: null
+            };
+
+        case WS_MESSAGE_SEND_SUCCESS:
+            return {
+                ...state,
+                wsMessageSendLoading: false,
+                wsMessageSendSuccess: true,
+                wsMessageSendErrors: null
+            };
+
+        case WS_MESSAGE_SEND_FAILED:
+            return {
+                ...state,
+                wsMessageSendLoading: false,
+                wsMessageSendSuccess: false,
+                wsMessageSendErrors: action.payload
             };
             
         /**

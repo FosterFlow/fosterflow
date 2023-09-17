@@ -13,7 +13,7 @@ import {
     VALIDATE_PASSWORD_RESET_TOKEN,
     RESET_PASSWORD,
     CHANGE_PASSWORD,
-    REFRESH_TOKEN_UPDATE
+    ACCESS_TOKEN_UPDATE
 } from './constants';
 
 
@@ -21,6 +21,8 @@ import {
     loginUserSuccess,
     loginUserFailure,
     
+    logoutUser,
+    logoutForce,
     logoutUserSuccess,
     logoutUserFailure,
 
@@ -51,26 +53,34 @@ import {
     changePasswordSuccess,
     changePasswordFailure,
     
-    refreshTokenUpdateInitState,
-    refreshTokenUpdateSuccess,
-    refreshTokenUpdateFailure,
+    accessTokenUpdateInitState,
+    accessTokenUpdateSuccess,
+    accessTokenUpdateFailure,
 } from './actions';
 
 import {
-    killWsConnection, 
+    killWsConnection,
+    chatInit
 } from '../chat/actions';
+
+import {
+    agentInit 
+} from '../agent/actions';
+
+import {
+    userInit
+} from '../user/actions';
+    
 
 /**
  * Login the user
  * @param {*} payload - email and password 
  */
 function* loginUserSaga({ payload: { email, password } }) {
-    yield put(refreshTokenUpdateInitState());
+    yield put(accessTokenUpdateInitState());
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
-        console.log("redux aux saga", "login response", response );
-        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
-        yield localStorage.setItem("isAuthenticated", true);
+        
         yield put(loginUserSuccess(response.access));            
     } catch (errors) {
         yield put(loginUserFailure(errors));
@@ -82,14 +92,21 @@ function* loginUserSaga({ payload: { email, password } }) {
  * Logout the user
  */
 function* logoutSaga() {
-    console.log ("Auth saga logout");
     try {
-        //we use isAuthorized param for the case if user reloaded the page
-        localStorage.setItem("isAuthenticated", false);
-        yield put(killWsConnection());
         yield call(apiAuthorizedClient.post, '/logout/');
+        yield put(killWsConnection());
+        yield put(chatInit());
+        yield put(userInit());
+        yield put(agentInit());
+        //Time for showing loader, otherwise page 
+        yield delay(1000);
         yield put(logoutUserSuccess());
     } catch (errors) {
+        yield put(killWsConnection());
+        yield put(chatInit());
+        yield put(userInit());
+        yield put(agentInit());
+        yield delay(1000);
         yield put(logoutUserFailure(errors));
     }
 }
@@ -100,8 +117,6 @@ function* logoutSaga() {
 function* registerSaga({ payload: { email, password } }) {
     try {
         const response = yield call(apiClient.post, '/register/', { email, password });
-        //we store isAuthenticated param into Local Storage for the case if user reloaded the page
-        localStorage.setItem("isAuthenticated", true);
         yield put(registerUserSuccess(response.access));
     } catch (errors) {
         yield put(registerUserFailure(errors));
@@ -113,7 +128,9 @@ function* registerSaga({ payload: { email, password } }) {
  */
   function* sendConfirmationEmailSaga() {
     try {
+        yield put(confirmEmailInitState());
         yield call(apiAuthorizedClient.post, '/confirmation-email/send/');
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(sendConfirmationEmailSuccess());
         yield delay(5000);
         yield put(sendConfirmationEmailInitState());
@@ -129,14 +146,13 @@ function* registerSaga({ payload: { email, password } }) {
  */
 function* confirmEmailSaga({ payload: { token } }) {
     try {
-      yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
+        yield call(apiClient.post, '/confirmation-email/confirm/', { email_confirm_token: token });
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(confirmEmailSuccess());
         yield delay(5000);
         yield put(confirmEmailInitState());
     } catch (errors) {
         yield put(confirmEmailFailure(errors));
-        yield delay(15000);
-        yield put(confirmEmailInitState());
     }
   }
 
@@ -147,6 +163,7 @@ function* confirmEmailSaga({ payload: { token } }) {
 function* forgetPasswordSaga({ payload: { email } }) {
     try {
         const response = yield call(apiClient.post, '/password-reset/', { email });
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(forgetPasswordSuccess(response.status));
         yield delay(5000);
         yield put(forgetPasswordInitState());
@@ -158,6 +175,7 @@ function* forgetPasswordSaga({ payload: { email } }) {
 function* validatePasswordResetTokenSaga({ payload: { token } }) {
     try {
         yield call(apiClient.post, '/password-reset/validate_token/', { token });
+        yield delay(1000); //show loading in case if API response is too fast
         yield put(validatePasswordResetTokenSuccess());
         yield delay(5000);
         yield put(validatePasswordResetTokenInitState());
@@ -195,16 +213,17 @@ function* changePasswordSaga({ payload: { oldPassword, newPassword } }) {
 }
 
 
-function* refreshTokenUpdateSaga() {
-    yield put(refreshTokenUpdateInitState());
+function* accessTokenUpdateSaga() {
     try {
         const response = yield call(apiClient.post, '/token/refresh/');
-        yield put(refreshTokenUpdateSuccess(response.access));
+        yield put(accessTokenUpdateSuccess(response.access));
         yield call(apiAuthorizedClient.resolve);
         yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
-        localStorage.setItem("isAuthenticated", false);
-        yield put(refreshTokenUpdateFailure(errors));
+        yield put(accessTokenUpdateFailure(errors));
+        yield put(logoutForce());
+        yield delay(10000);
+        yield put(accessTokenUpdateInitState());
     }
 }
 
@@ -218,5 +237,5 @@ export default function* chatSaga() {
     yield takeEvery(VALIDATE_PASSWORD_RESET_TOKEN, validatePasswordResetTokenSaga);
     yield takeEvery(RESET_PASSWORD, resetPasswordSaga);
     yield takeEvery(CHANGE_PASSWORD, changePasswordSaga);
-    yield takeEvery(REFRESH_TOKEN_UPDATE, refreshTokenUpdateSaga);
+    yield takeEvery(ACCESS_TOKEN_UPDATE, accessTokenUpdateSaga);
 }
