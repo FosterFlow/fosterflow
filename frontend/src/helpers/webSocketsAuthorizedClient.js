@@ -3,7 +3,7 @@ import {
   accessTokenUpdate,
   addWebSocketRequest,
   clearWebSocketsApiRequestsQueue
-} from '../redux/auth/actions';
+} from '../redux/webSocket/actions';
 import jwtDecode from 'jwt-decode';
 import config from '../config';
 
