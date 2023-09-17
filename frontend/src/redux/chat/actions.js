@@ -1,5 +1,7 @@
 // actions.js
 import {
+  CHAT_INIT,
+  
   FETCH_CHATS,
   FETCH_CHATS_INIT_STATE,
   FETCH_CHATS_SUCCESS,
@@ -30,11 +32,22 @@ import {
   SET_ACTIVE_NEW_CHAT,
 
   WS_CONNECTION_START,
+  WS_CONNECTION_KILL,
   WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_ERROR,
+  WS_CONNECTION_FAILED,
   WS_CONNECTION_CLOSED,
-  WS_RECEIVE_MESSAGE,
+
+  WS_MESSAGE_SEND,
+  WS_MESSAGE_SEND_INIT_STATE,
+  WS_MESSAGE_SEND_SUCCESS,
+  WS_MESSAGE_SEND_FAILED,
+
+  WS_RECEIVE_MESSAGE_CHUNK,
 } from './constants';
+
+export const chatInit = () => ({
+  type: CHAT_INIT,
+});
   
   /**
    * Specify an id of currently active chat. 
@@ -184,22 +197,43 @@ import {
     type: WS_CONNECTION_START,
     payload: chatId
   });
+
+  export const killWsConnection = () => ({
+    type: WS_CONNECTION_KILL,
+  });
   
   export const wsConnectionSuccess = (socket) => ({
     type: WS_CONNECTION_SUCCESS,
     payload: socket
   });
   
-  export const wsConnectionError = (error) => ({
-    type: WS_CONNECTION_ERROR,
-    payload: error
+  export const wsConnectionFailed = (errors) => ({
+    type: WS_CONNECTION_FAILED,
+    payload: errors
   });
   
   export const wsConnectionClosed = () => ({
     type: WS_CONNECTION_CLOSED
   });
+
+  export const wsMessageSend = () => ({
+    type: WS_MESSAGE_SEND
+  });
+
+  export const wsMessageSendInitState = () => ({
+    type: WS_MESSAGE_SEND_INIT_STATE
+  });
+
+  export const wsMessageSendSuccess = () => ({
+    type: WS_MESSAGE_SEND_SUCCESS
+  });
+  
+  export const wsMessageSendFailed = (errors) => ({
+    type: WS_MESSAGE_SEND_FAILED,
+    payload: errors
+  });
   
   export const wsReceiveMessage = (messageChunk) => ({
-    type: WS_RECEIVE_MESSAGE,
+    type: WS_RECEIVE_MESSAGE_CHUNK,
     payload: messageChunk
   });

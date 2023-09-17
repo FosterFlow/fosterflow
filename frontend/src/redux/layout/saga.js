@@ -32,7 +32,7 @@ function* setLayoutMode({ payload:  layoutMode  }) {
 /**
  * Changes the language
  */
-function* setLanguage({ payload:  language  }) {
+function* setLanguage({ payload: language }) {
   try {
       yield i18n.changeLanguage(language);
       yield localStorage.setItem("language", language);

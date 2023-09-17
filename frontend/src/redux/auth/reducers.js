@@ -5,6 +5,7 @@ import {
     LOGIN_USER_FAILURE,
 
     LOGOUT_USER,
+    LOGOUT_FORCE,
     LOGOUT_USER_INIT_STATE,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILURE,
@@ -44,10 +45,10 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     CHANGE_PASSWORD_FAILURE,
 
-    REFRESH_TOKEN_UPDATE,
-    REFRESH_TOKEN_UPDATE_INIT_STATE,
-    REFRESH_TOKEN_UPDATE_SUCCESS,
-    REFRESH_TOKEN_UPDATE_FAILURE,
+    ACCESS_TOKEN_UPDATE,
+    ACCESS_TOKEN_UPDATE_INIT_STATE,
+    ACCESS_TOKEN_UPDATE_SUCCESS,
+    ACCESS_TOKEN_UPDATE_FAILURE,
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
@@ -56,7 +57,6 @@ import {
     CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 } from './constants';
 
-const isAuthenticated = localStorage.getItem("isAuthenticated");
 const INIT_STATE = {
     accessToken: undefined,
     
@@ -96,18 +96,20 @@ const INIT_STATE = {
     changePasswordSuccess: false,
     changePassswordErrors: null,
 
-    refreshTokenUpdateLoading: false,
-    refreshTokenUpdateSuccess: false,
-    refreshTokenUpdateErrors: null,
+    accessTokenUpdateLoading: false,
+    accessTokenUpdateSuccess: false,
+    accessTokenUpdateErrors: null,
     
-    isAuthenticated: JSON.parse(isAuthenticated ) || false,
+    isAuthenticated: JSON.parse(
+        localStorage.getItem("isAuthenticated")
+        ) || false,
     authenticatedApiRequestsQueue: [],
     webSocketsRequestsQueue: [],
 };
 
 
 const Auth = (state = INIT_STATE, action) => {
-    console.log("reducers", "Auth", "action", action);
+    console.log("reducers", "Auth", "action", action );
     switch (action.type) {
         case LOGIN_USER:
             return { 
@@ -125,7 +127,9 @@ const Auth = (state = INIT_STATE, action) => {
                 loginErrors: null, 
             };
         
-        case LOGIN_USER_SUCCESS:
+        case LOGIN_USER_SUCCESS: {
+            localStorage.setItem("isAuthenticated", true);
+
             return { 
                 ...state,
                 isAuthenticated: true,
@@ -134,6 +138,7 @@ const Auth = (state = INIT_STATE, action) => {
                 loginSuccess: true,
                 loginErrors: null, 
             };
+        }
 
         case LOGIN_USER_FAILURE:
             return { 
@@ -144,14 +149,30 @@ const Auth = (state = INIT_STATE, action) => {
                 loginErrors: action.payload, 
             };
 
-        case LOGOUT_USER:
+        case LOGOUT_USER: {
             return { 
                 ...state,
-                isAuthenticated: false,
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
             };
+        }
+           
+        case LOGOUT_FORCE: {
+            localStorage.setItem("isAuthenticated", false);
+
+            return { 
+                ...state,
+                accessToken: undefined,
+                isAuthenticated: false,
+                accessTokenLoading: false,
+                logoutLoading: true,
+                logoutSuccess: false,
+                logoutErrors: null,
+                authenticatedApiRequestsQueue: [],
+                webSocketsRequestsQueue: [],
+            };
+        }
 
         case LOGOUT_USER_INIT_STATE:
             return { 
@@ -161,29 +182,39 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutErrors: null,
             };
     
-        case LOGOUT_USER_SUCCESS:
+        case LOGOUT_USER_SUCCESS: {
+            localStorage.setItem("isAuthenticated", false);
+
             return { 
                 ...state,
                 accessToken: undefined,
                 isAuthenticated: false,
-                refreshTokenLoading: false,
-                authenticatedApiRequestsQueue: [],
-                logoutLoading: false,
-                logoutSuccess: true,
+                accessTokenLoading: false,
+                logoutLoading: true,
+                logoutSuccess: false,
                 logoutErrors: null,
-            };
-    
-        case LOGOUT_USER_FAILURE:
-            return { 
-                accessToken: undefined,
-                refreshTokenLoading: false,
                 authenticatedApiRequestsQueue: [],
+                webSocketsRequestsQueue: [],
+            };
+        }
+
+        case LOGOUT_USER_FAILURE: {
+            localStorage.setItem("isAuthenticated", false);
+            
+            return {
+                ...state, 
+                accessToken: undefined,
+                isAuthenticated: false,
+                accessTokenLoading: false,
+                authenticatedApiRequestsQueue: [],
+                webSocketsRequestsQueue: [],
                 logoutLoading: false,
                 logoutSuccess: false,
                 logoutErrors: action.payload,
             };
+        }
 
-        case REGISTER_USER:
+        case REGISTER_USER: 
             return { 
                 ...state,
                 registerLoading: true,
@@ -199,7 +230,10 @@ const Auth = (state = INIT_STATE, action) => {
                 registerErrors: null,
             };
         
-        case REGISTER_USER_SUCCESS:
+        case REGISTER_USER_SUCCESS: {
+            //we store isAuthenticated param into Local Storage for the case if user reloaded the page
+            localStorage.setItem("isAuthenticated", true);
+
             return { 
                 ...state,
                 isAuthenticated: true,
@@ -208,6 +242,7 @@ const Auth = (state = INIT_STATE, action) => {
                 registerSuccess: true,
                 registerErrors: null,
             };
+        }
         
         case REGISTER_USER_FAILURE:
             return { 
@@ -411,41 +446,37 @@ const Auth = (state = INIT_STATE, action) => {
                 changePassswordErrors: action.payload,
             };
         
-        case REFRESH_TOKEN_UPDATE:
+        case ACCESS_TOKEN_UPDATE:
             return { 
                 ...state,
-                refreshTokenUpdateLoading: true,
-                refreshTokenUpdateSuccess: false,
-                refreshTokenUpdateErrors: null,
+                accessTokenUpdateLoading: true,
+                accessTokenUpdateSuccess: false,
+                accessTokenUpdateErrors: null,
             };
 
-        case REFRESH_TOKEN_UPDATE_INIT_STATE:
+        case ACCESS_TOKEN_UPDATE_INIT_STATE:
             return { 
                 ...state,
-                refreshTokenUpdateLoading: false,
-                refreshTokenUpdateSuccess: false,
-                refreshTokenUpdateErrors: null,
+                accessTokenUpdateLoading: false,
+                accessTokenUpdateSuccess: false,
+                accessTokenUpdateErrors: null,
             };
         
-        case REFRESH_TOKEN_UPDATE_SUCCESS:
+        case ACCESS_TOKEN_UPDATE_SUCCESS:
             return { 
                 ...state, 
                 accessToken: action.payload,
-                refreshTokenUpdateLoading: false,
-                refreshTokenUpdateSuccess: true,
-                refreshTokenUpdateErrors: null, 
+                accessTokenUpdateLoading: false,
+                accessTokenUpdateSuccess: true,
+                accessTokenUpdateErrors: null, 
             };
 
-        case REFRESH_TOKEN_UPDATE_FAILURE:
+        case ACCESS_TOKEN_UPDATE_FAILURE:
             return { 
                 ...state,
-                accessToken: undefined,
-                isAuthenticated: false,
-                refreshTokenUpdateLoading: false,
-                refreshTokenUpdateSuccess: false,
-                refreshTokenUpdateErrors: action.payload, 
-                authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: []
+                accessTokenUpdateLoading: false,
+                accessTokenUpdateSuccess: false,
+                accessTokenUpdateErrors: action.payload, 
             };
 
         case ADD_AUTHENTICATED_API_REQUEST:

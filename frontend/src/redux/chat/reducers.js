@@ -1,4 +1,7 @@
+import _ from 'lodash';
 import {
+    CHAT_INIT,
+    
     FETCH_CHATS,
     FETCH_CHATS_INIT_STATE,
     FETCH_CHATS_SUCCESS,
@@ -29,10 +32,18 @@ import {
     SET_ACTIVE_NEW_CHAT,
     
     WS_CONNECTION_START,
+    WS_CONNECTION_KILL,
     WS_CONNECTION_SUCCESS,
-    WS_CONNECTION_ERROR,
+    WS_CONNECTION_FAILED,
     WS_CONNECTION_CLOSED,
-    WS_RECEIVE_MESSAGE
+
+    WS_MESSAGE_SEND,
+    WS_MESSAGE_SEND_INIT_STATE,
+    WS_MESSAGE_SEND_SUCCESS,
+    WS_MESSAGE_SEND_FAILED,
+
+    WS_RECEIVE_MESSAGE_CHUNK,
+    WS_MESSAGE_SEND_SUCCCESS
 } from './constants';
 
 const INIT_STATE = {
@@ -45,6 +56,7 @@ const INIT_STATE = {
     fetchChatsSuccess: false,
     fetchChatsErrors: null,
 
+    addChatRequestMessage: undefined,
     addChatLoading: false,
     addChatSuccess: false,
     addChatErrors: null,
@@ -64,13 +76,20 @@ const INIT_STATE = {
     deleteMessageErrors: null,
   
     wsConnection: null,
-    wsConnected: false,
-    wsConnectionError: null
+    wsConnectionLoading: null,
+    wsConnectionSuccess: false,
+    wsConnectionErrors: null,
+
+    wsMessageSendLoading: false,
+    wsMessageSendSuccess: false,
+    wsMessageSendErrors: null,
 };
 
 const Chat = (state = INIT_STATE, action) => {
-    console.log("reducers", "Chat", "action", action);
     switch (action.type) {
+        case CHAT_INIT:
+            return INIT_STATE;
+
         case SET_ACTIVE_CHAT:
             return { 
                 ...state,
@@ -105,15 +124,21 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsErrors: null,
             };
 
-        case FETCH_CHATS_SUCCESS:
+        case FETCH_CHATS_SUCCESS: {
+            const chats = action.payload;
+            let filteredChats = (Array.isArray(chats) && chats) || [];
+
+            filteredChats = filteredChats.reverse();
+
             return {
                 ...state,
-                chats: action.payload,
+                chats: filteredChats,
                 fetchChatsLoading: false,
                 fetchChatsSuccess: true,
                 fetchChatsErrors: null,
             };
-
+        }
+            
         case FETCH_CHATS_FAILED:
             return {
                 ...state,
@@ -122,13 +147,19 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsErrors: action.payload,
             };
 
-        case ADD_CHAT:
+        case ADD_CHAT: {
+            const actionPayload = action.payload;
+            const messageRequest = (actionPayload && actionPayload.message) || undefined;
+            
             return {
                 ...state,
                 addChatLoading: true,
                 addChatSuccess: false,
                 addChatErrors: null,
+                addChatRequestMessage: messageRequest 
             };
+        }
+            
 
         case ADD_CHAT_INIT_STATE:
             return {
@@ -136,6 +167,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatLoading: false,
                 addChatSuccess: false,
                 addChatErrors: null,
+                addChatRequestMessage: undefined,
             };
 
         case ADD_CHAT_SUCCESS:
@@ -144,7 +176,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatLoading: false,
                 addChatSuccess: true,
                 addChatErrors: null,
-                chats: [...state.chats, action.payload],
+                chats: [action.payload, ...state.chats],
                 activeChatId: Number(action.payload.id),
                 chatWindow: true,
                 newChat: false
@@ -273,37 +305,117 @@ const Chat = (state = INIT_STATE, action) => {
         case WS_CONNECTION_START:
             return {
                 ...state,
-                wsConnected: false
+                wsConnection: null,
+                wsConnectionLoading: true,
+                wsConnectionSuccess: false,
+                wsConnectionErrors: null,
             };
 
-        case WS_CONNECTION_SUCCESS:
+        case WS_CONNECTION_KILL:
             return {
                 ...state,
-                wsConnected: true,
-                wsConnection: action.payload
+                wsConnection: null,
+                wsConnectionLoading: false,
+                wsConnectionSuccess: false,
+                wsConnectionErrors: null,
             };
 
-        case WS_CONNECTION_ERROR:
+        case WS_CONNECTION_SUCCESS: {
             return {
                 ...state,
-                wsConnected: false,
-                wsConnectionError: action.payload
+                wsConnection: action.payload,
+                wsConnectionLoading: false,
+                wsConnectionSuccess: true,
+                wsConnectionErrors: null,
+            };
+        }
+            
+        case WS_CONNECTION_FAILED:
+            return {
+                ...state,
+                wsConnection: action.payload,
+                wsConnectionLoading: false,
+                wsConnectionSuccess: true,
+                wsConnectionErrors: null,
             };
 
         case WS_CONNECTION_CLOSED:
             return {
                 ...state,
-                wsConnected: false,
                 wsConnection: null,
-                wsConnectionError: null
+                wsConnectionLoading: false,
+                wsConnectionSuccess: true,
+                wsConnectionErrors: null,
             };
-            
-        case WS_RECEIVE_MESSAGE:
-            // Assuming the WebSocket message contains a new chat message
+
+        case WS_MESSAGE_SEND:
             return {
                 ...state,
-                messages: [...state.messages, action.payload]
+                wsMessageSendLoading: true,
+                wsMessageSendSuccess: false,
+                wsMessageSendErrors: null
             };
+
+        case WS_MESSAGE_SEND_INIT_STATE:
+            return {
+                ...state,
+                wsMessageSendLoading: false,
+                wsMessageSendSuccess: false,
+                wsMessageSendErrors: null
+            };
+
+        case WS_MESSAGE_SEND_SUCCESS:
+            return {
+                ...state,
+                wsMessageSendLoading: false,
+                wsMessageSendSuccess: true,
+                wsMessageSendErrors: null
+            };
+
+        case WS_MESSAGE_SEND_FAILED:
+            return {
+                ...state,
+                wsMessageSendLoading: false,
+                wsMessageSendSuccess: false,
+                wsMessageSendErrors: action.payload
+            };
+            
+        /**
+        * TODO:
+        * Add to a buffer chunks with "start" and "process" status.
+        * And write them to the global messages store when we get "done" status.
+        * The issue is how to show them correctly then into the right order.
+        * 
+        * TODO:    
+        * Add handling of statuses for "start" and "done"   
+        * 
+        */
+        case WS_RECEIVE_MESSAGE_CHUNK:
+            {
+                const receivedMessage = action.payload;
+                const messagesList = [...state.messages];
+            
+                // Find the message by its id
+                const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
+            
+                // If the message already exists, update its content
+                if (messageIndex !== -1) {
+                    const existingMessage = messagesList[messageIndex];
+                    existingMessage.message_text += receivedMessage.message_chunk;
+                    messagesList[messageIndex] = existingMessage;
+                } else {
+                    // If the message doesn't exist, simply add it to the list
+                    if (receivedMessage.message_chunk !== undefined) {
+                        receivedMessage.message_text = receivedMessage.message_chunk;
+                    }
+                    messagesList.push(receivedMessage);
+                }
+            
+                return {
+                    ...state,
+                    messages: messagesList
+                };
+            }
 
         default: return { ...state };
     }

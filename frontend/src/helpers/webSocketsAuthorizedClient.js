@@ -1,6 +1,6 @@
 import { store } from '../redux/store';
 import { 
-  refreshTokenUpdate,
+  accessTokenUpdate,
   addWebSocketRequest,
   clearWebSocketsApiRequestsQueue
 } from '../redux/auth/actions';
@@ -29,17 +29,17 @@ function isTokenExpired (accessToken) {
  */
 function resolveWebSocketsQueue() {
   const state = store.getState();
-  const refreshTokenLoading = state.Auth.refreshTokenLoading; 
+  const accessTokenLoading = state.Auth.accessTokenUpdateLoading; 
   
-  if (refreshTokenLoading){
+  if (accessTokenLoading){
     return;
   }
 
   const accessToken = state.Auth.accessToken;
   if (isTokenExpired(accessToken)) {
-    store.dispatch(refreshTokenUpdate());
-    return;
-  }
+    store.dispatch(accessTokenUpdate());
+          return;
+    }
 
   const webSocketsRequestsQueue = state.Auth.webSocketsRequestsQueue;
   if (webSocketsRequestsQueue.length > 0 ) {
@@ -63,18 +63,18 @@ function resolveWebSocketsQueue() {
 
 /**
  * Using this method I'm trying to solve an issue when app makes a few requests 
- * same time, but access token was already expired. And axios makes a few requests for refresh token update.
+ * same time, but access token was already expired. And axios makes a few requests for access token update.
  * 
  * Solution: add all incoming reuqets to a queue. Check access token, if it was expired - 
  * request an update, once token is  updated - resolve all reuests from the queue. 
  * 
  * @param {string} method new web socket connection or resolve
- * @param {string} url  
- * 
+ * @param {string} url
+  * 
  * @returns {Object} returns promise 
  */
 function webSocketManager (method, url) {
-  let resolve;
+let resolve;
   
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.

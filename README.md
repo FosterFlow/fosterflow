@@ -1,5 +1,7 @@
 # [FosterFlow.com](https://fosterflow.com)
 
+![ezgif com-video-to-gif](https://github.com/soshace/fosterflow/assets/761219/e367b5dc-87b0-4c15-aaed-e1c125eb2089)
+
 Our project is a startup that leverages the power of the GPT4 and LLM/ML models. The main objective is to create a
 unified application that combines the comprehensive functionality offered ML models with our UI mechanics.
 By harnessing the capabilities of the GPT like models, we aim to provide users with a seamless and intelligent
@@ -28,9 +30,6 @@ There are the upcoming tasks and features on our todo list that we plan to imple
 
 * **Single sign-on**: Enable users to authenticate and log in to the application using their social media accounts such
   as Facebook, Twitter, or Google. This will provide a convenient and streamlined login experience for our users.
-* **Real-time response generation**: Implement a continuous stream of generated responses within the application. This
-  will enhance the conversational experience by allowing users to receive dynamic and immediate responses as they
-  interact with the system.
 * **Access to different types of LLM/ML models**: Allow users to smoothly switch to the best model for solving an exact
   task using model name @model_name like we do with real users into chats.
 

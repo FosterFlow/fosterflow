@@ -5,6 +5,7 @@ import {
     LOGIN_USER_FAILURE,
 
     LOGOUT_USER,
+    LOGOUT_FORCE,
     LOGOUT_USER_INIT_STATE,
     LOGOUT_USER_SUCCESS,
     LOGOUT_USER_FAILURE,
@@ -44,10 +45,10 @@ import {
     CHANGE_PASSWORD_SUCCESS,
     CHANGE_PASSWORD_FAILURE,
 
-    REFRESH_TOKEN_UPDATE,
-    REFRESH_TOKEN_UPDATE_INIT_STATE,
-    REFRESH_TOKEN_UPDATE_SUCCESS,
-    REFRESH_TOKEN_UPDATE_FAILURE,
+    ACCESS_TOKEN_UPDATE,
+    ACCESS_TOKEN_UPDATE_INIT_STATE,
+    ACCESS_TOKEN_UPDATE_SUCCESS,
+    ACCESS_TOKEN_UPDATE_FAILURE,
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
@@ -85,10 +86,21 @@ export const loginUserFailure = (errors) => {
 };
 
 
-export const logoutUser = (history) => {
+export const logoutUser = () => {
     return {
-        type: LOGOUT_USER,
-        payload: { history }
+        type: LOGOUT_USER
+    }
+};
+
+/**
+ * Method uses in cases if refresh token already expeired and we can't get actual 
+ * accessToken to make logout using API
+ * 
+ * @returns 
+ */
+export const logoutForce = () => {
+    return {
+        type: LOGOUT_FORCE
     }
 };
 
@@ -253,28 +265,28 @@ export const changePasswordFailure = (errors) => {
     }
 };
 
-export const refreshTokenUpdate = () => {
+export const accessTokenUpdate = () => {
     return {
-        type: REFRESH_TOKEN_UPDATE,
+        type: ACCESS_TOKEN_UPDATE,
     }
 };
 
-export const refreshTokenUpdateInitState = () => {
+export const accessTokenUpdateInitState = () => {
     return {
-        type: REFRESH_TOKEN_UPDATE_INIT_STATE,
+        type: ACCESS_TOKEN_UPDATE_INIT_STATE,
     }
 };
 
-export const refreshTokenUpdateSuccess = (accessToken) => {
+export const accessTokenUpdateSuccess = (accessToken) => {
     return {
-        type: REFRESH_TOKEN_UPDATE_SUCCESS,
+        type: ACCESS_TOKEN_UPDATE_SUCCESS,
         payload: accessToken
     }
 };
 
-export const refreshTokenUpdateFailure = (errors) => {
+export const accessTokenUpdateFailure = (errors) => {
     return {
-        type: REFRESH_TOKEN_UPDATE_FAILURE,
+        type: ACCESS_TOKEN_UPDATE_FAILURE,
         payload: errors
     }
 };

@@ -1,4 +1,5 @@
 import {
+    USER_INIT,
     GET_AUTHORIZED_USER,
     GET_AUTHORIZED_USER_SUCCESS,
     GET_USER,
@@ -10,6 +11,10 @@ import {
     GET_USERS,
     GET_USERS_SUCCESS,
 } from './constants';
+
+export const userInit = () => ({
+    type: USER_INIT,
+});
 
 export const getAuthorizedUser = (data) => ({
     type: GET_AUTHORIZED_USER,

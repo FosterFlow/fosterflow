@@ -5,6 +5,7 @@ import {
     Navigate, 
     useLocation, 
 } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { 
     authProtectedRoutes, 
     authRoutes, 
@@ -18,8 +19,9 @@ import AuthLayout from "../layouts/AuthLayout/";
  * Main Route component
  */
 const Routes = (props) => {
+    const { t } = useTranslation();
     const location = useLocation();
-    const { 
+    const {
         isAuthenticated,
         confirmEmailSuccess
     } = props;
@@ -32,8 +34,40 @@ const Routes = (props) => {
         return path.endsWith('/') ? path.slice(0, -1) : path;
     };
     const normalizedPathname = normalizePath(location.pathname);
-    const isAuthRoute = authRoutes.some(route => route.path === normalizedPathname);
-    const isAuthProtectedRoute = authProtectedRoutes.some(route => route.path === normalizedPathname);
+    const isAuthRoute = authRoutes.some(route => matchRoute(route.path, normalizedPathname));
+    const isAuthProtectedRoute = authProtectedRoutes.some(route => matchRoute(route.path, normalizedPathname));
+
+
+    /**
+     * TODO: check if build-in React methods can do the same 
+     *  
+     * @param {String} routePattern 
+     * @param {String} url 
+     * @returns 
+     */
+    function matchRoute (routePattern, url) {
+        const routeParts = routePattern.split('/');
+        const urlParts = url.split('/');
+      
+        if (routeParts.length !== urlParts.length) {
+            return false;
+        }
+      
+        for (let i = 0; i < routeParts.length; i++) {
+            const routePart = routeParts[i];
+            const urlPart = urlParts[i];
+        
+            if (routePart.startsWith(':')) {
+                continue; // this is a dynamic part of the route, so we don't check it
+            }
+        
+            if (routePart !== urlPart) {
+                return false; // static parts of the route don't match
+            }
+        }
+      
+        return true;
+    };
 
     //Email verification
     if (matchEmailVerifyPattern) {
@@ -66,8 +100,10 @@ const Routes = (props) => {
     return (
         // rendering the router with layout
         <React.Fragment>
-            {/* TODO add styled loading page */}
-            <Suspense fallback={<div>Loading...</div>} >
+            <Suspense fallback={
+                <div className='p-3'>
+                    {t('Loading dependencies')}...
+                </div>} >
                 <SwitchRoute>
                     {/* public routes */}
                     {authRoutes.map((route, idx) =>
@@ -105,10 +141,15 @@ const Routes = (props) => {
 }
 
 const mapStateToProps = (state) => {
+    const {
+        isAuthenticated,
+        confirmEmailSuccess
+    } = state.Auth;
+
     return {
         //cause re-render of the router if user was authenticated or logout
-        isAuthenticated: state.Auth.isAuthenticated,
-        confirmEmailSuccess: state.Auth.confirmEmailSuccess
+        isAuthenticated,
+        confirmEmailSuccess
     }
 };
 

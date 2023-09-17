@@ -1,11 +1,39 @@
-import apiClient from './apiClient';
 import { store } from '../redux/store';
 import { 
-  refreshTokenUpdate,
+  accessTokenUpdate,
   addAuthenticatedApiRequest,
   clearAuthenticatedApiRequestsQueue
 } from '../redux/auth/actions';
 import jwtDecode from 'jwt-decode';
+import axios from 'axios';
+import config from '../config';
+
+
+// Create a basic instance
+const apiClient = axios.create({
+  baseURL: config.API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true
+});
+
+apiClient.interceptors.response.use(
+  response => response.data ? response.data : response,
+  error => {
+    const errorsData = (error.response && error.response.data && error.response.data.errors) || null;
+    
+    if (errorsData !== null) {
+      return Promise.reject(errorsData);
+    }
+    
+    if (error.message) {
+      return Promise.reject(error.message);
+    }
+    
+    return Promise.reject("Something wrong.");
+  }
+);
 
 /**
  * Checks if access token is expired
@@ -37,15 +65,15 @@ function getAccessTokenFromAxios() {
  */
 function resolveRequestsQueue() {
   const state = store.getState();
-  const refreshTokenLoading = state.Auth.refreshTokenLoading; 
+  const accessTokenLoading = state.Auth.accessTokenUpdateLoading; 
   
-  if (refreshTokenLoading){
+  if (accessTokenLoading){
     return;
   }
 
   const accessToken = state.Auth.accessToken;
   if (isTokenExpired(accessToken)) {
-    store.dispatch(refreshTokenUpdate());
+    store.dispatch(accessTokenUpdate());
     return;
   }
 

@@ -20,7 +20,6 @@ const authProtectedRoutes = [
   { path: "/chats/email-verify-token/:emailVerifyToken", component: <Chats /> },
   { path: "/profile", component: <Profile /> },
   { path: "/settings", component: <Settings /> },
-  //TODO:  don't render the page
   { path: "/logout", component: <Logout /> },
   //TODO: make 404 page
 

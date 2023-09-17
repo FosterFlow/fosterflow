@@ -33,6 +33,7 @@ import {
 import withRouter from "../../components/withRouter";
 import config from '../../config';
 import _ from 'lodash';
+import logo from "../../assets/images/logo192.png";
 
 /**
  * ResetPassword component
@@ -120,12 +121,18 @@ const ResetPassword = (props) => {
 
     return (
         <React.Fragment>
-            <div className="account-pages pt-sm-5">
+            <div className="account-pages py-5">
                 <Container>
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5} >
+                            <div className="text-center mb-3">
+                                <Link to="/" className="auth-logo mb-4 d-block">
+                                    <img src={logo} alt="" height="60" className="logo" />
+                                </Link>
+                                <h4>{t('Create a new password')}</h4>
+                            </div>
                             <Card>
-                                <CardBody className="p-4">
+                                <CardBody className="p-3">
                                     {validatePasswordResetTokenLoading && (
                                         <Alert color="info">
                                             <Spinner size="sm"/>&nbsp;
@@ -135,7 +142,7 @@ const ResetPassword = (props) => {
                                     { resetPasswordSuccess &&
                                         <Alert color="success" className="text-center mb-4">
                                             {t('Password was updated successfully')}.&nbsp; 
-                                            <Link to="/login" className="font-weight-medium text-primary"> 
+                                            <Link to="/login" className="font-weight-medium"> 
                                                 {t('Login now')}. 
                                             </Link> 
                                         </Alert>
@@ -178,7 +185,7 @@ const ResetPassword = (props) => {
                                         <Form onSubmit={passwordResetForm.handleSubmit}>
 
                                             <FormGroup className="mb-4">
-                                                <Label className="form-label">{t('New Password')}</Label>
+                                                <Label className="form-label">{t('New password')}</Label>
                                                 <InputGroup className="mb-3 bg-soft-light rounded-3">
                                                     <span className="input-group-text text-muted">
                                                         <i className="ri-lock-2-line"></i>
@@ -188,7 +195,7 @@ const ResetPassword = (props) => {
                                                         id="password"
                                                         name="password"
                                                         className="form-control form-control-lg border-light bg-soft-light"
-                                                        placeholder="Enter New Password"
+                                                        placeholder={t('Enter new password')}
                                                         onChange={passwordResetForm.handleChange}
                                                         onBlur={passwordResetForm.handleBlur}                                                        
                                                         value={passwordResetForm.values.password}
@@ -223,7 +230,7 @@ const ResetPassword = (props) => {
                                             </FormGroup>
 
                                             <FormGroup className="mb-4">
-                                                <Label className="form-label">{t('Confirm New Password')}</Label>
+                                                <Label className="form-label">{t('Confirm new password')}</Label>
                                                 <InputGroup className="mb-3 bg-soft-light rounded-3">
                                                     <span className="input-group-text text-muted">
                                                         <i className="ri-lock-2-line"></i>
@@ -233,7 +240,7 @@ const ResetPassword = (props) => {
                                                         id="confirmPassword"
                                                         name="confirmPassword"
                                                         className="form-control form-control-lg border-light bg-soft-light"
-                                                        placeholder="Confirm New Password"
+                                                        placeholder={t('Confirm new password')}
                                                         onChange={passwordResetForm.handleChange}
                                                         onBlur={passwordResetForm.handleBlur}                                                        
                                                         value={passwordResetForm.values.confirmPassword}
@@ -270,7 +277,7 @@ const ResetPassword = (props) => {
                                                                 <Spinner size="sm"/>&nbsp;
                                                             </>
                                                         }
-                                                        {t('Reset Password')}
+                                                        {t('Reset password')}
                                                 </Button>
                                             </div>
                                         </Form>
@@ -278,9 +285,9 @@ const ResetPassword = (props) => {
                                 </CardBody>
                             </Card>
 
-                            <div className="mt-5 text-center">
+                            <div className="text-center">
                                 <p>{t("Remember your password")}?&nbsp; 
-                                <Link to="/login" className="font-weight-medium text-primary">
+                                <Link to="/login" className="font-weight-medium">
                                      {t('Sign in now')}
                                 </Link> </p>
                             </div>

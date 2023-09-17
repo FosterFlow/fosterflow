@@ -1,4 +1,9 @@
+//TODO: it renders 8 times, figure it out
 import React, { useRef, useEffect, useState } from 'react';
+import { 
+    Spinner,
+    Alert 
+} from "reactstrap";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ReactMarkdown from 'react-markdown';
@@ -6,47 +11,107 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gfm from 'remark-gfm';
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
 import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
+import config from '../../../config';
 import { 
-    fetchMessages,
-    startWsConnection
+    fetchMessages
 } from "../../../redux/chat/actions";
 
-// Here's the custom component to render the code blocks
-function CodeBlock({node, inline, className, children, ...props}) {
-  const match = /language-(\w+)/.exec(className || '')
-  return !inline && match ? (
-    <SyntaxHighlighter 
-        style={materialDark} 
-        customStyle={{
-            fontSize: "0.875rem",
-        }} 
-        language={match[1]} 
-        {...props}
-    >
-        {String(children).replace(/\n$/, '')}
-    </SyntaxHighlighter>
-  ) : (
-    <code className={className} {...props}>
-      {children}
-    </code>
-  )
-}
+
 
 function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
-    const { messages, activeChatId, authorizedUser} = props;
+    const { 
+        messages,
+        fetchMessagesLoading,
+        fetchMessagesErrors, 
+        activeChatId, 
+        authorizedUser,
+        addChatRequestMessage,
+        fetchMessages,
+        chatWindow
+    } = props;
+    const { t } = useTranslation();
     //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
     const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
     const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
+    const supportEmail =  config.SUPPORT_EMAIL;
+
+    function CodeBlock({node, inline, className, children, ...props}) {
+        const [copyStatus, setCopyStatus] = useState(t('Copy')); // 'Copy', 'Copied'
+        const match = /language-(\w+)/.exec(className || '');
+        const language = match ? match[1] : '';
+        
+        const copyCodeToClipboard = (event) => {
+          event.preventDefault();
+          setCopyStatus(t('Copied to buffer') + '!');
+          navigator.clipboard.writeText(String(children).replace(/\n$/, ''))
+            .then(() => {
+                // Clipboard successfully set
+                setTimeout(() => setCopyStatus(t('Copy')), 2000);
+            }, (error) => {
+                // Clipboard write failed
+                setCopyStatus(t('Error') + ': ' + error);
+                setTimeout(() => setCopyStatus(t('Copy')), 3000);
+            });
+        };
+        
+        return !inline && !!language ? (
+          <div className="code-block">
+            <div className="code-block-head">
+                <div className="code-block-head-language">
+                    {language}
+                </div>
+                <div className="code-block-head-copy-to-clipboard">
+                    {copyStatus === t('Copy') ? (
+                        <a href="#" onClick={copyCodeToClipboard}>{copyStatus}</a>
+                    ) : (
+                        <span>{copyStatus}</span>
+                    )}
+                </div>
+            </div>
+            
+            <SyntaxHighlighter 
+                style={materialDark} 
+                customStyle={{
+                    fontSize: "0.875rem",
+                }} 
+                language={language} 
+                {...props}
+            >
+                {String(children).replace(/\n$/, '')}
+            </SyntaxHighlighter>
+          </div>
+        ) : (
+          <code className={className} {...props}>
+            {children}
+          </code>
+        );
+      }
+    
+    function TableWrapper({node, ...props}) {
+        return (
+          <div style={{overflowY: 'auto'}}>
+            <table {...props} />
+          </div>
+        );
+      }
 
     function handleChatScroll() {
-        const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
-        userWasAtBottomRef.current = (scrollHeight - scrollTop) === clientHeight;
+        if (chatWindowRef.current !== null &&
+            userWasAtBottomRef.current !== null){
+                const { 
+                    scrollHeight, 
+                    scrollTop, 
+                    clientHeight 
+                } = chatWindowRef.current;
+                userWasAtBottomRef.current = (Math.ceil(scrollHeight - Math.floor(scrollTop)) >= clientHeight);
+        }
     };
 
     function handleWindowResize () {
@@ -67,12 +132,14 @@ function UserChat(props) {
     }
 
     // Add useEffect to auto scroll to bottom when messages update
+    //TODO: handles for every chunk of the message. We can add debounce method here or optimize it another way
     useEffect(() => {
         if (Array.isArray(messages) && messages.length > 0){
-        const { scrollHeight } = chatWindowRef.current;
-        if (userWasAtBottomRef.current){
-        chatWindowRef.current.scrollTop = scrollHeight;
-        }
+            
+            if (userWasAtBottomRef.current){
+                const scrollHeight = chatWindowRef.current.scrollHeight;
+                chatWindowRef.current.scrollTop = scrollHeight;
+            }
         }
     }, [messages]);
 
@@ -85,24 +152,18 @@ function UserChat(props) {
     }, []);
 
     useEffect(() => {
-        if (activeChatId === 0) {
-            return;
-        }
+        if (activeChatId === 0 ||
+            authorizedUser === null ||
+            authorizedUser.is_email_confirmed === false ||
+            addChatRequestMessage !== undefined
+        ) { return; }
 
-        if (authorizedUser === null){
-            return;
-        }
-
-        if (authorizedUser.is_email_confirmed === false){
-            return;
-        }
-
-        props.fetchMessages(activeChatId);
+        fetchMessages(activeChatId);
     }, [authorizedUser, activeChatId]);
 
     return (
         <React.Fragment>
-            <div className={`user-chat ${props.chatWindow ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat ${chatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <UserHead />
                     <div
@@ -110,6 +171,23 @@ function UserChat(props) {
                         onScroll={debouncedHandleChatScroll} 
                         className="user-chat-conversation"
                         id="messages">
+                            {  fetchMessagesLoading &&
+                                <div className="d-flex justify-content-center">
+                                    <Spinner size="sm"/>
+                                </div>
+                            }
+                            { fetchMessagesErrors && (
+                                <Alert color="danger">
+                                    {t('Errors details')}:
+                                    <ul>
+                                        {fetchMessagesErrors.details.map((error, index) => (
+                                            <li key={index}>{error}</li>
+                                        ))}
+                                    </ul>
+                                    <hr/>
+                                    {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                                </Alert>
+                            )}
                             <ul className="user-chat-conversation-list">
                                 {
                                     relevantMessages.map((message, key) =>
@@ -128,8 +206,11 @@ function UserChat(props) {
                                                             style={{maxWidth: `${messageMaxWidth}px`}}
                                                         >
                                                             <ReactMarkdown 
-                                                                remarkPlugins={[gfm]} 
-                                                                components={{code: CodeBlock}}>
+                                                                remarkPlugins={[gfm]}
+                                                                components={{
+                                                                    code: CodeBlock,
+                                                                    table: TableWrapper 
+                                                                    }}>
                                                                 {message.message_text}
                                                             </ReactMarkdown>
                                                         </div>
@@ -149,17 +230,28 @@ function UserChat(props) {
 }
 
 const mapStateToProps = (state) => {
+    const {
+        messages,
+        fetchMessagesLoading,
+        fetchMessagesErrors,
+        activeChatId,
+        chatWindow,
+        addChatRequestMessage
+    } = state.Chat;
+
     return {
-        messages: state.Chat.messages,
-        activeChatId: state.Chat.activeChatId,
-        chatWindow: state.Chat.chatWindow,
+        messages,
+        fetchMessagesLoading,
+        fetchMessagesErrors,
+        activeChatId,
+        chatWindow,
+        addChatRequestMessage,
         authorizedUser: state.User.authorizedUser
     }
 };
 
 const mapDispatchToProps = {
-    fetchMessages,
-    startWsConnection
+    fetchMessages
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));

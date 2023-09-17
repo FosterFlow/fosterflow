@@ -6,10 +6,14 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+html.overscrollYnone {
   overscroll-behavior-y: none;
 }
 
-body {
+body.mobileStickUrlBar {
+  overscroll-behavior-y: none;
   //start --- fix for mobile browsers to prevent url bar hiding
   position: fixed;
   overflow-y: hidden;

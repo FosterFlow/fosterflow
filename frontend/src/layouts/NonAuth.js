@@ -1,3 +1,6 @@
+/**
+ * Layout for pages for non authorized users like login, register
+ */
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Alert, Spinner } from 'reactstrap';
@@ -17,9 +20,9 @@ const NonAuth = (props) => {
     const supportEmail =  config.SUPPORT_EMAIL;
     const { emailVerifyToken } = useParams();
     const {
-        refreshTokenUpdateErrors,
+        accessTokenUpdateErrors,
+        logoutErrors,
         confirmEmail,
-        confirmEmailInitState,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
@@ -33,6 +36,16 @@ const NonAuth = (props) => {
 
     let currentPage = capitalizeFirstLetter(props.router.location.pathname);
     document.title = currentPage;
+
+    useEffect(() => {
+        if (document.body.classList.contains('mobileStickUrlBar')) {
+            document.body.classList.remove('mobileStickUrlBar');
+        }
+
+        if (document.documentElement.classList.contains('overscrollYnone')) {
+            document.documentElement.classList.remove('overscrollYnone');
+        }
+    }, []);
 
     useEffect(() => {
         if (emailVerifyToken === undefined) {
@@ -51,25 +64,47 @@ const NonAuth = (props) => {
                 )}
                 {confirmEmailSuccess && (
                     <Alert color="success">
-                            {t('Email was successfully confirmed')}.
+                        {t('Email was successfully confirmed')}.
                     </Alert>)
                 }
-                {refreshTokenUpdateErrors && (
+                {logoutErrors && (
                     <Alert color="danger">
                         <h6>
-                            {t('Authentification error')}
+                            {t('An error occurred when exiting the application')}
                         </h6>
-                        {refreshTokenUpdateErrors.details &&
+                        {logoutErrors.details &&
                             (<div>
-                                {t('Errors details')}:
+                                {t('Details')}:
                                 <ul>
-                                    {refreshTokenUpdateErrors.details.map((error, index) => (
+                                    {logoutErrors.details.map((error, index) => (
                                         <li key={index}>{error}</li>
                                     ))}
                                 </ul>
                             </div>)
                         }
                         <div>
+                            <hr/>
+                            {t('Сontact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                        </div>
+                    </Alert>
+                )}
+                {accessTokenUpdateErrors && (
+                    <Alert color="info">
+                        <h6>
+                            {t('Your session key was expired')}
+                        </h6>
+                        {accessTokenUpdateErrors.details &&
+                            (<div>
+                                {t('Details')}:
+                                <ul>
+                                    {accessTokenUpdateErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                            </div>)
+                        }
+                        <div>
+                            <hr/>
                             {t('Try to login once again')}.&nbsp;
                             {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                         </div>
@@ -91,6 +126,7 @@ const NonAuth = (props) => {
                             </div>)
                         }
                         <div>
+                            <hr/>
                             {t('Try to login and re-send confirmation email')}.&nbsp;
                             {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                         </div>
@@ -103,16 +139,18 @@ const NonAuth = (props) => {
 
 const mapStateToProps = state => {
     const {
-        refreshTokenUpdateErrors,
+        accessTokenUpdateErrors,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
+        logoutErrors
     } = state.Auth;
     return {
-        refreshTokenUpdateErrors,
+        accessTokenUpdateErrors,
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
+        logoutErrors,
         layoutMode: state.Layout.layoutMode
     };
 };
