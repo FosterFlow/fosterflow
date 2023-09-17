@@ -11,7 +11,6 @@ from user_app.views import UserModelViewSet, UserAgentModelViewSet, SelfUserAPIV
 
 from auth_app.views import CustomTokenRefreshView
 
-from chat_app.views import index, room
 from user_app.views import UserAvatarUpdateView
 
 router = DefaultRouter()
@@ -24,9 +23,6 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
-
-    path("chat/", index, name="index"),
-    path("chat/<str:room_name>/", room, name="index"),
 
     path('api/token/', UserLoginAPIView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),

@@ -188,44 +188,74 @@ paths:
         - Bearer: [ ]
       summary: Instruction to connect websocket
       description: >-
-        To connect to the chat websocket, you should make the following request: <br>
-        ws://localhost:8000/ws/chats/**{chat_id}**/** <br>
-        In headers you must provide access token like this: <br>
-        key: "access", value: "**{access_token}**" <br>
-        Where **{chat_id}** - ID Chat, **{access_token}** - token for auth <br>
+        For connect to the websocket, you should make the following request: <br>
+        ws://localhost:8000/ws/login/?access=**{access_token}** <br>
+        In params you must provide access token<br>
         <br>
         After connection you can write message to chat. You should use this structure: <br>
-        {"message": "**{your message}**"} <br>
-        Where **{your message}** - message to sent <br>
+        {
+            "send_type": "chat",
+            "chat_id": 1,
+            "prompt": "Hello",
+            "owner_id": 1,   
+            "method": "request"
+        } <br>
         <br>
-        Receiving messages looks like this: <br>
-        {"message": "", "finish_reason": ""} <br>
-        Where **message** - text message and **finish_reason** - an attribute that makes it clear whether the response has ended. There can only be a **null** or **stop** value<br>
+        Receiving messages have 3 stages: <br>
+        1. After you make request you will have response with data about your message: <br>
+        {
+            "send_type": "chat",
+            "id": 1,
+            "message_text": "Hello",
+            "created_at": "2023-08-15 12:00:00.00000+00:00",
+            "chat_id": 1,
+            "owner_id": 1,
+            "method": "response"
+        }
         <br>
         <br>
-        Example cod on JavaScript: <br>
-        
-        **Connect to WebSocket:** <br>
-        const chatSocket = new WebSocket( 
-            &nbsp; &nbsp; 'ws://' 
-            &nbsp; &nbsp; + window.location.host 
-            &nbsp; &nbsp; + '/ws/chats/' 
-            &nbsp; &nbsp; + chat_id/
-        );<br>
-        
-        **Send message to WebSocket:** <br>
-        chatSocket.send(JSON.stringify({ <br>
-        &nbsp; &nbsp; 'message': message <br>
-        });<br>
-        
-        **Take message from WebSocket:** <br>
-        chatSocket.onmessage = function(e) {
-            &nbsp; &nbsp; const data = JSON.parse(e.data);
-            &nbsp; &nbsp; document.querySelector('#chat-log').value += (data.message);
-            &nbsp; &nbsp; if(data.finish_reason === "stop"){
-            &nbsp; &nbsp; &nbsp; &nbsp; document.querySelector('#chat-log').value += "END" ;
-            &nbsp; &nbsp; }
-        }; <br>
+        2. On second stage you are receiving generations chunks: <br>
+        {
+            "send_type": "chat",
+            "chat_id": 1,
+            "created_at": "2023-08-15 12:00:10.00000+00:00",
+            "id": 2,
+            "message_chunk": "",
+            "owner_id": 100,
+            "status": "start"
+        }<br>
+        {
+            "type": "chat_message",
+            "id": 2,
+            "message_chunk": " can",
+            "status": "progress"
+        } <br>
+        <br>
+        3. When generations is stop, you will take last message:<br>
+        {
+            "send_type": "chat",
+            "id": 2,
+            "message_chunk": "",
+            "status": "done"
+        }<br>
+        <br>
+        **Errors that can be meet:**<br>
+        {
+          'error': "Not request method"
+        }<br>
+        {
+          'error': "Prompt is empty"
+        }<br>
+        {
+          'error': "Chat is not available"
+        }<br>
+        {
+          'error': "Agent is not exists"
+        }<br>
+        {
+          'error': "send_type is not correct"
+        }
+
       responses:
         101:
           description: Switching Protocols
