@@ -3,7 +3,7 @@ import {
     ADD_WEB_SOCKET_REQUEST,
     CLEAR_WEB_SOCKET_REQUESTS_QUEUE,
 
-    WS_CONNECTION_START,
+    WS_CONNECTION,
     WS_CONNECTION_KILL,
     WS_CONNECTION_SUCCESS,
     WS_CONNECTION_FAILED,
@@ -19,9 +19,8 @@ export const clearWebSocketsApiRequestsQueue = () => ({
     type: CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 });
 
-export const startWsConnection = (chatId) => ({
-    type: WS_CONNECTION_START,
-    payload: chatId
+export const wsConnection = () => ({
+    type: WS_CONNECTION
   });
 
   export const killWsConnection = () => ({

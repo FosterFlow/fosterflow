@@ -1,8 +1,12 @@
 import { store } from '../redux/store';
 import { 
   accessTokenUpdate,
+} from '../redux/auth/actions';
+import { 
+  accessTokenUpdate,
   addWebSocketRequest,
-  clearWebSocketsApiRequestsQueue
+  clearWebSocketsApiRequestsQueue,
+  wsConnection
 } from '../redux/webSocket/actions';
 import jwtDecode from 'jwt-decode';
 import config from '../config';
@@ -38,23 +42,29 @@ function resolveWebSocketsQueue() {
   const accessToken = state.Auth.accessToken;
   if (isTokenExpired(accessToken)) {
     store.dispatch(accessTokenUpdate());
-          return;
-    }
+    return;
+  }
+
+  const wsConnectionLoading = state.WebSocket.wsConnectionLoading;
+  if (wsConnectionLoading) {
+    return;
+  }
+
+  let wsConnection = wsConnection.state.WebSocket;
+  if (wsConnection === null) {
+    wsConnection = new WebSocket(
+      config.WS_URL
+      + url
+      + '?access='
+      + accessToken
+  );
+    store.dispatch(wsConnection(wsConnection));
+    return;
+  }
 
   const webSocketsRequestsQueue = state.Auth.webSocketsRequestsQueue;
   if (webSocketsRequestsQueue.length > 0 ) {
     webSocketsRequestsQueue.forEach(({ method, url, resolve }) => {
-        if (method !== "newSocket") {
-            return;
-        }
-        
-        const webSocketConnection = new WebSocket(
-            config.WS_URL
-            + url
-            + '?access='
-            + accessToken
-        );
-    
         resolve(webSocketConnection);
     });
     store.dispatch(clearWebSocketsApiRequestsQueue());
@@ -98,7 +108,7 @@ let resolve;
 }
 
 const webSocketsAuthorizedClient = {
-  newSocket: (url) => webSocketManager("newSocket", url),
+  sendChatMessage: () => webSocketManager("send", sendType, message),
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   resolve: () => webSocketManager("resolve")

@@ -3,7 +3,7 @@ import {
     ADD_WEB_SOCKET_REQUEST,
     CLEAR_WEB_SOCKET_REQUESTS_QUEUE,
  
-    WS_CONNECTION_START,
+    WS_CONNECTION,
     WS_CONNECTION_KILL,
     WS_CONNECTION_SUCCESS,
     WS_CONNECTION_FAILED,
@@ -20,7 +20,7 @@ const INIT_STATE = {
     wsConnectionErrors: null,
 };
 
-const Chat = (state = INIT_STATE, action) => {
+const WebSocket = (state = INIT_STATE, action) => {
     switch (action.type) {
         case ADD_WEB_SOCKET_REQUEST:
             return { 
@@ -33,8 +33,8 @@ const Chat = (state = INIT_STATE, action) => {
                 ...state, 
                 webSocketsRequestsQueue: [] 
             };
-            
-        case WS_CONNECTION_START:
+
+        case WS_CONNECTION:
             return {
                 ...state,
                 wsConnection: null,
@@ -84,4 +84,4 @@ const Chat = (state = INIT_STATE, action) => {
     }
 }
 
-export default Chat;
+export default WebSocket;

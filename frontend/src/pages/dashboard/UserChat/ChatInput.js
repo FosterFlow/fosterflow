@@ -72,9 +72,9 @@ function ChatInput(props) {
         wsConnection.send(JSON.stringify(
         {
                 "chat_id": activeChatId,
-        "prompt": textMessage,
-        "owner_id": authorizedUser.id,
-        "method": "request" 
+            "prompt": textMessage,
+            "owner_id": authorizedUser.id,
+            "method": "request" 
         }
         ));
         settextMessage("");

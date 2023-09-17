@@ -1,20 +1,16 @@
 import { eventChannel } from 'redux-saga';
 import { 
-  call, 
   put, 
-  take, 
   takeEvery,
   select 
 } from 'redux-saga/effects';
-import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 import {
-  WS_CONNECTION_START,
-  WS_CONNECTION_KILL,
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_ERROR,
-  WS_CONNECTION_CLOSED,
-  WS_RECEIVE_MESSAGE,
+    WS_CONNECTION,
+    WS_CONNECTION_KILL,
+    WS_CONNECTION_SUCCESS,
+    WS_CONNECTION_ERROR,
+    WS_CONNECTION_CLOSED,
+    WS_RECEIVE_MESSAGE,
 } from './constants';
 import {
   addChatInitState,
@@ -25,7 +21,6 @@ import {
   wsReceiveMessage
 } from './actions';
 
-const api = apiAuthorizedClient;
 const getActiveChatId = (state) => state.Chat.activeChatId;
 const getWsConnection = (state) => state.Chat.wsConnection;
 const getAddChatRequestMessage = (state) => state.Chat.addChatRequestMessage;
@@ -64,24 +59,7 @@ function createWebSocketChannelSaga(socket) {
 }
   
   
-function* startWebSocketSaga(action) {
-    const chatId = action.payload;
-    const wsConnection = yield select(getWsConnection);
-  
-    if (wsConnection !== null) {
-      wsConnection.close();
-    }
-    const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${chatId}/`);
-    const socketChannel = createWebSocketChannelSaga(socket);
-  
-    while (true) {
-      const action = yield take(socketChannel);
-      yield put(action);
-    }
-}
-  
-function* killWebSocketSaga(action) {
-    const chatId = action.payload;
+function* killWebSocketSaga() {
     const wsConnection = yield select(getWsConnection);
   
     if (wsConnection !== null) {
@@ -103,16 +81,16 @@ function* webSocketSuccessSaga() {
     wsConnection.send(JSON.stringify(
     {
         "chat_id":  activeChatId,
-    "prompt": addChatRequestMessage,
-    "owner_id": authorizedUser.id,
-    "method": "request" 
+        "prompt": addChatRequestMessage,
+        "owner_id": authorizedUser.id,
+        "method": "request" 
     }
     ));
     yield put(addChatInitState());
   }
 
   export default function* chatSaga() {
-    yield takeEvery(WS_CONNECTION_START, startWebSocketSaga);
+    yield takeEvery(WS_CONNECTION, createWebSocketChannelSaga);
     yield takeEvery(WS_CONNECTION_KILL, killWebSocketSaga);
     yield takeEvery(WS_CONNECTION_SUCCESS, webSocketSuccessSaga);
   }
