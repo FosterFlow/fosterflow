@@ -237,6 +237,23 @@ paths:
             "id": 2,
             "message_chunk": "",
             "status": "done"
+        }<br>
+        <br>
+        **Errors that can be meet:**<br>
+        {
+          'error': "Not request method"
+        }<br>
+        {
+          'error': "Prompt is empty"
+        }<br>
+        {
+          'error': "Chat is not available"
+        }<br>
+        {
+          'error': "Agent is not exists"
+        }<br>
+        {
+          'error': "send_type is not correct"
         }
 
       responses:

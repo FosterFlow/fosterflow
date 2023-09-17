@@ -57,7 +57,7 @@ class ChatConsumer(WebsocketConsumer):
             method = text_data_json['method']
 
             if method != 'request':
-                self.send(text_data=json.dumps({'error': 'Not request or response'}))
+                self.send(text_data=json.dumps({'error': 'Not request method'}))
             elif not prompt:
                 self.send(text_data=json.dumps({'error': 'Prompt is empty'}))
             elif chat_id.id not in self.available_chats:
