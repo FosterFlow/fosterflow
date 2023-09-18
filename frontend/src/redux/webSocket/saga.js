@@ -2,7 +2,8 @@ import { eventChannel } from 'redux-saga';
 import { 
   put, 
   takeEvery,
-  select 
+  select,
+  call 
 } from 'redux-saga/effects';
 import {
     WS_CONNECTION,
