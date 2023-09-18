@@ -49,21 +49,24 @@ function resolveWebSocketsQueue() {
     return;
   }
 
-  let wsConnection = wsConnection.state.WebSocket;
-  if (wsConnection === null) {
+  let wsConnectionInstance = wsConnection.state.WebSocket;
+  if (wsConnectionInstance === null) {
     wsConnection = new WebSocket(
       config.WS_URL
       + '?access='
       + accessToken
   );
-    store.dispatch(wsConnection(wsConnection));
+    store.dispatch(wsConnection(wsConnectionInstance));
     return;
   }
 
-  const webSocketsRequestsQueue = state.Auth.webSocketsRequestsQueue;
+  const webSocketsRequestsQueue = state.WebSocket.webSocketsRequestsQueue;
   if (webSocketsRequestsQueue.length > 0 ) {
-    webSocketsRequestsQueue.forEach(({ method, url, resolve }) => {
-        // resolve(webSocketConnection);
+    webSocketsRequestsQueue.forEach(({ method, sendType, data}) => {
+      wsConnectionInstance.send({
+        ...data,
+        send_type: sendType
+      });
     });
     store.dispatch(clearWebSocketsApiRequestsQueue());
   }
@@ -76,14 +79,16 @@ function resolveWebSocketsQueue() {
  * Solution: add all incoming reuqets to a queue. Check access token, if it was expired - 
  * request an update, once token is  updated - resolve all reuests from the queue. 
  * 
- * @param {string} method new web socket connection or resolve
- * @param {string} url
+ * @param {String} method send or resolve
+ * @param {String} sendType for example "chat"
+ * @param {Object} data 
+ * @param {Function} responseHandler
+ * @param {Function} errorHandler
+ * 
   * 
  * @returns {Object} returns promise 
  */
-function webSocketManager (method, url) {
-let resolve;
-  
+function webSocketManager (method, sendType, data, responseHandler, errorHandler) {
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   if (method === "resolve") {
@@ -91,22 +96,12 @@ let resolve;
     return;
   }
 
-  const requestPromise = new Promise ((_resolve) =>{
-    resolve = _resolve;
-  });
-
-  requestPromise.resolve = resolve;
-  requestPromise.method = method;
-  requestPromise.url = url;
-
-  store.dispatch(addWebSocketRequest(requestPromise));
+  store.dispatch(addWebSocketRequest({sendType, data, responseHandler, errorHandler}));
   resolveWebSocketsQueue();
-
-  return requestPromise;
 }
 
 const webSocketsAuthorizedClient = {
-  sendChatMessage: (sendType, message) => webSocketManager("send", sendType, message),
+  send: (sendType, data, responseHandler, errorHandler) => webSocketManager("send", sendType, data, responseHandler, errorHandler),
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   resolve: () => webSocketManager("resolve")

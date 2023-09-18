@@ -14,7 +14,7 @@ import {
     WS_SEND_SUCCESS,
     WS_SEND_FAILED,
 
-    WS_RECEIVE_MESSAGE_CHUNK
+    WS_RECEIVE_MESSAGE
   } from './constants';
 
 export const addWebSocketRequest = (requestPromise) => ({
@@ -48,24 +48,24 @@ export const wsConnection = () => ({
     type: WS_CONNECTION_CLOSED
   });
 
-  export const wsMessageSend = () => ({
+  export const wsSend = () => ({
     type: WS_SEND
   });
 
-  export const wsMessageSendInitState = () => ({
+  export const wsSendInitState = () => ({
     type: WS_SEND_INIT_STATE
   });
 
-  export const wsMessageSendSuccess = () => ({
+  export const wsSendSuccess = () => ({
     type: WS_SEND_SUCCESS
   });
   
-  export const wsMessageSendFailed = (errors) => ({
+  export const wsSendFailed = (errors) => ({
     type: WS_SEND_FAILED,
     payload: errors
   });
   
   export const wsReceiveMessage = (messageChunk) => ({
-    type: WS_RECEIVE_MESSAGE_CHUNK,
+    type: WS_RECEIVE_MESSAGE,
     payload: messageChunk
   });

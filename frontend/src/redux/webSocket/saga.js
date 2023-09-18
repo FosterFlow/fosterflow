@@ -6,11 +6,8 @@ import {
 } from 'redux-saga/effects';
 import {
     WS_CONNECTION,
-    WS_CONNECTION_KILL,
     WS_CONNECTION_SUCCESS,
-    WS_CONNECTION_ERROR,
-    WS_CONNECTION_CLOSED,
-    WS_RECEIVE_MESSAGE,
+    WS_CONNECTION_KILL,
 } from './constants';
 import {
   wsConnectionSuccess,
@@ -18,11 +15,9 @@ import {
   wsConnectionClosed,
   wsReceiveMessage
 } from './actions';
+import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 
-const getActiveChatId = (state) => state.Chat.activeChatId;
 const getWsConnection = (state) => state.Chat.wsConnection;
-const getAddChatRequestMessage = (state) => state.Chat.addChatRequestMessage;
-const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function createWebSocketChannelSaga(socket) {
     return eventChannel(emit => {
@@ -55,7 +50,10 @@ function createWebSocketChannelSaga(socket) {
       };
     });
 }
-  
+
+function* webSocketConnectionSuccess (){
+  yield call(webSocketsAuthorizedClient.resolve);
+}
   
 function* killWebSocketSaga() {
     const wsConnection = yield select(getWsConnection);
@@ -65,30 +63,8 @@ function* killWebSocketSaga() {
     }
   }
   
-function* webSocketSuccessSaga() {
-    const addChatRequestMessage = yield select(getAddChatRequestMessage);
-    
-    if (addChatRequestMessage === undefined) {
-      // yield put(addChatInitState());
-      return;
-    }
-  
-    const activeChatId = yield select(getActiveChatId);
-    const wsConnection = yield select(getWsConnection);
-    const authorizedUser = yield select(getAuthorizedUser);
-    wsConnection.send(JSON.stringify(
-    {
-        "chat_id":  activeChatId,
-        "prompt": addChatRequestMessage,
-        "owner_id": authorizedUser.id,
-        "method": "request" 
-    }
-    ));
-    // yield put(addChatInitState());
-  }
-
   export default function* chatSaga() {
     yield takeEvery(WS_CONNECTION, createWebSocketChannelSaga);
+    yield takeEvery(WS_CONNECTION_SUCCESS, webSocketConnectionSuccess);
     yield takeEvery(WS_CONNECTION_KILL, killWebSocketSaga);
-    yield takeEvery(WS_CONNECTION_SUCCESS, webSocketSuccessSaga);
   }
