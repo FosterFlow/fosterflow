@@ -13,8 +13,6 @@ import {
     WS_RECEIVE_MESSAGE,
 } from './constants';
 import {
-  addChatInitState,
-
   wsConnectionSuccess,
   wsConnectionError,
   wsConnectionClosed,
@@ -71,7 +69,7 @@ function* webSocketSuccessSaga() {
     const addChatRequestMessage = yield select(getAddChatRequestMessage);
     
     if (addChatRequestMessage === undefined) {
-      yield put(addChatInitState());
+      // yield put(addChatInitState());
       return;
     }
   
@@ -86,7 +84,7 @@ function* webSocketSuccessSaga() {
         "method": "request" 
     }
     ));
-    yield put(addChatInitState());
+    // yield put(addChatInitState());
   }
 
   export default function* chatSaga() {

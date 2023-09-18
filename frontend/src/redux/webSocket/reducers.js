@@ -9,6 +9,12 @@ import {
     WS_CONNECTION_FAILED,
     WS_CONNECTION_CLOSED,
 
+    WS_SEND,
+    WS_SEND_INIT_STATE,
+    WS_SEND_SUCCESS,
+    WS_SEND_FAILED,
+
+    WS_RECEIVE_MESSAGE_CHUNK,
 } from './constants';
 
 const INIT_STATE = {
@@ -18,6 +24,10 @@ const INIT_STATE = {
     wsConnectionLoading: null,
     wsConnectionSuccess: false,
     wsConnectionErrors: null,
+
+    wsMessageSendLoading: false,
+    wsMessageSendSuccess: false,
+    wsMessageSendErrors: null,
 };
 
 const WebSocket = (state = INIT_STATE, action) => {
@@ -79,6 +89,75 @@ const WebSocket = (state = INIT_STATE, action) => {
                 wsConnectionSuccess: true,
                 wsConnectionErrors: null,
             };
+
+        case WS_SEND:
+            return {
+                ...state,
+                wsSendLoading: true,
+                wsSendSuccess: false,
+                wsSendErrors: null
+            };
+    
+        case WS_SEND_INIT_STATE:
+            return {
+                ...state,
+                wsSendLoading: false,
+                wsSendSuccess: false,
+                wsSendErrors: null
+            };
+    
+        case WS_SEND_SUCCESS:
+            return {
+                ...state,
+                wsSendLoading: false,
+                wsSendSuccess: true,
+                wsSendErrors: null
+            };
+    
+        case WS_SEND_FAILED:
+            return {
+                ...state,
+                wsSendLoading: false,
+                wsSendSuccess: false,
+                wsSendErrors: action.payload
+            };
+                
+        /**
+        * TODO:
+        * Add to a buffer chunks with "start" and "process" status.
+        * And write them to the global messages store when we get "done" status.
+        * The issue is how to show them correctly then into the right order.
+        * 
+        * TODO:    
+        * Add handling of statuses for "start" and "done"   
+        * 
+        */
+        // case WS_RECEIVE_MESSAGE_CHUNK:
+        //     {
+        //         const receivedMessage = action.payload;
+        //         const messagesList = [...state.messages];
+                
+        //         // Find the message by its id
+        //         const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
+                
+        //         // If the message already exists, update its content
+        //         if (messageIndex !== -1) {
+        //             const existingMessage = messagesList[messageIndex];
+        //             existingMessage.message_text += receivedMessage.message_chunk;
+        //             messagesList[messageIndex] = existingMessage;
+        //         } else {
+        //             // If the message doesn't exist, simply add it to the list
+        //             if (receivedMessage.message_chunk !== undefined) {
+        //                 receivedMessage.message_text = receivedMessage.message_chunk;
+        //             }
+        //             messagesList.push(receivedMessage);
+        //         }
+                
+        //         return {
+        //             ...state,
+        //             messages: messagesList
+        //         };
+        //     }
 
         default: return { ...state };
     }

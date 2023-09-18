@@ -31,9 +31,7 @@ import {
 
   deleteMessageInitState,
   deleteMessageSuccess,
-  deleteMessageFailed,
-
-  startWsConnection,
+  deleteMessageFailed
 } from './actions';
 
 const api = apiAuthorizedClient;
@@ -58,7 +56,6 @@ function* addChatSaga(action) {
           "addressee_id": 100
       });
       yield put(addChatSuccess(chat));
-yield put(startWsConnection(chat.id));      
   } catch (errors) {
     yield put(addChatFailed(errors));
     yield delay(10000);
@@ -84,7 +81,6 @@ function* fetchMessagesSaga(action) {
   try {
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
-yield put(startWsConnection(action.payload));
     yield delay(5000);
     yield put(fetchMessagesInitState());
   } catch (errors) {

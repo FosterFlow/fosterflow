@@ -59,7 +59,10 @@ import {
 } from './actions';
 
 import {
-    killWsConnection,
+    killWsConnection
+} from '../webSocket/actions';
+
+import {
     chatInit
 } from '../chat/actions';
 

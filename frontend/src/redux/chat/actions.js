@@ -30,13 +30,6 @@ import {
   SET_ACTIVE_CHAT,
   SHOW_CHAT_WINDOW,
   SET_ACTIVE_NEW_CHAT,
-
-  WS_MESSAGE_SEND,
-  WS_MESSAGE_SEND_INIT_STATE,
-  WS_MESSAGE_SEND_SUCCESS,
-  WS_MESSAGE_SEND_FAILED,
-
-  WS_RECEIVE_MESSAGE_CHUNK,
 } from './constants';
 
 export const chatInit = () => ({
@@ -185,26 +178,4 @@ export const chatInit = () => ({
   export const deleteMessageFailed = (errors) => ({
     type: DELETE_MESSAGE_FAILED,
     payload: errors
-  });
-
-  export const wsMessageSend = () => ({
-    type: WS_MESSAGE_SEND
-  });
-
-  export const wsMessageSendInitState = () => ({
-    type: WS_MESSAGE_SEND_INIT_STATE
-  });
-
-  export const wsMessageSendSuccess = () => ({
-    type: WS_MESSAGE_SEND_SUCCESS
-  });
-  
-  export const wsMessageSendFailed = (errors) => ({
-    type: WS_MESSAGE_SEND_FAILED,
-    payload: errors
-  });
-  
-  export const wsReceiveMessage = (messageChunk) => ({
-    type: WS_RECEIVE_MESSAGE_CHUNK,
-    payload: messageChunk
   });

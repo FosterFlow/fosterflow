@@ -8,6 +8,13 @@ import {
     WS_CONNECTION_SUCCESS,
     WS_CONNECTION_FAILED,
     WS_CONNECTION_CLOSED,
+
+    WS_SEND,
+    WS_SEND_INIT_STATE,
+    WS_SEND_SUCCESS,
+    WS_SEND_FAILED,
+
+    WS_RECEIVE_MESSAGE_CHUNK
   } from './constants';
 
 export const addWebSocketRequest = (requestPromise) => ({
@@ -39,4 +46,26 @@ export const wsConnection = () => ({
   
   export const wsConnectionClosed = () => ({
     type: WS_CONNECTION_CLOSED
+  });
+
+  export const wsMessageSend = () => ({
+    type: WS_SEND
+  });
+
+  export const wsMessageSendInitState = () => ({
+    type: WS_SEND_INIT_STATE
+  });
+
+  export const wsMessageSendSuccess = () => ({
+    type: WS_SEND_SUCCESS
+  });
+  
+  export const wsMessageSendFailed = (errors) => ({
+    type: WS_SEND_FAILED,
+    payload: errors
+  });
+  
+  export const wsReceiveMessage = (messageChunk) => ({
+    type: WS_RECEIVE_MESSAGE_CHUNK,
+    payload: messageChunk
   });

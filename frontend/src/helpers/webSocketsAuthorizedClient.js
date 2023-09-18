@@ -3,7 +3,6 @@ import {
   accessTokenUpdate,
 } from '../redux/auth/actions';
 import { 
-  accessTokenUpdate,
   addWebSocketRequest,
   clearWebSocketsApiRequestsQueue,
   wsConnection
@@ -54,7 +53,6 @@ function resolveWebSocketsQueue() {
   if (wsConnection === null) {
     wsConnection = new WebSocket(
       config.WS_URL
-      + url
       + '?access='
       + accessToken
   );
@@ -65,7 +63,7 @@ function resolveWebSocketsQueue() {
   const webSocketsRequestsQueue = state.Auth.webSocketsRequestsQueue;
   if (webSocketsRequestsQueue.length > 0 ) {
     webSocketsRequestsQueue.forEach(({ method, url, resolve }) => {
-        resolve(webSocketConnection);
+        // resolve(webSocketConnection);
     });
     store.dispatch(clearWebSocketsApiRequestsQueue());
   }
@@ -108,7 +106,7 @@ let resolve;
 }
 
 const webSocketsAuthorizedClient = {
-  sendChatMessage: () => webSocketManager("send", sendType, message),
+  sendChatMessage: (sendType, message) => webSocketManager("send", sendType, message),
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   resolve: () => webSocketManager("resolve")
