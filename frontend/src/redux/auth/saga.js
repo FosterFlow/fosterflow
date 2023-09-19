@@ -219,7 +219,7 @@ function* accessTokenUpdateSaga() {
         const response = yield call(apiClient.post, '/token/refresh/');
         yield put(accessTokenUpdateSuccess(response.access));
         yield call(apiAuthorizedClient.resolve);
-        yield put(webSocketsAuthorizedClient.resolve());
+        yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
         yield put(accessTokenUpdateFailure(errors));
         yield put(logoutForce());

@@ -73,6 +73,7 @@ function ChatInput(props) {
         }
 
         sendMessage({
+            "send_type": "chat",
             "chat_id": activeChatId,
             "prompt": textMessage,
             "owner_id": authorizedUser.id,

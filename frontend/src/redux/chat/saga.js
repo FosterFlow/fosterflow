@@ -31,6 +31,7 @@ import {
   fetchMessagesSuccess,
   fetchMessagesFailed,
 
+  sendMessage,
   sendMessageInitState,
   sendMessageSuccess,
   sendMessageFailed,
@@ -63,6 +64,13 @@ function* addChatSaga(action) {
           "addressee_id": 100
       });
       yield put(addChatSuccess(chat));
+      yield put(sendMessage({
+        "send_type": "chat",
+        "chat_id": chat.id,
+        "prompt": data.message,
+        "owner_id": data.user_id,
+        "method": "request" 
+    }));
   } catch (errors) {
     yield put(addChatFailed(errors));
     yield delay(10000);

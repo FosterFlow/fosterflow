@@ -1,9 +1,12 @@
-import { eventChannel } from 'redux-saga';
+import { 
+  eventChannel 
+} from 'redux-saga';
 import { 
   put, 
   takeEvery,
   select,
-  call 
+  call,
+  take 
 } from 'redux-saga/effects';
 import {
     WS_CONNECTION,
@@ -20,9 +23,7 @@ import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient
 
 const getWsConnection = (state) => state.Chat.wsConnection;
 
-function createWebSocketChannelSaga(action) {
-  const socket = action.payload;
-
+function createWebSocketChannelSaga(socket) {
   return eventChannel(emit => {
       socket.onopen = () => {
         emit(wsConnectionSuccess(socket));
@@ -54,8 +55,20 @@ function createWebSocketChannelSaga(action) {
     });
 }
 
+function* watchWebSocketChannel(action) {
+  const socket = action.payload;
+
+  const wsChannel = yield call(createWebSocketChannelSaga, socket);
+
+  while (true) {
+      const action = yield take(wsChannel);
+      yield put(action);
+  }
+}
+
+
 function* webSocketConnectionSuccess (){
-  yield put(webSocketsAuthorizedClient.resolve());
+  yield call(webSocketsAuthorizedClient.resolve);
 }
   
 function* killWebSocketSaga() {
@@ -67,7 +80,7 @@ function* killWebSocketSaga() {
 }
   
   export default function* chatSaga() {
-    yield takeEvery(WS_CONNECTION, createWebSocketChannelSaga);
+    yield takeEvery(WS_CONNECTION, watchWebSocketChannel);
     yield takeEvery(WS_CONNECTION_SUCCESS, webSocketConnectionSuccess);
     yield takeEvery(WS_CONNECTION_KILL, killWebSocketSaga);
   }
