@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form } from "reactstrap";
 import { connect } from "react-redux";
-import { addChat} from "../../../redux/chat/actions";
+import { 
+    addChat, 
+    sendMessage
+} from "../../../redux/chat/actions";
 import { useTranslation } from 'react-i18next';
 
 function ChatInput(props) {
@@ -10,11 +13,11 @@ function ChatInput(props) {
     const { t } = useTranslation();
     const {
         activeChatId,
-        wsConnection,
         authorizedUser,
         newChat,
         fetchMessagesLoading,
         addChat,
+        sendMessage
     } = props;
 
     function isMobileDevice() {
@@ -69,14 +72,12 @@ function ChatInput(props) {
             return;        
         }
 
-        wsConnection.send(JSON.stringify(
-        {
-                "chat_id": activeChatId,
+        sendMessage({
+            "chat_id": activeChatId,
             "prompt": textMessage,
             "owner_id": authorizedUser.id,
             "method": "request" 
-        }
-        ));
+        });
         settextMessage("");
     }
 
@@ -128,14 +129,12 @@ function ChatInput(props) {
 const mapStateToProps = (state) => {
     const {
         activeChatId,
-        wsConnection,
         newChat,
         fetchMessagesLoading
     } = state.Chat;
 
     return { 
         activeChatId,
-        wsConnection,
         newChat,
         fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
@@ -143,7 +142,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    addChat
+    addChat,
+    sendMessage
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatInput);

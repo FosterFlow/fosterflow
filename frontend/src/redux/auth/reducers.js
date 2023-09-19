@@ -165,8 +165,7 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
-                authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: [],
+                authenticatedApiRequestsQueue: []
             };
         }
 
@@ -189,8 +188,7 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
-                authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: [],
+                authenticatedApiRequestsQueue: []
             };
         }
 
@@ -203,7 +201,6 @@ const Auth = (state = INIT_STATE, action) => {
                 isAuthenticated: false,
                 accessTokenLoading: false,
                 authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: [],
                 logoutLoading: false,
                 logoutSuccess: false,
                 logoutErrors: action.payload,

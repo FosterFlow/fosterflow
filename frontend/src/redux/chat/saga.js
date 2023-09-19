@@ -5,11 +5,13 @@ import {
   delay,
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
+import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 import {
   FETCH_CHATS,
   ADD_CHAT,
   DELETE_CHAT,
   FETCH_MESSAGES,
+  SEND_MESSAGE,
   DELETE_MESSAGE,
 } from './constants';
 import {
@@ -29,9 +31,14 @@ import {
   fetchMessagesSuccess,
   fetchMessagesFailed,
 
+  sendMessageInitState,
+  sendMessageSuccess,
+  sendMessageFailed,
+
   deleteMessageInitState,
   deleteMessageSuccess,
-  deleteMessageFailed
+  deleteMessageFailed,
+  sendMessagesFailed
 } from './actions';
 
 const api = apiAuthorizedClient;
@@ -88,6 +95,10 @@ function* fetchMessagesSaga(action) {
   }
 }
 
+function* sendMessageSaga(action) {
+  webSocketsAuthorizedClient.send(action.payload, sendMessageSuccess, sendMessageFailed);
+}
+
 function* deleteMessageSaga(action) {
   try {
     yield call(api.delete, `/messages/${action.payload}/`);
@@ -107,5 +118,6 @@ export default function* chatSaga() {
   yield takeEvery(ADD_CHAT, addChatSaga);
   yield takeEvery(DELETE_CHAT, deleteChatSaga);
   yield takeEvery(FETCH_MESSAGES, fetchMessagesSaga);
+  yield takeEvery(SEND_MESSAGE, sendMessageSaga);
   yield takeEvery(DELETE_MESSAGE, deleteMessageSaga);
 }

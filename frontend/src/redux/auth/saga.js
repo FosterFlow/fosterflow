@@ -59,7 +59,8 @@ import {
 } from './actions';
 
 import {
-    killWsConnection
+    killWsConnection,
+    clearWebSocketsApiRequestsQueue
 } from '../webSocket/actions';
 
 import {
@@ -96,19 +97,16 @@ function* loginUserSaga({ payload: { email, password } }) {
  */
 function* logoutSaga() {
     try {
-        yield call(apiAuthorizedClient.post, '/logout/');
         yield put(killWsConnection());
+        yield put (clearWebSocketsApiRequestsQueue());
         yield put(chatInit());
         yield put(userInit());
         yield put(agentInit());
+        yield call(apiAuthorizedClient.post, '/logout/');
         //Time for showing loader, otherwise page 
         yield delay(1000);
         yield put(logoutUserSuccess());
     } catch (errors) {
-        yield put(killWsConnection());
-        yield put(chatInit());
-        yield put(userInit());
-        yield put(agentInit());
         yield delay(1000);
         yield put(logoutUserFailure(errors));
     }
@@ -221,7 +219,7 @@ function* accessTokenUpdateSaga() {
         const response = yield call(apiClient.post, '/token/refresh/');
         yield put(accessTokenUpdateSuccess(response.access));
         yield call(apiAuthorizedClient.resolve);
-        yield call(webSocketsAuthorizedClient.resolve);
+        yield put(webSocketsAuthorizedClient.resolve());
     } catch (errors) {
         yield put(accessTokenUpdateFailure(errors));
         yield put(logoutForce());

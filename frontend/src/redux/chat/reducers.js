@@ -21,6 +21,11 @@ import {
     FETCH_MESSAGES_INIT_STATE,
     FETCH_MESSAGES_SUCCESS,
     FETCH_MESSAGES_FAILED, 
+
+    SEND_MESSAGE,
+    SEND_MESSAGE_INIT_STATE,
+    SEND_MESSAGE_SUCCESS,
+    SEND_MESSAGE_FAILED,
     
     DELETE_MESSAGE,
     DELETE_MESSAGE_INIT_STATE,
@@ -51,6 +56,8 @@ const INIT_STATE = {
     deleteChatSuccess: false,
     deleteChatErrors: null,
 
+    //messages, that not accepted by the server yet. We show them with clocks into chat
+    sendingMessagesQueue: [],
     messages: [],
 
     fetchMessagesLoading: false,
@@ -245,6 +252,64 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchMessagesSuccess: false,
                 fetchMessagesErrors: action.payload,
             };
+
+        case SEND_MESSAGE: {
+            const newMessage = {
+                ... action.payload,
+                sendMessageLoading: true,
+                sendMessageSuccess: false,
+                sendMessageFailed: false
+              };
+            
+              return {
+                ...state,
+                sendingMessagesQueue: [...state.sendingMessagesQueue, newMessage]
+              };
+        }
+    
+        case SEND_MESSAGE_INIT_STATE:
+            return {
+                ...state,
+                sendingMessagesQueue: []
+            };
+    
+        case SEND_MESSAGE_SUCCESS: {
+            const filteredQueue = state.sendingMessagesQueue.filter(
+                message => message.messageData.prompt !== action.payload.message_text
+              );
+
+            const newMessage = {
+                ... action.payload,
+                sendMessageLoading: false,
+                sendMessageSuccess: true,
+                sendMessageFailed: false
+            };
+            
+            return {
+                ...state,
+                messages: [...state.messages, newMessage],
+                sendingMessagesQueue: filteredQueue
+            }; 
+        }
+            
+        case SEND_MESSAGE_FAILED: {
+            const filteredQueue = state.sendingMessagesQueue.filter(
+                message => message.messageData.prompt !== action.payload.message_text
+                );
+
+            const newMessage = {
+                ... action.payload,
+                sendMessageLoading: false,
+                sendMessageSuccess: false,
+                sendMessageFailed: true
+            };
+                
+            return {
+                ...state,
+                messages: [...state.messages, newMessage],
+                sendingMessagesQueue: filteredQueue
+            };
+        }
             
         case DELETE_MESSAGE: 
             return {

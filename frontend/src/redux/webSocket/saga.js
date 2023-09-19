@@ -20,8 +20,10 @@ import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient
 
 const getWsConnection = (state) => state.Chat.wsConnection;
 
-function createWebSocketChannelSaga(socket) {
-    return eventChannel(emit => {
+function createWebSocketChannelSaga(action) {
+  const socket = action.payload;
+
+  return eventChannel(emit => {
       socket.onopen = () => {
         emit(wsConnectionSuccess(socket));
       };
@@ -53,16 +55,16 @@ function createWebSocketChannelSaga(socket) {
 }
 
 function* webSocketConnectionSuccess (){
-  yield call(webSocketsAuthorizedClient.resolve);
+  yield put(webSocketsAuthorizedClient.resolve());
 }
   
 function* killWebSocketSaga() {
-    const wsConnection = yield select(getWsConnection);
+  const wsConnection = yield select(getWsConnection);
   
-    if (wsConnection !== null) {
-      wsConnection.close();
-    }
+  if (wsConnection !== null) {
+    wsConnection.close();
   }
+}
   
   export default function* chatSaga() {
     yield takeEvery(WS_CONNECTION, createWebSocketChannelSaga);

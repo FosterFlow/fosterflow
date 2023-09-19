@@ -17,17 +17,18 @@ import {
     WS_RECEIVE_MESSAGE
   } from './constants';
 
-export const addWebSocketRequest = (requestPromise) => ({
+export const addWebSocketRequest = (requestData) => ({
     type: ADD_WEB_SOCKET_REQUEST,
-    payload: requestPromise
+    payload: requestData
 });
 
 export const clearWebSocketsApiRequestsQueue = () => ({
     type: CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 });
 
-export const wsConnection = () => ({
-    type: WS_CONNECTION
+export const wsConnection = (newWebSocket) => ({
+    type: WS_CONNECTION,
+    payload: newWebSocket
   });
 
   export const killWsConnection = () => ({

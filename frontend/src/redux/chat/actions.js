@@ -20,7 +20,12 @@ import {
   FETCH_MESSAGES,
   FETCH_MESSAGES_INIT_STATE,
   FETCH_MESSAGES_SUCCESS,
-  FETCH_MESSAGES_FAILED, 
+  FETCH_MESSAGES_FAILED,
+  
+  SEND_MESSAGE,
+  SEND_MESSAGE_INIT_STATE,
+  SEND_MESSAGE_SUCCESS,
+  SEND_MESSAGE_FAILED,
   
   DELETE_MESSAGE,
   DELETE_MESSAGE_INIT_STATE,
@@ -159,6 +164,25 @@ export const chatInit = () => ({
   export const fetchMessagesFailed = (errors) => ({
     type: FETCH_MESSAGES_FAILED,
     payload: errors
+  });
+
+  export const sendMessage = (messageData) => ({
+    type: SEND_MESSAGE,
+    payload: messageData
+  });
+
+  export const sendMessageInitState = () => ({
+    type: SEND_MESSAGE_INIT_STATE,
+  });
+
+  export const sendMessageSuccess = (message) => ({
+    type: SEND_MESSAGE_SUCCESS,
+    payload: message
+  });
+
+  export const sendMessageFailed = (message) => ({
+    type: SEND_MESSAGE_FAILED,
+    payload: message
   });
   
   export const deleteMessage = (messageId) => ({
