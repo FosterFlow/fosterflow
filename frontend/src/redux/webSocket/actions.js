@@ -14,7 +14,8 @@ import {
     WS_SEND_SUCCESS,
     WS_SEND_FAILED,
 
-    WS_RECEIVE_MESSAGE
+    WS_RECEIVE_MESSAGE,
+    WS_RECEIVE_MESSAGE_FAILED
   } from './constants';
 
 export const addWebSocketRequest = (requestData) => ({
@@ -69,4 +70,9 @@ export const wsConnection = (newWebSocket) => ({
   export const wsReceiveMessage = (messageChunk) => ({
     type: WS_RECEIVE_MESSAGE,
     payload: messageChunk
+  });
+
+  export const wsReceiveMessageFailed = (errors) => ({
+    type: WS_RECEIVE_MESSAGE_FAILED,
+    payload: errors
   });

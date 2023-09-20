@@ -104,7 +104,7 @@ function* fetchMessagesSaga(action) {
 }
 
 function* sendMessageSaga(action) {
-  webSocketsAuthorizedClient.send(action.payload, sendMessageSuccess, sendMessageFailed);
+  webSocketsAuthorizedClient.send(action.payload);
 }
 
 function* deleteMessageSaga(action) {

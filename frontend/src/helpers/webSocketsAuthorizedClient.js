@@ -78,13 +78,10 @@ function resolveWebSocketsQueue() {
  * 
  * @param {String} method send or resolve
  * @param {Object} data 
- * @param {Function} responseHandler
- * @param {Function} errorHandler
  * 
-  * 
  * @returns {Object} returns promise 
  */
-function webSocketManager (method, data, responseHandler, errorHandler) {
+function webSocketManager (method, data) {
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   if (method === "resolve") {
@@ -92,12 +89,12 @@ function webSocketManager (method, data, responseHandler, errorHandler) {
     return;
   }
 
-  store.dispatch(addWebSocketRequest({data, responseHandler, errorHandler}));
+  store.dispatch(addWebSocketRequest({data}));
   resolveWebSocketsQueue();
 }
 
 const webSocketsAuthorizedClient = {
-  send: (data, responseHandler, errorHandler) => webSocketManager("send", data, responseHandler, errorHandler),
+  send: (data, responseHandler, errorHandler) => webSocketManager("send", data),
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   resolve: () => webSocketManager("resolve")
