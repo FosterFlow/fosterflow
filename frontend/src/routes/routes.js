@@ -21,15 +21,6 @@ const authProtectedRoutes = [
   { path: "/profile", component: <Profile /> },
   { path: "/settings", component: <Settings /> },
   { path: "/logout", component: <Logout /> },
-  //TODO: make 404 page
-
-    // this route should be at the end of all other routes
-  // eslint-disable-next-line react/display-name
-  {
-    path: "/",
-    exact: true,
-    component: <Navigate to="/chats" />,
-  },
 ];
 
 const publicRoutes = [
