@@ -31,6 +31,12 @@ import {
     DELETE_MESSAGE_INIT_STATE,
     DELETE_MESSAGE_SUCCESS,
     DELETE_MESSAGE_FAILED,
+
+    RECEIVE_MESSAGE,
+    RECEIVE_MESSAGE_FAILED,
+
+    RECEIVE_MESSAGE_CHUNK,
+    RECEIVE_MESSAGE_CHUNK_FAILED,
     
     SET_ACTIVE_CHAT,
     SHOW_CHAT_WINDOW,
@@ -144,7 +150,6 @@ const Chat = (state = INIT_STATE, action) => {
             };
         }
             
-
         case ADD_CHAT_INIT_STATE:
             return {
                 ...state,
@@ -344,7 +349,25 @@ const Chat = (state = INIT_STATE, action) => {
                 deleteMessageErrors: action.payload,
             };
 
-           /**
+        case RECEIVE_MESSAGE: {
+            const filteredQueue = state.sendingMessagesQueue.filter(
+                message => message.messageData.prompt !== action.payload.message_text
+                );
+
+            return {
+                ...state,
+                messages: [...state.messages, action.payload],
+                sendingMessagesQueue: filteredQueue
+            };   
+        }
+        
+        case RECEIVE_MESSAGE_FAILED: {
+            return {
+                ...state
+            }
+        }
+
+        /**
         * TODO:
         * Add to a buffer chunks with "start" and "process" status.
         * And write them to the global messages store when we get "done" status.
@@ -380,6 +403,12 @@ const Chat = (state = INIT_STATE, action) => {
                     messages: messagesList
                 };
             }
+
+        case RECEIVE_MESSAGE_CHUNK_FAILED: {
+            return {
+                ...state
+            }
+        }
 
         default: return { ...state };
     }
