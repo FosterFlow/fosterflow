@@ -354,32 +354,32 @@ const Chat = (state = INIT_STATE, action) => {
         * Add handling of statuses for "start" and "done"   
         * 
         */
-        // case RECEIVE_MESSAGE_CHUNK:
-        //     {
-        //         const receivedMessage = action.payload;
-        //         const messagesList = [...state.messages];
+        case RECEIVE_MESSAGE_CHUNK:
+            {
+                const receivedMessage = action.payload;
+                const messagesList = [...state.messages];
                 
-        //         // Find the message by its id
-        //         const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
+                // Find the message by its id
+                const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
                 
-        //         // If the message already exists, update its content
-        //         if (messageIndex !== -1) {
-        //             const existingMessage = messagesList[messageIndex];
-        //             existingMessage.message_text += receivedMessage.message_chunk;
-        //             messagesList[messageIndex] = existingMessage;
-        //         } else {
-        //             // If the message doesn't exist, simply add it to the list
-        //             if (receivedMessage.message_chunk !== undefined) {
-        //                 receivedMessage.message_text = receivedMessage.message_chunk;
-        //             }
-        //             messagesList.push(receivedMessage);
-        //         }
+                // If the message already exists, update its content
+                if (messageIndex !== -1) {
+                    const existingMessage = messagesList[messageIndex];
+                    existingMessage.message_text += receivedMessage.message_chunk;
+                    messagesList[messageIndex] = existingMessage;
+                } else {
+                    // If the message doesn't exist, simply add it to the list
+                    if (receivedMessage.message_chunk !== undefined) {
+                        receivedMessage.message_text = receivedMessage.message_chunk;
+                    }
+                    messagesList.push(receivedMessage);
+                }
                 
-        //         return {
-        //             ...state,
-        //             messages: messagesList
-        //         };
-        //     }
+                return {
+                    ...state,
+                    messages: messagesList
+                };
+            }
 
         default: return { ...state };
     }
