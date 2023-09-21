@@ -1,15 +1,28 @@
-import { all, call, fork, put, takeEvery, delay } from 'redux-saga/effects';
+import { 
+    all, 
+    call, 
+    fork, 
+    put, 
+    takeEvery, 
+    delay 
+} from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { GET_AGENT, UPDATE_AGENT_DATA, UPDATE_AGENT_AVATAR } from './constants';
+import { 
+    GET_AGENT, 
+    UPDATE_AGENT_DATA, 
+    UPDATE_AGENT_AVATAR 
+} from './constants';
 import { 
     getAgentSuccess,
-    updateAgentDataSuccess,
-    hideAgentDataSuccessMessage,
     getAgentFailed,
+
+    updateAgentDataInitState,
+    updateAgentDataSuccess,
     updateAgentDataFailed,
+    
+    updateAgentAvatarInitState,
     updateAgentAvatarSuccess,
-    updateAgentAvatarFailed,
-    hideAgentAvatarSuccessMessage
+    updateAgentAvatarFailed
  } from './actions';
 const api = apiAuthorizedClient;
 
@@ -28,7 +41,7 @@ function* updateAgentData({ payload: { id, data } }) {
         const response = yield call(api.patch, `/agents/${id}/`, data);
         yield put(updateAgentDataSuccess(response));
         yield delay(10000);
-        yield put(hideAgentDataSuccessMessage());
+        yield put(updateAgentDataInitState());
     } catch (error) {
         yield put(updateAgentDataFailed(error));
     }
@@ -47,7 +60,7 @@ function* updateAgentAvatar({ payload: { id, avatar } }) {
 
         yield put(updateAgentAvatarSuccess(response.avatar));
         yield delay(10000);
-        yield put(hideAgentAvatarSuccessMessage());
+        yield put(updateAgentAvatarInitState());
     } catch (error) {
         yield put(updateAgentAvatarFailed(error));
     }

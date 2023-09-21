@@ -1,13 +1,18 @@
 import {
     AGENT_INIT,
     GET_AGENT,
+    GET_AGENT_INIT_STATE,
     GET_AGENT_SUCCESS,
     GET_AGENT_FAILED,
+
     UPDATE_AGENT_DATA,
+    UPDATE_AGENT_DATA_INIT_STATE,
     UPDATE_AGENT_DATA_SUCCESS,
     HIDE_AGENT_DATA_SUCCESS_MESSAGE,
     UPDATE_AGENT_DATA_FAILED,
+    
     UPDATE_AGENT_AVATAR,
+    UPDATE_AGENT_AVATAR_INIT_STATE,
     UPDATE_AGENT_AVATAR_SUCCESS,
     HIDE_AGENT_AVATAR_SUCCESS_MESSAGE,
     UPDATE_AGENT_AVATAR_FAILED
@@ -16,12 +21,15 @@ import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
 import config from '../../config';
 
 const INIT_STATE = {
-    errors: null,
-    loading: false,
     agent: null,
+    getAgentLoading: false,
+    getAgentSucess: false,
+    getAgentErrors: null,
+
     agentDataLoading: false,
     agentDataErrors: null,
     agentDataSuccess: false,
+    
     avatar: defaultAvatarImage,
     avatarLoading: false,
     avatarErrors: null,
@@ -34,7 +42,20 @@ const Agent = (state = INIT_STATE, action) => {
             return INIT_STATE;
             
         case GET_AGENT:
-            return { ...state, loading: true }
+            return { 
+                ...state, 
+                getAgentLoading: true,
+                getAgentSucess: false,
+                getAgentErrors: null, 
+            }
+
+        case GET_AGENT_INIT_STATE:
+            return { 
+                ...state, 
+                getAgentLoading: false,
+                getAgentSucess: false,
+                getAgentErrors: null, 
+            }
         
         case GET_AGENT_SUCCESS: {
             const serverAvatar = action.payload.avatar;
@@ -48,17 +69,31 @@ const Agent = (state = INIT_STATE, action) => {
                 ...state, 
                 agent: action.payload,
                 avatar: avatar, 
-                loading: false, 
-                error: null 
+                getAgentLoading: false,
+                getAgentSucess: true,
+                getAgentErrors: null, 
             };
         }
         case GET_AGENT_FAILED:
-            return { ...state, loading: false, errors: action.payload };
+            return { 
+                ...state,
+                getAgentLoading: false,
+                getAgentSucess: false,
+                getAgentErrors: action.payload, 
+            };
         
         case UPDATE_AGENT_DATA:
             return { 
                 ...state,
                 agentDataLoading: true,
+                agentDataErrors: null,
+                agentDataSuccess: false
+            };
+
+        case UPDATE_AGENT_DATA_INIT_STATE:
+            return { 
+                ...state,
+                agentDataLoading: false,
                 agentDataErrors: null,
                 agentDataSuccess: false
             };
@@ -93,6 +128,14 @@ const Agent = (state = INIT_STATE, action) => {
                 avatarErrors: null,
                 avatarSuccess: false 
             };
+        
+        case UPDATE_AGENT_AVATAR_INIT_STATE:
+            return { 
+                ...state, 
+                avatarLoading: false, 
+                avatarErrors: null,
+                avatarSuccess: false 
+            };
             
         case UPDATE_AGENT_AVATAR_SUCCESS: {
             const serverAvatar = action.payload;
@@ -110,6 +153,7 @@ const Agent = (state = INIT_STATE, action) => {
                 avatarSuccess: true 
             };
         }
+
         case HIDE_AGENT_AVATAR_SUCCESS_MESSAGE:
             return { 
                 ...state, 
