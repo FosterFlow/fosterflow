@@ -47,10 +47,11 @@ services:
     build: ./frontend
     ports:
       - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./frontend:/frontend
       - '/frontend/node_modules'
-    command: bash -c "yarn start"
     networks:
       - myNetwork
     env_file:
@@ -59,19 +60,19 @@ services:
       - db
       - backend
 
-  swagger:
-    container_name: swagger
-    build: ./swagger
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./swagger:/swagger
-    command: bash -c "npm install && npm start"
-    networks:
-      - myNetwork
-    depends_on:
-      - db
-      - backend
+#  swagger:
+#    container_name: swagger
+#    build: ./swagger
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - ./swagger:/swagger
+#    command: bash -c "npm install && npm start"
+#    networks:
+#      - myNetwork
+#    depends_on:
+#      - db
+#      - backend
 
 volumes:
   redis:
