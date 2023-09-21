@@ -159,5 +159,7 @@
     "We have sent you an email to confirm your account. Please check your inbox": "Abbiamo inviato un'email per confermare il tuo account. Per favore, controlla la tua casella di posta",
     "Click here": "Clicca qui",
     "to send again": "per inviare di nuovo",
-    "Sending email confirmation": "Invio conferma via email"
+    "Sending email confirmation": "Invio conferma via email",
+    "Please enter your first name": "Per favore, inserisci il tuo nome",
+    "Please enter your last name": "Per favore, inserisci il tuo cognome"
 }
