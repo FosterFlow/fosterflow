@@ -20,11 +20,14 @@ import _ from 'lodash';
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import {
-    updateAgentDataInitState, 
     updateAgentData,
+    updateAgentDataInitState,
     updateAgentDataFailed,
 
-    changePassword, 
+    changePassword,
+    changePasswordInitState,
+    changePasswordFailure,
+
     updateAgentAvatar 
 } from '../../../redux/actions';
 
@@ -178,37 +181,37 @@ function Settings(props) {
     });
 
     useEffect(() => {
-        const registerFormErrors = registerForm.errors;
+        const securityFormErrors = securityForm.errors;
         const errors = {};
 
-        if (_.isEmpty(registerFormErrors)) {
-            if (registerFormErrors === null) {
+        if (_.isEmpty(securityFormErrors)) {
+            if (securityFormErrors === null) {
                 return;
             }
 
-            registerUserInitState();
+            changePasswordInitState();
             return;
         }
 
-        const emailErrors = registerFormErrors.email;
-        if (emailErrors) {
-            if (Array.isArray(emailErrors)){
-                errors.email = [...emailErrors];
+        const oldPasswordErrors = securityFormErrors.old_password;
+        if (oldPasswordErrors) {
+            if (Array.isArray(oldPasswordErrors)){
+                errors.old_password = [...oldPasswordErrors];
             } else {
-                errors.email = [emailErrors];
+                errors.old_password = [oldPasswordErrors];
             }
         }
 
-        const passwordErrors = registerFormErrors.password;
-        if (passwordErrors) {
-            if (Array.isArray(passwordErrors)){
-                errors.password = [...passwordErrors];
+        const newPasswordErrors = securityFormErrors.new_password;
+        if (newPasswordErrors) {
+            if (Array.isArray(newPasswordErrors)){
+                errors.new_password = [...newPasswordErrors];
             } else {
-                errors.password = [passwordErrors];
+                errors.new_password = [newPasswordErrors];
             }
         }
 
-        registerUserFailure(errors);
+        changePasswordFailure(errors);
     }, [securityForm.errors]);
 
     return (
@@ -400,21 +403,24 @@ function Settings(props) {
                                                     value={securityForm.values.old_password}
                                                     onChange={securityForm.handleChange}
                                                     onBlur={securityForm.handleBlur}
-                                                    invalid={getOldPasswordErrors().length > 0 ? true : false}
                                                     placeholder={t('Enter current password')}
+                                                    invalid={!!(securityForm.touched.second_name 
+                                                        && changePassswordErrors
+                                                        && changePassswordErrors.old_password)}
                                                     disabled={props.auth.changePasswordLoading}
                                                 />
-                                                <FormFeedback>
-                                                    {
-                                                        getOldPasswordErrors().length > 0 && (
+                                                {securityForm.touched.old_password 
+                                                    && changePassswordErrors
+                                                    && changePassswordErrors.old_password
+                                                    && (
+                                                        <FormFeedback type="invalid">
                                                             <ul>
-                                                                {getOldPasswordErrors().map((error, index) => (
+                                                                {changePassswordErrors.old_password.map((error, index) => (
                                                                     <li key={index}>{error}</li>
                                                                 ))}
                                                             </ul>
-                                                        )
-                                                    }
-                                                </FormFeedback>
+                                                        </FormFeedback>
+                                                )}
                                             </div>
                                             
                                             <Input 
@@ -423,21 +429,24 @@ function Settings(props) {
                                                 value={securityForm.values.new_password}
                                                 onChange={securityForm.handleChange}
                                                 onBlur={securityForm.handleBlur}
-                                                invalid={getNewPasswordErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter new password')}
+                                                invalid={!!(securityForm.touched.new_password 
+                                                    && changePassswordErrors
+                                                    && changePassswordErrors.new_password)}
                                                 disabled={props.auth.changePasswordLoading}
                                             />
-                                            <FormFeedback>
-                                                {
-                                                    getNewPasswordErrors().length > 0 && (
+                                            {securityForm.touched.new_password 
+                                                && changePassswordErrors
+                                                && changePassswordErrors.new_password
+                                                && (
+                                                    <FormFeedback type="invalid">
                                                         <ul>
-                                                            {getNewPasswordErrors().map((error, index) => (
+                                                            {changePassswordErrors.new_password.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
-                                                    )
-                                                }
-                                            </FormFeedback>    
+                                                    </FormFeedback>
+                                            )}   
                                             <ul className='pt-3'>
                                                 <li>{t('At least one lowercase character')}.</li>
                                                 <li>{t('At least one uppercase character')}.</li>
@@ -482,6 +491,9 @@ const mapDispatchToProps = {
     updateAgentDataFailed,
 
     changePassword,
+    changePasswordInitState,
+    changePasswordFailure,
+
     updateAgentAvatar
 }
 
