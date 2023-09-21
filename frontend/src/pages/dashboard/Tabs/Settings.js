@@ -16,9 +16,17 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
+import _ from 'lodash';
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
-import { updateAgentData, changePassword, updateAgentAvatar } from '../../../redux/actions';
+import {
+    updateAgentDataInitState, 
+    updateAgentData,
+    updateAgentDataFailed,
+
+    changePassword, 
+    updateAgentAvatar 
+} from '../../../redux/actions';
 
 function Settings(props) {
     const { t } = useTranslation();
@@ -64,7 +72,13 @@ function Settings(props) {
             && props.agent.agent.last_name) || ''
     }
 
-    //Filling the form after page reloading
+    /**
+     * Filling the form after page reloading, once agent information is loaded
+     * 
+     * TODO: need to move agent.last_name, agent.first_name params to the level above, in this case
+     * we could subscribe to these params changing and re-render the form once we get information 
+     * from the server 
+    **/
     useEffect(() => {
         const lastName = getLastName();
         const formikLastName = personalInfoForm.values.last_name;
@@ -89,10 +103,10 @@ function Settings(props) {
         validationSchema: Yup.object({
             first_name: Yup.string()
                 .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
-                .notRequired(),
+                .required(t('Please enter your first name')),
             last_name: Yup.string()
                 .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
-                .notRequired()
+                .required(t('Please enter your last name')),
         }),
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
@@ -105,6 +119,40 @@ function Settings(props) {
             console.log ('Settings page personalInfoForm', 'onSubmit error', "No active user");
         },
     });
+
+    useEffect(() => {
+        const personalInfoFormErrors = personalInfoForm.errors;
+        const errors = {};
+
+        if (_.isEmpty(personalInfoFormErrors)) {
+            if (personalInfoFormErrors === null) {
+                return;
+            }
+
+            updateAgentDataInitState();
+            return;
+        }
+
+        const firstNameErrors = personalInfoFormErrors.first_name;
+        if (firstNameErrors) {
+            if (Array.isArray(firstNameErrors)){
+                errors.firs_name = [...firstNameErrors];
+            } else {
+                errors.first_name = [firstNameErrors];
+            }
+        }
+
+        const secondNameErrors = personalInfoFormErrors.second_name;
+        if (secondNameErrors) {
+            if (Array.isArray(secondNameErrors)){
+                errors.second_name = [...secondNameErrors];
+            } else {
+                errors.second_name = [secondNameErrors];
+            }
+        }
+
+        updateAgentDataFailed(errors);
+    }, [personalInfoForm.errors]);
 
     const securityForm = useFormik({
         initialValues: {
@@ -129,76 +177,39 @@ function Settings(props) {
         },
     });
 
+    useEffect(() => {
+        const registerFormErrors = registerForm.errors;
+        const errors = {};
 
-    //TODO: reduce number of invokes
-    function getFirstNameErrors () {
-        let errors = [];
-        if (personalInfoForm.errors && personalInfoForm.errors.first_name) {
-            errors.push(personalInfoForm.errors.first_name);
+        if (_.isEmpty(registerFormErrors)) {
+            if (registerFormErrors === null) {
+                return;
+            }
+
+            registerUserInitState();
+            return;
         }
 
-        if (props.agent 
-            && props.agent.agentDataErrors
-            && typeof props.agent.agentDataErrors === "object"
-            && props.agent.agentDataErrors.first_name) {
-
-            errors = [...errors, ...props.agent.agentDataErrors.first_name]
+        const emailErrors = registerFormErrors.email;
+        if (emailErrors) {
+            if (Array.isArray(emailErrors)){
+                errors.email = [...emailErrors];
+            } else {
+                errors.email = [emailErrors];
+            }
         }
 
-        return errors
-    }
-
-    //TODO: reduce number of invokes
-    function getLastNameErrors () {
-        let errors = [];
-        if (personalInfoForm.errors && personalInfoForm.errors.last_name) {
-            errors.push(personalInfoForm.errors.last_name);
+        const passwordErrors = registerFormErrors.password;
+        if (passwordErrors) {
+            if (Array.isArray(passwordErrors)){
+                errors.password = [...passwordErrors];
+            } else {
+                errors.password = [passwordErrors];
+            }
         }
 
-        if (props.agent 
-            && props.agent.agentDataErrors
-            && typeof props.agent.agentDataErrors === "object"
-            && props.agent.agentDataErrors.last_name) {
-
-            errors = [...errors, ...props.agent.agentDataErrors.last_name]
-        }
-
-        return errors
-    }
-
-    //TODO: reduce number of invokes
-    function getOldPasswordErrors () {
-        let errors = [];
-        if (securityForm.errors && securityForm.errors.old_password) {
-            errors.push(securityForm.errors.old_password);
-        }
-
-        if (props.auth && props.auth.changePassswordErrors 
-            && typeof props.auth.changePassswordErrors === "object"
-            && props.auth.changePassswordErrors.old_password) {
-
-            errors = [...errors, ...props.auth.changePassswordErrors.old_password]
-        }
-
-        return errors
-    }
-
-    //TODO: reduce number of invokes
-    function getNewPasswordErrors () {
-        let errors = [];
-        if (securityForm.errors && securityForm.errors.new_password) {
-            errors.push(securityForm.errors.new_password);
-        }
-
-        if (props.auth && props.auth.changePassswordErrors 
-            && typeof props.auth.changePassswordErrors === "object"
-            && props.auth.changePassswordErrors.new_password) {
-
-            errors = [...errors, ...props.auth.changePassswordErrors.new_password]
-        }
-
-        return errors
-    }
+        registerUserFailure(errors);
+    }, [securityForm.errors]);
 
     return (
         <React.Fragment>
@@ -292,21 +303,24 @@ function Settings(props) {
                                                 value={personalInfoForm.values.first_name}
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
-                                                invalid={getFirstNameErrors().length > 0 ? true : false}
+                                                invalid={!!(personalInfoForm.touched.first_name 
+                                                    && agentDataErrors
+                                                    && agentDataErrors.first_name)}
                                                 placeholder={t('Enter first name')}
                                                 disabled={props.agent.agentDataLoading}
                                             />
-                                            <FormFeedback>
-                                                {
-                                                    getFirstNameErrors().length > 0 && (
+                                            {personalInfoForm.touched.first_name 
+                                                && agentDataErrors
+                                                && agentDataErrors.first_name
+                                                && (
+                                                    <FormFeedback type="invalid">
                                                         <ul>
-                                                            {getFirstNameErrors().map((error, index) => (
+                                                            {agentDataErrors.first_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
-                                                    )
-                                                }
-                                            </FormFeedback>
+                                                    </FormFeedback>
+                                            )}
                                         </FormGroup>
 
                                         <FormGroup>
@@ -317,21 +331,24 @@ function Settings(props) {
                                                 value={personalInfoForm.values.last_name}
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
-                                                invalid={getLastNameErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter second name')}
+                                                invalid={!!(personalInfoForm.touched.second_name 
+                                                    && agentDataErrors
+                                                    && agentDataErrors.second_name)}
                                                 disabled={props.agent.agentDataLoading}
                                             />
-                                            <FormFeedback>
-                                                {
-                                                    getLastNameErrors().length > 0 && (
+                                            {personalInfoForm.touched.second_name 
+                                                && agentDataErrors
+                                                && agentDataErrors.second_name
+                                                && (
+                                                    <FormFeedback type="invalid">
                                                         <ul>
-                                                            {getLastNameErrors().map((error, index) => (
+                                                            {agentDataErrors.second_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
-                                                    )
-                                                }
-                                            </FormFeedback>
+                                                    </FormFeedback>
+                                            )}
                                         </FormGroup>
                                         <Button type="submit" disabled={props.agent.agentDataLoading}>
                                             {props.agent.agentDataLoading &&
@@ -460,7 +477,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
+    updateAgentDataInitState,
     updateAgentData,
+    updateAgentDataFailed,
+
     changePassword,
     updateAgentAvatar
 }

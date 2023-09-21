@@ -8,13 +8,11 @@ import {
     UPDATE_AGENT_DATA,
     UPDATE_AGENT_DATA_INIT_STATE,
     UPDATE_AGENT_DATA_SUCCESS,
-    HIDE_AGENT_DATA_SUCCESS_MESSAGE,
     UPDATE_AGENT_DATA_FAILED,
     
     UPDATE_AGENT_AVATAR,
     UPDATE_AGENT_AVATAR_INIT_STATE,
     UPDATE_AGENT_AVATAR_SUCCESS,
-    HIDE_AGENT_AVATAR_SUCCESS_MESSAGE,
     UPDATE_AGENT_AVATAR_FAILED
 } from './constants';
 import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
@@ -107,12 +105,6 @@ const Agent = (state = INIT_STATE, action) => {
                 agentDataSuccess: true
             };
 
-        case HIDE_AGENT_DATA_SUCCESS_MESSAGE:
-            return { 
-                ...state,
-                agentDataSuccess: false
-            };
-
         case UPDATE_AGENT_DATA_FAILED:
             return { 
                 ...state,
@@ -153,12 +145,6 @@ const Agent = (state = INIT_STATE, action) => {
                 avatarSuccess: true 
             };
         }
-
-        case HIDE_AGENT_AVATAR_SUCCESS_MESSAGE:
-            return { 
-                ...state, 
-                avatarSuccess: false 
-            };
 
         case UPDATE_AGENT_AVATAR_FAILED:
             return { 
