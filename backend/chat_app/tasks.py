@@ -1,7 +1,8 @@
 import openai
 from celery import shared_task
 from .models import Chat, Message
-
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 def get_messages(message_id, message_text, chat_id):
     previous_messages = Message.objects.filter(chat_id=chat_id).order_by('-id')[:10]
@@ -48,7 +49,15 @@ def send_feedback_nlp_task(message_id, message_text, chat_id, owner_id):
                 event_text = event['choices'][0]['delta']['content']
                 print(event_text)
                 complete += event_text
-                # todo To websocket
+
+                channel_layer = get_channel_layer()
+                async_to_sync(channel_layer.group_send)(
+                    str(owner_id),
+                    {
+                        "type": "chat.message",
+                        "text": event_text,
+                    },
+                )
         except Exception as e:
             print('None')
 
