@@ -1,20 +1,10 @@
-from celery import shared_task
-from time import sleep
-from .models import Chat, Message
 import openai
+from celery import shared_task
+from .models import Chat, Message
 
 
-@shared_task()
-def send_feedback_nlp_task(message_id, message_text, chat_id, owner_id):
-    chat_id = Chat.objects.get(id=chat_id)
-
-    nlp_message = Message.objects.create(
-        chat_id=chat_id,
-        message_text='',
-        owner_id=chat_id.addressee_id
-    )
-
-    previous_messages = Message.objects.filter(chat_id=chat_id).order_by('-id')[:5]
+def get_messages(message_id, message_text, chat_id):
+    previous_messages = Message.objects.filter(chat_id=chat_id).order_by('-id')[:10]
     messages = [
         {"role": "system", "content": "You are a helpful assistant."}
     ]
@@ -29,6 +19,21 @@ def send_feedback_nlp_task(message_id, message_text, chat_id, owner_id):
 
     user_prompt = {"role": "user", "content": message_text}
     messages.append(user_prompt)
+
+    return messages
+
+
+@shared_task()
+def send_feedback_nlp_task(message_id, message_text, chat_id, owner_id):
+    chat_id = Chat.objects.get(id=chat_id)
+
+    nlp_message = Message.objects.create(
+        chat_id=chat_id,
+        message_text='',
+        owner_id=chat_id.addressee_id
+    )
+
+    messages = get_messages(message_id, message_text, chat_id)
 
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
