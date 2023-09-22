@@ -71,7 +71,7 @@ def send_feedback_nlp_task(message_id, message_text, chat_id, owner_id):
         except Exception as e:
             data['errors'] = {
                 "details": [
-                    e
+                    str(e)
                 ]
             }
             data['status'] = 'failed'
