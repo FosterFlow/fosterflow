@@ -29,11 +29,13 @@ def get_messages(message_id, message_text, chat_id):
 def send_feedback_nlp_task(message_id, message_text, chat_id, owner_id):
     channel_layer = get_channel_layer()
     chat_id = Chat.objects.get(id=chat_id)
+    message = Message.objects.get(id=message_id)
 
     nlp_message = Message.objects.create(
         chat_id=chat_id,
         message_text='',
-        owner_id=chat_id.addressee_id
+        owner_id=chat_id.addressee_id,
+        request_id=message,
     )
 
     messages = get_messages(message_id, message_text, chat_id)
@@ -49,7 +51,7 @@ def send_feedback_nlp_task(message_id, message_text, chat_id, owner_id):
         "type": "chat_message_chunk",
         "chat_id": nlp_message.chat_id.id,
         "created_at": str(nlp_message.created_at),
-        # "request_id": 33, # ToDo
+        "request_id": message_id,
         "id": nlp_message.id,
         "message_chunk": '',
         "owner_id": nlp_message.owner_id.id,
