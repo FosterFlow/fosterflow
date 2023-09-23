@@ -10,7 +10,7 @@ services:
       - .env
     networks:
       - myNetwork
- 
+
   redis:
     image: redis:6.2-alpine
     container_name: redis
@@ -18,11 +18,11 @@ services:
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
-    volumes: 
+    volumes:
       - redis:/data
     networks:
       - myNetwork
-       
+
   backend:
     container_name: backend
     build: ./backend
@@ -32,6 +32,20 @@ services:
     environment:
       - REDIS_HOST=redis
     restart: always
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    networks:
+      - myNetwork
+
+  celery:
+    container_name: celery
+    build: ./backend
+    command: celery -A project worker --loglevel=info
     volumes:
       - ./backend:/backend
     depends_on:
@@ -76,7 +90,7 @@ services:
 volumes:
   redis:
     driver: local
-    
+
 networks:
   myNetwork:
     driver: bridge

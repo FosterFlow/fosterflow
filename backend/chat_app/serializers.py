@@ -76,6 +76,5 @@ class MessageModelSerializer(ModelSerializer):
             Message: The created message instance.
         """
 
-        answer_text = "take_answer(validated_data['message_text'], validated_data['chat_id'])"
         message = Message.objects.create(**validated_data)
         return message
