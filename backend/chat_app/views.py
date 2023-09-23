@@ -10,6 +10,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from auth_app.permissions import IsEmailConfirm
 from django.db.models import Q
+from .tasks import send_feedback_nlp_task
 
 User = get_user_model()
 
@@ -138,3 +139,16 @@ class MessageModelViewSet(ModelViewSet):
 
         return Response(response, status=status.HTTP_200_OK)
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            instance = serializer.save()
+
+            send_feedback_nlp_task.delay(
+                message_id=instance.id,
+                message_text=instance.message_text,
+                chat_id=instance.chat_id.id,
+                owner_id=instance.owner_id.id,
+            )
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
