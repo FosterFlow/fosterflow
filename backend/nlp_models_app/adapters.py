@@ -16,7 +16,8 @@ openai.api_key = env('OPENAI_API_KEY')
 class RequestHandler:
     def handle_request(self, request):
         sent_message = Message.objects.get(id=request['message_id'])
-        if request['npl_model'] == 'Gpt35Turbo':
+        nlp_model = sent_message.addressee_id.user_id
+        if nlp_model.username == 'GPT-3.5-turbo' and nlp_model.is_active:
             adapter = Gpt35TurboAdapter(Gpt35TurboInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
 

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'chat_app',
     'auth_app',
     'user_app',
+    'nlp_models_app',
 ]
 
 MIDDLEWARE = [
