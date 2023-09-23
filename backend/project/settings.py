@@ -17,10 +17,11 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-secretkey")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == 'True'
 
-ALLOWED_HOSTS = env.list("BASE_HOST")
+# ALLOWED_HOSTS = env.list("BASE_HOST")
+ALLOWED_HOSTS = ['*']
 ASGI_APPLICATION = "project.asgi.application"
 
-REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
 REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', 'password')
 
@@ -148,10 +149,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'auth_app.authenticate.CustomAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
 #        'rest_framework.authentication.SessionAuthentication',
 #        'rest_framework.authentication.BasicAuthentication',
-        'auth_app.authenticate.CustomAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -222,3 +223,6 @@ AUTH_USER_MODEL = "user_app.User"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Celery settings
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"
