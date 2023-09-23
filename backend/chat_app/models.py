@@ -60,5 +60,13 @@ class Message(models.Model):
         related_name='replies',
     )
 
+    addressee_id = models.ForeignKey(
+        Agent,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='addressee',
+    )
+
     def __str__(self):
         return f'{self.id} {self.owner_id}'
