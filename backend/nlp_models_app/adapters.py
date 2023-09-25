@@ -5,7 +5,6 @@ import openai
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from project.settings import BASE_DIR
-
 from chat_app.models import Message
 
 env = environ.Env()
@@ -73,7 +72,7 @@ class GptAdapter(Adapter):
     def generate_response(self, sent_message):
         messages = self.get_messages(sent_message)
         generator = self.from_interface().create_generator(messages)
-        nlp_message = self.create_nlp_message(sent_message.chat_id, sent_message.chat_id.addressee_id, sent_message)
+        nlp_message = self.create_nlp_message(sent_message.chat_id, sent_message.addressee_id, sent_message)
 
         complete = ""
         data = {
