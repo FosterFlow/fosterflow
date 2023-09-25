@@ -17,8 +17,17 @@ class RequestHandler:
     def handle_request(self, request):
         sent_message = Message.objects.get(id=request['message_id'])
         nlp_model = sent_message.addressee_id.user_id
-        if nlp_model.username == 'GPT-3.5-turbo' and nlp_model.is_active:
-            adapter = Gpt35TurboAdapter(Gpt35TurboInterface, ResponseWebsocketInterface)
+        if nlp_model.username == 'GPT-3.5-turbo-4k' and nlp_model.is_active:
+            adapter = GptAdapter(Gpt35Turbo4KInterface, ResponseWebsocketInterface)
+            adapter.generate_response(sent_message)
+        elif nlp_model.username == 'GPT-3.5-turbo-16k' and nlp_model.is_active:
+            adapter = GptAdapter(Gpt35Turbo16KInterface, ResponseWebsocketInterface)
+            adapter.generate_response(sent_message)
+        elif nlp_model.username == 'GPT-4-8k' and nlp_model.is_active:
+            adapter = GptAdapter(Gpt48KInterface, ResponseWebsocketInterface)
+            adapter.generate_response(sent_message)
+        elif nlp_model.username == 'GPT-4-16k' and nlp_model.is_active:
+            adapter = GptAdapter(Gpt432KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
 
 
@@ -60,7 +69,7 @@ class Adapter:
         )
 
 
-class Gpt35TurboAdapter(Adapter):
+class GptAdapter(Adapter):
     def generate_response(self, sent_message):
         messages = self.get_messages(sent_message)
         generator = self.from_interface().create_generator(messages)
@@ -103,10 +112,40 @@ class Gpt35TurboAdapter(Adapter):
         nlp_message.save()
 
 
-class Gpt35TurboInterface:
+class Gpt35Turbo4KInterface:
     def create_generator(self, messages):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
+            messages=messages,
+            stream=True
+        )
+        return response
+
+
+class Gpt35Turbo16KInterface:
+    def create_generator(self, messages):
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-16k",
+            messages=messages,
+            stream=True
+        )
+        return response
+
+
+class Gpt48KInterface:
+    def create_generator(self, messages):
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=messages,
+            stream=True
+        )
+        return response
+
+
+class Gpt432KInterface:
+    def create_generator(self, messages):
+        response = openai.ChatCompletion.create(
+            model="gpt-4-32k",
             messages=messages,
             stream=True
         )
