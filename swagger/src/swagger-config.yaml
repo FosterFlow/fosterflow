@@ -191,51 +191,38 @@ paths:
         For connect to the websocket, you should make the following request: <br>
         ws://localhost:8000/ws/login/?access=**{access_token}** <br>
         In params you must provide access token<br>
-        <br>
-        After connection you can write message to chat. You should use this structure: <br>
+        Receiving messages have 2 stages: <br>
+        1. You are receiving generations chunks: <br>
         {
-            "send_type": "chat",
-            "chat_id": 1,
-            "prompt": "Hello",
-            "owner_id": 1,   
-            "method": "request"
-        } <br>
-        <br>
-        Receiving messages have 3 stages: <br>
-        1. After you make request you will have response with data about your message: <br>
-        {
-            "send_type": "chat",
-            "id": 1,
-            "message_text": "Hello",
-            "created_at": "2023-08-15 12:00:00.00000+00:00",
-            "chat_id": 1,
-            "owner_id": 1,
-            "method": "response"
-        }
-        <br>
-        <br>
-        2. On second stage you are receiving generations chunks: <br>
-        {
-            "send_type": "chat",
+            "type": "chat_message_chunk",
             "chat_id": 1,
             "created_at": "2023-08-15 12:00:10.00000+00:00",
-            "id": 2,
+            "request_id": 2,
+            "id": 3,
             "message_chunk": "",
             "owner_id": 100,
             "status": "start"
         }<br>
         {
-            "type": "chat_message",
-            "id": 2,
-            "message_chunk": " can",
+            "type": "chat_message_chunk",
+            "chat_id": 1,
+            "created_at": "2023-08-15 12:00:10.00000+00:00",
+            "request_id": 2,
+            "id": 3,
+            "message_chunk": "",
+            "owner_id": 100,
             "status": "progress"
         } <br>
         <br>
-        3. When generations is stop, you will take last message:<br>
+        2. When generations is stop, you will take last message:<br>
         {
-            "send_type": "chat",
-            "id": 2,
-            "message_chunk": "",
+            "type": "chat_message_chunk",
+            "chat_id": 19,
+            "created_at": "2023-08-15 12:00:10.00000+00:00",
+            "request_id": 340,
+            "id": 341,
+            "message_chunk": ".",
+            "owner_id": 100,
             "status": "done"
         }<br>
         <br>
@@ -288,31 +275,21 @@ paths:
               [
                 {
                   "id": 1,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "message_text": "Hello",
                   "created_at": "2023-06-19T12:51:26.301069Z",
                   "chat_id": 1,
-                  "owner_id": 1
+                  "owner_id": 1,
+                  "request_id": null,
+                  "addressee_id": 105
                 },
                 {
                   "id": 2,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "message_text": "Hello. Can I help you?",
                   "created_at": "2023-06-19T12:51:26.301069Z",
                   "chat_id": 1,
-                  "owner_id": 2
-                },
-                {
-                  "id": 3,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
-                  "created_at": "2023-06-19T12:51:26.301069Z",
-                  "chat_id": 1,
-                  "owner_id": 1
-                },
-                {
-                  "id": 4,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
-                  "created_at": "2023-06-19T12:51:26.301069Z",
-                  "chat_id": 1,
-                  "owner_id": 2
+                  "owner_id": 2,
+                  "request_id": 2,
+                  "addressee_id": null
                 }
               ]
         400:
@@ -357,6 +334,10 @@ paths:
                 title: owner_id
                 type: integer
                 example: 1
+              addressee_id:
+                title: addressee_id
+                type: integer
+                example: 1
       responses:
         '201':
           description: 'The message will return with a ready answer to the question'
@@ -365,11 +346,13 @@ paths:
           examples:
             application/json:
               {
-                "id": 1,
-                "message_text": "Hello, how are you?",
-                "created_at": "2023-06-18T13:22:32.194640Z",
+                "id": 2,
+                "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                "created_at": "2023-09-25T12:07:09.647553Z",
                 "chat_id": 1,
-                "owner_id": 1
+                "owner_id": 101,
+                "request_id": null,
+                "addressee_id": 105
               }
         400:
           description: Bad request.
@@ -416,10 +399,13 @@ paths:
           examples:
             application/json:
               {
-                "id": 5,
-                "message_text": "Hello, how are you?",
-                "answer_text": "I'm doing well, thank you. How about you?",
-                "chat_id": 1
+                "id": 2,
+                "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                "created_at": "2023-09-25T12:07:09.647553Z",
+                "chat_id": 1,
+                "owner_id": 101,
+                "request_id": null,
+                "addressee_id": 105
               }
         400:
           description: Bad request.
