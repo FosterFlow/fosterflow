@@ -33,7 +33,21 @@ import {
 
 function Settings(props) {
     const { t } = useTranslation();
-    const { agent } = props;
+    const { 
+        agent,
+        user,
+        auth,
+
+        updateAgentDataInitState,
+        updateAgentData,
+        updateAgentDataFailed,
+        
+        changePassword,
+        changePasswordInitState,
+        changePasswordFailure,
+        
+        updateAgentAvatar
+    } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
 
     //TODO: redevelop to flat structure into agent and remove this method
@@ -52,10 +66,8 @@ function Settings(props) {
         event.preventDefault();
 
         if (selectedAvatar !== null){
-            const user = props.user;
-            
             if (user && user.authorizedUser) {
-                props.updateAgentAvatar(user.authorizedUser.id, selectedAvatar);
+                updateAgentAvatar(user.authorizedUser.id, selectedAvatar);
                 return;
             }
         }
@@ -64,15 +76,15 @@ function Settings(props) {
     }
 
     function getFirstName (){
-        return (props.agent
-        && props.agent.agent 
-        && props.agent.agent.first_name) || '';
+        return (agent
+        && agent.agent 
+        && agent.agent.first_name) || '';
     }
 
     function getLastName (){
-        return (props.agent
-            && props.agent.agent  
-            && props.agent.agent.last_name) || ''
+        return (agent
+            && agent.agent  
+            && agent.agent.last_name) || ''
     }
 
     /**
@@ -96,7 +108,7 @@ function Settings(props) {
         if ((firstName !== "") && (formikFirstName === "")) {
             personalInfoForm.setFieldValue('first_name', firstName);
         }
-    }, [props.agent]);
+    }, [agent]);
 
     const personalInfoForm = useFormik({
         initialValues: {
@@ -113,9 +125,9 @@ function Settings(props) {
         }),
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
-            const user = props.user;
+            const user = user;
             if (user && user.authorizedUser) {
-                props.updateAgentData(user.authorizedUser.id, values);
+                updateAgentData(user.authorizedUser.id, values);
                 return;
             } 
             //TODO: handle error if we don't have active User;
@@ -176,7 +188,7 @@ function Settings(props) {
             console.log('Settings page securityForm', 'onSubmit', values);
             const oldPassword = values.old_password;
             const newPassword = values.new_password;
-            props.changePassword(oldPassword, newPassword);
+            changePassword(oldPassword, newPassword);
         },
     });
 
@@ -224,8 +236,8 @@ function Settings(props) {
 
                     <div className="user-profile-sroll-area">
                         {
-                            (props.agent && props.agent.errors) &&
-                            <Alert color="danger">{props.agent.errors}</Alert>
+                            (agent && agent.errors) &&
+                            <Alert color="danger">{agent.errors}</Alert>
                         }
                         {/* Start Avatar card */}
                         <div className="p-4">
@@ -235,12 +247,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.agent && props.agent.avatarErrors 
-                                            && typeof props.agent.avatarErrors === "string") &&
-                                        <Alert color="danger">{props.agent.avatarErrors}</Alert>
+                                        (agent && agent.avatarErrors 
+                                            && typeof agent.avatarErrors === "string") &&
+                                        <Alert color="danger">{agent.avatarErrors}</Alert>
                                     }
                                     {
-                                         props.agent.avatarSuccess &&
+                                         agent.avatarSuccess &&
                                          <Alert color="success">{t("The photo has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={submitAvatar}>
@@ -256,20 +268,19 @@ function Settings(props) {
                                                 id="exampleFile"
                                                 name="file"
                                                 type="file"
-                                                disabled={props.agent.avatarLoading}
+                                                disabled={agent.avatarLoading}
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                             <FormFeedback>
                                                 {
-                                                    props.agent 
-                                                    && props.agent.avatarErrors 
-                                                    && typeof props.avatarErrors === "object"
-                                                    && props.agent.avatarErrors.avatar
+                                                    agent.avatarErrors 
+                                                    && typeof agent.avatarErrors === "object"
+                                                    && agent.avatarErrors.avatar
                                                 }
                                             </FormFeedback>
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.agent.avatarLoading}>
-                                            {props.agent.avatarLoading &&
+                                        <Button type="submit" disabled={agent.avatarLoading}>
+                                            {agent.avatarLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -289,12 +300,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.agent && props.agent.agentDataErrors 
-                                            && typeof props.agent.agentDataErrors === "string") &&
-                                        <Alert color="danger">{props.agent.agentDataErrors}</Alert>
+                                        (agent && agent.agentDataErrors 
+                                            && typeof agent.agentDataErrors === "string") &&
+                                        <Alert color="danger">{agent.agentDataErrors}</Alert>
                                     }
                                     {
-                                         props.agent.agentDataSuccess &&
+                                         agent.agentDataSuccess &&
                                          <Alert color="success">{t("Personal information has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={personalInfoForm.handleSubmit}>
@@ -307,18 +318,18 @@ function Settings(props) {
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
                                                 invalid={!!(personalInfoForm.touched.first_name 
-                                                    && agentDataErrors
-                                                    && agentDataErrors.first_name)}
+                                                    && agent.agentDataErrors
+                                                    && agent.agentDataErrors.first_name)}
                                                 placeholder={t('Enter first name')}
-                                                disabled={props.agent.agentDataLoading}
+                                                disabled={agent.agentDataLoading}
                                             />
                                             {personalInfoForm.touched.first_name 
-                                                && agentDataErrors
-                                                && agentDataErrors.first_name
+                                                && agent.agentDataErrors
+                                                && agent.agentDataErrors.first_name
                                                 && (
                                                     <FormFeedback type="invalid">
                                                         <ul>
-                                                            {agentDataErrors.first_name.map((error, index) => (
+                                                            {agent.agentDataErrors.first_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
@@ -336,25 +347,25 @@ function Settings(props) {
                                                 onBlur={personalInfoForm.handleBlur}
                                                 placeholder={t('Enter second name')}
                                                 invalid={!!(personalInfoForm.touched.second_name 
-                                                    && agentDataErrors
-                                                    && agentDataErrors.second_name)}
-                                                disabled={props.agent.agentDataLoading}
+                                                    && agent.agentDataErrors
+                                                    && agent.agentDataErrors.second_name)}
+                                                disabled={agent.agentDataLoading}
                                             />
                                             {personalInfoForm.touched.second_name 
-                                                && agentDataErrors
-                                                && agentDataErrors.second_name
+                                                && agent.agentDataErrors
+                                                && agent.agentDataErrors.second_name
                                                 && (
                                                     <FormFeedback type="invalid">
                                                         <ul>
-                                                            {agentDataErrors.second_name.map((error, index) => (
+                                                            {agent.agentDataErrors.second_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
                                                     </FormFeedback>
                                             )}
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.agent.agentDataLoading}>
-                                            {props.agent.agentDataLoading &&
+                                        <Button type="submit" disabled={agent.agentDataLoading}>
+                                            {agent.agentDataLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -374,12 +385,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.auth && props.auth.changePassswordErrors 
-                                            && typeof props.auth.changePassswordErrors === "string") &&
-                                        <Alert color="danger">{props.auth.changePassswordErrors}</Alert>
+                                        (auth && auth.changePassswordErrors 
+                                            && typeof auth.changePassswordErrors === "string") &&
+                                        <Alert color="danger">{auth.changePassswordErrors}</Alert>
                                     }
                                     {
-                                         props.auth.changePasswordSuccess &&
+                                         auth.changePasswordSuccess &&
                                          <Alert color="success">{t("The password has been successfully changed")}.</Alert>
                                     }
                                     <Form onSubmit={securityForm.handleSubmit}>
@@ -387,8 +398,8 @@ function Settings(props) {
                                             <Label>{t('Email')}:</Label>
                                             <div>
                                                 {
-                                                    props.user && props.user.authorizedUser 
-                                                    && props.user.authorizedUser.email ||
+                                                    user && user.authorizedUser 
+                                                    && user.authorizedUser.email ||
                                                     t('Email information not found')
                                                 }
                                             </div>
@@ -405,17 +416,17 @@ function Settings(props) {
                                                     onBlur={securityForm.handleBlur}
                                                     placeholder={t('Enter current password')}
                                                     invalid={!!(securityForm.touched.second_name 
-                                                        && changePassswordErrors
-                                                        && changePassswordErrors.old_password)}
-                                                    disabled={props.auth.changePasswordLoading}
+                                                        && auth.changePassswordErrors
+                                                        && auth.changePassswordErrors.old_password)}
+                                                    disabled={auth.changePasswordLoading}
                                                 />
                                                 {securityForm.touched.old_password 
-                                                    && changePassswordErrors
-                                                    && changePassswordErrors.old_password
+                                                    && auth.changePassswordErrors
+                                                    && auth.changePassswordErrors.old_password
                                                     && (
                                                         <FormFeedback type="invalid">
                                                             <ul>
-                                                                {changePassswordErrors.old_password.map((error, index) => (
+                                                                {auth.changePassswordErrors.old_password.map((error, index) => (
                                                                     <li key={index}>{error}</li>
                                                                 ))}
                                                             </ul>
@@ -430,18 +441,18 @@ function Settings(props) {
                                                 onChange={securityForm.handleChange}
                                                 onBlur={securityForm.handleBlur}
                                                 placeholder={t('Enter new password')}
-                                                invalid={!!(securityForm.touched.new_password 
-                                                    && changePassswordErrors
-                                                    && changePassswordErrors.new_password)}
-                                                disabled={props.auth.changePasswordLoading}
+                                                invalid={!!(securityForm.touched.new_password
+                                                    && auth.changePassswordErrors
+                                                    && auth.changePassswordErrors.new_password)}
+                                                disabled={auth.changePasswordLoading}
                                             />
-                                            {securityForm.touched.new_password 
-                                                && changePassswordErrors
-                                                && changePassswordErrors.new_password
+                                            {securityForm.touched.new_password
+                                                && auth.changePassswordErrors
+                                                && auth.changePassswordErrors.new_password
                                                 && (
                                                     <FormFeedback type="invalid">
                                                         <ul>
-                                                            {changePassswordErrors.new_password.map((error, index) => (
+                                                            {auth.changePassswordErrors.new_password.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
@@ -455,8 +466,8 @@ function Settings(props) {
                                                 <li>{t('At least 8 characters in total')}.</li>
                                             </ul>
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.auth.changePasswordLoading}>
-                                            {props.auth.changePasswordLoading &&
+                                        <Button type="submit" disabled={auth.changePasswordLoading}>
+                                            {auth.changePasswordLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
