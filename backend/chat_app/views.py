@@ -144,11 +144,6 @@ class MessageModelViewSet(ModelViewSet):
         if serializer.is_valid():
             instance = serializer.save()
 
-            send_feedback_nlp_task.delay(
-                message_id=instance.id,
-                message_text=instance.message_text,
-                chat_id=instance.chat_id.id,
-                owner_id=instance.owner_id.id,
-            )
+            send_feedback_nlp_task.delay({'message_id': instance.id, })
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

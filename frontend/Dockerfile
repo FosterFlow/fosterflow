@@ -4,7 +4,7 @@ WORKDIR /frontend
 
 COPY package.json .
 
-RUN npm install
+RUN yarn add react-scripts
 
 COPY . .
 

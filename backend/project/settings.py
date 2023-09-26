@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'chat_app',
     'auth_app',
     'user_app',
+    'nlp_models_app',
 ]
 
 MIDDLEWARE = [
@@ -149,10 +150,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'auth_app.authenticate.CustomAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
 #        'rest_framework.authentication.SessionAuthentication',
 #        'rest_framework.authentication.BasicAuthentication',
-        'auth_app.authenticate.CustomAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
