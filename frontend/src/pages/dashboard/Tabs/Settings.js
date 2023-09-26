@@ -95,20 +95,20 @@ function Settings(props) {
      * from the server 
     **/
     useEffect(() => {
-        const lastName = getLastName();
-        const formikLastName = personalInfoForm.values.last_name;
+        if (!agent.getAgentSucess) {
+            return;
+        }
 
-        if ((lastName !== "") && (formikLastName === "")) {
+        const lastName = getLastName();
+        if (lastName !== "") {
             personalInfoForm.setFieldValue('last_name', lastName);
         }
 
         const firstName = getFirstName();
-        const formikFirstName = personalInfoForm.values.first_name;
-        
-        if ((firstName !== "") && (formikFirstName === "")) {
+        if (firstName !== "") {
             personalInfoForm.setFieldValue('first_name', firstName);
         }
-    }, [agent]);
+    }, [agent.getAgentSucess]);
 
     const personalInfoForm = useFormik({
         initialValues: {
@@ -117,10 +117,10 @@ function Settings(props) {
         },
         validationSchema: Yup.object({
             first_name: Yup.string()
-                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
+                .matches(/^[^@$%&*#!?()№;~:+<>=/]+$/, t('No special characters allowed'))
                 .required(t('Please enter your first name')),
             last_name: Yup.string()
-                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
+                .matches(/^[^@$%&*#!?()№;~:+<>=/]+$/, t('No special characters allowed'))
                 .required(t('Please enter your last name')),
         }),
         onSubmit: values => {
@@ -345,18 +345,18 @@ function Settings(props) {
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
                                                 placeholder={t('Enter second name')}
-                                                invalid={!!(personalInfoForm.touched.second_name 
+                                                invalid={!!(personalInfoForm.touched.last_name 
                                                     && agent.agentDataErrors
-                                                    && agent.agentDataErrors.second_name)}
+                                                    && agent.agentDataErrors.last_name)}
                                                 disabled={agent.agentDataLoading}
                                             />
-                                            {personalInfoForm.touched.second_name 
+                                            {personalInfoForm.touched.last_name 
                                                 && agent.agentDataErrors
-                                                && agent.agentDataErrors.second_name
+                                                && agent.agentDataErrors.last_name
                                                 && (
                                                     <FormFeedback type="invalid">
                                                         <ul>
-                                                            {agent.agentDataErrors.second_name.map((error, index) => (
+                                                            {agent.agentDataErrors.last_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
@@ -414,7 +414,7 @@ function Settings(props) {
                                                     onChange={securityForm.handleChange}
                                                     onBlur={securityForm.handleBlur}
                                                     placeholder={t('Enter current password')}
-                                                    invalid={!!(securityForm.touched.second_name 
+                                                    invalid={!!(securityForm.touched.old_password 
                                                         && auth.changePassswordErrors
                                                         && auth.changePassswordErrors.old_password)}
                                                     disabled={auth.changePasswordLoading}

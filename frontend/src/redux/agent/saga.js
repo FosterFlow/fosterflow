@@ -42,8 +42,8 @@ function* updateAgentData({ payload: { id, data } }) {
         yield put(updateAgentDataSuccess(response));
         yield delay(10000);
         yield put(updateAgentDataInitState());
-    } catch (error) {
-        yield put(updateAgentDataFailed(error));
+    } catch (errors) {
+        yield put(updateAgentDataFailed(errors));
     }
 }
 
