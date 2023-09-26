@@ -25,7 +25,7 @@ class RequestHandler:
         elif nlp_model.username == 'GPT-4-8k' and nlp_model.is_active:
             adapter = GptAdapter(Gpt48KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif nlp_model.username == 'GPT-4-16k' and nlp_model.is_active:
+        elif nlp_model.username == 'GPT-4-32k' and nlp_model.is_active:
             adapter = GptAdapter(Gpt432KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
 
