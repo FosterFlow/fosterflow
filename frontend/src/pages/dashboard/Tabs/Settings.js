@@ -125,8 +125,7 @@ function Settings(props) {
         }),
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
-            const user = user;
-            if (user && user.authorizedUser) {
+            if (user.authorizedUser) {
                 updateAgentData(user.authorizedUser.id, values);
                 return;
             } 
@@ -157,12 +156,12 @@ function Settings(props) {
             }
         }
 
-        const secondNameErrors = personalInfoFormErrors.second_name;
-        if (secondNameErrors) {
-            if (Array.isArray(secondNameErrors)){
-                errors.second_name = [...secondNameErrors];
+        const lastNameErrors = personalInfoFormErrors.last_name;
+        if (lastNameErrors) {
+            if (Array.isArray(lastNameErrors)){
+                errors.last_name = [...lastNameErrors];
             } else {
-                errors.second_name = [secondNameErrors];
+                errors.last_name = [lastNameErrors];
             }
         }
 
