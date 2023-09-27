@@ -10,7 +10,12 @@ services:
       - .env
     networks:
       - myNetwork
- 
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   redis:
     image: redis:6.2-alpine
     container_name: redis
@@ -18,11 +23,16 @@ services:
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
-    volumes: 
+    volumes:
       - redis:/data
     networks:
       - myNetwork
-       
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   backend:
     container_name: backend
     build: ./backend
@@ -41,7 +51,12 @@ services:
       - .env
     networks:
       - myNetwork
-  
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   frontend:
     container_name: frontend
     build: ./frontend
@@ -59,25 +74,30 @@ services:
     depends_on:
       - db
       - backend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-#  swagger:
-#    container_name: swagger
-#    build: ./swagger
-#    ports:
-#      - "8080:8080"
-#    volumes:
-#      - ./swagger:/swagger
-#    command: bash -c "npm install && npm start"
-#    networks:
-#      - myNetwork
-#    depends_on:
-#      - db
-#      - backend
+  swagger:
+    container_name: swagger
+    build: ./swagger
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./swagger:/swagger
+    command: bash -c "npm install && npm start"
+    networks:
+      - myNetwork
+    depends_on:
+      - db
+      - backend
 
 volumes:
   redis:
     driver: local
-    
+
 networks:
   myNetwork:
     driver: bridge
