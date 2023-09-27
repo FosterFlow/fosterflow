@@ -101,7 +101,7 @@ function* webSocketReceiveMessageFailedSaga (action){
 
   if (typeof type === 'string' && type.length > 0) {
     if (wsResponseHandlers[type] !== undefined) {
-      wsResponseHandlers[type].onError(errors);
+      yield put(wsResponseHandlers[type].onError(errors));
       return;
     }
     console.error("wsResponseHandlers[type] is not defined. webSocketReceiveMessageSaga wsResponseHandlers", wsResponseHandlers);

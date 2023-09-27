@@ -5,10 +5,10 @@ import {
   delay,
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 import {
   FETCH_CHATS,
   ADD_CHAT,
+  ADD_CHAT_SUCCESS,
   DELETE_CHAT,
   FETCH_MESSAGES,
   SEND_MESSAGE,
@@ -41,6 +41,7 @@ import {
   deleteMessageFailed,
   sendMessagesFailed
 } from './actions';
+import config from '../../config';
 
 const api = apiAuthorizedClient;
 
@@ -58,22 +59,35 @@ function* fetchChatsSaga() {
 function* addChatSaga(action) {
   const data = action.payload;
   try {
-      const chat = yield call(api.post, '/chats/', {
-          "owner_id": data.user_id,
-          "name": data.name,
-          "addressee_id": 100
-      });
-      yield put(addChatSuccess(chat));
-      yield put(sendMessage({
-        "chat_id": chat.id,
-        "message_text": data.message,
+      const newChatData = yield call(api.post, '/chats/', {
+        "addressee_id": config.BASE_MODEL_AGENT_ID,
         "owner_id": data.user_id,
-    }));
+        "name": data.name
+      });
+      yield put(addChatSuccess({
+        ...newChatData,
+        new_chat_message: data.message 
+      }));
   } catch (errors) {
     yield put(addChatFailed(errors));
     yield delay(10000);
     yield put(addChatInitState());
   }
+}
+
+function* addChatSuccessSaga(action) {
+  const chatData = action.payload;
+
+  try {
+    yield put(sendMessage({
+      "addressee_id": chatData.addressee_id,
+      "chat_id": chatData.id,
+      "message_text": chatData.new_chat_message,
+      "owner_id": chatData.owner_id,
+  }));
+} catch (errors) {
+  yield put(sendMessageFailed(errors));
+}
 }
 
 function* deleteChatSaga(action) {
@@ -127,6 +141,7 @@ function* deleteMessageSaga(action) {
 export default function* chatSaga() {
   yield takeEvery(FETCH_CHATS, fetchChatsSaga);
   yield takeEvery(ADD_CHAT, addChatSaga);
+  yield takeEvery(ADD_CHAT_SUCCESS, addChatSuccessSaga); 
   yield takeEvery(DELETE_CHAT, deleteChatSaga);
   yield takeEvery(FETCH_MESSAGES, fetchMessagesSaga);
   yield takeEvery(SEND_MESSAGE, sendMessageSaga);
