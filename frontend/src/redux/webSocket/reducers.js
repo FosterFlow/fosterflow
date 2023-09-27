@@ -13,14 +13,9 @@ import {
     WS_SEND_INIT_STATE,
     WS_SEND_SUCCESS,
     WS_SEND_FAILED,
-
-    WS_RECEIVE_MESSAGE,
-    WS_RECEIVE_MESSAGE_FAILED,
 } from './constants';
 
 import {
-    receiveMessage,
-    receiveMessageFailed,
     receiveMessageChunk,
     receiveMessageChunkFailed
   } from '../chat/actions';
@@ -29,10 +24,6 @@ const INIT_STATE = {
     webSocketsRequestsQueue: [],
     //Handlers for onmessage/onerror events for different WebSocket types ("type" field) of messages 
     webSocketsResponseHandlers: {
-        "chat": {
-            onMessage: receiveMessage,
-            onError: receiveMessageFailed
-        },
         "chat_message_chunk": {
             onMessage: receiveMessageChunk,
             onError: receiveMessageChunkFailed
@@ -141,16 +132,6 @@ const WebSocket = (state = INIT_STATE, action) => {
                 wsSendErrors: action.payload
             };
 
-        // case WS_RECEIVE_MESSAGE: 
-        //     return {
-        //         ...state
-        //     };
-
-        // case WS_RECEIVE_MESSAGE_FAILED: 
-        //     return {
-        //         ...state
-        //     };
-        
         default: return { ...state };
     }
 }

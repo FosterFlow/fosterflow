@@ -27,9 +27,6 @@ import {
   SEND_MESSAGE_SUCCESS,
   SEND_MESSAGE_FAILED,
 
-  RECEIVE_MESSAGE,
-  RECEIVE_MESSAGE_FAILED,
-
   RECEIVE_MESSAGE_CHUNK,
   RECEIVE_MESSAGE_CHUNK_FAILED,
   
@@ -177,26 +174,6 @@ export const chatInit = () => ({
     payload: messageData
   });
 
-  export const receiveMessage = (messageData) => ({
-    type: RECEIVE_MESSAGE,
-    payload: messageData
-  });
-
-  export const receiveMessageFailed = (errors) => ({
-    type: RECEIVE_MESSAGE_FAILED,
-    payload: errors
-  });
-
-  export const receiveMessageChunk = (messageChunkData) => ({
-    type: RECEIVE_MESSAGE_CHUNK,
-    payload: messageChunkData
-  });
-
-  export const receiveMessageChunkFailed = (errors) => ({
-    type: RECEIVE_MESSAGE_CHUNK_FAILED,
-    payload: errors
-  });
-
   export const sendMessageInitState = () => ({
     type: SEND_MESSAGE_INIT_STATE,
   });
@@ -209,6 +186,16 @@ export const chatInit = () => ({
   export const sendMessageFailed = (message) => ({
     type: SEND_MESSAGE_FAILED,
     payload: message
+  });
+
+  export const receiveMessageChunk = (messageChunkData) => ({
+    type: RECEIVE_MESSAGE_CHUNK,
+    payload: messageChunkData
+  });
+
+  export const receiveMessageChunkFailed = (errors) => ({
+    type: RECEIVE_MESSAGE_CHUNK_FAILED,
+    payload: errors
   });
   
   export const deleteMessage = (messageId) => ({

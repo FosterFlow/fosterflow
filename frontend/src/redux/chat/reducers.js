@@ -32,9 +32,6 @@ import {
     DELETE_MESSAGE_SUCCESS,
     DELETE_MESSAGE_FAILED,
 
-    RECEIVE_MESSAGE,
-    RECEIVE_MESSAGE_FAILED,
-
     RECEIVE_MESSAGE_CHUNK,
     RECEIVE_MESSAGE_CHUNK_FAILED,
     
@@ -259,16 +256,9 @@ const Chat = (state = INIT_STATE, action) => {
             };
 
         case SEND_MESSAGE: {
-            const newMessage = {
-                ... action.payload,
-                sendMessageLoading: true,
-                sendMessageSuccess: false,
-                sendMessageFailed: false
-              };
-            
               return {
                 ...state,
-                sendingMessagesQueue: [...state.sendingMessagesQueue, newMessage]
+                sendingMessagesQueue: [...state.sendingMessagesQueue, action.payload]
               };
         }
     
@@ -280,38 +270,24 @@ const Chat = (state = INIT_STATE, action) => {
     
         case SEND_MESSAGE_SUCCESS: {
             const filteredQueue = state.sendingMessagesQueue.filter(
-                message => message.messageData.prompt !== action.payload.message_text
+                message => message.message_text !== action.payload.message_text
               );
 
-            const newMessage = {
-                ... action.payload,
-                sendMessageLoading: false,
-                sendMessageSuccess: true,
-                sendMessageFailed: false
-            };
-            
             return {
                 ...state,
-                messages: [...state.messages, newMessage],
+                messages: [...state.messages, action.payload],
                 sendingMessagesQueue: filteredQueue
             }; 
         }
-            
+
         case SEND_MESSAGE_FAILED: {
             const filteredQueue = state.sendingMessagesQueue.filter(
-                message => message.messageData.prompt !== action.payload.message_text
+                message => message.message_text !== action.payload.message_text
                 );
 
-            const newMessage = {
-                ... action.payload,
-                sendMessageLoading: false,
-                sendMessageSuccess: false,
-                sendMessageFailed: true
-            };
-                
             return {
                 ...state,
-                messages: [...state.messages, newMessage],
+                messages: [...state.messages, action.payload],
                 sendingMessagesQueue: filteredQueue
             };
         }
@@ -348,24 +324,6 @@ const Chat = (state = INIT_STATE, action) => {
                 deleteMessageSuccess: false,
                 deleteMessageErrors: action.payload,
             };
-
-        case RECEIVE_MESSAGE: {
-            const filteredQueue = state.sendingMessagesQueue.filter(
-                message => message.messageData.prompt !== action.payload.message_text
-                );
-
-            return {
-                ...state,
-                messages: [...state.messages, action.payload],
-                sendingMessagesQueue: filteredQueue
-            };   
-        }
-        
-        case RECEIVE_MESSAGE_FAILED: {
-            return {
-                ...state
-            }
-        }
 
         /**
         * TODO:

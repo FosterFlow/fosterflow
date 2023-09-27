@@ -65,11 +65,9 @@ function* addChatSaga(action) {
       });
       yield put(addChatSuccess(chat));
       yield put(sendMessage({
-        "send_type": "chat",
         "chat_id": chat.id,
-        "prompt": data.message,
+        "message_text": data.message,
         "owner_id": data.user_id,
-        "method": "request" 
     }));
   } catch (errors) {
     yield put(addChatFailed(errors));
@@ -104,7 +102,12 @@ function* fetchMessagesSaga(action) {
 }
 
 function* sendMessageSaga(action) {
-  webSocketsAuthorizedClient.send(action.payload);
+  try {
+    const message = yield call(api.post, '/messages/', action.payload);
+    yield put(sendMessageSuccess(message));
+  } catch (errors) {
+    yield put(sendMessageFailed(errors));
+  }
 }
 
 function* deleteMessageSaga(action) {

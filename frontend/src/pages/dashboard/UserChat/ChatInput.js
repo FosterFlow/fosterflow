@@ -6,6 +6,7 @@ import {
     sendMessage
 } from "../../../redux/chat/actions";
 import { useTranslation } from 'react-i18next';
+import config from '../../../config';
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
@@ -73,11 +74,10 @@ function ChatInput(props) {
         }
 
         sendMessage({
-            "send_type": "chat",
+            "addressee_id": config.BASE_MODEL_AGENT_ID,
             "chat_id": activeChatId,
-            "prompt": textMessage,
-            "owner_id": authorizedUser.id,
-            "method": "request" 
+            "message_text": textMessage,
+            "owner_id": authorizedUser.id
         });
         settextMessage("");
     }
