@@ -19,6 +19,8 @@ securityDefinitions:
     description: >-
       Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
 tags:
+  - name: websocket
+    description: Instruction to connect websocket
   - name: chats
     description: The chat is needed for grouping messages
   - name: messages
@@ -40,6 +42,83 @@ tags:
   - name: confirmation-email
     description: An Api View which provides send and confirm email
 paths:
+  /websocket/:
+    options:
+      security:
+        - Bearer: [ ]
+      summary: Instruction to connect websocket
+      description: >-
+        For connect to the websocket, you should make the following request: <br>
+        ws://localhost:8000/ws/login/?access=**{access_token}** <br>
+      responses:
+        101:
+          description: Switching Protocols
+        111:
+          schema:
+            type: array
+          description: 'Receiving messages have 2 stages: <br> You are receiving generations chunks:'
+          examples:
+            application/json:
+              [
+                {
+                  "type": "chat_message_chunk",
+                  "chat_id": 1,
+                  "created_at": "2023-08-15 12:00:10.00000+00:00",
+                  "request_id": 2,
+                  "id": 3,
+                  "message_chunk": "",
+                  "owner_id": 100,
+                  "status": "start"
+                },
+                {
+                  "type": "chat_message_chunk",
+                  "chat_id": 1,
+                  "created_at": "2023-08-15 12:00:10.00000+00:00",
+                  "request_id": 2,
+                  "id": 3,
+                  "message_chunk": "",
+                  "owner_id": 100,
+                  "status": "progress"
+                }
+              ]
+        112:
+          schema:
+            type: array
+          description: 'When generations is stop, you will take last message:'
+          examples:
+            application/json:
+              [
+                {
+                  "type": "chat_message_chunk",
+                  "chat_id": 19,
+                  "created_at": "2023-08-15 12:00:10.00000+00:00",
+                  "request_id": 340,
+                  "id": 341,
+                  "message_chunk": ".",
+                  "owner_id": 100,
+                  "status": "done"
+                }
+              ]
+        '400':
+          description: 'Possible errors in response'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "details": [
+                    "Not request method.",
+                    "Prompt is empty.",
+                    "This field is required.",
+                    "Chat is not available",
+                    "Agent is not exists",
+                    "send_type is not correct"
+                    ]
+                }
+              }
+        '403':
+          description: '403 Access denied'
+      tags:
+        - websocket
   /chats/:
     get:
       summary: Get all the chats
@@ -181,73 +260,6 @@ paths:
           description: A unique integer value identifying this chat.
           required: true
           type: integer
-      tags:
-        - chats
-    options:
-      security:
-        - Bearer: [ ]
-      summary: Instruction to connect websocket
-      description: >-
-        For connect to the websocket, you should make the following request: <br>
-        ws://localhost:8000/ws/login/?access=**{access_token}** <br>
-        In params you must provide access token<br>
-        Receiving messages have 2 stages: <br>
-        1. You are receiving generations chunks: <br>
-        {
-            "type": "chat_message_chunk",
-            "chat_id": 1,
-            "created_at": "2023-08-15 12:00:10.00000+00:00",
-            "request_id": 2,
-            "id": 3,
-            "message_chunk": "",
-            "owner_id": 100,
-            "status": "start"
-        }<br>
-        {
-            "type": "chat_message_chunk",
-            "chat_id": 1,
-            "created_at": "2023-08-15 12:00:10.00000+00:00",
-            "request_id": 2,
-            "id": 3,
-            "message_chunk": "",
-            "owner_id": 100,
-            "status": "progress"
-        } <br>
-        <br>
-        2. When generations is stop, you will take last message:<br>
-        {
-            "type": "chat_message_chunk",
-            "chat_id": 19,
-            "created_at": "2023-08-15 12:00:10.00000+00:00",
-            "request_id": 340,
-            "id": 341,
-            "message_chunk": ".",
-            "owner_id": 100,
-            "status": "done"
-        }<br>
-        <br>
-        **Errors that can be meet:**<br>
-        {
-          'error': "Not request method"
-        }<br>
-        {
-          'error': "Prompt is empty"
-        }<br>
-        {
-          'error': "Chat is not available"
-        }<br>
-        {
-          'error': "Agent is not exists"
-        }<br>
-        {
-          'error': "send_type is not correct"
-        }
-
-      responses:
-        101:
-          description: Switching Protocols
-        '403':
-          description: '403 Access denied'
       tags:
         - chats
   /messages/:
@@ -713,7 +725,6 @@ paths:
         description: A unique integer value identifying this agent.
         required: true
         type: integer
-
   /agents/{id}/avatar/:
     patch:
       security:
@@ -747,7 +758,6 @@ paths:
         description: A unique integer value identifying this agent.
         required: true
         type: integer
-
   /users/:
     get:
       security:
