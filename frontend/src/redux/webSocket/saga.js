@@ -80,11 +80,11 @@ function* killWebSocketSaga() {
 function* webSocketReceiveMessageSaga(action){
   const wsResponseHandlers = yield select(getWsResponseHandlers);
   const messageData = action.payload;
-  const type = messageData.send_type || messageData.type;
+  const type = messageData.type;
 
   if (typeof type === 'string' && type.length > 0) {
     if (wsResponseHandlers[type] !== undefined) {
-      wsResponseHandlers[type].onMessage(messageData);
+      yield put(wsResponseHandlers[type].onMessage(messageData));
       return;
     }
     console.error("wsResponseHandlers[type] is not defined. webSocketReceiveMessageSaga wsResponseHandlers", wsResponseHandlers);

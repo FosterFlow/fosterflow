@@ -94,7 +94,7 @@ function webSocketManager (method, data) {
 }
 
 const webSocketsAuthorizedClient = {
-  send: (data, responseHandler, errorHandler) => webSocketManager("send", data),
+  send: (data) => webSocketManager("send", data),
   //  We use "resolve" method when we get updated access Token.
   //  Listening store seems to be more complex into helper.
   resolve: () => webSocketManager("resolve")
