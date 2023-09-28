@@ -231,7 +231,7 @@ function UserChat(props) {
                                                 <li className="user-chat-conversation-list-item right">
                                                     <div className="user-chat-message user-chat-message-formatting">
                                                         <Spinner size="sm"/>&nbsp;&nbsp;
-                                                        {message.prompt}
+                                                        {message.message_text}
                                                     </div>
                                                 </li>
                                             }
