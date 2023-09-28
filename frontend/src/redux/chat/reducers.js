@@ -270,7 +270,7 @@ const Chat = (state = INIT_STATE, action) => {
     
         case SEND_MESSAGE_SUCCESS: {
             const filteredQueue = state.sendingMessagesQueue.filter(
-                message => message.message_text !== action.payload.message_text
+                message => message.messageHash !== action.payload.messageHash
               );
 
             return {
@@ -282,7 +282,7 @@ const Chat = (state = INIT_STATE, action) => {
 
         case SEND_MESSAGE_FAILED: {
             const filteredQueue = state.sendingMessagesQueue.filter(
-                message => message.message_text !== action.payload.message_text
+                message => message.messageHash !== action.payload.messageHash
                 );
 
             return {

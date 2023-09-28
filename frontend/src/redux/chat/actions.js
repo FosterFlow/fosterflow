@@ -169,10 +169,13 @@ export const chatInit = () => ({
     payload: errors
   });
 
-  export const sendMessage = (messageData) => ({
-    type: SEND_MESSAGE,
-    payload: messageData
-  });
+  export const sendMessage = (messageData) => {
+    const messageHash = new Date().getTime().toString() + Math.floor(Math.random() * 1000000).toString();
+    return {
+      type: SEND_MESSAGE,
+      payload: { ...messageData, messageHash }
+    }
+  };
 
   export const sendMessageInitState = () => ({
     type: SEND_MESSAGE_INIT_STATE,

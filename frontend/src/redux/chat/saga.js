@@ -77,17 +77,12 @@ function* addChatSaga(action) {
 
 function* addChatSuccessSaga(action) {
   const chatData = action.payload;
-
-  try {
-    yield put(sendMessage({
-      "addressee_id": chatData.addressee_id,
-      "chat_id": chatData.id,
-      "message_text": chatData.new_chat_message,
-      "owner_id": chatData.owner_id,
+  yield put(sendMessage({
+    "addressee_id": chatData.addressee_id,
+    "chat_id": chatData.id,
+    "message_text": chatData.new_chat_message,
+    "owner_id": chatData.owner_id,
   }));
-} catch (errors) {
-  yield put(sendMessageFailed(errors));
-}
 }
 
 function* deleteChatSaga(action) {
@@ -116,11 +111,13 @@ function* fetchMessagesSaga(action) {
 }
 
 function* sendMessageSaga(action) {
+  const newMessage = action.payload;
+  const messageHash = newMessage.messageHash;
   try {
-    const message = yield call(api.post, '/messages/', action.payload);
-    yield put(sendMessageSuccess(message));
+    const message = yield call(api.post, '/messages/', newMessage);
+    yield put(sendMessageSuccess({...message, messageHash}));
   } catch (errors) {
-    yield put(sendMessageFailed(errors));
+    yield put(sendMessageFailed({...errors, messageHash}));
   }
 }
 
