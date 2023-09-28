@@ -68,6 +68,7 @@ function* addChatSaga(action) {
         ...newChatData,
         new_chat_message: data.message 
       }));
+      yield put(addChatInitState());
   } catch (errors) {
     yield put(addChatFailed(errors));
     yield delay(10000);

@@ -158,7 +158,9 @@ function UserChat(props) {
             authorizedUser === null ||
             authorizedUser.is_email_confirmed === false ||
             addChatRequestMessage !== undefined
-        ) { return; }
+        ) { 
+            return; 
+        }
 
         fetchMessages(activeChatId);
     }, [authorizedUser, activeChatId]);
