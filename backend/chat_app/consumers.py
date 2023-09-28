@@ -9,7 +9,7 @@ from django.contrib.auth.models import AnonymousUser
 from project.settings import BASE_DIR
 from django.db.models import Q
 from chat_app.models import Chat, Message
-from user_app.models import Agent
+from agent_app.models import Agent
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))

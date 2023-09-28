@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from .models import Agent
+from agent_app.models import Agent
 from .permissions import IsOwnerAgent, IsOwnerUser
 from .serializers import CustomUserSerializer, AgentSerializer, SelfUserSerializer, UserAvatarSerializer
 from rest_framework.permissions import IsAuthenticated
