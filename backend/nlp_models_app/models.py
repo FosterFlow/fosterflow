@@ -18,6 +18,9 @@ class NlpModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f'{self.pk} {self.title}'
+
 
 class ProfileModel(models.Model):
     nlp_model = models.ForeignKey(NlpModel, on_delete=models.CASCADE)
@@ -36,3 +39,6 @@ class ProfileModel(models.Model):
             if image.size > 0.3 * 1024 * 1024:
                 self.avatar = compress_image(image)
         super(ProfileModel, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.pk} {self.nlp_model}'

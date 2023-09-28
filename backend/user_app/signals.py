@@ -11,12 +11,8 @@ User = get_user_model()
 @receiver(post_save, sender=User)
 def create_agent(sender, instance, created, **kwargs):
     if created:
-        Agent.objects.create(user_id=instance)
+        Agent.objects.create(user_id=instance.id)
 
-
-@receiver(post_save, sender=User)
-def save_agent(sender, instance, **kwargs):
-    instance.agent.save()
 
 @receiver(post_save, sender=User)
 def create_profile_user(sender, instance, created, **kwargs):
@@ -26,4 +22,4 @@ def create_profile_user(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_profile_user(sender, instance, **kwargs):
-    instance.profile_user.save()
+    instance.profileuser.save()

@@ -11,11 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        migrations.RunSQL("""            
-            INSERT INTO agent_app_agent (id, created_at, updated_at)
-            SELECT id, '2023-09-02 05:00:00.0', '2023-09-02 05:00:00.0'
-            FROM user_app_agent
-        """),
+        ('user_app', '0003_rename_profile_agent'),
     ]
 
     operations = [
@@ -30,4 +26,9 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='users', to=settings.AUTH_USER_MODEL)),
             ],
         ),
+        migrations.RunSQL("""            
+                INSERT INTO agent_app_agent (id, created_at, updated_at, user_id)
+                SELECT id, '2023-09-02 05:00:00.0', '2023-09-02 05:00:00.0', user_id_id
+                FROM user_app_agent
+            """),
     ]

@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
     dependencies = [
         ('agent_app', '0001_initial'),
-        ('chat_app', '0007_add_Gpts_models'),
+        ('chat_app', '0006_message_addressee_id'),
     ]
 
     operations = [
