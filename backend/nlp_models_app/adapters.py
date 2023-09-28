@@ -95,6 +95,7 @@ class GptAdapter(Adapter):
                     self.to_interface().send_chunk(data, str(sent_message.owner_id.id))
                 else:
                     data['status'] = 'done'
+                    data['message_chunk'] = ''
                     self.to_interface().send_chunk(data, str(sent_message.owner_id.id))
             except Exception as e:
                 data['errors'] = {
