@@ -76,7 +76,10 @@ class UserAgentModelViewSet(ModelViewSet):
                 return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        errors = {"errors": {}}
+        for error in serializer.errors:
+            errors["errors"][error] = [serializer.errors[error][0]]
+        return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
         agents = Agent.objects.all()
