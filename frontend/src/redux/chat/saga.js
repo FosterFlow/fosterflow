@@ -118,7 +118,12 @@ function* sendMessageSaga(action) {
     const message = yield call(api.post, '/messages/', newMessage);
     yield put(sendMessageSuccess({...message, messageHash}));
   } catch (errors) {
-    yield put(sendMessageFailed({...errors, messageHash}));
+    yield put(sendMessageFailed({
+      ...errors, 
+      messageHash
+    }));
+    yield delay(5000);
+    yield put(sendMessageInitState());
   }
 }
 

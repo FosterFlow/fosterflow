@@ -25,6 +25,7 @@ function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
     const {
+        sendMessageErrors,
         sendingMessagesQueue, 
         messages,
         fetchMessagesLoading,
@@ -239,6 +240,20 @@ function UserChat(props) {
                                     )
                                 }
                             </ul>
+                            { sendMessageErrors && (
+                                <Alert color="danger">
+                                    {t("The message wasn't delivered to the server. Errors details")}:
+                                    <ul className='ps-4'>
+                                        {sendMessageErrors.details.map((error, index) => (
+                                            <li key={index} className="p-0">
+                                                {error}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <hr/>
+                                    {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                                </Alert>
+                            )}
                     </div>
                 </div>
                 <ChatInput/>
@@ -249,6 +264,7 @@ function UserChat(props) {
 
 const mapStateToProps = (state) => {
     const {
+        sendMessageErrors,
         sendingMessagesQueue,
         messages,
         fetchMessagesLoading,
@@ -259,6 +275,7 @@ const mapStateToProps = (state) => {
     } = state.Chat;
 
     return {
+        sendMessageErrors,
         sendingMessagesQueue,
         messages,
         fetchMessagesLoading,
