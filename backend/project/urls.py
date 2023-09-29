@@ -10,7 +10,7 @@ from chat_app.views import ChatModelViewSet, MessageModelViewSet
 from user_app.views import UserModelViewSet, ProfileUserModelViewSet, SelfUserAPIView, SelfProfileUserAPIView
 from auth_app.views import CustomTokenRefreshView
 from user_app.views import UserAvatarUpdateView
-from agent_app.views import AgentListView, AgentDetailView
+from agent_app.views import AgentListView
 
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/profile_user/', SelfProfileUserAPIView.as_view(), name='profile_user'),
     path('api/profiles_user/<int:pk>/avatar/', UserAvatarUpdateView.as_view(), name='profile_user_update'),
 
-    path('agents/', AgentListView.as_view(), name='agent-list'),
+    path('api/agents/', AgentListView.as_view(), name='agent-list'),
     # path('agents/<int:pk>/', AgentDetailView.as_view(), name='agent-detail'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
