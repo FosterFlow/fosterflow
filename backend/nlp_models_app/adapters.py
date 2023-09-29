@@ -44,18 +44,15 @@ class Adapter:
         self.to_interface = to_interface
 
     def get_messages(self, sent_message):
-        previous_messages = Message.objects.filter(chat_id=sent_message.chat_id).order_by('-id')[:10]
+        previous_messages = Message.objects.filter(chat_id=sent_message.chat_id).order_by('id')[:10]
 
         messages = [{"role": "system", "content": "You are a helpful assistant."}]
         for message in previous_messages:
-            if message.owner_id != sent_message.owner_id:
+            if message.owner_id == sent_message.owner_id:
                 mes = {"role": "user", "content": message.message_text}
             else:
                 mes = {"role": "assistant", "content": message.message_text}
             messages.append(mes)
-
-        user_prompt = {"role": "user", "content": sent_message.message_text}
-        messages.append(user_prompt)
 
         return messages
 
@@ -98,6 +95,7 @@ class GptAdapter(Adapter):
                     self.to_interface().send_chunk(data, str(sent_message.owner_id.id))
                 else:
                     data['status'] = 'done'
+                    data['message_chunk'] = ''
                     self.to_interface().send_chunk(data, str(sent_message.owner_id.id))
             except Exception as e:
                 data['errors'] = {
