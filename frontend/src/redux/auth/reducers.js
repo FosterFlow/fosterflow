@@ -52,9 +52,6 @@ import {
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
-
-    ADD_WEB_SOCKET_REQUEST,
-    CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 } from './constants';
 
 const INIT_STATE = {
@@ -103,8 +100,7 @@ const INIT_STATE = {
     isAuthenticated: JSON.parse(
         localStorage.getItem("isAuthenticated")
         ) || false,
-    authenticatedApiRequestsQueue: [],
-    webSocketsRequestsQueue: [],
+    authenticatedApiRequestsQueue: []
 };
 
 
@@ -169,8 +165,7 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
-                authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: [],
+                authenticatedApiRequestsQueue: []
             };
         }
 
@@ -193,8 +188,7 @@ const Auth = (state = INIT_STATE, action) => {
                 logoutLoading: true,
                 logoutSuccess: false,
                 logoutErrors: null,
-                authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: [],
+                authenticatedApiRequestsQueue: []
             };
         }
 
@@ -207,7 +201,6 @@ const Auth = (state = INIT_STATE, action) => {
                 isAuthenticated: false,
                 accessTokenLoading: false,
                 authenticatedApiRequestsQueue: [],
-                webSocketsRequestsQueue: [],
                 logoutLoading: false,
                 logoutSuccess: false,
                 logoutErrors: action.payload,
@@ -489,18 +482,6 @@ const Auth = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 authenticatedApiRequestsQueue: [] 
-            };
-
-        case ADD_WEB_SOCKET_REQUEST:
-            return { 
-                ...state,
-                webSocketsRequestsQueue : [...state.webSocketsRequestsQueue, action.payload]
-            };
-    
-        case CLEAR_WEB_SOCKET_REQUESTS_QUEUE:
-            return { 
-                ...state, 
-                webSocketsRequestsQueue: [] 
             };
 
         default: return { ...state };

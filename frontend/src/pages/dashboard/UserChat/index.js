@@ -24,7 +24,8 @@ import {
 function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
-    const { 
+    const {
+        sendingMessagesQueue, 
         messages,
         fetchMessagesLoading,
         fetchMessagesErrors, 
@@ -37,6 +38,7 @@ function UserChat(props) {
     const { t } = useTranslation();
     //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
+    const relevantSendingMessages = sendingMessagesQueue.filter(message => message.chat_id === activeChatId);
     const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
     const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
@@ -156,7 +158,9 @@ function UserChat(props) {
             authorizedUser === null ||
             authorizedUser.is_email_confirmed === false ||
             addChatRequestMessage !== undefined
-        ) { return; }
+        ) { 
+            return; 
+        }
 
         fetchMessages(activeChatId);
     }, [authorizedUser, activeChatId]);
@@ -220,6 +224,20 @@ function UserChat(props) {
                                         </React.Fragment>
                                     )
                                 }
+                                {
+                                    relevantSendingMessages.map((message, key) =>
+                                        <React.Fragment key={key}>
+                                            {
+                                                <li className="user-chat-conversation-list-item right">
+                                                    <div className="user-chat-message user-chat-message-formatting">
+                                                        <Spinner size="sm"/>&nbsp;&nbsp;
+                                                        {message.message_text}
+                                                    </div>
+                                                </li>
+                                            }
+                                        </React.Fragment>
+                                    )
+                                }
                             </ul>
                     </div>
                 </div>
@@ -231,6 +249,7 @@ function UserChat(props) {
 
 const mapStateToProps = (state) => {
     const {
+        sendingMessagesQueue,
         messages,
         fetchMessagesLoading,
         fetchMessagesErrors,
@@ -240,6 +259,7 @@ const mapStateToProps = (state) => {
     } = state.Chat;
 
     return {
+        sendingMessagesQueue,
         messages,
         fetchMessagesLoading,
         fetchMessagesErrors,

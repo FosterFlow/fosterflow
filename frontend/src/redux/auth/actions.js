@@ -52,9 +52,6 @@ import {
 
     ADD_AUTHENTICATED_API_REQUEST,
     CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE,
-  
-    ADD_WEB_SOCKET_REQUEST,
-    CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 } from './constants';
 
 export const loginUser = (email, password ) => {
@@ -298,13 +295,4 @@ export const addAuthenticatedApiRequest = (requestPromise) => ({
 
 export const clearAuthenticatedApiRequestsQueue = () => ({
     type: CLEAR_AUTHENTICATED_API_REQUESTS_QUEUE
-});
-
-export const addWebSocketRequest = (requestPromise) => ({
-    type: ADD_WEB_SOCKET_REQUEST,
-    payload: requestPromise
-});
-
-export const clearWebSocketsApiRequestsQueue = () => ({
-    type: CLEAR_WEB_SOCKET_REQUESTS_QUEUE
 });
