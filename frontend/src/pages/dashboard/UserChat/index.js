@@ -240,16 +240,24 @@ function UserChat(props) {
                                     )
                                 }
                             </ul>
+                            {/* TODO: add an ability to re-send failed messages */}
                             { sendMessageErrors && (
                                 <Alert color="danger">
                                     {t("The message wasn't delivered to the server. Errors details")}:
-                                    <ul className='ps-4'>
-                                        {sendMessageErrors.details.map((error, index) => (
-                                            <li key={index} className="p-0">
+                                    {sendMessageErrors.details && 
+                                        (<ul className='ps-4'>
+                                            {sendMessageErrors.details.map((error, index) => (
+                                                <li key={index} className="p-0">
                                                 {error}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                                </li>
+                                            ))}
+                                        </ul>)
+                                    }
+                                    {sendMessageErrors.details === undefined && 
+                                        (<pre>
+                                            {JSON.stringify(sendMessageErrors)}
+                                        </pre>)
+                                    }
                                     <hr/>
                                     {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                                 </Alert>

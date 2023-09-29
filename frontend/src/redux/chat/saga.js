@@ -122,7 +122,7 @@ function* sendMessageSaga(action) {
       ...errors, 
       messageHash
     }));
-    yield delay(5000);
+    yield delay(10000);
     yield put(sendMessageInitState());
   }
 }
