@@ -27,6 +27,8 @@ tags:
     description: This is what the user sends and receives a response
   - name: users
     description: The model for User
+  - name: profiles_user
+    description: The Profile for User
   - name: agents
     description: Information containing user data
   - name: register
@@ -112,7 +114,7 @@ paths:
                     "Chat is not available",
                     "Agent is not exists",
                     "send_type is not correct"
-                    ]
+                  ]
                 }
               }
         '403':
@@ -588,13 +590,14 @@ paths:
       tags:
         - token
     parameters: [ ]
-  /agents/:
+
+
+  /profiles_user/:
     get:
-      summary: Get all the agents
+      summary: Get all the profiles user
       security:
         - Bearer: [ ]
-      operationId: agents_list
-      description: Get, Update user agent
+      description: Get, Update user profile
       parameters: [ ]
       responses:
         '200':
@@ -602,7 +605,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Agent'
+              $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -612,11 +615,11 @@ paths:
           schema:
             $ref: '#/definitions/TokenNotValid'
       tags:
-        - agents
+        - profiles_user
     parameters: [ ]
-  /agent/:
+  /profile_user/:
     get:
-      summary: Get user agents
+      summary: Get user profile
       security:
         - Bearer: [ ]
       description: Get user agents
@@ -626,7 +629,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Agent'
+              $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -640,21 +643,20 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters: [ ]
-  /agents/{id}/:
+  /profiles_user/{id}/:
     get:
-      summary: Get agent by ID
+      summary: Get user profile by ID
       security:
         - Bearer: [ ]
-      operationId: agents_read
-      description: Get, Update user agent
+      description: Get, Update user profile
       parameters: [ ]
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Agent'
+            $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -668,13 +670,12 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit agent by ID
-      operationId: agents_update
-      description: Get, Update user agent
+      summary: Edit user profile by ID
+      description: Get, Update user profile
       parameters:
         - name: data
           in: body
@@ -693,8 +694,6 @@ paths:
       responses:
         '200':
           description: ''
-          schema:
-            $ref: '#/definitions/Agent'
           examples:
             application/json:
               {
@@ -710,14 +709,14 @@ paths:
           examples:
             application/json:
               {
-                  "errors": {
-                      "first_name": [
-                        "This field may not be blank."
-                      ],
-                      "last_name": [
-                        "Ensure this field has no more than 32 characters."
-                      ]
-                  }
+                "errors": {
+                  "first_name": [
+                    "This field may not be blank."
+                  ],
+                  "last_name": [
+                    "Ensure this field has no more than 32 characters."
+                  ]
+                }
               }
         401:
           description: Unauthorized
@@ -728,20 +727,19 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters:
       - name: id
         in: path
         description: A unique integer value identifying this agent.
         required: true
         type: integer
-  /agents/{id}/avatar/:
+  /profiles_user/{id}/avatar/:
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit agent by ID
-      operationId: agents_avatar_update
-      description: Update Agent avatar
+      summary: Edit user profile by ID
+      description: Update user profile avatar
       parameters:
         - in: formData
           name: avatar
@@ -761,13 +759,16 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters:
       - name: id
         in: path
         description: A unique integer value identifying this agent.
         required: true
         type: integer
+
+
+
   /users/:
     get:
       security:
@@ -1367,7 +1368,7 @@ definitions:
         minLength: 1
         example: 'user'
         pattern: '^(?!_$)(?![-.])(?!.*[_.-]{2})[a-zA-Z0-9_.-]+(?<![.-])$'
-  Profile:
+  ProfileUser:
     type: object
     properties:
       user_id:

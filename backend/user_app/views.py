@@ -93,12 +93,12 @@ class ProfileUserModelViewSet(ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         try:
-            agent = Agent.objects.get(id=kwargs['pk'])
-            agent_serializer = ProfileUserSerializer(
-                instance=agent,
+            profile_user = ProfileUser.objects.get(id=kwargs['pk'])
+            profile_user_serializer = ProfileUserSerializer(
+                instance=profile_user,
                 many=False
             )
-            return Response(agent_serializer.data, status.HTTP_200_OK)
+            return Response(profile_user_serializer.data, status.HTTP_200_OK)
         except Exception as e:
             return Response({"errors": {"details": e.args}}, status=status.HTTP_404_NOT_FOUND)
 
@@ -123,7 +123,7 @@ class UserAvatarUpdateView(APIView):
     permission_classes = (IsAuthenticated, IsOwnerAgent)
 
     def patch(self, request, pk=None, *args, **kwargs):
-        profile_user = get_object_or_404(Agent, pk=pk)
+        profile_user = get_object_or_404(ProfileUser, pk=pk)
         serializer = ProfileUserAvatarSerializer(profile_user, data=request.data, partial=True)
 
         if serializer.is_valid():
