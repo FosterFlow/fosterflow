@@ -11,6 +11,7 @@ from user_app.views import UserModelViewSet, ProfileUserModelViewSet, SelfUserAP
 from auth_app.views import CustomTokenRefreshView
 from user_app.views import UserAvatarUpdateView
 from agent_app.views import AgentListView
+from nlp_models_app.viws import NlpModelListView, ProfileModelListView
 
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
@@ -32,6 +33,9 @@ urlpatterns = [
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
     # path('agents/<int:pk>/', AgentDetailView.as_view(), name='agent-detail'),
+
+    path('api/nlp-models/', NlpModelListView.as_view(), name='nlp-model-list'),
+    path('api/profiles-model/', ProfileModelListView.as_view(), name='profile-model-list'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/logout/', UserLogoutAPIView.as_view(), name='logout'),
