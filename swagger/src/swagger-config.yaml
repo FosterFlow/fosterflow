@@ -601,6 +601,15 @@ paths:
         - Bearer: [ ]
       operationId: agents_list
       summary: Get all the agents
+      parameters:
+        - in: query
+          name: is_user
+          type: boolean
+          description: Filter by User Agent
+        - in: query
+          name: is_nlp_model
+          type: boolean
+          description: Filter by NLP Model Agent
       description: 'Get all the agents'
       responses:
         '200':
