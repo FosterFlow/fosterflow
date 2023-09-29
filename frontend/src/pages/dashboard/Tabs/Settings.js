@@ -30,6 +30,8 @@ import {
 
     updateAgentAvatar 
 } from '../../../redux/actions';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css'; 
 
 function Settings(props) {
     const { t } = useTranslation();
@@ -49,6 +51,8 @@ function Settings(props) {
         updateAgentAvatar
     } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
+    const [crop, setCrop] = useState({ aspect: 1 });
+    const [croppedImage, setCroppedImage] = useState(null);
 
     //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
@@ -73,6 +77,36 @@ function Settings(props) {
         }
 
         //TODO: show exception, that avatar wasn't chosen
+    }
+
+    function handleImageLoad(image) {
+        setCroppedImage(image);
+    }
+
+    function onCropComplete(crop, pixelCrop) {
+        getCroppedImg(croppedImage, pixelCrop);
+    }
+
+    function getCroppedImg(image, pixelCrop) {
+        const canvas = document.createElement('canvas');
+        canvas.width = pixelCrop.width;
+        canvas.height = pixelCrop.height;
+        const ctx = canvas.getContext('2d');
+
+        ctx.drawImage(
+            image,
+            pixelCrop.x,
+            pixelCrop.y,
+            pixelCrop.width,
+            pixelCrop.height,
+            0,
+            0,
+            pixelCrop.width,
+            pixelCrop.height
+        );
+
+        const base64Image = canvas.toDataURL('image/jpeg');
+        setSelectedAvatar(base64Image);
     }
 
     function getFirstName (){
@@ -258,9 +292,12 @@ function Settings(props) {
                                         <FormGroup>
                                             <Label>{t('Photo')}</Label>
                                             <div className='pb-3'>
-                                            <img 
-                                                src={getAgentAvatar ()} 
-                                                className="rounded-circle avatar-lg img-thumbnail"
+                                                <ReactCrop
+                                                    src={getAgentAvatar()}
+                                                    crop={crop}
+                                                    onChange={(newCrop) => setCrop(newCrop)}
+                                                    onComplete={onCropComplete}
+                                                    onImageLoaded={handleImageLoad}
                                                 />
                                             </div>
                                             <Input
@@ -268,7 +305,11 @@ function Settings(props) {
                                                 name="file"
                                                 type="file"
                                                 disabled={agent.avatarLoading}
-                                                onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
+                                                onChange={(e) => {
+                                                    const reader = new FileReader();
+                                                    reader.addEventListener('load', () => setSelectedAvatar(reader.result));
+                                                    reader.readAsDataURL(e.target.files[0]);
+                                                }}
                                             />
                                             <FormFeedback>
                                                 {
