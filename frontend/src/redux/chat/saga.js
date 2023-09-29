@@ -1,37 +1,20 @@
-import { eventChannel } from 'redux-saga';
 import { 
   call, 
   put, 
-  take, 
   takeEvery,
   delay,
-  select 
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import webSocketsAuthorizedClient from '../../helpers/webSocketsAuthorizedClient';
 import {
   FETCH_CHATS,
   ADD_CHAT,
+  ADD_CHAT_SUCCESS,
   DELETE_CHAT,
   FETCH_MESSAGES,
+  SEND_MESSAGE,
   DELETE_MESSAGE,
-    
-  SET_ACTIVE_CHAT,
-  SHOW_CHAT_WINDOW,
-  SET_ACTIVE_NEW_CHAT,
-
-  WS_CONNECTION_START,
-  WS_CONNECTION_KILL,
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_ERROR,
-  WS_CONNECTION_CLOSED,
-  WS_RECEIVE_MESSAGE,
 } from './constants';
 import {
-  setActiveChat,
-  showChatWindow,
-  setActiveNewChat,
-
   fetchChatsInitState,
   fetchChatsSuccess,
   fetchChatsFailed,
@@ -48,22 +31,19 @@ import {
   fetchMessagesSuccess,
   fetchMessagesFailed,
 
+  sendMessage,
+  sendMessageInitState,
+  sendMessageSuccess,
+  sendMessageFailed,
+
   deleteMessageInitState,
   deleteMessageSuccess,
   deleteMessageFailed,
-
-  startWsConnection,
-  wsConnectionSuccess,
-  wsConnectionError,
-  wsConnectionClosed,
-  wsReceiveMessage
+  sendMessagesFailed
 } from './actions';
+import config from '../../config';
 
 const api = apiAuthorizedClient;
-const getActiveChatId = (state) => state.Chat.activeChatId;
-const getWsConnection = (state) => state.Chat.wsConnection;
-const getAddChatRequestMessage = (state) => state.Chat.addChatRequestMessage;
-const getAuthorizedUser = (state) => state.User.authorizedUser;
 
 function* fetchChatsSaga() {
   try {
@@ -79,18 +59,31 @@ function* fetchChatsSaga() {
 function* addChatSaga(action) {
   const data = action.payload;
   try {
-      const chat = yield call(api.post, '/chats/', {
-          "owner_id": data.user_id,
-          "name": data.name,
-          "addressee_id": 100
+      const newChatData = yield call(api.post, '/chats/', {
+        "addressee_id": config.BASE_MODEL_AGENT_ID,
+        "owner_id": data.user_id,
+        "name": data.name
       });
-      yield put(addChatSuccess(chat));
-yield put(startWsConnection(chat.id));      
+      yield put(addChatSuccess({
+        ...newChatData,
+        new_chat_message: data.message 
+      }));
+      yield put(addChatInitState());
   } catch (errors) {
     yield put(addChatFailed(errors));
     yield delay(10000);
     yield put(addChatInitState());
   }
+}
+
+function* addChatSuccessSaga(action) {
+  const chatData = action.payload;
+  yield put(sendMessage({
+    "addressee_id": chatData.addressee_id,
+    "chat_id": chatData.id,
+    "message_text": chatData.new_chat_message,
+    "owner_id": chatData.owner_id,
+  }));
 }
 
 function* deleteChatSaga(action) {
@@ -111,11 +104,21 @@ function* fetchMessagesSaga(action) {
   try {
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
-yield put(startWsConnection(action.payload));
     yield delay(5000);
     yield put(fetchMessagesInitState());
   } catch (errors) {
     yield put(fetchMessagesFailed(errors));
+  }
+}
+
+function* sendMessageSaga(action) {
+  const newMessage = action.payload;
+  const messageHash = newMessage.messageHash;
+  try {
+    const message = yield call(api.post, '/messages/', newMessage);
+    yield put(sendMessageSuccess({...message, messageHash}));
+  } catch (errors) {
+    yield put(sendMessageFailed({...errors, messageHash}));
   }
 }
 
@@ -132,92 +135,13 @@ function* deleteMessageSaga(action) {
   }
 }
 
-function createWebSocketChannelSaga(socket) {
-  return eventChannel(emit => {
-    socket.onopen = () => {
-      emit(wsConnectionSuccess(socket));
-    };
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      // if (data.error) {
-
-      // }
-      //TODO: add handling errors data.error
-      //{"error": "'prompt'"}
-      emit(wsReceiveMessage(data));
-    };
-    socket.onerror = (event) => {
-      //TODO: check error format in this case
-      // emit(wsConnectionFailed(event));
-    };
-    socket.onclose = () => {
-      emit(wsConnectionClosed());
-    };
-
-    //TODO: check how it works
-    return () => {
-      socket.close();
-    };
-  });
-}
-
-
-function* startWebSocketSaga(action) {
-  const chatId = action.payload;
-  const wsConnection = yield select(getWsConnection);
-
-  if (wsConnection !== null) {
-    wsConnection.close();
-  }
-  const socket = yield call(webSocketsAuthorizedClient.newSocket, `/chats/${chatId}/`);
-  const socketChannel = createWebSocketChannelSaga(socket);
-
-  while (true) {
-    const action = yield take(socketChannel);
-    yield put(action);
-  }
-}
-
-function* killWebSocketSaga(action) {
-  const chatId = action.payload;
-  const wsConnection = yield select(getWsConnection);
-
-  if (wsConnection !== null) {
-    wsConnection.close();
-  }
-}
-
-function* webSocketSuccessSaga() {
-  const addChatRequestMessage = yield select(getAddChatRequestMessage);
-  
-  if (addChatRequestMessage === undefined) {
-    yield put(addChatInitState());
-    return;
-  }
-
-  const activeChatId = yield select(getActiveChatId);
-  const wsConnection = yield select(getWsConnection);
-  const authorizedUser = yield select(getAuthorizedUser);
-  wsConnection.send(JSON.stringify(
-  {
-      "chat_id":  activeChatId,
-  "prompt": addChatRequestMessage,
-  "owner_id": authorizedUser.id,
-  "method": "request" 
-  }
-  ));
-  yield put(addChatInitState());
-}
-
-
 
 export default function* chatSaga() {
   yield takeEvery(FETCH_CHATS, fetchChatsSaga);
   yield takeEvery(ADD_CHAT, addChatSaga);
+  yield takeEvery(ADD_CHAT_SUCCESS, addChatSuccessSaga); 
   yield takeEvery(DELETE_CHAT, deleteChatSaga);
   yield takeEvery(FETCH_MESSAGES, fetchMessagesSaga);
+  yield takeEvery(SEND_MESSAGE, sendMessageSaga);
   yield takeEvery(DELETE_MESSAGE, deleteMessageSaga);
-  yield takeEvery(WS_CONNECTION_START, startWebSocketSaga);
-  yield takeEvery(WS_CONNECTION_KILL, killWebSocketSaga);
-  yield takeEvery(WS_CONNECTION_SUCCESS, webSocketSuccessSaga);
 }

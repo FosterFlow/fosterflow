@@ -94,9 +94,10 @@ const ForgetPassword = (props) => {
                     <Row className="justify-content-center">
                         <Col md={8} lg={6} xl={5}>
                             <div className="text-center mb-3">
-                                <Link to="/" className="auth-logo mb-4 d-block">
+                                <a href="/" className="auth-logo mb-4 d-block">
+                                    {/* By / root url we show landing page, so we don't need to handle it by React router */}
                                     <img src={logo} alt="" height="60" className="logo" />
-                                </Link>
+                                </a>
                                 <h4>{t('Restore your password')}</h4>
                             </div>
                             <Card>

@@ -20,7 +20,15 @@ import {
   FETCH_MESSAGES,
   FETCH_MESSAGES_INIT_STATE,
   FETCH_MESSAGES_SUCCESS,
-  FETCH_MESSAGES_FAILED, 
+  FETCH_MESSAGES_FAILED,
+  
+  SEND_MESSAGE,
+  SEND_MESSAGE_INIT_STATE,
+  SEND_MESSAGE_SUCCESS,
+  SEND_MESSAGE_FAILED,
+
+  RECEIVE_MESSAGE_CHUNK,
+  RECEIVE_MESSAGE_CHUNK_FAILED,
   
   DELETE_MESSAGE,
   DELETE_MESSAGE_INIT_STATE,
@@ -30,19 +38,6 @@ import {
   SET_ACTIVE_CHAT,
   SHOW_CHAT_WINDOW,
   SET_ACTIVE_NEW_CHAT,
-
-  WS_CONNECTION_START,
-  WS_CONNECTION_KILL,
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_FAILED,
-  WS_CONNECTION_CLOSED,
-
-  WS_MESSAGE_SEND,
-  WS_MESSAGE_SEND_INIT_STATE,
-  WS_MESSAGE_SEND_SUCCESS,
-  WS_MESSAGE_SEND_FAILED,
-
-  WS_RECEIVE_MESSAGE_CHUNK,
 } from './constants';
 
 export const chatInit = () => ({
@@ -173,6 +168,38 @@ export const chatInit = () => ({
     type: FETCH_MESSAGES_FAILED,
     payload: errors
   });
+
+  export const sendMessage = (messageData) => {
+    const messageHash = new Date().getTime().toString() + Math.floor(Math.random() * 1000000).toString();
+    return {
+      type: SEND_MESSAGE,
+      payload: { ...messageData, messageHash }
+    }
+  };
+
+  export const sendMessageInitState = () => ({
+    type: SEND_MESSAGE_INIT_STATE,
+  });
+
+  export const sendMessageSuccess = (message) => ({
+    type: SEND_MESSAGE_SUCCESS,
+    payload: message
+  });
+
+  export const sendMessageFailed = (message) => ({
+    type: SEND_MESSAGE_FAILED,
+    payload: message
+  });
+
+  export const receiveMessageChunk = (messageChunkData) => ({
+    type: RECEIVE_MESSAGE_CHUNK,
+    payload: messageChunkData
+  });
+
+  export const receiveMessageChunkFailed = (errors) => ({
+    type: RECEIVE_MESSAGE_CHUNK_FAILED,
+    payload: errors
+  });
   
   export const deleteMessage = (messageId) => ({
     type: DELETE_MESSAGE,
@@ -191,49 +218,4 @@ export const chatInit = () => ({
   export const deleteMessageFailed = (errors) => ({
     type: DELETE_MESSAGE_FAILED,
     payload: errors
-  });
-
-  export const startWsConnection = (chatId) => ({
-    type: WS_CONNECTION_START,
-    payload: chatId
-  });
-
-  export const killWsConnection = () => ({
-    type: WS_CONNECTION_KILL,
-  });
-  
-  export const wsConnectionSuccess = (socket) => ({
-    type: WS_CONNECTION_SUCCESS,
-    payload: socket
-  });
-  
-  export const wsConnectionFailed = (errors) => ({
-    type: WS_CONNECTION_FAILED,
-    payload: errors
-  });
-  
-  export const wsConnectionClosed = () => ({
-    type: WS_CONNECTION_CLOSED
-  });
-
-  export const wsMessageSend = () => ({
-    type: WS_MESSAGE_SEND
-  });
-
-  export const wsMessageSendInitState = () => ({
-    type: WS_MESSAGE_SEND_INIT_STATE
-  });
-
-  export const wsMessageSendSuccess = () => ({
-    type: WS_MESSAGE_SEND_SUCCESS
-  });
-  
-  export const wsMessageSendFailed = (errors) => ({
-    type: WS_MESSAGE_SEND_FAILED,
-    payload: errors
-  });
-  
-  export const wsReceiveMessage = (messageChunk) => ({
-    type: WS_RECEIVE_MESSAGE_CHUNK,
-    payload: messageChunk
   });

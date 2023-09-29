@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form } from "reactstrap";
 import { connect } from "react-redux";
-import { addChat} from "../../../redux/chat/actions";
+import { 
+    addChat, 
+    sendMessage
+} from "../../../redux/chat/actions";
 import { useTranslation } from 'react-i18next';
+import config from '../../../config';
+import _ from 'lodash';
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
@@ -10,11 +15,11 @@ function ChatInput(props) {
     const { t } = useTranslation();
     const {
         activeChatId,
-        wsConnection,
         authorizedUser,
         newChat,
         fetchMessagesLoading,
         addChat,
+        sendMessage
     } = props;
 
     function isMobileDevice() {
@@ -53,30 +58,30 @@ function ChatInput(props) {
 
     //function for send data to onaddMessage function(in userChat/index.js component)
     const addMessage = (textMessage) => {
+        const trimmedText = _.trim(textMessage);
+
         if (authorizedUser === null ||
             authorizedUser.is_email_confirmed === false ||
-            textMessage === ""){
+            trimmedText === ""){
             return;
         }
 
         if (newChat){
             addChat({
                 "user_id": authorizedUser.id,
-                "name": textMessage.substring(0, 32),
-                "message": textMessage
+                "name": trimmedText.substring(0, 32),
+                "message": trimmedText
             });
             settextMessage("");
             return;        
         }
 
-        wsConnection.send(JSON.stringify(
-        {
-                "chat_id": activeChatId,
-        "prompt": textMessage,
-        "owner_id": authorizedUser.id,
-        "method": "request" 
-        }
-        ));
+        sendMessage({
+            "addressee_id": config.BASE_MODEL_AGENT_ID,
+            "chat_id": activeChatId,
+            "message_text": trimmedText,
+            "owner_id": authorizedUser.id
+        });
         settextMessage("");
     }
 
@@ -128,14 +133,12 @@ function ChatInput(props) {
 const mapStateToProps = (state) => {
     const {
         activeChatId,
-        wsConnection,
         newChat,
         fetchMessagesLoading
     } = state.Chat;
 
     return { 
         activeChatId,
-        wsConnection,
         newChat,
         fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
@@ -143,7 +146,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    addChat
+    addChat,
+    sendMessage
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatInput);
