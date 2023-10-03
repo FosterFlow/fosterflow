@@ -162,5 +162,7 @@
     "Sending email confirmation": "Отправка подтверждения по электронной почте",
     "Please enter your first name": "Пожалуйста, введите ваше имя",
     "Please enter your last name": "Пожалуйста, введите вашу фамилию",
-    "The message wasn't delivered to the server. Errors details": "Сообщение не было доставлено на сервер. Подробности об ошибках" 
+    "The message wasn't delivered to the server. Errors details": "Сообщение не было доставлено на сервер. Подробности об ошибках",
+    "Agents": "Агенты",
+    "Find agent": "Найти агента" 
 }

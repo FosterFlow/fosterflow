@@ -162,5 +162,7 @@
     "Sending email confirmation": "E-Mail-Bestätigung wird gesendet",
     "Please enter your first name": "Bitte geben Sie Ihren Vornamen ein",
     "Please enter your last name": "Bitte geben Sie Ihren Nachnamen ein",
-    "The message wasn't delivered to the server. Errors details": "Die Nachricht wurde nicht an den Server übermittelt. Fehlerdetails"
+    "The message wasn't delivered to the server. Errors details": "Die Nachricht wurde nicht an den Server übermittelt. Fehlerdetails",
+    "Agents": "Agenten",
+    "Find agent": "Agent finden"
 }

@@ -11,7 +11,8 @@ import withRouter from "../../../components/withRouter";
 import UserChat from "../UserChat/";
 import NewUserChat from "../NewUserChat";
 import config from '../../../config';
-import { 
+import {
+    getAgents, 
     fetchChats,
     setActiveChat,
     setActiveNewChat,
@@ -84,15 +85,6 @@ const Chats = (props) => {
     }, [chats]);
 
 
-    const newChatHandleLinkClick = useCallback(() => {
-        //TODO: do we need to make check that param is not already the same?
-        if (newChat){
-            return;
-        }
-
-        setActiveNewChat(true);
-    });
-
     const chatHandleLinkClick = useCallback(() => {
         //TODO: do we need to make check that param is not already the same?
         if (chatWindow){
@@ -105,9 +97,6 @@ const Chats = (props) => {
         <React.Fragment>
             <div className="chat-leftsidebar me-lg-1">
                 <div className="px-2 pt-2">
-                    <Link to="/chats" className="btn btn-primary w-100 text-start new-chat-button" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
-                </div>
-                <div className="px-2 pt-2">
                     <div className="search-box chat-search-box">
                         <InputGroup className="mb-3 rounded-3">
                             <span className="input-group-text text-muted bg-light pe-1 ps-3" id="basic-addon1">
@@ -118,7 +107,7 @@ const Chats = (props) => {
                                 value={searchChat} 
                                 onChange={handleSearchChange} 
                                 className="form-control bg-light" 
-                                placeholder={t('Search in chats')}
+                                placeholder={t('Find agent')}
                                 disabled={fetchChatsLoading} 
                             />
                         </InputGroup>

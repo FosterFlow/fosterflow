@@ -162,5 +162,7 @@
     "Sending email confirmation": "Invio conferma via email",
     "Please enter your first name": "Per favore, inserisci il tuo nome",
     "Please enter your last name": "Per favore, inserisci il tuo cognome",
-    "The message wasn't delivered to the server. Errors details": "Il messaggio non è stato consegnato al server. Dettagli degli errori"
+    "The message wasn't delivered to the server. Errors details": "Il messaggio non è stato consegnato al server. Dettagli degli errori",
+    "Agents": "Agenti",
+    "Find agent": "Trova agente"
 }
