@@ -95,9 +95,9 @@ const Agents = (props) => {
 
     return (
         <React.Fragment>
-            <div className="chat-leftsidebar me-lg-1">
+            <div className="agents-leftsidebar me-lg-1">
                 <div className="px-2 pt-2">
-                    <div className="search-box chat-search-box">
+                    <div className="search-box agents-search-box">
                         <InputGroup className="mb-3 rounded-3">
                             <span className="input-group-text text-muted bg-light pe-1 ps-3" id="basic-addon1">
                                 <i className="ri-search-line search-icon font-size-18"></i>
@@ -113,7 +113,7 @@ const Agents = (props) => {
                         </InputGroup>
                     </div>
                 </div>
-                <div className="chats-list-wrapper">
+                <div className="agents-list-wrapper">
                     {  getAgentsLoading &&
                         <div className="d-flex justify-content-center">
                             <Spinner size="sm"/>
@@ -131,7 +131,7 @@ const Agents = (props) => {
                             {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                         </Alert>
                     )}
-                    <ul className="list-unstyled chats-list" id="chat-list">
+                    <ul className="list-unstyled agents-list" id="agents-list">
                         {
                             recentAgentsList.map((agent, key) =>
                                 <li 
@@ -154,7 +154,7 @@ const Agents = (props) => {
                                                     t('No surname')
                                                 }
                                             </h5> 
-                                            <p className="chat-user-message text-truncate mb-0">
+                                            <p className="agents-user-message text-truncate mb-0">
                                                 {t("Click to open agent's profile")}
                                             </p>
                                         </Link>
