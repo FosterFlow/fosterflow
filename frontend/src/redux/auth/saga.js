@@ -69,7 +69,7 @@ import {
 
 import {
     agentInit 
-} from '../agent/actions';
+} from '../agents/actions';
 
 import {
     userInit

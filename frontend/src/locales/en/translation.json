@@ -163,5 +163,6 @@
     "Please enter your last name": "Please enter your last name",
     "The message wasn't delivered to the server. Errors details": "The message wasn't delivered to the server. Errors details",
     "Agents": "Agents",
-    "Find agent": "Find agent"
+    "Find agent": "Find agent",
+    "Click to open agent's profile": "Click to open agent's profile"
 }

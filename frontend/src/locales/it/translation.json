@@ -164,5 +164,6 @@
     "Please enter your last name": "Per favore, inserisci il tuo cognome",
     "The message wasn't delivered to the server. Errors details": "Il messaggio non è stato consegnato al server. Dettagli degli errori",
     "Agents": "Agenti",
-    "Find agent": "Trova agente"
+    "Find agent": "Trova agente",
+    "Click to open agent's profile": "Clicca per aprire il profilo dell'agente"
 }

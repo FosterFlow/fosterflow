@@ -13,7 +13,6 @@ import NewUserChat from "../NewUserChat";
 import config from '../../../config';
 import {
     getAgents, 
-    fetchChats,
     setActiveChat,
     setActiveNewChat,
     showChatWindow 
@@ -21,14 +20,19 @@ import {
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
-const Chats = (props) => {
+const Agents = (props) => {
     const id = Number(props.router.params.id) || 0;
     const [searchChat, setSearchChat] = useState("");
-    const [recentChatList, setRecentChatList] = useState([]);
+    const [recentAgentsList, setRecentAgentsList] = useState([]);
     const supportEmail =  config.SUPPORT_EMAIL;
     const { t } = useTranslation();
     const {
-        router,
+        agent,
+        agents,
+
+        getAgentsLoading,
+        getAgentsSucess,
+        getAgentsErrors,
 
         getAgents,
         setActiveChat,
@@ -51,38 +55,30 @@ const Chats = (props) => {
             return;
         }
 
-        // getAgents();
+        getAgents();
     }, [authorizedUser]);
 
-    // useEffect(() => {
-    //     if (id === 0) {
-            
-    //         //TODO: we can do it using one action, update fields into reducer
-    //         setActiveChat(0);
-    //         showChatWindow(false);
-    //         setActiveNewChat(true);
-    //         return;
-    //     }
+    useEffect(() => {
+        if (agents && agents.length === 0) {
+            return;
+        }
 
-    //     if (activeChatId === id){
-    //         return;
-    //     }
+        setRecentAgentsList(agents);
         
-    //     //Opened specific chat by id in url
-    //     //TODO: we can do it using one action, update fields into reducer
-    //     showChatWindow(true);
-    //     setActiveChat(id);
-    //     setActiveNewChat(false);
-    // }, [id]);
+        // if (id === 0 && activeChatId > 0) {
+        //     //added new chats
+        //     router.navigate(`/chats/${activeChatId}`);
+        // }
+    }, [agents]);
 
     const handleSearchChange = useCallback((event) => {
         const search = event.target.value.toLowerCase();
         setSearchChat(search);
-        const filteredChats = chats.filter(
-            chat => chat.latest_message && chat.latest_message.toString().toLowerCase().includes(search)
+        const filteredAgents = agents.filter(
+            agent=> agent.name && agent.name.toString().toLowerCase().includes(search)
         );
-        setRecentChatList(filteredChats);
-    }, [chats]);
+        setRecentAgentsList(filteredAgents);
+    }, [agents]);
 
 
     const chatHandleLinkClick = useCallback(() => {
@@ -108,22 +104,22 @@ const Chats = (props) => {
                                 onChange={handleSearchChange} 
                                 className="form-control bg-light" 
                                 placeholder={t('Find agent')}
-                                disabled={fetchChatsLoading} 
+                                disabled={getAgentsLoading} 
                             />
                         </InputGroup>
                     </div>
                 </div>
                 <div className="chats-list-wrapper">
-                    {  fetchChatsLoading &&
+                    {  getAgentsLoading &&
                         <div className="d-flex justify-content-center">
                             <Spinner size="sm"/>
                         </div>
                     }
-                    { fetchChatsErrors && (
+                    { getAgentsErrors && (
                         <Alert color="danger">
                             {t('Errors details')}:
                             <ul>
-                                {fetchChatsErrors.details.map((error, index) => (
+                                {getAgentsErrors.details.map((error, index) => (
                                     <li key={index}>{error}</li>
                                 ))}
                             </ul>
@@ -133,19 +129,22 @@ const Chats = (props) => {
                     )}
                     <ul className="list-unstyled chats-list" id="chat-list">
                         {
-                            recentChatList.map((chat, key) =>
+                            recentAgentsList.map((agent, key) =>
                                 <li 
                                     key={key} 
-                                    id={"conversation"+ chat.id} 
-                                    className={`px-2 pt-2 ${activeChatId === chat.id ? 'active' : ''}`}
+                                    id={"conversation" + agent.id} 
+                                    className={`px-2 pt-2 ${activeChatId === agent.id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/chats/${chat.id}`} onClick={chatHandleLinkClick}>
-                                        {chat.latest_message 
-                                            ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
-                                            : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
-                                        }
+                                        <Link to={`/chats/${agent.id}`} onClick={chatHandleLinkClick}>
+                                            <h5 className="text-truncate font-size-15 mb-1">
+                                                {agent.avatar &&   
+                                                    <img src={agent.avatar} alt="" className="profile-user rounded-circle" />
+                                                }
+                                                
+                                                {agent.first_name} {agent.last_name}
+                                            </h5> 
                                             <p className="chat-user-message text-truncate mb-0">
-                                                {t('Click to open chat')}
+                                                {t("Click to open agent's profile")}
                                             </p>
                                         </Link>
                                 </li>
@@ -163,30 +162,30 @@ const Chats = (props) => {
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = state => {
     const {
-        chats,
-        activeChatId,
-        chatWindow,
-        newChat,
-        fetchChatsLoading,
-        fetchChatsErrors
-    } = state.Chat;
+        agent,
+        agents,
+
+        getAgentsLoading,
+        getAgentsSucess,
+        getAgentsErrors
+    } = state.Agents;
     return {
-        chats,
-        activeChatId,
-        chatWindow,
-        newChat,
-        fetchChatsLoading,
-        fetchChatsErrors,
+        agent,
+        agents,
+
+        getAgentsLoading,
+        getAgentsSucess,
+        getAgentsErrors,
         //TODO: cause redundun re-render
         authorizedUser: state.User.authorizedUser,
     };
 };
 
 const mapDispatchToProps = {
-    fetchChats,
+    getAgents,
     setActiveChat,
     setActiveNewChat,
     showChatWindow
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Chats));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Agents));

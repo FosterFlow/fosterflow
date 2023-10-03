@@ -164,5 +164,6 @@
     "Please enter your last name": "Пожалуйста, введите вашу фамилию",
     "The message wasn't delivered to the server. Errors details": "Сообщение не было доставлено на сервер. Подробности об ошибках",
     "Agents": "Агенты",
-    "Find agent": "Найти агента" 
+    "Find agent": "Найти агента",
+    "Click to open agent's profile": "Нажмите, чтобы открыть профиль агента" 
 }

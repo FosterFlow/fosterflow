@@ -56,7 +56,7 @@ const INIT_STATE = {
     avatarSuccess: false
 };
 
-const Agent = (state = INIT_STATE, action) => {
+const Agents = (state = INIT_STATE, action) => {
     switch (action.type) {
         case AGENT_INIT:
             return INIT_STATE;
@@ -250,4 +250,4 @@ const Agent = (state = INIT_STATE, action) => {
     }
 }
 
-export default Agent;
+export default Agents;

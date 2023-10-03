@@ -164,5 +164,6 @@
     "Please enter your last name": "Bitte geben Sie Ihren Nachnamen ein",
     "The message wasn't delivered to the server. Errors details": "Die Nachricht wurde nicht an den Server übermittelt. Fehlerdetails",
     "Agents": "Agenten",
-    "Find agent": "Agent finden"
+    "Find agent": "Agent finden",
+    "Click to open agent's profile": "Klicken Sie, um das Profil des Agenten zu öffnen"
 }
