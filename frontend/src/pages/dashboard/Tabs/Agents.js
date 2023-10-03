@@ -13,7 +13,7 @@ import NewUserChat from "../NewUserChat";
 import config from '../../../config';
 import {
     getAgents, 
-    setActiveChat,
+    // setActiveAgent,
     setActiveNewChat,
     showChatWindow 
 } from "../../../redux/actions";
@@ -22,11 +22,13 @@ import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 const Agents = (props) => {
     const id = Number(props.router.params.id) || 0;
-    const [searchChat, setSearchChat] = useState("");
+    const [searchAgent, setSearchAgent] = useState("");
     const [recentAgentsList, setRecentAgentsList] = useState([]);
     const supportEmail =  config.SUPPORT_EMAIL;
     const { t } = useTranslation();
     const {
+        router,
+
         agent,
         agents,
 
@@ -43,7 +45,7 @@ const Agents = (props) => {
         fetchChatsLoading,
         fetchChatsErrors,
 
-        activeChatId,
+        activeAgentId,
         chatWindow,
         newChat,
         authorizedUser
@@ -65,28 +67,30 @@ const Agents = (props) => {
 
         setRecentAgentsList(agents);
         
-        // if (id === 0 && activeChatId > 0) {
-        //     //added new chats
-        //     router.navigate(`/chats/${activeChatId}`);
-        // }
+        if (id === 0 && activeAgentId > 0) {
+            router.navigate(`/agents/${activeAgentId}`);
+        }
     }, [agents]);
 
     const handleSearchChange = useCallback((event) => {
         const search = event.target.value.toLowerCase();
-        setSearchChat(search);
+        setSearchAgent(search);
         const filteredAgents = agents.filter(
-            agent=> agent.name && agent.name.toString().toLowerCase().includes(search)
+            agent=> {
+                const agentFullName = agent.first_name + " " + agent.last_name  
+                return agentFullName.toString().toLowerCase().includes(search)
+            }
         );
         setRecentAgentsList(filteredAgents);
     }, [agents]);
 
 
-    const chatHandleLinkClick = useCallback(() => {
+    const agentHandleLinkClick = useCallback(() => {
         //TODO: do we need to make check that param is not already the same?
-        if (chatWindow){
-            return;
-        }
-        showChatWindow(true);
+        // if (agentWindow){
+        //     return;
+        // }
+        // showAgentWindow(true);
     });
 
     return (
@@ -100,7 +104,7 @@ const Agents = (props) => {
                             </span>
                             <Input 
                                 type="text" 
-                                value={searchChat} 
+                                value={searchAgent} 
                                 onChange={handleSearchChange} 
                                 className="form-control bg-light" 
                                 placeholder={t('Find agent')}
@@ -133,15 +137,22 @@ const Agents = (props) => {
                                 <li 
                                     key={key} 
                                     id={"conversation" + agent.id} 
-                                    className={`px-2 pt-2 ${activeChatId === agent.id ? 'active' : ''}`}
+                                    className={`px-2 pt-2 ${activeAgentId === agent.id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/chats/${agent.id}`} onClick={chatHandleLinkClick}>
+                                        <Link to={`/agents/${agent.id}`} onClick={agentHandleLinkClick}>
                                             <h5 className="text-truncate font-size-15 mb-1">
                                                 {agent.avatar &&   
                                                     <img src={agent.avatar} alt="" className="profile-user rounded-circle" />
                                                 }
-                                                
-                                                {agent.first_name} {agent.last_name}
+                                                {agent.first_name ?
+                                                    agent.first_name :
+                                                    t('No name')
+                                                }
+                                                &nbsp;
+                                                {agent.last_name ?
+                                                    agent.last_name :
+                                                    t('No surname')
+                                                }
                                             </h5> 
                                             <p className="chat-user-message text-truncate mb-0">
                                                 {t("Click to open agent's profile")}
@@ -183,7 +194,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     getAgents,
-    setActiveChat,
+    // setActiveAgent,
     setActiveNewChat,
     showChatWindow
 }
