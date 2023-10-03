@@ -136,10 +136,10 @@ const Agents = (props) => {
                             recentAgentsList.map((agent, key) =>
                                 <li 
                                     key={key} 
-                                    id={"conversation" + agent.id} 
-                                    className={`px-2 pt-2 ${activeAgentId === agent.id ? 'active' : ''}`}
+                                    id={"conversation" + agent.user_id} 
+                                    className={`px-2 pt-2 ${activeAgentId === agent.user_id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/agents/${agent.id}`} onClick={agentHandleLinkClick}>
+                                        <Link to={`/agents/${agent.user_id}`} onClick={agentHandleLinkClick}>
                                             <h5 className="text-truncate font-size-15 mb-1">
                                                 {agent.avatar &&   
                                                     <img src={agent.avatar} alt="" className="profile-user rounded-circle" />
