@@ -164,5 +164,6 @@
     "The message wasn't delivered to the server. Errors details": "The message wasn't delivered to the server. Errors details",
     "Agents": "Agents",
     "Find agent": "Find agent",
-    "Click to open agent's profile": "Click to open agent's profile"
+    "Click to open agent's profile": "Click to open agent's profile",
+    "Choose agent for the new chat": "Choose agent for the new chat"
 }

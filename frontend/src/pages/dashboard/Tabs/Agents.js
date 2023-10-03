@@ -8,8 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import UserChat from "../UserChat/";
-import NewUserChat from "../NewUserChat";
+import NewAgentChat from "../NewAgentChat";
 import config from '../../../config';
 import {
     getAgents, 
@@ -165,7 +164,7 @@ const Agents = (props) => {
                 </div>
                 <SideBarMenuMobile />
             </div>
-            {id ? <UserChat/> : <NewUserChat />}
+            <NewAgentChat />
         </React.Fragment>
     );
 }

@@ -165,5 +165,6 @@
     "The message wasn't delivered to the server. Errors details": "El mensaje no fue entregado al servidor. Detalles de los errores",
     "Agents": "Agentes",
     "Find agent": "Buscar agente",
-    "Click to open agent's profile": "Haz clic para abrir el perfil del agente"
+    "Click to open agent's profile": "Haz clic para abrir el perfil del agente",
+    "Choose agent for the new chat": "Elija un agente para el nuevo chat"
 }

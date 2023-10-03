@@ -17,8 +17,9 @@ const PasswordReset = React.lazy(() => import("../pages/Auth/PasswordReset"));
 // declare all routes
 const authProtectedRoutes = [
   { path: "/chats", component: <Chats /> },
-  { path: "/agents", component: <Agents /> },
   { path: "/chats/:id", component: <Chats /> },
+  { path: "/agents", component: <Agents /> },
+  { path: "/agents/:id", component: <Agents /> },
   { path: "/chats/email-verify-token/:emailVerifyToken", component: <Chats /> },
   { path: "/profile", component: <Profile /> },
   { path: "/settings", component: <Settings /> },
