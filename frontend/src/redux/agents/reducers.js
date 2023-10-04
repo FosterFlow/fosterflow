@@ -1,5 +1,11 @@
 import {
     AGENT_INIT,
+    SET_ACTIVE_AGENT_ID,
+
+    SET_ACTIVE_AGENT,
+    SET_ACTIVE_AGENT_INIT_STATE,
+    SET_ACTIVE_AGENT_SUCCESS,
+    SET_ACTIVE_AGENT_FAILED,
 
     GET_AGENTS,
     GET_AGENTS_INIT_STATE,
@@ -30,9 +36,21 @@ import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
 import config from '../../config';
 
 const INIT_STATE = {
+    //TODO: rename param names according to agents / current user/ current model 
+    
+    //current user's agent
     agent: null,
+
+    //current ML model
+    activeAgentId: 0,
+    activeAgent: null,
+
     agents: [],
     userAgents: [],
+
+    setActiveAgentLoading: false,
+    setActiveAgentSucess: false,
+    setActiveAgentErrors: null,
 
     getAgentsLoading: false,
     getAgentsSucess: false,
@@ -67,6 +85,42 @@ const Agents = (state = INIT_STATE, action) => {
                 getAgentsLoading: true,
                 getAgentsSucess: false,
                 getAgentsErrors: null, 
+        }
+
+        case SET_ACTIVE_AGENT:
+            return { 
+                ...state, 
+                activeAgentId: action.payload,
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: null,
+        }
+
+        case SET_ACTIVE_AGENT_INIT_STATE:
+            return { 
+                ...state, 
+                activeAgentId: 0,
+                activeAgent: null,
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: null,
+        }
+
+        case SET_ACTIVE_AGENT_SUCCESS:
+            return { 
+                ...state, 
+                activeAgent: action.payload,
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: null,
+        }
+
+        case SET_ACTIVE_AGENT_FAILED:
+            return { 
+                ...state, 
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: action.payload,
         }
 
         case GET_AGENTS_INIT_STATE:

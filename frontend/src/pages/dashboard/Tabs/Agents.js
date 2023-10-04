@@ -12,9 +12,7 @@ import NewAgentChat from "../NewAgentChat";
 import config from '../../../config';
 import {
     getAgents, 
-    // setActiveAgent,
-    setActiveNewChat,
-    showChatWindow 
+    setActiveAgent,
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
@@ -27,26 +25,13 @@ const Agents = (props) => {
     const { t } = useTranslation();
     const {
         router,
-
-        agent,
         agents,
-
+        activeAgentId,
+        setActiveAgent,
+        getAgents,
         getAgentsLoading,
         getAgentsSucess,
         getAgentsErrors,
-
-        getAgents,
-        setActiveChat,
-        setActiveNewChat,
-        showChatWindow,
-
-        chats,
-        fetchChatsLoading,
-        fetchChatsErrors,
-
-        activeAgentId,
-        chatWindow,
-        newChat,
         authorizedUser
     } = props;
 
@@ -83,14 +68,13 @@ const Agents = (props) => {
         setRecentAgentsList(filteredAgents);
     }, [agents]);
 
-
-    const agentHandleLinkClick = useCallback(() => {
-        //TODO: do we need to make check that param is not already the same?
-        // if (agentWindow){
-        //     return;
-        // }
-        // showAgentWindow(true);
-    });
+    useEffect(() => {
+        if (activeAgentId === id){
+            return;
+        }
+        
+        setActiveAgent(id);
+    }, [id]);
 
     return (
         <React.Fragment>
@@ -138,7 +122,7 @@ const Agents = (props) => {
                                     id={"conversation" + agent.user_id} 
                                     className={`px-2 pt-2 ${activeAgentId === agent.user_id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/agents/${agent.user_id}`} onClick={agentHandleLinkClick}>
+                                        <Link to={`/agents/${agent.user_id}`}>
                                             <h5 className="text-truncate font-size-15 mb-1">
                                                 {agent.avatar &&   
                                                     <img src={agent.avatar} alt="" className="profile-user rounded-circle" />
@@ -172,17 +156,15 @@ const Agents = (props) => {
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = state => {
     const {
-        agent,
         agents,
-
+        activeAgentId,
         getAgentsLoading,
         getAgentsSucess,
         getAgentsErrors
     } = state.Agents;
     return {
-        agent,
         agents,
-
+        activeAgentId,
         getAgentsLoading,
         getAgentsSucess,
         getAgentsErrors,
@@ -193,9 +175,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     getAgents,
-    // setActiveAgent,
-    setActiveNewChat,
-    showChatWindow
+    setActiveAgent,
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Agents));
