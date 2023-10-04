@@ -43,7 +43,7 @@ const INIT_STATE = {
     getUserAgentErrors: null,
 
     getAgentLoading: false,
-    getAgentSucess: false,
+    getAgentSuccess: false,
     getAgentErrors: null,
 
     agentDataLoading: false,
@@ -134,7 +134,7 @@ const Agents = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 getAgentLoading: true,
-                getAgentSucess: false,
+                getAgentSuccess: false,
                 getAgentErrors: null, 
             }
 
@@ -142,7 +142,7 @@ const Agents = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 getAgentLoading: false,
-                getAgentSucess: false,
+                getAgentSuccess: false,
                 getAgentErrors: null, 
             }
         
@@ -159,7 +159,7 @@ const Agents = (state = INIT_STATE, action) => {
                 agent: action.payload,
                 avatar: avatar, 
                 getAgentLoading: false,
-                getAgentSucess: true,
+                getAgentSuccess: true,
                 getAgentErrors: null, 
             };
         }
@@ -167,7 +167,7 @@ const Agents = (state = INIT_STATE, action) => {
             return { 
                 ...state,
                 getAgentLoading: false,
-                getAgentSucess: false,
+                getAgentSuccess: false,
                 getAgentErrors: action.payload, 
             };
         

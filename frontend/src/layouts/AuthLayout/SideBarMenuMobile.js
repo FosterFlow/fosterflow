@@ -13,12 +13,12 @@ import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
 function LeftSidebarMenu(props) {
-    const { agent } = props;
+    const { agents } = props;
     const { t } = useTranslation();
 
     function getAgentAvatar (){
-        if (agent) {
-            return agent.avatar;
+        if (agents) {
+            return agents.avatar;
         }
         return "";
     }
@@ -117,7 +117,7 @@ const mapStatetoProps = state => {
     return {
         layoutMode: state.Layout.layoutMode,
         language: state.Layout.language,
-        agent: state.Agent
+        agents: state.Agents
     };
 };
 
