@@ -1,4 +1,4 @@
-import React, { useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../components/withRouter";
 import ChatInput from "./UserChat/ChatInput";
@@ -8,14 +8,19 @@ import {
     getAgents, 
     setActiveAgent,
 } from "../../redux/actions";
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 function UserChat(props) {
     const { t } = useTranslation();
     const {
-        agents,
         getAgents,
-        authorizedUser
+        authorizedUser,
+        agents
     } = props;
+
+    // State to manage dropdown toggle
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const toggle = () => setDropdownOpen(prevState => !prevState);
 
     useEffect(() => {
         if (authorizedUser === null ||
@@ -24,23 +29,28 @@ function UserChat(props) {
         }
 
         getAgents();
-    }, [authorizedUser]);
+    }, [authorizedUser, getAgents]);
 
     return (
         <React.Fragment>
             <div className={`user-chat user-chat-new ${props.newChat ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <UserHead />
-                    <div
-                        className="user-chat-conversation"
-                        id="messages">
-                            {/* Replacing h1 title with a selector */}
-                            <label htmlFor="agentSelector">{t('Select an agent to chat with:')}</label>
-                            <select id="agentSelector" name="agentSelector">
+                    <div className="user-chat-conversation" id="messages">
+                        {/* Styled Selector using Reactstrap */}
+                        <label htmlFor="agentSelector">{t('Select an agent to chat with:')}</label>
+                        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                            <DropdownToggle caret>
+                                {t('Choose an Agent')}
+                            </DropdownToggle>
+                            <DropdownMenu>
                                 {agents && agents.map((agent, index) => 
-                                    <option key={index} value={agent.user_id}>{agent.first_name + ' ' + agent.last_name}</option>
+                                    <DropdownItem key={index} onClick={() => {/* handle agent select */}}>
+                                        {agent.first_name + " " + agent.last_name}
+                                    </DropdownItem>
                                 )}
-                            </select>
+                            </DropdownMenu>
+                        </Dropdown>
                     </div>
                 </div>
                 <ChatInput/>
