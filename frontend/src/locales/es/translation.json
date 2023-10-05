@@ -166,5 +166,8 @@
     "Agents": "Agentes",
     "Find agent": "Buscar agente",
     "Click to open agent's profile": "Haz clic para abrir el perfil del agente",
-    "Choose agent for the new chat": "Elija un agente para el nuevo chat"
+    "Choose agent for the new chat": "Elija un agente para el nuevo chat",
+    "Start chatting with": "Comienza a chatear con",
+    "No name": "Sin nombre",
+    "No surname": "Sin apellido"
 }

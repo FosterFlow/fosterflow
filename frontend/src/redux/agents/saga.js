@@ -36,7 +36,9 @@ import {
  } from './actions';
 const api = apiAuthorizedClient;
 
-function* setActiveAgentSaga({ payload: { agentId } }) {
+function* setActiveAgentSaga(action) {
+    const agentId = action.payload;
+
     try {
         const response = yield call(api.get, `/agents/${agentId}/`);
         yield put(setActiveAgentSuccess(response));

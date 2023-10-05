@@ -19,11 +19,19 @@ function UserChat(props) {
                     <div
                         className="user-chat-conversation"
                         id="messages">
-                            <h1>{
-                                activeAgent ?
-                                    activeAgent.first_name + ' ' + activeAgent.last_name 
-                                    : t('Choose agent for the new chat')
-                            }</h1>
+                            <h1>
+                                {activeAgent && t('Start chatting with') + " "}
+                                {(activeAgent && activeAgent.first_name) ?
+                                    activeAgent.first_name :
+                                    t('No name')
+                                }
+                                &nbsp;
+                                {(activeAgent && activeAgent.last_name) ?
+                                    activeAgent.last_name :
+                                    t('No surname')
+                                }
+                                {activeAgent === null && t('Choose agent for the new chat')}
+                            </h1>
                     </div>
                 </div>
                 <ChatInput/>

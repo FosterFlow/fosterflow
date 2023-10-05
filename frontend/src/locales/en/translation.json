@@ -165,5 +165,8 @@
     "Agents": "Agents",
     "Find agent": "Find agent",
     "Click to open agent's profile": "Click to open agent's profile",
-    "Choose agent for the new chat": "Choose agent for the new chat"
+    "Choose agent for the new chat": "Choose agent for the new chat",
+    "Start chatting with": "Start chatting with",
+    "No name": "No name",
+    "No surname": "No surname"
 }

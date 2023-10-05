@@ -166,5 +166,8 @@
     "Agents": "Агенты",
     "Find agent": "Найти агента",
     "Click to open agent's profile": "Нажмите, чтобы открыть профиль агента",
-    "Choose agent for the new chat": "Выберите агента для нового чата" 
+    "Choose agent for the new chat": "Выберите агента для нового чата",
+    "Start chatting with": "Начать чат с",
+    "No name": "Без имени",
+    "No surname": "Без фамилии" 
 }
