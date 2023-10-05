@@ -44,7 +44,7 @@ function LeftSidebarMenu(props) {
                 <Nav pills className="side-menu-nav justify-content-center" role="tablist">
                 <NavItem id="Agents" title={t('Agents')}>
                         <RouterNavLink to="/agents" id="pills-chat-tab" className="nav-link" activeclassname="active">
-                            <i className="ri-message-3-line"></i>
+                            <i className="ri-contacts-book-line"></i>
                         </RouterNavLink>
                     </NavItem>
                     <NavItem id="Chats" title={t('Chats')}>

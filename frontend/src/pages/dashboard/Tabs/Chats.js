@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import UserChat from "../UserChat/";
-import NewUserChat from "../NewUserChat";
+import NewUserChat from "../UserChat/NewUserChat";
 import config from '../../../config';
 import { 
     fetchChats,

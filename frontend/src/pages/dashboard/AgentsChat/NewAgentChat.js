@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from "react-redux";
-import withRouter from "../../components/withRouter";
-import ChatInput from "./UserChat/ChatInput";
-import UserHead from "./UserChat/UserHead";
+import withRouter from "../../../components/withRouter";
+import ChatInput from "../UserChat/ChatInput";
+import AgentHead from "./AgentHead";
 import { useTranslation } from 'react-i18next';
 
 function UserChat(props) {
@@ -15,7 +15,7 @@ function UserChat(props) {
         <React.Fragment>
             <div className={`user-chat user-chat-new user-chat-show`}>
                 <div className="user-chat-wrapper">
-                    <UserHead />
+                    <AgentHead />
                     <div
                         className="user-chat-conversation"
                         id="messages">

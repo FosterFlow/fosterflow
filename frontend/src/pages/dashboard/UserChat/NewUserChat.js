@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from "react-redux";
-import withRouter from "../../components/withRouter";
-import ChatInput from "./UserChat/ChatInput";
-import UserHead from "./UserChat/UserHead";
+import withRouter from "../../../components/withRouter";
+import ChatInput from "./ChatInput";
+import UserHead from "./UserHead";
 import { useTranslation } from 'react-i18next';
 import {
     getAgents, 
     setActiveAgent,
-} from "../../redux/actions";
+} from "../../../redux/actions";
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 function UserChat(props) {
