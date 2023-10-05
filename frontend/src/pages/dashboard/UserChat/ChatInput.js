@@ -6,7 +6,6 @@ import {
     sendMessage
 } from "../../../redux/chat/actions";
 import { useTranslation } from 'react-i18next';
-import config from '../../../config';
 import _ from 'lodash';
 
 function ChatInput(props) {
@@ -14,6 +13,7 @@ function ChatInput(props) {
     const textAreaRef = useRef(null);
     const { t } = useTranslation();
     const {
+        activeAgentId,
         activeChatId,
         authorizedUser,
         newChat,
@@ -77,7 +77,7 @@ function ChatInput(props) {
         }
 
         sendMessage({
-            "addressee_id": config.BASE_MODEL_AGENT_ID,
+            "addressee_id": activeAgentId,
             "chat_id": activeChatId,
             "message_text": trimmedText,
             "owner_id": authorizedUser.id
@@ -137,7 +137,8 @@ const mapStateToProps = (state) => {
         fetchMessagesLoading
     } = state.Chat;
 
-    return { 
+    return {
+        activeAgentId: state.Agents.activeAgentId, 
         activeChatId,
         newChat,
         fetchMessagesLoading,
