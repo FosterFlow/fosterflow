@@ -1,6 +1,7 @@
 import {
     AGENT_INIT,
     SET_ACTIVE_AGENT_ID,
+    SHOW_NEW_AGENT_CHAT,
 
     SET_ACTIVE_AGENT,
     SET_ACTIVE_AGENT_INIT_STATE,
@@ -43,6 +44,7 @@ const INIT_STATE = {
 
     //current ML model
     activeAgentId: 0,
+    newAgentChatShow: false,
     activeAgent: null,
 
     agents: [],
@@ -78,6 +80,12 @@ const Agents = (state = INIT_STATE, action) => {
     switch (action.type) {
         case AGENT_INIT:
             return INIT_STATE;
+
+        case SHOW_NEW_AGENT_CHAT:
+            return { 
+                ...state, 
+                newAgentChatShow: action.payload,
+        }
 
         case GET_AGENTS:
             return { 

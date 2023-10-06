@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 function UserChat(props) {
     const {
+        newAgentChatShow,
         activeAgent
     } = props;
     const { t } = useTranslation();
@@ -27,7 +28,7 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat user-chat-new user-chat-show`}>
+            <div className={`user-chat user-chat-new ${newAgentChatShow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <AgentHead />
                     <div
@@ -47,6 +48,7 @@ function UserChat(props) {
 const mapStateToProps = (state) => {
     return { 
         activeAgent: state.Agents.activeAgent,
+        newAgentChatShow: state.Agents.newAgentChatShow
     }
 };
 

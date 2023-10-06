@@ -1,6 +1,7 @@
 import {
     AGENT_INIT,
     SET_ACTIVE_AGENT,
+    SHOW_NEW_AGENT_CHAT,
 
     GET_AGENTS,
     GET_AGENTS_INIT_STATE,
@@ -30,6 +31,18 @@ import {
     SET_ACTIVE_AGENT_SUCCESS,
     SET_ACTIVE_AGENT_FAILED,
 } from './constants';
+
+ /**
+   * Show window for startign a new chat with an agent
+   * 
+   * @param {boolean} set - show window of a new chat or not 
+   * @returns 
+   */
+ export const showNewAgentChat = (show) => ({
+    type: SHOW_NEW_AGENT_CHAT,
+    payload: show
+  });
+
 
 export const agentInit = () => ({
     type: AGENT_INIT,

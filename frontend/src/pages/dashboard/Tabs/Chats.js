@@ -104,7 +104,7 @@ const Chats = (props) => {
         showChatWindow(true);
         setActiveChat(id);
         setActiveNewChat(false);
-    }, [id]);
+    }, [id, isNewChat]);
 
     const handleSearchChange = useCallback((event) => {
         const search = event.target.value.toLowerCase();

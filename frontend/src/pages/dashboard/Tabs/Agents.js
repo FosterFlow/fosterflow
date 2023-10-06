@@ -13,9 +13,11 @@ import config from '../../../config';
 import {
     getAgents, 
     setActiveAgent,
+    showNewAgentChat 
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
+import { isMobileDevice } from '../../../helpers/mobileDevices';
 
 const Agents = (props) => {
     const id = Number(props.router.params.id) || 0;
@@ -32,7 +34,8 @@ const Agents = (props) => {
         getAgentsLoading,
         getAgentsSucess,
         getAgentsErrors,
-        authorizedUser
+        authorizedUser,
+        showNewAgentChat 
     } = props;
 
     useEffect(() => {
@@ -69,10 +72,19 @@ const Agents = (props) => {
     }, [agents]);
 
     useEffect(() => {
+        if (isMobileDevice()){
+            if (id === 0) {
+                setActiveAgent(id);
+                showNewAgentChat(false);
+                return;
+            }
+        }
+        
         if (activeAgentId === id){
             return;
         }
         
+        showNewAgentChat(true);
         setActiveAgent(id);
     }, [id]);
 
@@ -176,6 +188,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
     getAgents,
     setActiveAgent,
+    showNewAgentChat
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Agents));
