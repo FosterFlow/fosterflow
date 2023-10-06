@@ -11,6 +11,20 @@ function UserChat(props) {
     } = props;
     const { t } = useTranslation();
 
+    const renderAgentName = () => {
+        if (activeAgent === null) {
+            return t('Choose agent for the new chat')
+        }
+
+        const firstName = activeAgent.first_name || t('No name');
+        const lastName = activeAgent.last_name || t('No surname');
+        return (
+            <>
+                {t('Start chatting with')} {firstName} {lastName}
+            </>
+        );
+    };
+
     return (
         <React.Fragment>
             <div className={`user-chat user-chat-new user-chat-show`}>
@@ -20,21 +34,11 @@ function UserChat(props) {
                         className="user-chat-conversation"
                         id="messages">
                             <h1>
-                                {activeAgent && t('Start chatting with') + " "}
-                                {(activeAgent && activeAgent.first_name) ?
-                                    activeAgent.first_name :
-                                    t('No name')
-                                }
-                                &nbsp;
-                                {(activeAgent && activeAgent.last_name) ?
-                                    activeAgent.last_name :
-                                    t('No surname')
-                                }
-                                {activeAgent === null && t('Choose agent for the new chat')}
+                                {renderAgentName()}
                             </h1>
                     </div>
                 </div>
-                <ChatInput/>
+                {activeAgent !== null && <ChatInput/>}
             </div>
         </React.Fragment>
     );
