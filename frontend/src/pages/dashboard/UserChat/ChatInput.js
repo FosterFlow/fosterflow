@@ -5,6 +5,7 @@ import {
     addChat, 
     sendMessage
 } from "../../../redux/chat/actions";
+import { isMobileDevice } from '../../../helpers/mobileDevices';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 
@@ -22,10 +23,6 @@ function ChatInput(props) {
         sendMessage
     } = props;
 
-    function isMobileDevice() {
-        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-    
     useEffect(() => {
         textAreaRef.current.style.height = "auto";
         textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 3}px`;

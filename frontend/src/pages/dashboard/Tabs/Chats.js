@@ -5,7 +5,10 @@ import {
     Spinner,
     Alert 
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { 
+    Link, 
+    useLocation 
+} from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import UserChat from "../UserChat/";
@@ -19,9 +22,12 @@ import {
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
+import { isMobileDevice } from '../../../helpers/mobileDevices';
 
 const Chats = (props) => {
     const id = Number(props.router.params.id) || 0;
+    const location = useLocation();
+    const isNewChat = location.pathname === '/chats/new_chat';
     const [searchChat, setSearchChat] = useState("");
     const [recentChatList, setRecentChatList] = useState([]);
     const supportEmail =  config.SUPPORT_EMAIL;
@@ -67,9 +73,23 @@ const Chats = (props) => {
     }, [chats]);
 
     useEffect(() => {
+        if (isNewChat) {
+            setActiveChat(0);
+            showChatWindow(false);
+            setActiveNewChat(true);
+            return;
+        }
+        
+        if (isMobileDevice()){
+            if (id === 0) {
+                setActiveChat(0);
+                showChatWindow(false);
+                setActiveNewChat(false);
+                return;
+            }
+        }
+        
         if (id === 0) {
-            
-            //TODO: we can do it using one action, update fields into reducer
             setActiveChat(0);
             showChatWindow(false);
             setActiveNewChat(true);
@@ -81,7 +101,6 @@ const Chats = (props) => {
         }
         
         //Opened specific chat by id in url
-        //TODO: we can do it using one action, update fields into reducer
         showChatWindow(true);
         setActiveChat(id);
         setActiveNewChat(false);
@@ -118,7 +137,7 @@ const Chats = (props) => {
         <React.Fragment>
             <div className="chat-leftsidebar me-lg-1">
                 <div className="px-2 pt-2">
-                    <Link to="/chats" className="btn btn-primary w-100 text-start new-chat-button" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
+                    <Link to="/chats/new_chat" className="btn btn-primary w-100 text-start new-chat-button" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
                 </div>
                 <div className="px-2 pt-2">
                     <div className="search-box chat-search-box">
