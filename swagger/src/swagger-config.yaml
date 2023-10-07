@@ -240,6 +240,12 @@ paths:
         - Bearer: [ ]
       operationId: chats_delete
       summary: 'Get a chat by ID'
+      parameters:
+        - name: id
+          in: path
+          description: A unique integer value identifying this chat.
+          required: true
+          type: integer
       responses:
         '200':
           description: 'successful operation'
@@ -266,6 +272,8 @@ paths:
           description: Not Found
           schema:
             $ref: '#/definitions/NotFound'
+      tags:
+        - chats
     delete:
       security:
         - Bearer: [ ]
