@@ -235,6 +235,37 @@ paths:
         - chats
     parameters: [ ]
   /chats/{id}/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: chats_delete
+      summary: 'Get a chat by ID'
+      responses:
+        '200':
+          description: 'successful operation'
+          examples:
+            application/json:
+              {
+                "id": 1,
+                "latest_message": "Message",
+                "name": "Hello",
+                "created_at": "2023-07-18T10:07:37.075051Z",
+                "updated_at": "2023-07-18T10:07:37.075097Z",
+                "owner_id": 1,
+                "addressee_id": 2
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
     delete:
       security:
         - Bearer: [ ]
