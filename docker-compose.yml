@@ -2,7 +2,7 @@ version: '3.1'
 services:
   db:
     container_name: postgres
-    image: postgres:13.1
+    image: postgres:15.4-alpine
     privileged: true
     ports:
       - 5432:5432
@@ -38,7 +38,7 @@ services:
     build: ./backend
     ports:
       - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    entrypoint: sh ./django-entrypoint.sh
     environment:
       - REDIS_HOST=redis
     restart: always

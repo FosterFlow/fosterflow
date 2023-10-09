@@ -2,10 +2,12 @@ from python:3.10.12
 
 WORKDIR /backend
 
-RUN apt-get update \
-&& apt-get install -y postgresql postgresql-contrib libpq-dev python3-dev
+RUN apt-get update && apt-get install -y postgresql-client
+RUN pip install --upgrade pip
 
-RUN pip3 install --upgrade pip
-
-COPY requirements.txt .
+COPY . .
+RUN pip install aiohttp
 RUN pip3 install -r requirements.txt
+
+RUN chmod +x ./wait-for-postgres.sh
+RUN chmod +x ./django-entrypoint.sh
