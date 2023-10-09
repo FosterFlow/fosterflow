@@ -1,5 +1,5 @@
 from django.db import models
-from user_app.models import Agent
+from agent_app.models import Agent
 
 
 class Chat(models.Model):

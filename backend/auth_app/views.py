@@ -325,7 +325,11 @@ class ConfirmEmailGenericAPIView(GenericAPIView):
         try:
             if timezone.now() > email_token.expires_at:
                 return Response({
-                    "message": "Token is expired"
+                    "errors": {
+                        "details": [
+                            "Token is invalid or expired"
+                        ]
+                    }
                 }, status=status.HTTP_400_BAD_REQUEST)
             user = email_token.user
             user.is_email_confirmed = True
@@ -337,7 +341,12 @@ class ConfirmEmailGenericAPIView(GenericAPIView):
             email_token.delete()
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            data = {'errors': {
+                "details": [
+                    "Token is invalid or expired"
+                ]
+            }}
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordView(generics.UpdateAPIView):

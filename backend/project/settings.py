@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'auth_app',
     'user_app',
     'nlp_models_app',
+    'agent_app',
 ]
 
 MIDDLEWARE = [

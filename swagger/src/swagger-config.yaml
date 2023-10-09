@@ -27,8 +27,14 @@ tags:
     description: This is what the user sends and receives a response
   - name: users
     description: The model for User
+  - name: profiles_user
+    description: The Profile for User
   - name: agents
     description: Information containing user data
+  - name: nlp_models
+    description: Information containing NLP Models data
+  - name: profiles_nlp_models
+    description: Information containing NLP Model Profiles data
   - name: register
     description: Registering a new user
   - name: token
@@ -112,7 +118,7 @@ paths:
                     "Chat is not available",
                     "Agent is not exists",
                     "send_type is not correct"
-                    ]
+                  ]
                 }
               }
         '403':
@@ -229,6 +235,45 @@ paths:
         - chats
     parameters: [ ]
   /chats/{id}/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: chats_delete
+      summary: 'Get a chat by ID'
+      parameters:
+        - name: id
+          in: path
+          description: A unique integer value identifying this chat.
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: 'successful operation'
+          examples:
+            application/json:
+              {
+                "id": 1,
+                "latest_message": "Message",
+                "name": "Hello",
+                "created_at": "2023-07-18T10:07:37.075051Z",
+                "updated_at": "2023-07-18T10:07:37.075097Z",
+                "owner_id": 1,
+                "addressee_id": 2
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - chats
     delete:
       security:
         - Bearer: [ ]
@@ -588,13 +633,153 @@ paths:
       tags:
         - token
     parameters: [ ]
+
   /agents/:
     get:
-      summary: Get all the agents
       security:
         - Bearer: [ ]
       operationId: agents_list
-      description: Get, Update user agent
+      summary: Get all the agents
+      parameters:
+        - in: query
+          name: is_user
+          type: boolean
+          description: Filter by User Agent
+        - in: query
+          name: is_nlp_model
+          type: boolean
+          description: Filter by NLP Model Agent
+      description: 'Get all the agents'
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              [
+                {
+                  "id": 113,
+                  "name": "GPT-4-8k",
+                  "created_at": "2023-09-01T10:48:03.037402Z",
+                  "updated_at": "2023-09-01T10:48:03.037402Z",
+                  "is_active": true,
+                  "user": null,
+                  "nlp_model": 3
+                },
+                {
+                  "id": 114,
+                  "name": "GPT-4-32k",
+                  "created_at": "2023-09-01T10:48:03.050403Z",
+                  "updated_at": "2023-09-01T10:48:03.050403Z",
+                  "is_active": true,
+                  "user": null,
+                  "nlp_model": 4
+                }
+              ]
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - agents
+
+  /profiles-model/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: profiles-model_list
+      summary: Get all the nlp_models profiles
+      description: 'Get all the nlp_models profiles'
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              [
+                {
+                  "id": 2,
+                  "price_per_token": "0.00000",
+                  "description": "string",
+                  "avatar": null,
+                  "nlp_model": 2
+                },
+                {
+                  "id": 1,
+                  "price_per_token": "0.00000",
+                  "description": "string",
+                  "avatar": null,
+                  "nlp_model": 2
+                },
+              ]
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - profiles_nlp_models
+
+  /nlp-models/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: nlp_models_list
+      summary: Get all the nlp_models
+      description: 'Get all the nlp_models'
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              [
+                {
+                  "id": 1,
+                  "title": "GPT-3.5-turbo-4k",
+                  "created_at": "2023-09-29T10:48:03.011402Z",
+                  "updated_at": "2023-09-29T10:48:03.012403Z"
+                },
+                {
+                  "id": 2,
+                  "title": "GPT-3.5-turbo-16k",
+                  "created_at": "2023-09-29T10:48:03.024403Z",
+                  "updated_at": "2023-09-29T10:48:03.025401Z"
+                },
+              ]
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - nlp_models
+
+  /profiles_user/:
+    get:
+      summary: Get all the profiles user
+      security:
+        - Bearer: [ ]
+      description: Get, Update user profile
       parameters: [ ]
       responses:
         '200':
@@ -602,7 +787,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Agent'
+              $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -612,11 +797,11 @@ paths:
           schema:
             $ref: '#/definitions/TokenNotValid'
       tags:
-        - agents
+        - profiles_user
     parameters: [ ]
-  /agent/:
+  /profile_user/:
     get:
-      summary: Get user agents
+      summary: Get user profile
       security:
         - Bearer: [ ]
       description: Get user agents
@@ -626,7 +811,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Agent'
+              $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -640,21 +825,20 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters: [ ]
-  /agents/{id}/:
+  /profiles_user/{id}/:
     get:
-      summary: Get agent by ID
+      summary: Get user profile by ID
       security:
         - Bearer: [ ]
-      operationId: agents_read
-      description: Get, Update user agent
+      description: Get, Update user profile
       parameters: [ ]
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Agent'
+            $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -668,13 +852,12 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit agent by ID
-      operationId: agents_update
-      description: Get, Update user agent
+      summary: Edit user profile by ID
+      description: Get, Update user profile
       parameters:
         - name: data
           in: body
@@ -693,8 +876,6 @@ paths:
       responses:
         '200':
           description: ''
-          schema:
-            $ref: '#/definitions/Agent'
           examples:
             application/json:
               {
@@ -710,14 +891,14 @@ paths:
           examples:
             application/json:
               {
-                  "errors": {
-                      "first_name": [
-                        "This field may not be blank."
-                      ],
-                      "last_name": [
-                        "Ensure this field has no more than 32 characters."
-                      ]
-                  }
+                "errors": {
+                  "first_name": [
+                    "This field may not be blank."
+                  ],
+                  "last_name": [
+                    "Ensure this field has no more than 32 characters."
+                  ]
+                }
               }
         401:
           description: Unauthorized
@@ -728,20 +909,19 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters:
       - name: id
         in: path
-        description: A unique integer value identifying this agent.
+        description: A unique integer value identifying this profile.
         required: true
         type: integer
-  /agents/{id}/avatar/:
+  /profiles_user/{id}/avatar/:
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit agent by ID
-      operationId: agents_avatar_update
-      description: Update Agent avatar
+      summary: Edit user profile by ID
+      description: Update user profile avatar
       parameters:
         - in: formData
           name: avatar
@@ -761,13 +941,16 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters:
       - name: id
         in: path
-        description: A unique integer value identifying this agent.
+        description: A unique integer value identifying this profile.
         required: true
         type: integer
+
+
+
   /users/:
     get:
       security:
@@ -1367,7 +1550,7 @@ definitions:
         minLength: 1
         example: 'user'
         pattern: '^(?!_$)(?![-.])(?!.*[_.-]{2})[a-zA-Z0-9_.-]+(?<![.-])$'
-  Profile:
+  ProfileUser:
     type: object
     properties:
       user_id:
