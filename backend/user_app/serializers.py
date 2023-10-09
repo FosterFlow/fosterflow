@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from user_app.validators import is_safe_username, is_safe_name
 from rest_framework import serializers
-from user_app.models import Agent
+from .models import ProfileUser
 
 User = get_user_model()
 
@@ -29,7 +29,7 @@ class SelfUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'last_login', 'username', 'email', 'is_email_confirmed', 'created_at', 'updated_at']
 
 
-class AgentSerializer(CustomUserSerializer):
+class ProfileUserSerializer(CustomUserSerializer):
     """
     Serializer class to serialize the user Profile model
     """
@@ -45,11 +45,11 @@ class AgentSerializer(CustomUserSerializer):
         return data
 
     class Meta:
-        model = Agent
+        model = ProfileUser
         fields = ('user_id', 'first_name', 'last_name', 'avatar')
 
 
-class UserAvatarSerializer(serializers.ModelSerializer):
+class ProfileUserAvatarSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Agent
+        model = ProfileUser
         fields = ('avatar', )

@@ -15,17 +15,17 @@ openai.api_key = env('OPENAI_API_KEY')
 class RequestHandler:
     def handle_request(self, request):
         sent_message = Message.objects.get(id=request['message_id'])
-        nlp_model = sent_message.addressee_id.user_id
-        if nlp_model.username == 'GPT-3.5-turbo-4k' and nlp_model.is_active:
+        agent = sent_message.addressee_id
+        if agent.nlp_model.title == 'GPT-3.5-turbo-4k' and agent.is_active:
             adapter = GptAdapter(Gpt35Turbo4KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif nlp_model.username == 'GPT-3.5-turbo-16k' and nlp_model.is_active:
+        elif agent.nlp_model.title == 'GPT-3.5-turbo-16k' and agent.is_active:
             adapter = GptAdapter(Gpt35Turbo16KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif nlp_model.username == 'GPT-4-8k' and nlp_model.is_active:
+        elif agent.nlp_model.title == 'GPT-4-8k' and agent.is_active:
             adapter = GptAdapter(Gpt48KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif nlp_model.username == 'GPT-4-32k' and nlp_model.is_active:
+        elif agent.nlp_model.title == 'GPT-4-32k' and agent.is_active:
             adapter = GptAdapter(Gpt432KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
 
