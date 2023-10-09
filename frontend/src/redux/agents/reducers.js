@@ -95,6 +95,38 @@ const Agents = (state = INIT_STATE, action) => {
                 getAgentsErrors: null, 
         }
 
+        case GET_AGENTS_INIT_STATE:
+            return { 
+                ...state,
+                agents: [], 
+                getAgentsLoading: false,
+                getAgentsSucess: false,
+                getAgentsErrors: null, 
+            }
+        
+        case GET_AGENTS_SUCCESS: {
+            //We take only NLP models
+            const filteredAgents = action.payload.filter(agent => 
+                agent.is_active && agent.nlp_model !== null
+            );
+            
+            return { 
+                ...state, 
+                agents: filteredAgents,
+                getAgentsLoading: false,
+                getAgentsSuccess: true, // Noticed a typo here (Sucess -> Success)
+                getAgentsErrors: null, 
+            };
+        }
+
+        case GET_AGENTS_FAILED:
+            return { 
+                ...state,
+                getAgentsLoading: false,
+                getAgentsSucess: false,
+                getAgentsErrors: action.payload, 
+            };
+
         case SET_ACTIVE_AGENT:
             return { 
                 ...state, 
@@ -130,32 +162,6 @@ const Agents = (state = INIT_STATE, action) => {
                 setActiveAgentSucess: false,
                 setActiveAgentErrors: action.payload,
         }
-
-        case GET_AGENTS_INIT_STATE:
-            return { 
-                ...state,
-                agents: [], 
-                getAgentsLoading: false,
-                getAgentsSucess: false,
-                getAgentsErrors: null, 
-            }
-        
-        case GET_AGENTS_SUCCESS: {
-            return { 
-                ...state, 
-                agents: action.payload,
-                getAgentsLoading: false,
-                getAgentsSucess: true,
-                getAgentsErrors: null, 
-            };
-        }
-        case GET_AGENTS_FAILED:
-            return { 
-                ...state,
-                getAgentsLoading: false,
-                getAgentsSucess: false,
-                getAgentsErrors: action.payload, 
-            };
 
         case GET_USER_AGENT:
             return { 
