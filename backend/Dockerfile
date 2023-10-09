@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y postgresql-client
 RUN pip install --upgrade pip
 
 COPY . .
-RUN pip install aiohttp
 RUN pip3 install -r requirements.txt
 
 RUN chmod +x ./wait-for-postgres.sh
