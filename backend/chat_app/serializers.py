@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
 from .models import Chat, Message
 from rest_framework import serializers
-from .request_to_agent import take_answer
 
 User = get_user_model()
 
@@ -76,6 +75,5 @@ class MessageModelSerializer(ModelSerializer):
             Message: The created message instance.
         """
 
-        answer_text = "take_answer(validated_data['message_text'], validated_data['chat_id'])"
         message = Message.objects.create(**validated_data)
         return message

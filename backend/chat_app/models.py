@@ -1,5 +1,5 @@
 from django.db import models
-from user_app.models import Agent
+from agent_app.models import Agent
 
 
 class Chat(models.Model):
@@ -51,6 +51,22 @@ class Message(models.Model):
         on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField(auto_now_add=True)
+
+    request_id = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='replies',
+    )
+
+    addressee_id = models.ForeignKey(
+        Agent,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='addressee',
+    )
 
     def __str__(self):
         return f'{self.id} {self.owner_id}'

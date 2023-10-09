@@ -16,13 +16,38 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
+import _ from 'lodash';
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
-import { updateAgentData, changePassword, updateAgentAvatar } from '../../../redux/actions';
+import {
+    updateAgentData,
+    updateAgentDataInitState,
+    updateAgentDataFailed,
+
+    changePassword,
+    changePasswordInitState,
+    changePasswordFailure,
+
+    updateAgentAvatar 
+} from '../../../redux/actions';
 
 function Settings(props) {
     const { t } = useTranslation();
-    const { agent } = props;
+    const { 
+        agent,
+        user,
+        auth,
+
+        updateAgentDataInitState,
+        updateAgentData,
+        updateAgentDataFailed,
+        
+        changePassword,
+        changePasswordInitState,
+        changePasswordFailure,
+        
+        updateAgentAvatar
+    } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
 
     //TODO: redevelop to flat structure into agent and remove this method
@@ -41,10 +66,8 @@ function Settings(props) {
         event.preventDefault();
 
         if (selectedAvatar !== null){
-            const user = props.user;
-            
             if (user && user.authorizedUser) {
-                props.updateAgentAvatar(user.authorizedUser.id, selectedAvatar);
+                updateAgentAvatar(user.authorizedUser.id, selectedAvatar);
                 return;
             }
         }
@@ -53,33 +76,39 @@ function Settings(props) {
     }
 
     function getFirstName (){
-        return (props.agent
-        && props.agent.agent 
-        && props.agent.agent.first_name) || '';
+        return (agent
+        && agent.agent 
+        && agent.agent.first_name) || '';
     }
 
     function getLastName (){
-        return (props.agent
-            && props.agent.agent  
-            && props.agent.agent.last_name) || ''
+        return (agent
+            && agent.agent  
+            && agent.agent.last_name) || ''
     }
 
-    //Filling the form after page reloading
+    /**
+     * Filling the form after page reloading, once agent information is loaded
+     * 
+     * TODO: need to move agent.last_name, agent.first_name params to the level above, in this case
+     * we could subscribe to these params changing and re-render the form once we get information 
+     * from the server 
+    **/
     useEffect(() => {
-        const lastName = getLastName();
-        const formikLastName = personalInfoForm.values.last_name;
+        if (!agent.getAgentSucess) {
+            return;
+        }
 
-        if ((lastName !== "") && (formikLastName === "")) {
+        const lastName = getLastName();
+        if (lastName !== "") {
             personalInfoForm.setFieldValue('last_name', lastName);
         }
 
         const firstName = getFirstName();
-        const formikFirstName = personalInfoForm.values.first_name;
-        
-        if ((firstName !== "") && (formikFirstName === "")) {
+        if (firstName !== "") {
             personalInfoForm.setFieldValue('first_name', firstName);
         }
-    }, [props.agent]);
+    }, [agent.getAgentSucess]);
 
     const personalInfoForm = useFormik({
         initialValues: {
@@ -88,23 +117,56 @@ function Settings(props) {
         },
         validationSchema: Yup.object({
             first_name: Yup.string()
-                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
-                .notRequired(),
+                .matches(/^[^@$%&*#!?()№;~:+<>=/]+$/, t('No special characters allowed'))
+                .required(t('Please enter your first name')),
             last_name: Yup.string()
-                .matches(/^[^@$%&*#!?()№;~:]+$/, t('No special characters allowed'))
-                .notRequired()
+                .matches(/^[^@$%&*#!?()№;~:+<>=/]+$/, t('No special characters allowed'))
+                .required(t('Please enter your last name')),
         }),
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
-            const user = props.user;
-            if (user && user.authorizedUser) {
-                props.updateAgentData(user.authorizedUser.id, values);
+            if (user.authorizedUser) {
+                updateAgentData(user.authorizedUser.id, values);
                 return;
             } 
             //TODO: handle error if we don't have active User;
             console.log ('Settings page personalInfoForm', 'onSubmit error', "No active user");
         },
     });
+
+    useEffect(() => {
+        const personalInfoFormErrors = personalInfoForm.errors;
+        const errors = {};
+
+        if (_.isEmpty(personalInfoFormErrors)) {
+            if (personalInfoFormErrors === null) {
+                return;
+            }
+
+            updateAgentDataInitState();
+            return;
+        }
+
+        const firstNameErrors = personalInfoFormErrors.first_name;
+        if (firstNameErrors) {
+            if (Array.isArray(firstNameErrors)){
+                errors.firs_name = [...firstNameErrors];
+            } else {
+                errors.first_name = [firstNameErrors];
+            }
+        }
+
+        const lastNameErrors = personalInfoFormErrors.last_name;
+        if (lastNameErrors) {
+            if (Array.isArray(lastNameErrors)){
+                errors.last_name = [...lastNameErrors];
+            } else {
+                errors.last_name = [lastNameErrors];
+            }
+        }
+
+        updateAgentDataFailed(errors);
+    }, [personalInfoForm.errors]);
 
     const securityForm = useFormik({
         initialValues: {
@@ -125,80 +187,43 @@ function Settings(props) {
             console.log('Settings page securityForm', 'onSubmit', values);
             const oldPassword = values.old_password;
             const newPassword = values.new_password;
-            props.changePassword(oldPassword, newPassword);
+            changePassword(oldPassword, newPassword);
         },
     });
 
+    useEffect(() => {
+        const securityFormErrors = securityForm.errors;
+        const errors = {};
 
-    //TODO: reduce number of invokes
-    function getFirstNameErrors () {
-        let errors = [];
-        if (personalInfoForm.errors && personalInfoForm.errors.first_name) {
-            errors.push(personalInfoForm.errors.first_name);
+        if (_.isEmpty(securityFormErrors)) {
+            if (securityFormErrors === null) {
+                return;
+            }
+
+            changePasswordInitState();
+            return;
         }
 
-        if (props.agent 
-            && props.agent.agentDataErrors
-            && typeof props.agent.agentDataErrors === "object"
-            && props.agent.agentDataErrors.first_name) {
-
-            errors = [...errors, ...props.agent.agentDataErrors.first_name]
+        const oldPasswordErrors = securityFormErrors.old_password;
+        if (oldPasswordErrors) {
+            if (Array.isArray(oldPasswordErrors)){
+                errors.old_password = [...oldPasswordErrors];
+            } else {
+                errors.old_password = [oldPasswordErrors];
+            }
         }
 
-        return errors
-    }
-
-    //TODO: reduce number of invokes
-    function getLastNameErrors () {
-        let errors = [];
-        if (personalInfoForm.errors && personalInfoForm.errors.last_name) {
-            errors.push(personalInfoForm.errors.last_name);
+        const newPasswordErrors = securityFormErrors.new_password;
+        if (newPasswordErrors) {
+            if (Array.isArray(newPasswordErrors)){
+                errors.new_password = [...newPasswordErrors];
+            } else {
+                errors.new_password = [newPasswordErrors];
+            }
         }
 
-        if (props.agent 
-            && props.agent.agentDataErrors
-            && typeof props.agent.agentDataErrors === "object"
-            && props.agent.agentDataErrors.last_name) {
-
-            errors = [...errors, ...props.agent.agentDataErrors.last_name]
-        }
-
-        return errors
-    }
-
-    //TODO: reduce number of invokes
-    function getOldPasswordErrors () {
-        let errors = [];
-        if (securityForm.errors && securityForm.errors.old_password) {
-            errors.push(securityForm.errors.old_password);
-        }
-
-        if (props.auth && props.auth.changePassswordErrors 
-            && typeof props.auth.changePassswordErrors === "object"
-            && props.auth.changePassswordErrors.old_password) {
-
-            errors = [...errors, ...props.auth.changePassswordErrors.old_password]
-        }
-
-        return errors
-    }
-
-    //TODO: reduce number of invokes
-    function getNewPasswordErrors () {
-        let errors = [];
-        if (securityForm.errors && securityForm.errors.new_password) {
-            errors.push(securityForm.errors.new_password);
-        }
-
-        if (props.auth && props.auth.changePassswordErrors 
-            && typeof props.auth.changePassswordErrors === "object"
-            && props.auth.changePassswordErrors.new_password) {
-
-            errors = [...errors, ...props.auth.changePassswordErrors.new_password]
-        }
-
-        return errors
-    }
+        changePasswordFailure(errors);
+    }, [securityForm.errors]);
 
     return (
         <React.Fragment>
@@ -210,8 +235,8 @@ function Settings(props) {
 
                     <div className="user-profile-sroll-area">
                         {
-                            (props.agent && props.agent.errors) &&
-                            <Alert color="danger">{props.agent.errors}</Alert>
+                            (agent && agent.errors) &&
+                            <Alert color="danger">{agent.errors}</Alert>
                         }
                         {/* Start Avatar card */}
                         <div className="p-4">
@@ -221,12 +246,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.agent && props.agent.avatarErrors 
-                                            && typeof props.agent.avatarErrors === "string") &&
-                                        <Alert color="danger">{props.agent.avatarErrors}</Alert>
+                                        (agent && agent.avatarErrors 
+                                            && typeof agent.avatarErrors === "string") &&
+                                        <Alert color="danger">{agent.avatarErrors}</Alert>
                                     }
                                     {
-                                         props.agent.avatarSuccess &&
+                                         agent.avatarSuccess &&
                                          <Alert color="success">{t("The photo has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={submitAvatar}>
@@ -242,20 +267,19 @@ function Settings(props) {
                                                 id="exampleFile"
                                                 name="file"
                                                 type="file"
-                                                disabled={props.agent.avatarLoading}
+                                                disabled={agent.avatarLoading}
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                             <FormFeedback>
                                                 {
-                                                    props.agent 
-                                                    && props.agent.avatarErrors 
-                                                    && typeof props.avatarErrors === "object"
-                                                    && props.agent.avatarErrors.avatar
+                                                    agent.avatarErrors 
+                                                    && typeof agent.avatarErrors === "object"
+                                                    && agent.avatarErrors.avatar
                                                 }
                                             </FormFeedback>
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.agent.avatarLoading}>
-                                            {props.agent.avatarLoading &&
+                                        <Button type="submit" disabled={agent.avatarLoading}>
+                                            {agent.avatarLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -275,12 +299,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.agent && props.agent.agentDataErrors 
-                                            && typeof props.agent.agentDataErrors === "string") &&
-                                        <Alert color="danger">{props.agent.agentDataErrors}</Alert>
+                                        (agent && agent.agentDataErrors 
+                                            && typeof agent.agentDataErrors === "string") &&
+                                        <Alert color="danger">{agent.agentDataErrors}</Alert>
                                     }
                                     {
-                                         props.agent.agentDataSuccess &&
+                                         agent.agentDataSuccess &&
                                          <Alert color="success">{t("Personal information has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={personalInfoForm.handleSubmit}>
@@ -292,21 +316,24 @@ function Settings(props) {
                                                 value={personalInfoForm.values.first_name}
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
-                                                invalid={getFirstNameErrors().length > 0 ? true : false}
+                                                invalid={!!(personalInfoForm.touched.first_name 
+                                                    && agent.agentDataErrors
+                                                    && agent.agentDataErrors.first_name)}
                                                 placeholder={t('Enter first name')}
-                                                disabled={props.agent.agentDataLoading}
+                                                disabled={agent.agentDataLoading}
                                             />
-                                            <FormFeedback>
-                                                {
-                                                    getFirstNameErrors().length > 0 && (
+                                            {personalInfoForm.touched.first_name 
+                                                && agent.agentDataErrors
+                                                && agent.agentDataErrors.first_name
+                                                && (
+                                                    <FormFeedback type="invalid">
                                                         <ul>
-                                                            {getFirstNameErrors().map((error, index) => (
+                                                            {agent.agentDataErrors.first_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
-                                                    )
-                                                }
-                                            </FormFeedback>
+                                                    </FormFeedback>
+                                            )}
                                         </FormGroup>
 
                                         <FormGroup>
@@ -317,24 +344,27 @@ function Settings(props) {
                                                 value={personalInfoForm.values.last_name}
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
-                                                invalid={getLastNameErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter second name')}
-                                                disabled={props.agent.agentDataLoading}
+                                                invalid={!!(personalInfoForm.touched.last_name 
+                                                    && agent.agentDataErrors
+                                                    && agent.agentDataErrors.last_name)}
+                                                disabled={agent.agentDataLoading}
                                             />
-                                            <FormFeedback>
-                                                {
-                                                    getLastNameErrors().length > 0 && (
+                                            {personalInfoForm.touched.last_name 
+                                                && agent.agentDataErrors
+                                                && agent.agentDataErrors.last_name
+                                                && (
+                                                    <FormFeedback type="invalid">
                                                         <ul>
-                                                            {getLastNameErrors().map((error, index) => (
+                                                            {agent.agentDataErrors.last_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
-                                                    )
-                                                }
-                                            </FormFeedback>
+                                                    </FormFeedback>
+                                            )}
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.agent.agentDataLoading}>
-                                            {props.agent.agentDataLoading &&
+                                        <Button type="submit" disabled={agent.agentDataLoading}>
+                                            {agent.agentDataLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -354,12 +384,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (props.auth && props.auth.changePassswordErrors 
-                                            && typeof props.auth.changePassswordErrors === "string") &&
-                                        <Alert color="danger">{props.auth.changePassswordErrors}</Alert>
+                                        (auth && auth.changePassswordErrors 
+                                            && typeof auth.changePassswordErrors === "string") &&
+                                        <Alert color="danger">{auth.changePassswordErrors}</Alert>
                                     }
                                     {
-                                         props.auth.changePasswordSuccess &&
+                                         auth.changePasswordSuccess &&
                                          <Alert color="success">{t("The password has been successfully changed")}.</Alert>
                                     }
                                     <Form onSubmit={securityForm.handleSubmit}>
@@ -367,8 +397,8 @@ function Settings(props) {
                                             <Label>{t('Email')}:</Label>
                                             <div>
                                                 {
-                                                    props.user && props.user.authorizedUser 
-                                                    && props.user.authorizedUser.email ||
+                                                    user && user.authorizedUser 
+                                                    && user.authorizedUser.email ||
                                                     t('Email information not found')
                                                 }
                                             </div>
@@ -383,21 +413,24 @@ function Settings(props) {
                                                     value={securityForm.values.old_password}
                                                     onChange={securityForm.handleChange}
                                                     onBlur={securityForm.handleBlur}
-                                                    invalid={getOldPasswordErrors().length > 0 ? true : false}
                                                     placeholder={t('Enter current password')}
-                                                    disabled={props.auth.changePasswordLoading}
+                                                    invalid={!!(securityForm.touched.old_password 
+                                                        && auth.changePassswordErrors
+                                                        && auth.changePassswordErrors.old_password)}
+                                                    disabled={auth.changePasswordLoading}
                                                 />
-                                                <FormFeedback>
-                                                    {
-                                                        getOldPasswordErrors().length > 0 && (
+                                                {securityForm.touched.old_password 
+                                                    && auth.changePassswordErrors
+                                                    && auth.changePassswordErrors.old_password
+                                                    && (
+                                                        <FormFeedback type="invalid">
                                                             <ul>
-                                                                {getOldPasswordErrors().map((error, index) => (
+                                                                {auth.changePassswordErrors.old_password.map((error, index) => (
                                                                     <li key={index}>{error}</li>
                                                                 ))}
                                                             </ul>
-                                                        )
-                                                    }
-                                                </FormFeedback>
+                                                        </FormFeedback>
+                                                )}
                                             </div>
                                             
                                             <Input 
@@ -406,21 +439,24 @@ function Settings(props) {
                                                 value={securityForm.values.new_password}
                                                 onChange={securityForm.handleChange}
                                                 onBlur={securityForm.handleBlur}
-                                                invalid={getNewPasswordErrors().length > 0 ? true : false}
                                                 placeholder={t('Enter new password')}
-                                                disabled={props.auth.changePasswordLoading}
+                                                invalid={!!(securityForm.touched.new_password
+                                                    && auth.changePassswordErrors
+                                                    && auth.changePassswordErrors.new_password)}
+                                                disabled={auth.changePasswordLoading}
                                             />
-                                            <FormFeedback>
-                                                {
-                                                    getNewPasswordErrors().length > 0 && (
+                                            {securityForm.touched.new_password
+                                                && auth.changePassswordErrors
+                                                && auth.changePassswordErrors.new_password
+                                                && (
+                                                    <FormFeedback type="invalid">
                                                         <ul>
-                                                            {getNewPasswordErrors().map((error, index) => (
+                                                            {auth.changePassswordErrors.new_password.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
-                                                    )
-                                                }
-                                            </FormFeedback>    
+                                                    </FormFeedback>
+                                            )}   
                                             <ul className='pt-3'>
                                                 <li>{t('At least one lowercase character')}.</li>
                                                 <li>{t('At least one uppercase character')}.</li>
@@ -429,8 +465,8 @@ function Settings(props) {
                                                 <li>{t('At least 8 characters in total')}.</li>
                                             </ul>
                                         </FormGroup>
-                                        <Button type="submit" disabled={props.auth.changePasswordLoading}>
-                                            {props.auth.changePasswordLoading &&
+                                        <Button type="submit" disabled={auth.changePasswordLoading}>
+                                            {auth.changePasswordLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -460,8 +496,14 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
+    updateAgentDataInitState,
     updateAgentData,
+    updateAgentDataFailed,
+
     changePassword,
+    changePasswordInitState,
+    changePasswordFailure,
+
     updateAgentAvatar
 }
 

@@ -5,13 +5,6 @@ from django.db import migrations, models
 import django.utils.timezone
 
 
-def create_user(apps, schema_editor):
-    User = get_user_model()
-    user = User(id=100, username='GPT-3.5-turbo', email="GPT-3.5-turbo",
-                password=''.join(random.choice(string.ascii_letters) for _ in range(30)))
-    user.save()
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ('user_app', '0003_rename_profile_agent'),
@@ -23,7 +16,6 @@ class Migration(migrations.Migration):
             old_name='Dialog',
             new_name='Chat',
         ),
-        migrations.RunPython(create_user),
         migrations.AddField(
             model_name='chat',
             name='owner_id',

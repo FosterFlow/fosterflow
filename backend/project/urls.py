@@ -7,17 +7,17 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
     ConfirmEmailGenericAPIView, SendEmailConfirmationTokenAPIView, \
     ChangePasswordView
 from chat_app.views import ChatModelViewSet, MessageModelViewSet
-from user_app.views import UserModelViewSet, UserAgentModelViewSet, SelfUserAPIView, SelfAgentAPIView
-
+from user_app.views import UserModelViewSet, ProfileUserModelViewSet, SelfUserAPIView, SelfProfileUserAPIView
 from auth_app.views import CustomTokenRefreshView
-
 from user_app.views import UserAvatarUpdateView
+from agent_app.views import AgentListView
+from nlp_models_app.viws import NlpModelListView, ProfileModelListView
 
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
 router.register('users', UserModelViewSet, basename='users')
-router.register('agents', UserAgentModelViewSet, basename='agents')
+router.register('profiles_user', ProfileUserModelViewSet, basename='profiles_user')
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),
@@ -28,8 +28,14 @@ urlpatterns = [
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterApi.as_view()),
     path('api/user/', SelfUserAPIView.as_view(), name='user'),
-    path('api/agent/', SelfAgentAPIView.as_view(), name='agent'),
-    path('api/agents/<int:pk>/avatar/', UserAvatarUpdateView.as_view(), name='avatar_update'),
+    path('api/profile_user/', SelfProfileUserAPIView.as_view(), name='profile_user'),
+    path('api/profiles_user/<int:pk>/avatar/', UserAvatarUpdateView.as_view(), name='profile_user_update'),
+
+    path('api/agents/', AgentListView.as_view(), name='agent-list'),
+    # path('agents/<int:pk>/', AgentDetailView.as_view(), name='agent-detail'),
+
+    path('api/nlp-models/', NlpModelListView.as_view(), name='nlp-model-list'),
+    path('api/profiles-model/', ProfileModelListView.as_view(), name='profile-model-list'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/logout/', UserLogoutAPIView.as_view(), name='logout'),

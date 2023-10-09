@@ -58,7 +58,7 @@ def get_image_filename(instance, filename):
     return f"avatars/{slug}-{filename}"
 
 
-class Agent(models.Model):
+class ProfileUser(models.Model):
     user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
     first_name = models.TextField(max_length=32)
@@ -77,4 +77,4 @@ class Agent(models.Model):
             image = self.avatar
             if image.size > 0.3 * 1024 * 1024:
                 self.avatar = compress_image(image)
-        super(Agent, self).save(*args, **kwargs)
+        super(ProfileUser, self).save(*args, **kwargs)
