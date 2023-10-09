@@ -17,11 +17,10 @@ function UserChat(props) {
             return t('Choose agent for the new chat')
         }
 
-        const firstName = activeAgent.first_name || t('No name');
-        const lastName = activeAgent.last_name || t('No surname');
+        const name = activeAgent.name || t('No name');
         return (
             <>
-                {t('Start chatting with')} {firstName} {lastName}
+                {t('Start chatting with')} {name}
             </>
         );
     };

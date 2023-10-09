@@ -131,22 +131,17 @@ const Agents = (props) => {
                             recentAgentsList.map((agent, key) =>
                                 <li 
                                     key={key} 
-                                    id={"conversation" + agent.user_id} 
-                                    className={`px-2 pt-2 ${activeAgentId === agent.user_id ? 'active' : ''}`}
+                                    id={"conversation" + agent.id} 
+                                    className={`px-2 pt-2 ${activeAgentId === agent.id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/agents/${agent.user_id}`}>
+                                        <Link to={`/agents/${agent.id}`}>
                                             <h5 className="text-truncate font-size-15 mb-1">
                                                 {agent.avatar &&   
                                                     <img src={agent.avatar} alt="" className="profile-user rounded-circle" />
                                                 }
-                                                {agent.first_name ?
-                                                    agent.first_name :
+                                                {agent.name ?
+                                                    agent.name :
                                                     t('No name')
-                                                }
-                                                &nbsp;
-                                                {agent.last_name ?
-                                                    agent.last_name :
-                                                    t('No surname')
                                                 }
                                             </h5> 
                                             <p className="agents-user-message text-truncate mb-0">

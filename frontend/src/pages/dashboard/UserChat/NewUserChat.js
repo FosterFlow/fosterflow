@@ -6,7 +6,6 @@ import UserHead from "./UserHead";
 import { useTranslation } from 'react-i18next';
 import {
     getAgents, 
-    setActiveAgent,
 } from "../../../redux/actions";
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
@@ -47,7 +46,7 @@ function UserChat(props) {
                             <DropdownMenu>
                                 {agents && agents.map((agent, index) => 
                                     <DropdownItem key={index} onClick={() => {/* handle agent select */}}>
-                                        {agent.first_name + " " + agent.last_name}
+                                        {agent.name}
                                     </DropdownItem>
                                 )}
                             </DropdownMenu>
@@ -70,8 +69,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    getAgents,
-    setActiveAgent,
+    getAgents
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));
