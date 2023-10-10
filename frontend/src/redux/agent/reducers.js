@@ -1,5 +1,16 @@
 import {
     AGENT_INIT,
+
+    GET_AGENTS,
+    GET_AGENTS_INIT_STATE,
+    GET_AGENTS_SUCCESS,
+    GET_AGENTS_FAILED,
+
+    GET_USER_AGENT,
+    GET_USER_AGENT_INIT_STATE,
+    GET_USER_AGENT_SUCCESS,
+    GET_USER_AGENT_FAILED,
+
     GET_AGENT,
     GET_AGENT_INIT_STATE,
     GET_AGENT_SUCCESS,
@@ -20,6 +31,17 @@ import config from '../../config';
 
 const INIT_STATE = {
     agent: null,
+    agents: [],
+    userAgents: [],
+
+    getAgentsLoading: false,
+    getAgentsSucess: false,
+    getAgentsErrors: null,
+
+    getUserAgentLoading: false,
+    getUserAgentSucess: false,
+    getUserAgentErrors: null,
+
     getAgentLoading: false,
     getAgentSucess: false,
     getAgentErrors: null,
@@ -38,6 +60,75 @@ const Agent = (state = INIT_STATE, action) => {
     switch (action.type) {
         case AGENT_INIT:
             return INIT_STATE;
+
+        case GET_AGENTS:
+            return { 
+                ...state, 
+                getAgentsLoading: true,
+                getAgentsSucess: false,
+                getAgentsErrors: null, 
+        }
+
+        case GET_AGENTS_INIT_STATE:
+            return { 
+                ...state,
+                agents: [], 
+                getAgentsLoading: false,
+                getAgentsSucess: false,
+                getAgentsErrors: null, 
+            }
+        
+        case GET_AGENTS_SUCCESS: {
+            return { 
+                ...state, 
+                agents: action.payload,
+                getAgentsLoading: false,
+                getAgentsSucess: true,
+                getAgentsErrors: null, 
+            };
+        }
+        case GET_AGENTS_FAILED:
+            return { 
+                ...state,
+                getAgentsLoading: false,
+                getAgentsSucess: false,
+                getAgentsErrors: action.payload, 
+            };
+
+        case GET_USER_AGENT:
+            return { 
+                ...state, 
+                getUserAgentLoading: true,
+                getUserAgentSucess: false,
+                getUserAgentErrors: null, 
+            }
+    
+        case GET_USER_AGENT_INIT_STATE:
+            return { 
+                ...state,
+                userAgents: [], 
+                getUserAgentLoading: false,
+                getUserAgentSucess: false,
+                getUserAgentErrors: null, 
+            }
+            
+        case GET_USER_AGENT_SUCCESS: {
+            return { 
+                ...state, 
+                userAgents: action.payload,
+                getUserAgentLoading: false,
+                getUserAgentSucess: true,
+                getUserAgentErrors: null, 
+            };
+        }
+        
+        case GET_USER_AGENT_FAILED:
+            return { 
+                ...state,
+                getUserAgentLoading: false,
+                getUserAgentSucess: false,
+                getUserAgentErrors: action.payload, 
+            };
             
         case GET_AGENT:
             return { 

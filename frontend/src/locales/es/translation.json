@@ -161,5 +161,6 @@
     "to send again": "para enviar de nuevo",
     "Sending email confirmation": "Enviando confirmación por correo electrónico",
     "Please enter your first name": "Por favor, introduzca su nombre",
-    "Please enter your last name": "Por favor, introduzca su apellido"
+    "Please enter your last name": "Por favor, introduzca su apellido",
+    "The message wasn't delivered to the server. Errors details": "El mensaje no fue entregado al servidor. Detalles de los errores"
 }

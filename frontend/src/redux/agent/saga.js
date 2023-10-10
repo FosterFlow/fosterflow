@@ -1,18 +1,24 @@
 import { 
-    all, 
     call, 
-    fork, 
     put, 
     takeEvery, 
     delay 
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { 
+import {
+    GET_AGENTS,
+    GET_USER_AGENT,   
     GET_AGENT, 
     UPDATE_AGENT_DATA, 
     UPDATE_AGENT_AVATAR 
 } from './constants';
-import { 
+import {
+    getAgentsSuccess,
+    getAgentsFailed,
+    
+    getUserAgentSuccess,
+    getUserAgentFailed,
+
     getAgentSuccess,
     getAgentFailed,
 
@@ -25,6 +31,24 @@ import {
     updateAgentAvatarFailed
  } from './actions';
 const api = apiAuthorizedClient;
+
+function* getAgents() {
+    try {
+        const response = yield call(api.get, `/agents/`);
+        yield put(getAgentsSuccess(response));
+    } catch (errors) {
+        yield put(getAgentsFailed(errors));
+    }
+}
+
+function* getUserAgent() {
+    try {
+        const response = yield call(api.get, `/agent/`);
+        yield put(getUserAgentSuccess(response));
+    } catch (errors) {
+        yield put(getUserAgentFailed(errors));
+    }
+}
 
 //TODO does saga reach API by each user request?
 function* getAgent({ payload: { id } }) {
@@ -66,24 +90,10 @@ function* updateAgentAvatar({ payload: { id, avatar } }) {
     }
 }
 
-export function* watchGetAgent() {
+export default function* agentSaga() {
+    yield takeEvery(GET_AGENTS, getAgents);
+    yield takeEvery(GET_USER_AGENT, getUserAgent);
     yield takeEvery(GET_AGENT, getAgent);
-}
-
-export function* watchUpdateAgentData() {
     yield takeEvery(UPDATE_AGENT_DATA, updateAgentData);
-}
-
-export function* watchUpdateAgentAvatar() {
     yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatar);
 }
-
-function* agentSaga() {
-    yield all([
-        fork(watchGetAgent),
-        fork(watchUpdateAgentData),
-        fork(watchUpdateAgentAvatar),
-    ]);
-}
-
-export default agentSaga;

@@ -59,6 +59,7 @@ const INIT_STATE = {
     deleteChatSuccess: false,
     deleteChatErrors: null,
 
+    sendMessageErrors: null,
     //messages, that not accepted by the server yet. We show them with clocks into chat
     sendingMessagesQueue: [],
     messages: [],
@@ -258,6 +259,7 @@ const Chat = (state = INIT_STATE, action) => {
         case SEND_MESSAGE: {
               return {
                 ...state,
+                sendMessageErrors: null,
                 sendingMessagesQueue: [...state.sendingMessagesQueue, action.payload]
               };
         }
@@ -265,6 +267,7 @@ const Chat = (state = INIT_STATE, action) => {
         case SEND_MESSAGE_INIT_STATE:
             return {
                 ...state,
+                sendMessageErrors: null,
                 sendingMessagesQueue: []
             };
     
@@ -275,6 +278,7 @@ const Chat = (state = INIT_STATE, action) => {
 
             return {
                 ...state,
+                sendMessageErrors: null,
                 messages: [...state.messages, action.payload],
                 sendingMessagesQueue: filteredQueue
             }; 
@@ -287,7 +291,7 @@ const Chat = (state = INIT_STATE, action) => {
 
             return {
                 ...state,
-                messages: [...state.messages, action.payload],
+                sendMessageErrors: action.payload,
                 sendingMessagesQueue: filteredQueue
             };
         }
