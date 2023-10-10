@@ -6,6 +6,7 @@ import {
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import {
+    SET_ACTIVE_AGENT,
     GET_AGENTS,
     GET_USER_AGENT,   
     GET_AGENT, 
@@ -13,6 +14,9 @@ import {
     UPDATE_AGENT_AVATAR 
 } from './constants';
 import {
+    setActiveAgentSuccess,
+    setActiveAgentFailed,
+
     getAgentsSuccess,
     getAgentsFailed,
     
@@ -32,7 +36,18 @@ import {
  } from './actions';
 const api = apiAuthorizedClient;
 
-function* getAgents() {
+function* setActiveAgentSaga(action) {
+    const agentId = action.payload;
+
+    try {
+        const response = yield call(api.get, `/agents/${agentId}/`);
+        yield put(setActiveAgentSuccess(response));
+    } catch (error) {
+        yield put(setActiveAgentFailed(error));
+    }
+}
+
+function* getAgentsSaga() {
     try {
         const response = yield call(api.get, `/agents/`);
         yield put(getAgentsSuccess(response));
@@ -41,7 +56,7 @@ function* getAgents() {
     }
 }
 
-function* getUserAgent() {
+function* getUserAgentSaga() {
     try {
         const response = yield call(api.get, `/agent/`);
         yield put(getUserAgentSuccess(response));
@@ -51,7 +66,7 @@ function* getUserAgent() {
 }
 
 //TODO does saga reach API by each user request?
-function* getAgent({ payload: { id } }) {
+function* getAgentSaga({ payload: { id } }) {
     try {
         const response = yield call(api.get, `/agents/${id}/`);
         yield put(getAgentSuccess(response));
@@ -60,7 +75,7 @@ function* getAgent({ payload: { id } }) {
     }
 }
 
-function* updateAgentData({ payload: { id, data } }) {
+function* updateAgentDataSaga({ payload: { id, data } }) {
     try {
         const response = yield call(api.patch, `/agents/${id}/`, data);
         yield put(updateAgentDataSuccess(response));
@@ -71,7 +86,7 @@ function* updateAgentData({ payload: { id, data } }) {
     }
 }
 
-function* updateAgentAvatar({ payload: { id, avatar } }) {
+function* updateAgentAvatarSaga({ payload: { id, avatar } }) {
     try {
         let avatarData = new FormData();
         
@@ -91,9 +106,10 @@ function* updateAgentAvatar({ payload: { id, avatar } }) {
 }
 
 export default function* agentSaga() {
-    yield takeEvery(GET_AGENTS, getAgents);
-    yield takeEvery(GET_USER_AGENT, getUserAgent);
-    yield takeEvery(GET_AGENT, getAgent);
-    yield takeEvery(UPDATE_AGENT_DATA, updateAgentData);
-    yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatar);
+    yield takeEvery(SET_ACTIVE_AGENT, setActiveAgentSaga);
+    yield takeEvery(GET_AGENTS, getAgentsSaga);
+    yield takeEvery(GET_USER_AGENT, getUserAgentSaga);
+    yield takeEvery(GET_AGENT, getAgentSaga);
+    yield takeEvery(UPDATE_AGENT_DATA, updateAgentDataSaga);
+    yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatarSaga);
 }

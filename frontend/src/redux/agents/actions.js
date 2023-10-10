@@ -1,5 +1,7 @@
 import {
     AGENT_INIT,
+    SET_ACTIVE_AGENT,
+    SHOW_NEW_AGENT_CHAT,
 
     GET_AGENTS,
     GET_AGENTS_INIT_STATE,
@@ -25,10 +27,44 @@ import {
     UPDATE_AGENT_AVATAR_INIT_STATE,
     UPDATE_AGENT_AVATAR_SUCCESS,
     UPDATE_AGENT_AVATAR_FAILED,
+    SET_ACTIVE_AGENT_INIT_STATE,
+    SET_ACTIVE_AGENT_SUCCESS,
+    SET_ACTIVE_AGENT_FAILED,
 } from './constants';
+
+ /**
+   * Show window for startign a new chat with an agent
+   * 
+   * @param {boolean} set - show window of a new chat or not 
+   * @returns 
+   */
+ export const showNewAgentChat = (show) => ({
+    type: SHOW_NEW_AGENT_CHAT,
+    payload: show
+  });
+
 
 export const agentInit = () => ({
     type: AGENT_INIT,
+});
+
+export const setActiveAgent = (agentId) => ({
+    type: SET_ACTIVE_AGENT,
+    payload: agentId
+});
+
+export const setActiveAgentinitState = () => ({
+    type: SET_ACTIVE_AGENT_INIT_STATE,
+});
+
+export const setActiveAgentSuccess = (agent) => ({
+    type: SET_ACTIVE_AGENT_SUCCESS,
+    payload: agent
+});
+
+export const setActiveAgentFailed = (errors) => ({
+    type: SET_ACTIVE_AGENT_FAILED,
+    payload: errors
 });
 
 export const getAgents = () => ({
@@ -66,8 +102,6 @@ export const getUserAgentFailed = (errors) => ({
     type: GET_USER_AGENT_FAILED,
     payload: errors
 });
-
-
 
 export const getAgent = (id) => ({
     type: GET_AGENT,

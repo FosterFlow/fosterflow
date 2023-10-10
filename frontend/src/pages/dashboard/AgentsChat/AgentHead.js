@@ -8,6 +8,16 @@ import { deleteChat as actionDeleteChat, showChatWindow, setActiveNewChat} from 
 function UserHead(props) {
     const id = Number(props.router.params.id) || 0;
 
+    function closeUserChat(event) {
+        event.preventDefault();
+        if (id > 0){
+            props.showChatWindow(false);
+            return;
+        }
+        
+        props.setActiveNewChat(false);
+    }
+
     function deleteChat(event) {
         event.preventDefault();
         console.log("UserHead deleteChat activeChatId ", props.activeChatId);
@@ -20,7 +30,7 @@ function UserHead(props) {
             <div className="container-fluid user-chat-header">
                 <Row className="m-0">
                     <Col sm={11} xs={10}>
-                        <Link to="/chats" className="user-chat-back d-lg-none text-muted p-2">
+                        <Link to="/agents" className="user-chat-back d-lg-none text-muted p-2">
                             <i className="ri-arrow-left-s-line"></i>
                         </Link>
                     </Col>

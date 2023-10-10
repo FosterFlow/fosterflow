@@ -13,13 +13,13 @@ import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
 function LeftSidebarMenu(props) {
-    const { agent } = props;
+    const { agents } = props;
     const { t } = useTranslation();
 
     //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
-        if (agent) {
-            return agent.avatar;
+        if (agents) {
+            return agents.avatar;
         }
         return "";
     }
@@ -43,6 +43,11 @@ function LeftSidebarMenu(props) {
             {/* Desktop version start */}
             <div className="side-menu me-lg-1 d-none d-lg-block">
                     <Nav pills className="side-menu-nav justify-content-center" role="tablist">
+                    <NavItem id="Agents" title={t('Agents')}>
+                            <RouterNavLink to="/agents" id="pills-chat-tab" className="nav-link" activeclassname="active">
+                                <i className="ri-contacts-book-line"></i>
+                            </RouterNavLink>
+                        </NavItem>
                         <NavItem id="Chats" title={t('Chats')}>
                             <RouterNavLink to="/chats" id="pills-chat-tab" className="nav-link" activeclassname="active">
                                 <i className="ri-message-3-line"></i>
@@ -120,7 +125,7 @@ const mapStatetoProps = state => {
     return {
         layoutMode: state.Layout.layoutMode,
         language: state.Layout.language,
-        agent: state.Agent
+        agents: state.Agents
     };
 };
 

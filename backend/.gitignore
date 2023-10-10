@@ -13,7 +13,7 @@
 /db.sqlite3
 .env
 /media
-/nlp_models_app/__pycache__
 /nlp_models_app/migrations/__pycache__
+/nlp_models_app/__pycache__
 /agent_app/__pycache__
 /agent_app/migrations/__pycache__

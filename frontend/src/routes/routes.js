@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 
 // lazy load all the views
 const Chats = React.lazy(() => import("../pages/dashboard/Tabs/Chats"));
+const Agents = React.lazy(() => import("../pages/dashboard/Tabs/Agents"));
 const Profile = React.lazy(() => import("../pages/dashboard/Tabs/Profile"));
 const Settings = React.lazy(() => import("../pages/dashboard/Tabs/Settings"));
 
@@ -17,6 +18,10 @@ const PasswordReset = React.lazy(() => import("../pages/Auth/PasswordReset"));
 const authProtectedRoutes = [
   { path: "/chats", component: <Chats /> },
   { path: "/chats/:id", component: <Chats /> },
+  ///chats/new_chat url requires for mobile devices
+  { path: "/chats/new_chat", component: <Chats /> },
+  { path: "/agents", component: <Agents /> },
+  { path: "/agents/:id", component: <Agents /> },
   { path: "/chats/email-verify-token/:emailVerifyToken", component: <Chats /> },
   { path: "/profile", component: <Profile /> },
   { path: "/settings", component: <Settings /> },

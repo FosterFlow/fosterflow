@@ -1,5 +1,12 @@
 import {
     AGENT_INIT,
+    SET_ACTIVE_AGENT_ID,
+    SHOW_NEW_AGENT_CHAT,
+
+    SET_ACTIVE_AGENT,
+    SET_ACTIVE_AGENT_INIT_STATE,
+    SET_ACTIVE_AGENT_SUCCESS,
+    SET_ACTIVE_AGENT_FAILED,
 
     GET_AGENTS,
     GET_AGENTS_INIT_STATE,
@@ -30,9 +37,22 @@ import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
 import config from '../../config';
 
 const INIT_STATE = {
+    //TODO: rename param names according to agents / current user/ current model 
+    
+    //current user's agent
     agent: null,
+
+    //current ML model
+    activeAgentId: 0,
+    newAgentChatShow: false,
+    activeAgent: null,
+
     agents: [],
     userAgents: [],
+
+    setActiveAgentLoading: false,
+    setActiveAgentSucess: false,
+    setActiveAgentErrors: null,
 
     getAgentsLoading: false,
     getAgentsSucess: false,
@@ -43,7 +63,7 @@ const INIT_STATE = {
     getUserAgentErrors: null,
 
     getAgentLoading: false,
-    getAgentSucess: false,
+    getAgentSuccess: false,
     getAgentErrors: null,
 
     agentDataLoading: false,
@@ -56,10 +76,16 @@ const INIT_STATE = {
     avatarSuccess: false
 };
 
-const Agent = (state = INIT_STATE, action) => {
+const Agents = (state = INIT_STATE, action) => {
     switch (action.type) {
         case AGENT_INIT:
             return INIT_STATE;
+
+        case SHOW_NEW_AGENT_CHAT:
+            return { 
+                ...state, 
+                newAgentChatShow: action.payload,
+        }
 
         case GET_AGENTS:
             return { 
@@ -79,14 +105,20 @@ const Agent = (state = INIT_STATE, action) => {
             }
         
         case GET_AGENTS_SUCCESS: {
+            //We take only NLP models
+            const filteredAgents = action.payload.filter(agent => 
+                agent.is_active && agent.nlp_model !== null
+            );
+            
             return { 
                 ...state, 
-                agents: action.payload,
+                agents: filteredAgents,
                 getAgentsLoading: false,
-                getAgentsSucess: true,
+                getAgentsSuccess: true, // Noticed a typo here (Sucess -> Success)
                 getAgentsErrors: null, 
             };
         }
+
         case GET_AGENTS_FAILED:
             return { 
                 ...state,
@@ -94,6 +126,42 @@ const Agent = (state = INIT_STATE, action) => {
                 getAgentsSucess: false,
                 getAgentsErrors: action.payload, 
             };
+
+        case SET_ACTIVE_AGENT:
+            return { 
+                ...state, 
+                activeAgentId: action.payload,
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: null,
+        }
+
+        case SET_ACTIVE_AGENT_INIT_STATE:
+            return { 
+                ...state, 
+                activeAgentId: 0,
+                activeAgent: null,
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: null,
+        }
+
+        case SET_ACTIVE_AGENT_SUCCESS:
+            return { 
+                ...state, 
+                activeAgent: action.payload,
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: null,
+        }
+
+        case SET_ACTIVE_AGENT_FAILED:
+            return { 
+                ...state, 
+                setActiveAgentLoading: false,
+                setActiveAgentSucess: false,
+                setActiveAgentErrors: action.payload,
+        }
 
         case GET_USER_AGENT:
             return { 
@@ -134,7 +202,7 @@ const Agent = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 getAgentLoading: true,
-                getAgentSucess: false,
+                getAgentSuccess: false,
                 getAgentErrors: null, 
             }
 
@@ -142,7 +210,7 @@ const Agent = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 getAgentLoading: false,
-                getAgentSucess: false,
+                getAgentSuccess: false,
                 getAgentErrors: null, 
             }
         
@@ -159,7 +227,7 @@ const Agent = (state = INIT_STATE, action) => {
                 agent: action.payload,
                 avatar: avatar, 
                 getAgentLoading: false,
-                getAgentSucess: true,
+                getAgentSuccess: true,
                 getAgentErrors: null, 
             };
         }
@@ -167,7 +235,7 @@ const Agent = (state = INIT_STATE, action) => {
             return { 
                 ...state,
                 getAgentLoading: false,
-                getAgentSucess: false,
+                getAgentSuccess: false,
                 getAgentErrors: action.payload, 
             };
         
@@ -250,4 +318,4 @@ const Agent = (state = INIT_STATE, action) => {
     }
 }
 
-export default Agent;
+export default Agents;

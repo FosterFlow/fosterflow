@@ -34,7 +34,7 @@ import {
 function Settings(props) {
     const { t } = useTranslation();
     const { 
-        agent,
+        agents,
         user,
         auth,
 
@@ -56,8 +56,8 @@ function Settings(props) {
             return URL.createObjectURL(selectedAvatar);
         }
 
-        if (agent) {
-            return agent.avatar;
+        if (agents) {
+            return agents.avatar;
         }
         return "";
       }
@@ -76,15 +76,15 @@ function Settings(props) {
     }
 
     function getFirstName (){
-        return (agent
-        && agent.agent 
-        && agent.agent.first_name) || '';
+        return (agents
+        && agents.agent 
+        && agents.agent.first_name) || '';
     }
 
     function getLastName (){
-        return (agent
-            && agent.agent  
-            && agent.agent.last_name) || ''
+        return (agents
+            && agents.agent  
+            && agents.agent.last_name) || ''
     }
 
     /**
@@ -95,7 +95,7 @@ function Settings(props) {
      * from the server 
     **/
     useEffect(() => {
-        if (!agent.getAgentSucess) {
+        if (!agents.getAgentSuccess) {
             return;
         }
 
@@ -108,7 +108,7 @@ function Settings(props) {
         if (firstName !== "") {
             personalInfoForm.setFieldValue('first_name', firstName);
         }
-    }, [agent.getAgentSucess]);
+    }, [agents.getAgentSuccess]);
 
     const personalInfoForm = useFormik({
         initialValues: {
@@ -235,8 +235,8 @@ function Settings(props) {
 
                     <div className="user-profile-sroll-area">
                         {
-                            (agent && agent.errors) &&
-                            <Alert color="danger">{agent.errors}</Alert>
+                            (agents && agents.errors) &&
+                            <Alert color="danger">{agents.errors}</Alert>
                         }
                         {/* Start Avatar card */}
                         <div className="p-4">
@@ -246,12 +246,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (agent && agent.avatarErrors 
-                                            && typeof agent.avatarErrors === "string") &&
-                                        <Alert color="danger">{agent.avatarErrors}</Alert>
+                                        (agents && agents.avatarErrors 
+                                            && typeof agents.avatarErrors === "string") &&
+                                        <Alert color="danger">{agents.avatarErrors}</Alert>
                                     }
                                     {
-                                         agent.avatarSuccess &&
+                                         agents.avatarSuccess &&
                                          <Alert color="success">{t("The photo has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={submitAvatar}>
@@ -267,19 +267,19 @@ function Settings(props) {
                                                 id="exampleFile"
                                                 name="file"
                                                 type="file"
-                                                disabled={agent.avatarLoading}
+                                                disabled={agents.avatarLoading}
                                                 onChange={(e) => setSelectedAvatar(e.target.files[0])} // Handle file selection
                                             />
                                             <FormFeedback>
                                                 {
-                                                    agent.avatarErrors 
-                                                    && typeof agent.avatarErrors === "object"
-                                                    && agent.avatarErrors.avatar
+                                                    agents.avatarErrors 
+                                                    && typeof agents.avatarErrors === "object"
+                                                    && agents.avatarErrors.avatar
                                                 }
                                             </FormFeedback>
                                         </FormGroup>
-                                        <Button type="submit" disabled={agent.avatarLoading}>
-                                            {agent.avatarLoading &&
+                                        <Button type="submit" disabled={agents.avatarLoading}>
+                                            {agents.avatarLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -299,12 +299,12 @@ function Settings(props) {
                                 </CardHeader>
                                 <CardBody>
                                     {
-                                        (agent && agent.agentDataErrors 
-                                            && typeof agent.agentDataErrors === "string") &&
-                                        <Alert color="danger">{agent.agentDataErrors}</Alert>
+                                        (agents && agents.agentDataErrors 
+                                            && typeof agents.agentDataErrors === "string") &&
+                                        <Alert color="danger">{agents.agentDataErrors}</Alert>
                                     }
                                     {
-                                         agent.agentDataSuccess &&
+                                         agents.agentDataSuccess &&
                                          <Alert color="success">{t("Personal information has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={personalInfoForm.handleSubmit}>
@@ -317,18 +317,18 @@ function Settings(props) {
                                                 onChange={personalInfoForm.handleChange}
                                                 onBlur={personalInfoForm.handleBlur}
                                                 invalid={!!(personalInfoForm.touched.first_name 
-                                                    && agent.agentDataErrors
-                                                    && agent.agentDataErrors.first_name)}
+                                                    && agents.agentDataErrors
+                                                    && agents.agentDataErrors.first_name)}
                                                 placeholder={t('Enter first name')}
-                                                disabled={agent.agentDataLoading}
+                                                disabled={agents.agentDataLoading}
                                             />
                                             {personalInfoForm.touched.first_name 
-                                                && agent.agentDataErrors
-                                                && agent.agentDataErrors.first_name
+                                                && agents.agentDataErrors
+                                                && agents.agentDataErrors.first_name
                                                 && (
                                                     <FormFeedback type="invalid">
                                                         <ul>
-                                                            {agent.agentDataErrors.first_name.map((error, index) => (
+                                                            {agents.agentDataErrors.first_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
@@ -346,25 +346,25 @@ function Settings(props) {
                                                 onBlur={personalInfoForm.handleBlur}
                                                 placeholder={t('Enter second name')}
                                                 invalid={!!(personalInfoForm.touched.last_name 
-                                                    && agent.agentDataErrors
-                                                    && agent.agentDataErrors.last_name)}
-                                                disabled={agent.agentDataLoading}
+                                                    && agents.agentDataErrors
+                                                    && agents.agentDataErrors.last_name)}
+                                                disabled={agents.agentDataLoading}
                                             />
                                             {personalInfoForm.touched.last_name 
-                                                && agent.agentDataErrors
-                                                && agent.agentDataErrors.last_name
+                                                && agents.agentDataErrors
+                                                && agents.agentDataErrors.last_name
                                                 && (
                                                     <FormFeedback type="invalid">
                                                         <ul>
-                                                            {agent.agentDataErrors.last_name.map((error, index) => (
+                                                            {agents.agentDataErrors.last_name.map((error, index) => (
                                                                 <li key={index}>{error}</li>
                                                             ))}
                                                         </ul>
                                                     </FormFeedback>
                                             )}
                                         </FormGroup>
-                                        <Button type="submit" disabled={agent.agentDataLoading}>
-                                            {agent.agentDataLoading &&
+                                        <Button type="submit" disabled={agents.agentDataLoading}>
+                                            {agents.agentDataLoading &&
                                                 <div className='pe-2 d-inline-block'>
                                                     <Spinner color="primary" size="sm"/>
                                                 </div>
@@ -490,7 +490,7 @@ function Settings(props) {
 
 //TODO: suscribe only to required fields
 const mapStateToProps = (state) => ({
-    agent: state.Agent,
+    agents: state.Agents,
     user: state.User,
     auth: state.Auth
 });
