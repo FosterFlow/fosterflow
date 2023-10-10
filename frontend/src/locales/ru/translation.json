@@ -169,5 +169,6 @@
     "Choose agent for the new chat": "Выберите агента для нового чата",
     "Start chatting with": "Начать чат с",
     "No name": "Без имени",
-    "No surname": "Без фамилии" 
+    "No surname": "Без фамилии",
+    "Select an agent to chat with": "Выберите агента для общения в чате" 
 }

@@ -3,6 +3,14 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ChatInput from "./ChatInput";
 import UserHead from "./UserHead";
+import { 
+    Card, 
+    CardBody, 
+    CardHeader,
+    Form, 
+    FormGroup,
+    Label 
+} from "reactstrap";
 import { useTranslation } from 'react-i18next';
 import {
     getAgents, 
@@ -38,19 +46,29 @@ function UserChat(props) {
                     <UserHead />
                     <div className="user-chat-conversation" id="messages">
                         {/* Styled Selector using Reactstrap */}
-                        <label htmlFor="agentSelector">{t('Select an agent to chat with:')}</label>
-                        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-                            <DropdownToggle caret>
-                                {t('Choose an Agent')}
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                {agents && agents.map((agent, index) => 
-                                    <DropdownItem key={index} onClick={() => {/* handle agent select */}}>
-                                        {agent.name}
-                                    </DropdownItem>
-                                )}
-                            </DropdownMenu>
-                        </Dropdown>
+                        <Card className="border">
+                            <CardHeader>
+                                {t('Agents')}
+                            </CardHeader>
+                            <CardBody>
+                                <Form>
+                                    <FormGroup>
+                                        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+                                            <DropdownToggle caret>
+                                                {t('Select an agent to chat with')}
+                                            </DropdownToggle>
+                                            <DropdownMenu>
+                                                {agents && agents.map((agent, index) => 
+                                                <DropdownItem key={index} onClick={() => {/* handle agent select */}}>
+                                                    {agent.name}
+                                                </DropdownItem>
+                                                )}
+                                            </DropdownMenu>
+                                        </Dropdown>
+                                    </FormGroup>
+                                </Form>
+                            </CardBody>
+                         </Card>       
                     </div>
                 </div>
                 <ChatInput/>
