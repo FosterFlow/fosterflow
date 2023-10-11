@@ -159,13 +159,16 @@ const Index = (props) => {
                 confirmEmailErrors === null && 
                 !sendConfirmationEmailLoading &&
                     <Alert color="info">
-                        <span>
+                        <div>
                             {t('We have sent you an email to confirm your account. Please check your inbox')}.&nbsp;
                                 <a href="#" onClick={sendConfirmationEmailHandler}> 
                                     {t('Click here')}&nbsp;
                                 </a>
                             {t('to send again')}.
-                        </span>
+                        </div>
+                        <div>
+                            {t('Or contact our support by email')}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                        </div>
                     </Alert>
                 }
                 <div className="auth-layout-content">
