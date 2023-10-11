@@ -3,19 +3,23 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ChatInput from "./ChatInput";
 import UserHead from "./UserHead";
-import { 
+import {
+    Alert, 
     Card, 
     CardBody, 
     CardHeader,
     Form, 
     FormGroup,
-    Label 
+    Dropdown,
+    DropdownToggle, 
+    DropdownMenu, 
+    DropdownItem
 } from "reactstrap";
 import { useTranslation } from 'react-i18next';
 import {
     getAgents, 
 } from "../../../redux/actions";
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import config from '../../../config';
 
 function UserChat(props) {
     const { t } = useTranslation();
@@ -23,8 +27,10 @@ function UserChat(props) {
         getAgents,
         authorizedUser,
         agents,
-        newChat
+        newChat,
+        addChatErrors
     } = props;
+    const supportEmail =  config.SUPPORT_EMAIL;
 
     // State to manage dropdown toggle
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -41,11 +47,13 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
+            
             <div className={`user-chat user-chat-new ${newChat ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <UserHead />
                     <div className="user-chat-conversation" id="messages">
                         {/* Styled Selector using Reactstrap */}
+                        
                         <Card className="border">
                             <CardHeader>
                                 {t('Agents')}
@@ -68,7 +76,28 @@ function UserChat(props) {
                                     </FormGroup>
                                 </Form>
                             </CardBody>
-                         </Card>       
+                         </Card>
+                         { addChatErrors && (
+                            <Alert color="danger">
+                                {t("The message wasn't delivered to the server. Errors details")}:
+                                {addChatErrors.details && 
+                                    (<ul className='ps-4'>
+                                        {addChatErrors.details.map((error, index) => (
+                                            <li key={index} className="p-0">
+                                                {error}
+                                            </li>
+                                        ))}
+                                    </ul>)
+                                }
+                                {addChatErrors.details === undefined && 
+                                    (<pre>
+                                        {JSON.stringify(addChatErrors)}
+                                    </pre>)
+                                }
+                                <hr/>
+                                {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                            </Alert>
+                        )}       
                     </div>
                 </div>
                 <ChatInput/>
@@ -81,6 +110,7 @@ const mapStateToProps = (state) => {
     return { 
         messages: state.Chat.messages,
         newChat: state.Chat.newChat,
+        addChatErrors: state.Chat.addChatErrors,
         authorizedUser: state.User.authorizedUser,
         agents: state.Agents.agents,
     }
