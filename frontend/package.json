@@ -12,10 +12,12 @@
     "i18next": "^22.5.0",
     "i18next-browser-languagedetector": "^7.0.1",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "node-sass": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.3.1",
+    "react-image-crop": "^10.1.8",
     "react-markdown": "^8.0.7",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.2",
@@ -24,10 +26,9 @@
     "reactstrap": "^9.1.10",
     "redux": "^4.2.1",
     "redux-saga": "^1.2.3",
+    "remark-gfm": "^3.0.1",
     "simplebar-react": "^3.2.4",
-    "yup": "^1.1.1",
-    "lodash": "^4.17.21",
-    "remark-gfm": "^3.0.1"
+    "yup": "^1.1.1"
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false && WATCHPACK_POLLING=true react-scripts start",
