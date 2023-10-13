@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { 
+    useEffect, 
+    useState, 
+    useRef  
+} from 'react';
 import { 
     Card, 
     CardBody, 
@@ -50,6 +54,7 @@ function Settings(props) {
         updateAgentAvatar
     } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
+    const avatarEditorRef = useRef(null);
 
     //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
@@ -63,17 +68,25 @@ function Settings(props) {
         return "";
       }
 
-    function submitAvatar (event){
+    function submitAvatar(event) {
         event.preventDefault();
-
-        if (selectedAvatar !== null){
-            if (user && user.authorizedUser) {
-                updateAgentAvatar(user.authorizedUser.id, selectedAvatar);
-                return;
-            }
+    
+        if (avatarEditorRef.current) {
+            const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+            canvas.toBlob((blob) => {
+                // You now have the cropped image as a blob
+                
+                const formData = new FormData();
+                formData.append('avatar', blob);
+    
+                if (user && user.authorizedUser) {
+                    updateAgentAvatar(user.authorizedUser.id, formData);
+                    return;
+                }
+                
+                // TODO: Handle any errors or other scenarios here
+            });
         }
-
-        //TODO: show exception, that avatar wasn't chosen
     }
 
     function getFirstName (){
@@ -256,18 +269,19 @@ function Settings(props) {
                                          <Alert color="success">{t("The photo has been successfully updated")}.</Alert>
                                     }
                                     <Form onSubmit={submitAvatar}>
-                                    <FormGroup>
+                                        <FormGroup>
                                             <Label>{t('Photo')}</Label>
                                             <div className='pb-3'>
                                             </div>
                                             <AvatarEditor
+                                                ref={avatarEditorRef}
                                                 image={getAgentAvatar ()} 
                                                 className="rounded-circle avatar-lg img-thumbnail"
-                                                width={250}
-                                                height={250}
-                                                border={50}
+                                                width={150}
+                                                height={150}
+                                                border={0}
                                                 color={[255, 255, 255, 0.6]} // RGBA
-                                                scale={1.2}
+                                                scale={1}
                                                 rotate={0}
                                             />
                                             <Input
