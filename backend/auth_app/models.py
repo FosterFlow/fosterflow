@@ -25,7 +25,7 @@ class EmailConfirmationToken(models.Model):
         verbose_name_plural = "Email Confirm Tokens"
 
     created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField(default=(timezone.now() + timezone.timedelta(hours=int(EMAIL_TOKEN_LIFETIME_HOURS))))
+    expires_at = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     key = models.CharField(
         max_length=64,
