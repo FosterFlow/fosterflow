@@ -2,7 +2,7 @@ version: '3.1'
 services:
   db:
     container_name: postgres
-    image: postgres:13.1
+    image: postgres:15.4-alpine
     privileged: true
     ports:
       - 5432:5432
@@ -10,6 +10,11 @@ services:
       - .env
     networks:
       - myNetwork
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:6.2-alpine
@@ -22,13 +27,18 @@ services:
       - redis:/data
     networks:
       - myNetwork
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   backend:
     container_name: backend
     build: ./backend
     ports:
       - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    entrypoint: sh ./django-entrypoint.sh
     environment:
       - REDIS_HOST=redis
     restart: always
@@ -41,6 +51,11 @@ services:
       - .env
     networks:
       - myNetwork
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   celery:
     container_name: celery
@@ -55,16 +70,17 @@ services:
       - .env
     networks:
       - myNetwork
-  
+
   frontend:
     container_name: frontend
     build: ./frontend
     ports:
       - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./frontend:/frontend
       - '/frontend/node_modules'
-    command: bash -c "yarn start"
     networks:
       - myNetwork
     env_file:
@@ -72,6 +88,11 @@ services:
     depends_on:
       - db
       - backend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   swagger:
     container_name: swagger

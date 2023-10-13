@@ -19,18 +19,23 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='chat',
             name='owner_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='owner_id',
+            field=models.ForeignKey(default=100, on_delete=django.db.models.deletion.CASCADE, related_name='owner_id',
                                     to='user_app.agent'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='chat',
             name='addressee_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='addressee_id',
-                                    to='user_app.agent'),
+            field=models.ForeignKey(default=100, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='addressee_id', to='user_app.agent'),
             preserve_default=False,
         ),
-        migrations.RunSQL('UPDATE chat_app_chat SET owner_id_id=user_id_id, addressee_id_id=100;'),
+        migrations.AddField(
+            model_name='message',
+            name='owner_id',
+            field=models.ForeignKey(default=100, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
+            preserve_default=False,
+        ),
         migrations.RemoveField(
             model_name='chat',
             name='user_id',
@@ -46,53 +51,8 @@ class Migration(migrations.Migration):
             field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
         ),
-        migrations.AddField(
-            model_name='message',
-            name='owner_id',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
-        ),
-        migrations.RunSQL('UPDATE user_app_agent SET id=100 WHERE user_id_id=100'),
-        migrations.RunSQL("""            
-            UPDATE chat_app_message
-            SET owner_id_id = chat_app_chat.owner_id_id
-            FROM chat_app_chat
-            WHERE chat_app_message.chat_id_id = chat_app_chat.id;
-        """),
-        migrations.RunSQL("""
-            CREATE TABLE temp_table AS SELECT * FROM chat_app_message;
-            UPDATE temp_table SET id = id * 2 - 1;
-            DELETE FROM chat_app_message;
-            INSERT INTO chat_app_message SELECT * FROM temp_table;
-            DROP TABLE temp_table;
-        """),
-        migrations.RunSQL("""
-            INSERT INTO chat_app_message (id, message_text, chat_id_id, created_at, owner_id_id)
-            SELECT id + 1, answer_text, chat_id_id, created_at, 100
-            FROM chat_app_message
-            WHERE answer_text IS NOT NULL;            
-            """),
         migrations.RemoveField(
             model_name='message',
             name='answer_text',
-        ),
-        migrations.AlterField(
-            model_name='chat',
-            name='addressee_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='addressee_id',
-                                    to='user_app.agent'),
-            preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name='chat',
-            name='owner_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='owner_id',
-                                    to='user_app.agent'),
-            preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name='message',
-            name='owner_id',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='user_app.agent'),
-            preserve_default=False,
         ),
     ]

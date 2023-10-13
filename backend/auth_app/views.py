@@ -29,6 +29,7 @@ environ.Env.read_env()
 FRONTEND_URL = env('FRONTEND_URL')
 
 User = get_user_model()
+EMAIL_TOKEN_LIFETIME_HOURS = os.environ.get('EMAIL_TOKEN_LIFETIME_HOURS', 24)
 
 
 class UserLoginAPIView(GenericAPIView):
@@ -199,7 +200,7 @@ class RegisterApi(generics.GenericAPIView):
             response.status_code = status.HTTP_200_OK
 
             token = get_token_generator().generate_token()
-            EmailConfirmationToken.objects.create(user=user, key=token)
+            EmailConfirmationToken.objects.create(user=user, key=token, expires_at=(timezone.now() + timezone.timedelta(hours=int(EMAIL_TOKEN_LIFETIME_HOURS))))
             send_confirmation_email(email=user.email, token=token)
         else:
             data = {'errors': serializer.errors}
@@ -275,7 +276,8 @@ class SendEmailConfirmationTokenAPIView(APIView):
 
         user = request.user
         token = get_token_generator().generate_token()
-        EmailConfirmationToken.objects.create(user=user, key=token)
+        EmailConfirmationToken.objects.create(user=user, key=token, expires_at=(
+                    timezone.now() + timezone.timedelta(hours=int(EMAIL_TOKEN_LIFETIME_HOURS))))
         send_confirmation_email(email=user.email, token=token)
         data = {
             "message": "Sending was successful"
