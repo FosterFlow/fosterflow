@@ -52,9 +52,12 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     'chat_app',
+    'messages_app'
     'auth_app',
     'user_app',
+    'user_agent_profiles_app'
     'nlp_models_app',
+    'ai_agent_profiles_app',
     'agent_app',
 ]
 
