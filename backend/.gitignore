@@ -17,3 +17,9 @@
 /nlp_models_app/__pycache__
 /agent_app/__pycache__
 /agent_app/migrations/__pycache__
+/messages_app/__pycache__
+/messages_app/migrations/__pycache__
+/ai_agent_profiles_app/__pycache__
+/ai_agent_profiles_app/migrations/__pycache__
+/user_agent_profiles_app/__pycache__
+/user_agent_profiles_app/migrations/__pycache__
