@@ -12,8 +12,9 @@ yarn-debug.log*
 yarn-error.log*
 yarn.lock
 
-# idea
+# IDE
 /.idea/
+/.vscode/
 
 #Django
 backend/static_django/
