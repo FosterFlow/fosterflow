@@ -8,6 +8,8 @@
 /auth_app/__pycache__
 /auth_app/migrations/__pycache__
 /user_app/__pycache__
+/user_app/management/__pycache__
+/user_app/management/commands/__pycache__
 /user_app/migrations/__pycache__
 .idea
 /db.sqlite3
