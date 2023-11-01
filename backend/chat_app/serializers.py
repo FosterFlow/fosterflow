@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
-from .models import Chat, Message
+from .models import Chat
 from rest_framework import serializers
 
 User = get_user_model()
@@ -45,35 +45,3 @@ class ChatModelSerializer(ModelSerializer):
             return customer_account_query.message_text
         except Exception as e:
             return None
-
-
-class MessageModelSerializer(ModelSerializer):
-    """
-    Serializer class for the Message model.
-
-    This serializer is used to serialize and deserialize Message objects.
-
-    Methods:
-        create(self, validated_data): Creates a new message instance.
-    """
-
-    class Meta:
-        model = Message
-        fields = '__all__'
-
-    def create(self, validated_data):
-        """
-        Creates a new message instance.
-
-        This method creates a new Message instance with the provided data.
-        It generates an answer text using the `take_answer` utility function.
-
-        Args:
-            validated_data (dict): The validated data containing message_text and chat_id.
-
-        Returns:
-            Message: The created message instance.
-        """
-
-        message = Message.objects.create(**validated_data)
-        return message

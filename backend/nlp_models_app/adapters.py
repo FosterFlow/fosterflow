@@ -5,7 +5,7 @@ import openai
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from project.settings import BASE_DIR
-from chat_app.models import Message
+from messages_app.models import Message
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
