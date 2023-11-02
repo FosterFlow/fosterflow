@@ -8,7 +8,7 @@ from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth.models import AnonymousUser
 from project.settings import BASE_DIR
 from django.db.models import Q
-from chat_app.models import Chat, Message
+from chat_app.models import Chat
 from agent_app.models import Agent
 
 env = environ.Env()
