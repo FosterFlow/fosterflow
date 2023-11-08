@@ -63,6 +63,8 @@ class ProfileUser(models.Model):
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
     first_name = models.TextField(max_length=32)
     last_name = models.TextField(max_length=32)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user_id.email

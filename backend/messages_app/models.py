@@ -22,6 +22,7 @@ class Message(models.Model):
         on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     request_id = models.ForeignKey(
         'self',
