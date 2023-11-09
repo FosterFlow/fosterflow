@@ -12,10 +12,10 @@ class AgentListView(generics.ListAPIView):
     filterset_class = AgentFilter
 
 
-# class AgentDetailView(generics.RetrieveUpdateAPIView):
-#     queryset = Agent.objects.all()
-#     serializer_class = AgentSerializer
-#
-#     # def perform_destroy(self, instance):
-#     #     instance.is_active = False
-#     #     instance.save()
+class AgentDetailView(generics.RetrieveUpdateAPIView):
+    queryset = Agent.objects.all()
+    serializer_class = AgentSerializer
+
+    # def perform_destroy(self, instance):
+    #     instance.is_active = False
+    #     instance.save()
