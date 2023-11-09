@@ -3,6 +3,7 @@ from .models import Agent
 from .serializers import AgentSerializer
 from rest_framework import generics
 from django_filters import rest_framework as django_filters
+from rest_framework.permissions import IsAuthenticated
 
 
 class AgentListView(generics.ListAPIView):
@@ -19,3 +20,15 @@ class AgentDetailView(generics.RetrieveUpdateAPIView):
     # def perform_destroy(self, instance):
     #     instance.is_active = False
     #     instance.save()
+
+class AgentSelfView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get']
+
+    def get(self, request, format=None):
+        # Assuming that the Agent model is related to the Django User model
+        # through a ForeignKey or OneToOneField called 'user'.
+        agent = get_object_or_404(Agent, user=request.user)
+        serializer = AgentSerializer(agent)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

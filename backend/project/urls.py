@@ -11,7 +11,7 @@ from messages_app.views import MessageModelViewSet
 from user_app.views import UserModelViewSet, ProfileUserModelViewSet, SelfUserAPIView, SelfProfileUserAPIView
 from auth_app.views import CustomTokenRefreshView
 from user_app.views import UserAvatarUpdateView
-from agent_app.views import AgentListView, AgentDetailView
+from agent_app.views import AgentListView, AgentDetailView, AgentSelfView
 from nlp_models_app.viws import NlpModelListView, ProfileModelListView
 
 router = DefaultRouter()
@@ -33,6 +33,7 @@ urlpatterns = [
     path('api/profiles_user/<int:pk>/avatar/', UserAvatarUpdateView.as_view(), name='profile_user_update'),
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
+    path('api/agents/self', AgentSelfView.as_view(), name='agent-self'),
     path('api/agents/<int:pk>/', AgentDetailView.as_view(), name='agent-detail'),
 
     path('api/nlp-models/', NlpModelListView.as_view(), name='nlp-model-list'),
