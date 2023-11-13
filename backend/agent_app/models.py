@@ -1,7 +1,5 @@
 from django.db import models
-
-from user_app.models import get_image_filename, User
-
+from user_app.models import User
 from nlp_models_app.models import NlpModel
 
 

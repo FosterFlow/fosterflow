@@ -1,10 +1,7 @@
 import os
-
 from django.db import models
 from django.template.defaultfilters import slugify
-
-from user_app.validators import compress_image
-
+from .validators import compress_image
 
 def get_image_filename(instance, filename):
     name = instance.user_id.username

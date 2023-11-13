@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import UserAgentProfiles
 
-# Register your models here.
+class UserAgentProfilesAdmin(admin.ModelAdmin):
+    readonly_fields = ('id','updated_at','created_at')
+
+admin.site.register(UserAgentProfiles, UserAgentProfilesAdmin)
