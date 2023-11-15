@@ -3,9 +3,9 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import ProfileUser
+from .models import UserAgentProfiles
 from .permissions import IsOwnerAgent
-from .serializers import ProfileUserSerializer
+from .serializers import UserAgentProfilesSerializer, UserAgentProfilesAvatarSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,22 +13,22 @@ from rest_framework.response import Response
 User = get_user_model()
 
 
-class ProfileUserModelViewSet(ModelViewSet):
+class UserAgentProfilesModelViewSet(ModelViewSet):
     """
-    Get, Update user profile
+    Get, Update user's agent profile
     """
 
-    queryset = ProfileUser.objects.all()
-    serializer_class = ProfileUserSerializer
+    queryset = UserAgentProfiles.objects.all()
+    serializer_class = UserAgentProfilesSerializer
     permission_classes = (IsAuthenticated, IsOwnerAgent)
     http_method_names = ['get', 'patch', ]
 
     def partial_update(self, request, *args, **kwargs):
-        profile_user = get_object_or_404(ProfileUser, pk=kwargs['pk'])
-        serializer = ProfileUserSerializer(profile_user, data=request.data, partial=True)
+        user_agent_profile = get_object_or_404(UserAgentProfiles, pk=kwargs['pk'])
+        serializer = UserAgentProfilesSerializer(user_agent_profile, data=request.data, partial=True)
 
         if serializer.is_valid():
-            if request.user.id != profile_user.user_id.id:
+            if request.user.id != user_agent_profile.user_id.id:
                 return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
             serializer.save()
             return Response(serializer.data)
@@ -38,17 +38,17 @@ class ProfileUserModelViewSet(ModelViewSet):
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
-        profiles_user = ProfileUser.objects.all()
-        profile_user_serializer = ProfileUserSerializer(
-            instance=profiles_user,
+        user_agent_profiles = UserAgentProfiles.objects.all()
+        profile_user_serializer = UserAgentProfilesSerializer(
+            instance=user_agent_profiles,
             many=True
         )
         return Response(profile_user_serializer.data, status.HTTP_200_OK)
 
     def retrieve(self, request, *args, **kwargs):
         try:
-            profile_user = ProfileUser.objects.get(id=kwargs['pk'])
-            profile_user_serializer = ProfileUserSerializer(
+            profile_user = UserAgentProfiles.objects.get(id=kwargs['pk'])
+            profile_user_serializer = UserAgentProfilesSerializer(
                 instance=profile_user,
                 many=False
             )
@@ -57,17 +57,31 @@ class ProfileUserModelViewSet(ModelViewSet):
             return Response({"errors": {"details": e.args}}, status=status.HTTP_404_NOT_FOUND)
 
 
-class SelfProfileUserAPIView(APIView):
+class SelfUserAgentProfilesAPIView(APIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated, IsOwnerAgent)
-    serializer_class = ProfileUserSerializer
+    serializer_class = UserAgentProfilesSerializer
     http_method_names = ['get']
 
     def get(self, request):
         user_id = User.objects.get(id=request.user.id)
-        profile_user = ProfileUser.objects.get(user_id=user_id)
-        profile_user_serializer = ProfileUserSerializer(
-            instance=profile_user,
+        user_agent_profiles = UserAgentProfiles.objects.get(user_id=user_id)
+        profile_user_serializer = UserAgentProfilesSerializer(
+            instance=user_agent_profiles,
             many=False
         )
         return Response(profile_user_serializer.data, status.HTTP_200_OK)
+    
+class UserAgentProfileAvatarUpdateView(APIView):
+    permission_classes = (IsAuthenticated, IsOwnerAgent)
+
+    def patch(self, request, pk=None, *args, **kwargs):
+        user_agent_profile = get_object_or_404(UserAgentProfiles, pk=pk)
+        serializer = UserAgentProfilesAvatarSerializer(user_agent_profile, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            if request.user.id != user_agent_profile.user_id.id:
+                return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -8,9 +8,9 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
     ChangePasswordView
 from chat_app.views import ChatModelViewSet
 from messages_app.views import MessageModelViewSet
-from user_app.views import UserModelViewSet, ProfileUserModelViewSet, SelfUserAPIView, SelfProfileUserAPIView
+from user_app.views import UserModelViewSet, SelfUserAPIView
+from user_agent_profiles_app.views import UserAgentProfilesModelViewSet, SelfUserAgentProfilesAPIView, UserAgentProfileAvatarUpdateView
 from auth_app.views import CustomTokenRefreshView
-from user_app.views import UserAvatarUpdateView
 from agent_app.views import AgentListView, AgentDetailView, AgentSelfView
 from nlp_models_app.viws import NlpModelListView, ProfileModelListView
 
@@ -18,7 +18,7 @@ router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
 router.register('users', UserModelViewSet, basename='users')
-router.register('profiles_user', ProfileUserModelViewSet, basename='profiles_user')
+router.register('user_agent_profiles', UserAgentProfilesModelViewSet, basename='user_agent_profiles')
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),
@@ -28,9 +28,9 @@ urlpatterns = [
     path('api/token/', UserLoginAPIView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterApi.as_view()),
-    path('api/user/', SelfUserAPIView.as_view(), name='user'),
-    path('api/profile_user/', SelfProfileUserAPIView.as_view(), name='profile_user'),
-    path('api/profiles_user/<int:pk>/avatar/', UserAvatarUpdateView.as_view(), name='profile_user_update'),
+    path('api/users/self', SelfUserAPIView.as_view(), name='user'),
+    path('api/user_agent_profiles/self', SelfUserAgentProfilesAPIView.as_view(), name='profile_user'),
+    path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarUpdateView.as_view(), name='profile_user_update'),
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
     path('api/agents/self', AgentSelfView.as_view(), name='agent-self'),
