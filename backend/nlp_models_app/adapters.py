@@ -16,16 +16,16 @@ class RequestHandler:
     def handle_request(self, request):
         sent_message = Message.objects.get(id=request['message_id'])
         agent = sent_message.addressee_id
-        if agent.nlp_model.title == 'GPT-3.5-turbo-4k' and agent.is_active:
+        if agent.ai_model.title == 'GPT-3.5-turbo-4k' and agent.is_active:
             adapter = GptAdapter(Gpt35Turbo4KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif agent.nlp_model.title == 'GPT-3.5-turbo-16k' and agent.is_active:
+        elif agent.ai_model.title == 'GPT-3.5-turbo-16k' and agent.is_active:
             adapter = GptAdapter(Gpt35Turbo16KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif agent.nlp_model.title == 'GPT-4-8k' and agent.is_active:
+        elif agent.ai_model.title == 'GPT-4-8k' and agent.is_active:
             adapter = GptAdapter(Gpt48KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif agent.nlp_model.title == 'GPT-4-32k' and agent.is_active:
+        elif agent.ai_model.title == 'GPT-4-32k' and agent.is_active:
             adapter = GptAdapter(Gpt432KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
 

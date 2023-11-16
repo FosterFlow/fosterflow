@@ -1,8 +1,7 @@
 from django.db import models
-from django.contrib import admin
 from django.template.defaultfilters import slugify
 from .validators import compress_image
-from django.conf import settings
+from agent_app.models import Agent
 
 # Create your models here.
 
@@ -12,7 +11,7 @@ def get_image_filename(instance, filename):
     return f"avatars/{slug}-{filename}"
 
 class UserAgentProfiles(models.Model):
-    user_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user_agent_id = models.OneToOneField(Agent, on_delete=models.CASCADE, primary_key=True)
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
     first_name = models.TextField(max_length=32)
     last_name = models.TextField(max_length=32)

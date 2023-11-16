@@ -6,7 +6,7 @@ from user_agent_profiles_app.models import UserAgentProfiles
 @receiver(post_save, sender=Agent)
 def create_user_agent_profile(sender, instance, created, **kwargs):
     if created:
-        UserAgentProfiles.objects.create(agent=instance)
+        UserAgentProfiles.objects.create(user_agent_id=instance)
 
 @receiver(post_save, sender=Agent)
 def save_user_agent_profile(sender, instance, **kwargs):

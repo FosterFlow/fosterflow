@@ -20,7 +20,7 @@ class NlpModel(models.Model):
 
 
 class ProfileModel(models.Model):
-    nlp_model = models.ForeignKey(NlpModel, on_delete=models.CASCADE)
+    ai_model = models.ForeignKey(NlpModel, on_delete=models.CASCADE)
     price_per_token = models.DecimalField(decimal_places=5, max_digits=10)
     description = models.TextField(max_length=2000)
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
@@ -38,4 +38,4 @@ class ProfileModel(models.Model):
         super(ProfileModel, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.pk} {self.nlp_model}'
+        return f'{self.pk} {self.ai_model}'
