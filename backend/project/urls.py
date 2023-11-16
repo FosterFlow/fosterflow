@@ -12,7 +12,7 @@ from user_app.views import UserModelViewSet, SelfUserAPIView
 from user_agent_profiles_app.views import UserAgentProfilesModelViewSet, SelfUserAgentProfilesAPIView, UserAgentProfileAvatarUpdateView
 from auth_app.views import CustomTokenRefreshView
 from agent_app.views import AgentListView, AgentDetailView, AgentSelfView
-from nlp_models_app.viws import NlpModelListView, ProfileModelListView
+from nlp_models_app.views import NlpModelListView, ProfileModelListView
 
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
