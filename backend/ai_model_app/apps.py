@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AiAgentProfilesAppConfig(AppConfig):
+class AiModelAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ai_agent_profiles_app'
+    name = 'ai_model_app'

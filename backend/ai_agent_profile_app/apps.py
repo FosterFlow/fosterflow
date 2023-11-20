@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class NlpModelsAppConfig(AppConfig):
+class AiAgentProfileAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'nlp_models_app'
+    name = 'ai_agent_profile_app'
