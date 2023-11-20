@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('price_per_token', models.DecimalField(decimal_places=5, max_digits=10)),
                 ('description', models.TextField(max_length=2000)),
                 ('avatar', models.ImageField(blank=True, upload_to=nlp_models_app.models.get_image_filename)),
-                ('nlp_model', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='nlp_models_app.nlpmodel')),
+                ('ai_model', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='nlp_models_app.NlpModel')),
             ],
         ),
     ]

@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('chat_app', '0010_delete_message'),
-        ('agent_app', '0003_agent_is_active'),
+        ('agent_app', '0002_agent_is_active'),
     ]
 
     operations = [

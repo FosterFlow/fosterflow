@@ -22,13 +22,8 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(blank=True, null=True, max_length=50)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('nlp_model', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='nlp_models', to=settings.AUTH_USER_MODEL)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='users', to=settings.AUTH_USER_MODEL)),
+                ('ai_model', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to='nlp_models_app.NlpModel')),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.RunSQL("""            
-                INSERT INTO agent_app_agent (id, created_at, updated_at, user_id)
-                SELECT id, '2023-09-02 05:00:00.0', '2023-09-02 05:00:00.0', user_id_id
-                FROM user_app_agent
-            """),
+        )
     ]

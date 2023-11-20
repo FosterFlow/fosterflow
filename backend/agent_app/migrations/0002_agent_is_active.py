@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('agent_app', '0002_alter_agent_nlp_model'),
+        ('agent_app', '0001_initial'),
     ]
 
     operations = [
