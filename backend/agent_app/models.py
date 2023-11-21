@@ -1,11 +1,11 @@
 from django.db import models
 from user_app.models import User
-from nlp_models_app.models import NlpModel
+from ai_model_app.models import AiModel
 
 
 class Agent(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='agents', null=True, blank=True)
-    ai_model = models.ForeignKey(NlpModel, on_delete=models.SET_NULL, related_name='agents', null=True, blank=True)
+    ai_model = models.ForeignKey(AiModel, on_delete=models.SET_NULL, related_name='agents', null=True, blank=True)
     name = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

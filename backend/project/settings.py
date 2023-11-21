@@ -56,8 +56,8 @@ INSTALLED_APPS = [
     'auth_app',
     'user_app',
     'user_agent_profiles_app',
-    'nlp_models_app',
-    'ai_agent_profiles_app',
+    'ai_model_app',
+    'ai_agent_profile_app',
     'agent_app',
 ]
 

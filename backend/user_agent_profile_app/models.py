@@ -10,8 +10,8 @@ def get_image_filename(instance, filename):
     slug = slugify(name)
     return f"avatars/{slug}-{filename}"
 
-class UserAgentProfiles(models.Model):
-    user_agent_id = models.OneToOneField(Agent, on_delete=models.CASCADE, primary_key=True)
+class UserAgentProfile(models.Model):
+    user_agent = models.OneToOneField(Agent, on_delete=models.CASCADE, primary_key=True)
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
     first_name = models.TextField(max_length=32)
     last_name = models.TextField(max_length=32)
@@ -31,4 +31,4 @@ class UserAgentProfiles(models.Model):
             image = self.avatar
             if image.size > 0.3 * 1024 * 1024:
                 self.avatar = compress_image(image)
-        super(UserAgentProfiles, self).save(*args, **kwargs)
+        super(UserAgentProfile, self).save(*args, **kwargs)

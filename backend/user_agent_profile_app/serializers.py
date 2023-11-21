@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
 from user_app.validators import is_safe_name
 from rest_framework import serializers
-from .models import UserAgentProfiles
+from .models import UserAgentProfile
 
 User = get_user_model()
 
 
-class UserAgentProfilesSerializer(serializers.ModelSerializer):
+class UserAgentProfileSerializer(serializers.ModelSerializer):
     """
     Serializer class to serialize the user Profile model
     """
@@ -22,11 +22,11 @@ class UserAgentProfilesSerializer(serializers.ModelSerializer):
         return data
 
     class Meta:
-        model = UserAgentProfiles
+        model = UserAgentProfile
         fields = ('user_id', 'first_name', 'last_name', 'avatar')
 
 
-class UserAgentProfilesAvatarSerializer(serializers.ModelSerializer):
+class UserAgentProfileAvatarSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserAgentProfiles
+        model = UserAgentProfile
         fields = ('avatar', )

@@ -19,10 +19,11 @@ class Migration(migrations.Migration):
             name='Agent',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('is_active', models.BooleanField(default=True)),
                 ('name', models.CharField(blank=True, null=True, max_length=50)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('ai_model', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to='nlp_models_app.NlpModel')),
+                ('ai_model', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to='ai_model_app.AiModel')),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to=settings.AUTH_USER_MODEL)),
             ],
         )

@@ -3,9 +3,9 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import UserAgentProfiles
+from .models import UserAgentProfile
 from .permissions import IsOwnerAgent
-from .serializers import UserAgentProfilesSerializer, UserAgentProfilesAvatarSerializer
+from .serializers import UserAgentProfileSerializer, UserAgentProfileAvatarSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
@@ -18,14 +18,14 @@ class UserAgentProfilesModelViewSet(ModelViewSet):
     Get, Update user's agent profile
     """
 
-    queryset = UserAgentProfiles.objects.all()
-    serializer_class = UserAgentProfilesSerializer
+    queryset = UserAgentProfile.objects.all()
+    serializer_class = UserAgentProfileSerializer
     permission_classes = (IsAuthenticated, IsOwnerAgent)
     http_method_names = ['get', 'patch', ]
 
     def partial_update(self, request, *args, **kwargs):
-        user_agent_profile = get_object_or_404(UserAgentProfiles, pk=kwargs['pk'])
-        serializer = UserAgentProfilesSerializer(user_agent_profile, data=request.data, partial=True)
+        user_agent_profile = get_object_or_404(UserAgentProfile, pk=kwargs['pk'])
+        serializer = UserAgentProfileSerializer(user_agent_profile, data=request.data, partial=True)
 
         if serializer.is_valid():
             if request.user.id != user_agent_profile.user_id.id:
@@ -38,8 +38,8 @@ class UserAgentProfilesModelViewSet(ModelViewSet):
         return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
-        user_agent_profiles = UserAgentProfiles.objects.all()
-        profile_user_serializer = UserAgentProfilesSerializer(
+        user_agent_profiles = UserAgentProfile.objects.all()
+        profile_user_serializer = UserAgentProfileSerializer(
             instance=user_agent_profiles,
             many=True
         )
@@ -47,8 +47,8 @@ class UserAgentProfilesModelViewSet(ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         try:
-            profile_user = UserAgentProfiles.objects.get(id=kwargs['pk'])
-            profile_user_serializer = UserAgentProfilesSerializer(
+            profile_user = UserAgentProfile.objects.get(id=kwargs['pk'])
+            profile_user_serializer = UserAgentProfileSerializer(
                 instance=profile_user,
                 many=False
             )
@@ -60,13 +60,13 @@ class UserAgentProfilesModelViewSet(ModelViewSet):
 class SelfUserAgentProfilesAPIView(APIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated, IsOwnerAgent)
-    serializer_class = UserAgentProfilesSerializer
+    serializer_class = UserAgentProfileSerializer
     http_method_names = ['get']
 
     def get(self, request):
         user_id = User.objects.get(id=request.user.id)
-        user_agent_profiles = UserAgentProfiles.objects.get(user_id=user_id)
-        profile_user_serializer = UserAgentProfilesSerializer(
+        user_agent_profiles = UserAgentProfile.objects.get(user_id=user_id)
+        profile_user_serializer = UserAgentProfileSerializer(
             instance=user_agent_profiles,
             many=False
         )
@@ -76,8 +76,8 @@ class UserAgentProfileAvatarUpdateView(APIView):
     permission_classes = (IsAuthenticated, IsOwnerAgent)
 
     def patch(self, request, pk=None, *args, **kwargs):
-        user_agent_profile = get_object_or_404(UserAgentProfiles, pk=pk)
-        serializer = UserAgentProfilesAvatarSerializer(user_agent_profile, data=request.data, partial=True)
+        user_agent_profile = get_object_or_404(UserAgentProfile, pk=pk)
+        serializer = UserAgentProfileAvatarSerializer(user_agent_profile, data=request.data, partial=True)
 
         if serializer.is_valid():
             if request.user.id != user_agent_profile.user_id.id:
