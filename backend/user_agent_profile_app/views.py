@@ -28,7 +28,7 @@ class UserAgentProfileViewSet(ModelViewSet):
         serializer = UserAgentProfileSerializer(user_agent_profile, data=request.data, partial=True)
 
         if serializer.is_valid():
-            if request.user.id != user_agent_profile.user_id.id:
+            if request.agent.id != user_agent_profile.agent_id.id:
                 return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
             serializer.save()
             return Response(serializer.data)
@@ -47,12 +47,12 @@ class UserAgentProfileViewSet(ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         try:
-            profile_user = UserAgentProfile.objects.get(id=kwargs['pk'])
-            profile_user_serializer = UserAgentProfileSerializer(
-                instance=profile_user,
+            user_agent_profile = UserAgentProfile.objects.get(id=kwargs['pk'])
+            user_agent_profile_serializer = UserAgentProfileSerializer(
+                instance=user_agent_profile,
                 many=False
             )
-            return Response(profile_user_serializer.data, status.HTTP_200_OK)
+            return Response(user_agent_profile_serializer.data, status.HTTP_200_OK)
         except Exception as e:
             return Response({"errors": {"details": e.args}}, status=status.HTTP_404_NOT_FOUND)
 

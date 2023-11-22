@@ -6,7 +6,7 @@ from agent_app.models import Agent
 # Create your models here.
 
 def get_image_filename(instance, filename):
-    name = instance.user_id.username
+    name = instance.user_agent.name
     slug = slugify(name)
     return f"avatars/{slug}-{filename}"
 
@@ -19,7 +19,7 @@ class UserAgentProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user_id.email
+        return self.user_agent.name
 
     @property
     def filename(self):
