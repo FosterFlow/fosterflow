@@ -30,8 +30,8 @@ urlpatterns = [
     path('api/token/', UserLoginAPIView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterApi.as_view()),
-    path('api/users/self', SelfUserAPIView.as_view(), name='user'),
-    path('api/user_agent_profiles/self', SelfUserAgentProfileAPIView.as_view(), name='profile_user'),
+    path('api/users/self/', SelfUserAPIView.as_view(), name='user'),
+    path('api/user_agent_profiles/self/', SelfUserAgentProfileAPIView.as_view(), name='profile_user'),
     path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarUpdateView.as_view(), name='profile_user_update'),
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
