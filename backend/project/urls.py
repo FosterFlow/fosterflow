@@ -7,7 +7,7 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
     ConfirmEmailGenericAPIView, SendEmailConfirmationTokenAPIView, \
     ChangePasswordView
 from chat_app.views import ChatModelViewSet
-from messages_app.views import MessageModelViewSet
+from message_app.views import MessageModelViewSet
 from user_app.views import UserModelViewSet, SelfUserAPIView
 from user_agent_profile_app.views import UserAgentProfileViewSet, SelfUserAgentProfileAPIView, UserAgentProfileAvatarUpdateView
 from auth_app.views import CustomTokenRefreshView

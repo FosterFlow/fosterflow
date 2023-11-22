@@ -19,8 +19,8 @@
 /ai_model_app/__pycache__
 /agent_app/__pycache__
 /agent_app/migrations/__pycache__
-/messages_app/__pycache__
-/messages_app/migrations/__pycache__
+/message_app/__pycache__
+/message_app/migrations/__pycache__
 /ai_agent_profile_app/__pycache__
 /ai_agent_profile_app/migrations/__pycache__
 /user_agent_profile_app/__pycache__

@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('addressee_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='addressee', to='agent_app.agent')),
                 ('chat_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='chat_app.chat')),
                 ('owner_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='agent_app.agent')),
-                ('request_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='replies', to='messages_app.message')),
+                ('request_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='replies', to='message_app.message')),
             ],
         ),
     ]
