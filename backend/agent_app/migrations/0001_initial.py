@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('user_app', '0003_rename_profile_agent'),
+        ('ai_model_app', '0001_initial'),
     ]
 
     operations = [
@@ -23,7 +24,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(blank=True, null=True, max_length=50)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('ai_model', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to='ai_model_app.AiModel')),
+                ('ai_model', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to='ai_model_app.aimodel')),
                 ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to=settings.AUTH_USER_MODEL)),
             ],
         )
