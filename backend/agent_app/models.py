@@ -10,6 +10,7 @@ class Agent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
+    # TODO: add an avatar image ???
 
     def __str__(self):
         if self.user:

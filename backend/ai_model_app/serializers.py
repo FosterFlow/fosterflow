@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import AiModels
+from .models import AiModel
 
 
 class AiModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AiModels
+        model = AiModel
         fields = '__all__'

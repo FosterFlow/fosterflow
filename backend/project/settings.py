@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'messages_app',
     'auth_app',
     'user_app',
-    'user_agent_profiles_app',
+    'user_agent_profile_app',
     'ai_model_app',
     'ai_agent_profile_app',
     'agent_app',
@@ -69,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -133,11 +132,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -210,9 +206,7 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_CREDENTIALS = True
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS') == 'True'
@@ -220,9 +214,7 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_SSL = env('EMAIL_USE_SSL') == 'True'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-
 AUTH_USER_MODEL = "user_app.User"
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 

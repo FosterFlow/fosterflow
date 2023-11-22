@@ -9,7 +9,6 @@ def get_image_filename(instance, filename):
 
 class AiModel(models.Model):
     title = models.CharField(max_length=50)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

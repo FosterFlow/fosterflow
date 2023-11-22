@@ -13,7 +13,7 @@ from rest_framework.response import Response
 User = get_user_model()
 
 
-class UserAgentProfilesModelViewSet(ModelViewSet):
+class UserAgentProfileViewSet(ModelViewSet):
     """
     Get, Update user's agent profile
     """
@@ -57,7 +57,7 @@ class UserAgentProfilesModelViewSet(ModelViewSet):
             return Response({"errors": {"details": e.args}}, status=status.HTTP_404_NOT_FOUND)
 
 
-class SelfUserAgentProfilesAPIView(APIView):
+class SelfUserAgentProfileAPIView(APIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated, IsOwnerAgent)
     serializer_class = UserAgentProfileSerializer

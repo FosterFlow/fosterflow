@@ -1,13 +1,8 @@
 from rest_framework import generics
-from .models import NlpModel, ProfileModel
-from .serializers import NlpModelSerializer, ProfileModelSerializer
+from .models import AiModel
+from .serializers import AiModelSerializer
 
 
-class NlpModelListView(generics.ListCreateAPIView):
-    queryset = NlpModel.objects.all()
-    serializer_class = NlpModelSerializer
-
-
-class ProfileModelListView(generics.ListCreateAPIView):
-    queryset = ProfileModel.objects.all()
-    serializer_class = ProfileModelSerializer
+class AiModelListView(generics.ListCreateAPIView):
+    queryset = AiModel.objects.all()
+    serializer_class = AiModelSerializer
