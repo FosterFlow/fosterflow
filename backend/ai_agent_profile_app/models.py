@@ -30,4 +30,4 @@ class AiAgentProfile(models.Model):
         super(AiAgentProfile, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.pk} {self.ai_model}'
+        return f'{self.id} {self.ai_agent.name}'

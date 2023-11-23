@@ -19,7 +19,7 @@ class UserAgentProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.user_agent.name
+        return f'{self.id} {self.user_agent.name}'
 
     @property
     def filename(self):
