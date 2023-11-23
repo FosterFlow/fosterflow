@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from .models import UserAgentProfile
+from agent_app.models import Agent
 from .permissions import IsOwnerAgent
 from .serializers import UserAgentProfileSerializer, UserAgentProfileAvatarSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +13,7 @@ from rest_framework.response import Response
 
 User = get_user_model()
 
-
+# API '/user_agent_profiles'
 class UserAgentProfileViewSet(ModelViewSet):
     """
     Get, Update user's agent profile
@@ -56,7 +57,7 @@ class UserAgentProfileViewSet(ModelViewSet):
         except Exception as e:
             return Response({"errors": {"details": e.args}}, status=status.HTTP_404_NOT_FOUND)
 
-
+# API 'api/user_agent_profiles/self/'
 class SelfUserAgentProfileAPIView(APIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated, IsOwnerAgent)
@@ -64,14 +65,15 @@ class SelfUserAgentProfileAPIView(APIView):
     http_method_names = ['get']
 
     def get(self, request):
-        user_id = User.objects.get(id=request.user.id)
-        user_agent_profiles = UserAgentProfile.objects.get(user_id=user_id)
+        agent = Agent.objects.get(user_id=request.user.id)
+        user_agent_profiles = UserAgentProfile.objects.get(agent_id=agent)
         profile_user_serializer = UserAgentProfileSerializer(
             instance=user_agent_profiles,
             many=False
         )
         return Response(profile_user_serializer.data, status.HTTP_200_OK)
     
+# API 'api/user_agent_profiles/<int:pk>/avatar/'
 class UserAgentProfileAvatarUpdateView(APIView):
     permission_classes = (IsAuthenticated, IsOwnerAgent)
 
@@ -80,7 +82,7 @@ class UserAgentProfileAvatarUpdateView(APIView):
         serializer = UserAgentProfileAvatarSerializer(user_agent_profile, data=request.data, partial=True)
 
         if serializer.is_valid():
-            if request.user.id != user_agent_profile.user_id.id:
+            if request.user.id != user_agent_profile.agent_id.user_id.id:
                 return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
             serializer.save()
             return Response(serializer.data)
