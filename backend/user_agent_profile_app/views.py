@@ -14,6 +14,8 @@ from rest_framework.response import Response
 User = get_user_model()
 
 # API '/user_agent_profiles'
+# TODO: I need an API to get profile by agent id
+# TODO: don't see a patch method
 class UserAgentProfileViewSet(ModelViewSet):
     """
     Get, Update user's agent profile
@@ -57,8 +59,9 @@ class UserAgentProfileViewSet(ModelViewSet):
         except Exception as e:
             return Response({"errors": {"details": e.args}}, status=status.HTTP_404_NOT_FOUND)
 
-# API 'api/user_agent_profiles/self/'
-class SelfUserAgentProfileAPIView(APIView):
+# API GET single 'api/user_agent_profiles/{agent_id}/'
+# Need to update from self to by agent id
+class UserAgentProfileByAgentView(APIView):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticated, IsOwnerAgent)
     serializer_class = UserAgentProfileSerializer

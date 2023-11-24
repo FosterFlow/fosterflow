@@ -9,17 +9,14 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
 from chat_app.views import ChatModelViewSet
 from message_app.views import MessageModelViewSet
 from user_app.views import UserModelViewSet, SelfUserAPIView
-from user_agent_profile_app.views import UserAgentProfileViewSet, SelfUserAgentProfileAPIView, UserAgentProfileAvatarUpdateView
+from user_agent_profile_app.views import UserAgentProfileViewSet, UserAgentProfileByAgentView, UserAgentProfileAvatarUpdateView
 from auth_app.views import CustomTokenRefreshView
 from agent_app.views import AgentListView, AgentDetailView, AgentSelfView
-# from ai_model_app.views import AiModelListView
-# from ai_agent_profile_app.views import AiAgentProfileListView
+from ai_agent_profile_app.views import AiAgentProfileView
 
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
-# TODO: we don't need users presented into API, we have agents for that
-# router.register('users', UserModelViewSet, basename='users')
 router.register('user_agent_profiles', UserAgentProfileViewSet, basename='user_agent_profiles')
 
 urlpatterns = [
@@ -31,16 +28,15 @@ urlpatterns = [
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterApi.as_view()),
     path('api/users/self/', SelfUserAPIView.as_view(), name='user'),
-    path('api/user_agent_profiles/self/', SelfUserAgentProfileAPIView.as_view(), name='profile_user'),
+    
+    path('api/user_agent_profiles/<int:agent_id>/', UserAgentProfileByAgentView.as_view(), name='user_agent_profile_by_agent'),
     path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarUpdateView.as_view(), name='profile_user_update'),
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
     path('api/agents/self', AgentSelfView.as_view(), name='agent-self'),
     path('api/agents/<int:pk>/', AgentDetailView.as_view(), name='agent-detail'),
 
-    # TODO: update to get a profile for a specific agents by agent id
-    # path('api/ai-models/', AiModelListView.as_view(), name='ai-model-list'),
-    # path('api/ai_agent_profiles/', AiAgentProfileListView.as_view(), name='profile-model-list'),
+    path('api/ai_agent_profiles/<int:agent_id>/', AiAgentProfileView.as_view(), name='ai_agent_profile'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/logout/', UserLogoutAPIView.as_view(), name='logout'),
