@@ -9,24 +9,21 @@ from rest_framework.response import Response
 from rest_framework import status
 
 
-# TODO: didn't find get method
 class AgentListView(generics.ListAPIView):
     queryset = Agent.objects.filter(is_active=True)
     serializer_class = AgentSerializer
     filter_backends = (django_filters.DjangoFilterBackend,)
     filterset_class = AgentFilter
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get']  
 
 
-# TODO: didn't find get method
 class AgentDetailView(generics.RetrieveUpdateAPIView):
     queryset = Agent.objects.all()
     serializer_class = AgentSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get'] 
 
-    # def perform_destroy(self, instance):
-    #     instance.is_active = False
-    #     instance.save()
-
-# TODO: need to check if provides agent only for authorized user
 class AgentSelfView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     http_method_names = ['get']
