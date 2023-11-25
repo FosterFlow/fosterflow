@@ -27,6 +27,7 @@ class AgentDetailView(generics.RetrieveUpdateAPIView):
 class AgentSelfView(generics.ListAPIView):
     serializer_class = AgentSerializer
     permission_classes = [IsAuthenticated]
+    http_method_names = ['get'] 
 
     def get_queryset(self):
         """
