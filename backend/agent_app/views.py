@@ -24,14 +24,14 @@ class AgentDetailView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
     http_method_names = ['get'] 
 
-class AgentSelfView(generics.RetrieveUpdateAPIView):
+class AgentSelfView(generics.ListAPIView):
+    serializer_class = AgentSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get']
 
-    def get(self, request, format=None):
-        # Assuming that the Agent model is related to the Django User model
-        # through a ForeignKey or OneToOneField called 'user'.
-        agent = get_object_or_404(Agent, user=request.user)
-        serializer = AgentSerializer(agent)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_queryset(self):
+        """
+        This view should return a list of all the agents
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return Agent.objects.filter(user=user, is_active=True)
