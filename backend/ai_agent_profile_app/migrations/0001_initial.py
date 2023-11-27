@@ -17,6 +17,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AiAgentProfile',
             fields=[
+                ('id', models.BigAutoField(auto_created=True, verbose_name='ID')),
                 ('ai_agent', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='agent_app.agent')),
                 ('description', models.TextField(max_length=2000)),
                 ('avatar', models.ImageField(blank=True, upload_to=ai_agent_profile_app.models.get_image_filename)),

@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Agent',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, verbose_name='ID')),
                 ('is_active', models.BooleanField(default=True)),
                 ('name', models.CharField(blank=True, null=True, max_length=50)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),

@@ -8,8 +8,8 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
     ChangePasswordView
 from chat_app.views import ChatModelViewSet
 from message_app.views import MessageModelViewSet
-from user_app.views import UserModelViewSet, SelfUserAPIView
-from user_agent_profile_app.views import UserAgentProfileViewSet, UserAgentProfileByAgentView, UserAgentProfileAvatarUpdateView
+from user_app.views import SelfUserAPIView
+from user_agent_profile_app.views import UserAgentProfileUpdateView, UserAgentProfileByAgentView, UserAgentProfileAvatarUpdateView
 from auth_app.views import CustomTokenRefreshView
 from agent_app.views import AgentListView, AgentDetailView, AgentSelfView
 from ai_agent_profile_app.views import AiAgentProfileView
@@ -17,7 +17,6 @@ from ai_agent_profile_app.views import AiAgentProfileView
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
 router.register('messages', MessageModelViewSet, basename='messages')
-router.register('user_agent_profiles', UserAgentProfileViewSet, basename='user_agent_profiles')
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),
@@ -30,7 +29,8 @@ urlpatterns = [
     path('api/users/self/', SelfUserAPIView.as_view(), name='user'),
     
     path('api/user_agent_profiles/<int:agent_id>/', UserAgentProfileByAgentView.as_view(), name='user_agent_profile_by_agent'),
-    path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarUpdateView.as_view(), name='profile_user_update'),
+    path('api/user_agent_profiles/<int:pk>/', UserAgentProfileUpdateView.as_view(), name='user_agent_profile_update'),
+    path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarUpdateView.as_view(), name='user_agent_profile_avatar_update'),
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
     path('api/agents/self', AgentSelfView.as_view(), name='agent-self'),
