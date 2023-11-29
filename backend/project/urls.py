@@ -9,10 +9,10 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
 from chat_app.views import ChatModelViewSet
 from message_app.views import MessageModelViewSet
 from user_app.views import SelfUserAPIView
-from user_agent_profile_app.views import UserAgentProfileUpdateView, UserAgentProfileByAgentView, UserAgentProfileAvatarUpdateView
+from user_agent_profile_app.views import UserAgentProfileDetailsView, UserAgentProfileView, UserAgentProfileAvatarView
 from auth_app.views import CustomTokenRefreshView
-from agent_app.views import AgentListView, AgentDetailView, AgentSelfView
-from ai_agent_profile_app.views import AiAgentProfileView
+from agent_app.views import AgentListView, AgentDetailsView, AgentSelfView
+from ai_agent_profile_app.views import AiAgentProfileDetailsView
 
 router = DefaultRouter()
 router.register('chats', ChatModelViewSet, basename='chats')
@@ -28,15 +28,15 @@ urlpatterns = [
     path('api/register/', RegisterApi.as_view()),
     path('api/users/self/', SelfUserAPIView.as_view(), name='user'),
     
-    path('api/user_agent_profiles/<int:agent_id>/', UserAgentProfileByAgentView.as_view(), name='user_agent_profile_by_agent'),
-    path('api/user_agent_profiles/<int:pk>/', UserAgentProfileUpdateView.as_view(), name='user_agent_profile_update'),
-    path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarUpdateView.as_view(), name='user_agent_profile_avatar_update'),
+    path('api/user_agent_profiles/', UserAgentProfileView.as_view(), name='user_agent_profile'),
+    path('api/user_agent_profiles/<int:pk>/', UserAgentProfileDetailsView.as_view(), name='user_agent_profile_details'),
+    path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarView.as_view(), name='user_agent_profile_avatar'),
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
     path('api/agents/self', AgentSelfView.as_view(), name='agent-self'),
-    path('api/agents/<int:pk>/', AgentDetailView.as_view(), name='agent-detail'),
+    path('api/agents/<int:pk>/', AgentDetailsView.as_view(), name='agent-detail'),
 
-    path('api/ai_agent_profiles/<int:agent_id>/', AiAgentProfileView.as_view(), name='ai_agent_profile'),
+    path('api/ai_agent_profiles/<int:agent_id>/', AiAgentProfileDetailsView.as_view(), name='ai_agent_profile_details'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/logout/', UserLogoutAPIView.as_view(), name='logout'),

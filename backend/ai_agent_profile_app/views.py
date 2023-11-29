@@ -3,5 +3,5 @@ from .models import AiAgentProfile
 from .serializers import AiAgentProfileSerializer
 
 # TODO: add get method
-class AiAgentProfileView(generics.ListCreateAPIView):
+class AiAgentProfileDetailsView(generics.ListCreateAPIView):
     serializer_class = AiAgentProfileSerializer
