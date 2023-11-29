@@ -11,7 +11,7 @@ def get_image_filename(instance, filename):
     return f"avatars/{slug}-{filename}"
 
 class UserAgentProfile(models.Model):
-    user_agent = models.OneToOneField(Agent, on_delete=models.CASCADE, primary_key=True)
+    user_agent = models.OneToOneField(Agent, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
     first_name = models.TextField(max_length=32)
     last_name = models.TextField(max_length=32)

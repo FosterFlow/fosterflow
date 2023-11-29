@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='UserAgentProfile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, verbose_name='ID')),
-                ('user_agent', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='agent_app.agent')),
+                ('user_agent', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, serialize=False, to='agent_app.agent')),
                 ('avatar', models.ImageField(blank=True, upload_to=user_agent_profile_app.models.get_image_filename)),
                 ('first_name', models.TextField(max_length=32)),
                 ('last_name', models.TextField(max_length=32)),

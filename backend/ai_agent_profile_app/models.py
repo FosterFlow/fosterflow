@@ -11,7 +11,7 @@ def get_image_filename(instance, filename):
 
 
 class AiAgentProfile(models.Model):
-    ai_agent = models.OneToOneField(Agent, on_delete=models.CASCADE, primary_key=True)
+    ai_agent = models.OneToOneField(Agent, on_delete=models.CASCADE)
     description = models.TextField(max_length=2000)
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
