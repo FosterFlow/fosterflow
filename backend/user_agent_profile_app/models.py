@@ -25,6 +25,7 @@ class UserAgentProfile(models.Model):
     def filename(self):
         return os.path.basename(self.image.name)
 
+    #TODO: resize avatars, check format of the images
     def save(self, force_insert=False, force_update=False, using=None, *args, **kwargs):
 
         if self.avatar:
