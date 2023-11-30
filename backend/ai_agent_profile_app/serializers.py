@@ -4,4 +4,4 @@ from .models import AiAgentProfile
 class AiAgentProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = AiAgentProfile
-        fields = '__all__'
+        fields = ('ai_agent_id', 'description', 'avatar')

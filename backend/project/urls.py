@@ -36,7 +36,7 @@ urlpatterns = [
     path('api/agents/self', AgentSelfView.as_view(), name='agent-self'),
     path('api/agents/<int:pk>/', AgentDetailsView.as_view(), name='agent-detail'),
 
-    path('api/ai_agent_profiles/<int:agent_id>/', AiAgentProfileDetailsView.as_view(), name='ai_agent_profile_details'),
+    path('api/ai_agent_profiles_by_agent_id/<int:agent_id>/', AiAgentProfileDetailsView.as_view(), name='ai_agent_profile_details_by_agent_id'),
 
     path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/logout/', UserLogoutAPIView.as_view(), name='logout'),
