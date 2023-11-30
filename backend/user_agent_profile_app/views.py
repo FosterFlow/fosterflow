@@ -7,20 +7,13 @@ from rest_framework import status
 from rest_framework.response import Response
 
 # Retrieve user agent profile by agent_id
-class UserAgentProfileView(RetrieveAPIView):
+class UserAgentProfileByAgentIdView(RetrieveAPIView):
     queryset = UserAgentProfile.objects.all()
-    http_method_names = ['get']
     serializer_class = UserAgentProfileSerializer
     permission_classes = [IsAuthenticated, IsOwnerAgent]
-    lookup_field = 'agent_id'
-
-    def get_object(self):
-        agent_id = self.request.query_params.get('agent_id')
-        if agent_id is not None:
-            return UserAgentProfile.objects.filter(agent_id=agent_id).first()
-        else:
-            return Response({"errors": {"details": ["Not found."]}}, status=status.HTTP_404_NOT_FOUND)
-
+    lookup_field = 'user_agent_id'  # Adjust if the field name is different
+    lookup_url_kwarg = 'agent_id'   # The name of the URL parameter
+        
 # Update user agent profile
 class UserAgentProfileDetailsView(UpdateAPIView):
     http_method_names = ['patch']

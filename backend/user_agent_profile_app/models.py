@@ -13,8 +13,8 @@ def get_image_filename(instance, filename):
 class UserAgentProfile(models.Model):
     user_agent = models.OneToOneField(Agent, on_delete=models.CASCADE)
     avatar = models.ImageField(upload_to=get_image_filename, blank=True)
-    first_name = models.TextField(max_length=32)
-    last_name = models.TextField(max_length=32)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
