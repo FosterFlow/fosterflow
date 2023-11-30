@@ -6,6 +6,7 @@ from .permissions import IsOwnerOfAgentProfile, IsOwnerOfAgent
 
 # Retrieve user agent profile by agent_id
 class UserAgentProfileByAgentIdView(RetrieveAPIView):
+    http_method_names = ['get']
     queryset = UserAgentProfile.objects.all()
     serializer_class = UserAgentProfileSerializer
     permission_classes = [IsAuthenticated, IsOwnerOfAgent]
