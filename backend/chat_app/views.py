@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
 from auth_app.permissions import IsEmailConfirm
-from django.db.models import Q
+from rest_framework.permissions import IsAuthenticated
 
 User = get_user_model()
 
@@ -31,22 +31,20 @@ class ChatModelViewSet(ModelViewSet):
 
     queryset = Chat.objects.all()
     serializer_class = ChatModelSerializer
-    permission_classes = [IsOwnerChat, IsEmailConfirm]
+    permission_classes = [IsAuthenticated, IsOwnerChat, IsEmailConfirm]
     http_method_names = ['get', 'post', 'delete']
 
-    def get_queryset(self):
+    def get_queryset(self, request, *args, **kwargs):
         """
-        Get the queryset of Chats objects.
-
-        This method filters the queryset based on the user's ownership.
-
-        Returns:
-            QuerySet: The filtered queryset of Chats objects.
+        Get the queryset of Chats objects based on the agent's ownership.
         """
-
-        owner_queryset = self.queryset.filter(
-            Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
-        return owner_queryset
+        chat_owner_agent_id = self.request.query_params.get('owner_agent_id')
+        if chat_owner_agent_id is not None:
+            return self.queryset.filter(owner_agent_id=chat_owner_agent_id)
+        else:
+            # If agent_id is not provided, handle accordingly, 
+            # e.g., return an empty queryset or all chats depending on your application logic
+            return Chat.objects.none()
 
     def destroy(self, request, *args, **kwargs):
         """

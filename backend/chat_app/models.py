@@ -13,15 +13,10 @@ class Chat(models.Model):
         updated_at (DateTimeField): The date and time of chat update.
     """
 
-    owner_id = models.ForeignKey(
+    owner_agent = models.ForeignKey(
         Agent,
         on_delete=models.CASCADE,
-        related_name='owner_id',
-    )
-    addressee_id = models.ForeignKey(
-        Agent,
-        on_delete=models.CASCADE,
-        related_name='addressee_id',
+        related_name='owner_agent',
     )
     name = models.TextField(max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
