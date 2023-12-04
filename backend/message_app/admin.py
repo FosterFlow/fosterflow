@@ -7,5 +7,4 @@ class MessageModelAdmin(admin.ModelAdmin):
         "chat_id",
     ]
 
-
 admin.site.register(Message, MessageModelAdmin)

@@ -17,7 +17,7 @@ class Message(models.Model):
         on_delete=models.CASCADE,
     )
     message_text = models.TextField()
-    owner_id = models.ForeignKey(
+    owner_agent_id = models.ForeignKey(
         Agent,
         on_delete=models.CASCADE,
     )
@@ -32,7 +32,7 @@ class Message(models.Model):
         related_name='replies',
     )
 
-    addressee_id = models.ForeignKey(
+    addressee_agent_id = models.ForeignKey(
         Agent,
         null=True,
         blank=True,
