@@ -12,7 +12,7 @@ import {
     confirmEmail, 
     sendConfirmationEmail, 
     getAuthorizedUser, 
-    getAgent
+    getUserAgents
 } from '../../redux/actions';
 import config from '../../config';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +37,7 @@ const Index = (props) => {
         layoutMode,
 
         getAuthorizedUser,
-        getAgent,
+        getUserAgents,
         sendConfirmationEmail
     } = props;
 
@@ -63,6 +63,7 @@ const Index = (props) => {
         }
 
         getAuthorizedUser();
+        getUserAgents();
     }, []);
 
     useEffect(() => {
@@ -71,12 +72,6 @@ const Index = (props) => {
         } 
         confirmEmail(emailVerifyToken);
     }, [emailVerifyToken]);
-
-    useEffect(() => {
-        if (authorizedUser && authorizedUser.id){
-            getAgent(authorizedUser.id);
-        }
-    }, [authorizedUser]);
 
     return (
         <React.Fragment>
@@ -210,7 +205,7 @@ const mapDispatchToProps = {
     confirmEmail,
     sendConfirmationEmail,
     getAuthorizedUser,
-    getAgent
+    getUserAgents
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));

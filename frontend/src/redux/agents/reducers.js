@@ -13,10 +13,10 @@ import {
     GET_AGENTS_SUCCESS,
     GET_AGENTS_FAILED,
 
-    GET_USER_AGENT,
-    GET_USER_AGENT_INIT_STATE,
-    GET_USER_AGENT_SUCCESS,
-    GET_USER_AGENT_FAILED,
+    GET_USER_AGENTS,
+    GET_USER_AGENTS_INIT_STATE,
+    GET_USER_AGENTS_SUCCESS,
+    GET_USER_AGENTS_FAILED,
 
     GET_AGENT,
     GET_AGENT_INIT_STATE,
@@ -163,7 +163,7 @@ const Agents = (state = INIT_STATE, action) => {
                 setActiveAgentErrors: action.payload,
         }
 
-        case GET_USER_AGENT:
+        case GET_USER_AGENTS:
             return { 
                 ...state, 
                 getUserAgentLoading: true,
@@ -171,7 +171,7 @@ const Agents = (state = INIT_STATE, action) => {
                 getUserAgentErrors: null, 
             }
     
-        case GET_USER_AGENT_INIT_STATE:
+        case GET_USER_AGENTS_INIT_STATE:
             return { 
                 ...state,
                 userAgents: [], 
@@ -180,7 +180,7 @@ const Agents = (state = INIT_STATE, action) => {
                 getUserAgentErrors: null, 
             }
             
-        case GET_USER_AGENT_SUCCESS: {
+        case GET_USER_AGENTS_SUCCESS: {
             return { 
                 ...state, 
                 userAgents: action.payload,
@@ -190,7 +190,7 @@ const Agents = (state = INIT_STATE, action) => {
             };
         }
         
-        case GET_USER_AGENT_FAILED:
+        case GET_USER_AGENTS_FAILED:
             return { 
                 ...state,
                 getUserAgentLoading: false,

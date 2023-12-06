@@ -8,10 +8,10 @@ import {
     GET_AGENTS_SUCCESS,
     GET_AGENTS_FAILED,
 
-    GET_USER_AGENT,
-    GET_USER_AGENT_INIT_STATE,
-    GET_USER_AGENT_SUCCESS,
-    GET_USER_AGENT_FAILED,
+    GET_USER_AGENTS,
+    GET_USER_AGENTS_INIT_STATE,
+    GET_USER_AGENTS_SUCCESS,
+    GET_USER_AGENTS_FAILED,
 
     GET_AGENT,
     GET_AGENT_INIT_STATE,
@@ -85,21 +85,21 @@ export const getAgentsFailed = (errors) => ({
     payload: errors
 });
 
-export const getUserAgent = () => ({
-    type: GET_USER_AGENT
+export const getUserAgents = () => ({
+    type: GET_USER_AGENTS
 });
 
-export const getUserAgentInitState = () => ({
-    type: GET_USER_AGENT_INIT_STATE,
+export const getUserAgentsInitState = () => ({
+    type: GET_USER_AGENTS_INIT_STATE,
 });
 
-export const getUserAgentSuccess = (agents) => ({
-    type: GET_USER_AGENT_SUCCESS,
+export const getUserAgentsSuccess = (agents) => ({
+    type: GET_USER_AGENTS_FAILED,
     payload: agents
 });
 
-export const getUserAgentFailed = (errors) => ({
-    type: GET_USER_AGENT_FAILED,
+export const getUserAgentsFailed = (errors) => ({
+    type: GET_USER_AGENTS_FAILED,
     payload: errors
 });
 
