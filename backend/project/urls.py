@@ -13,10 +13,14 @@ from user_agent_profile_app.views import UserAgentProfileDetailsView, UserAgentP
 from auth_app.views import CustomTokenRefreshView
 from agent_app.views import AgentListView, AgentDetailsView, AgentSelfView
 from ai_agent_profile_app.views import AiAgentProfileDetailsView
+from chat_app.views import (
+    ChatListView, ChatCreateView, ChatDetailView, ChatUpdateView, ChatDeleteView
+)
+from message_app.views import (
+    MessageListView, MessageCreateView, MessageDetailView, MessageUpdateView, MessageDeleteView
+)
 
 router = DefaultRouter()
-router.register('chats', ChatModelViewSet, basename='chats')
-router.register('messages', MessageModelViewSet, basename='messages')
 
 urlpatterns = [
     path('api/admin/', admin.site.urls),
@@ -45,4 +49,19 @@ urlpatterns = [
     path('api/confirmation-email/send/', SendEmailConfirmationTokenAPIView.as_view(),
          name='send_email_confirmation_api_view'),
     path('api/confirmation-email/confirm/', ConfirmEmailGenericAPIView.as_view(), name='account_confirm_email'),
+
+    # Chat URLs
+    path('api/chats/', ChatListView.as_view(), name='chat-list'),
+    path('api/chats/create/', ChatCreateView.as_view(), name='chat-create'),
+    path('api/chats/<int:pk>/', ChatDetailView.as_view(), name='chat-detail'),
+    path('api/chats/<int:pk>/update/', ChatUpdateView.as_view(), name='chat-update'),
+    path('api/chats/<int:pk>/delete/', ChatDeleteView.as_view(), name='chat-delete'),
+
+    # Message URLs
+    path('api/messages/', MessageListView.as_view(), name='message-list'),
+    path('api/messages/create/', MessageCreateView.as_view(), name='message-create'),
+    path('api/messages/<int:pk>/', MessageDetailView.as_view(), name='message-detail'),
+    path('api/messages/<int:pk>/update/', MessageUpdateView.as_view(), name='message-update'),
+    path('api/messages/<int:pk>/delete/', MessageDeleteView.as_view(), name='message-delete'),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
