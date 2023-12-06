@@ -26,7 +26,7 @@ class ChatConsumer(WebsocketConsumer):
 
         self.agents = Agent.objects.filter(user_id=self.scope["user"])
         self.available_chats = list(
-            Chat.objects.filter(owner_id__in=self.agents)
+            Chat.objects.filter(owner_agent_id__in=self.agents)
             .values_list('id', flat=True)
         )
 

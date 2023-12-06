@@ -17,6 +17,8 @@ class Chat(models.Model):
         Agent,
         on_delete=models.CASCADE,
         related_name='owner_agent',
+        null=True,  # Temporarily allow null
+        blank=True, # Allow Django admin to save the object without this field
     )
     name = models.TextField(max_length=32)
     created_at = models.DateTimeField(auto_now_add=True)
