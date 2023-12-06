@@ -4,10 +4,12 @@ from django.contrib.auth import get_user_model
 from .models import Message
 from .permissions import IsOwnerMessage
 from .serializers import MessageModelSerializer
-from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import (
+    ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+)
 from rest_framework import status
 from rest_framework.response import Response
-from auth_app.permissions import IsEmailConfirm
+from auth_app.permissions import IsEmailConfirmed
 from rest_framework.exceptions import NotFound
 from django.db.models import Q
 from agent_app.models import Agent
@@ -21,12 +23,9 @@ environ.Env.read_env()
 class MessageListView(ListAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirm]
+    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
 
     def get_queryset(self):
-        """
-        Get the queryset of Message objects.
-        """
         user_agent = Agent.objects.get(user=self.request.user)
         chat_id = self.request.query_params.get('chat_id')
         if chat_id:
@@ -41,22 +40,25 @@ class MessageListView(ListAPIView):
 class MessageCreateView(CreateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirm]
+    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            instance = serializer.save()
-            # Assuming send_feedback_ai_task is a task for processing AI responses.
-            send_feedback_ai_task.delay({'message_id': instance.id, })
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        serializer.save(owner_agent=self.request.user.agent)
+
+class MessageDetailView(RetrieveAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageModelSerializer
+    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
+
+class MessageUpdateView(UpdateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageModelSerializer
+    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
 
 class MessageDeleteView(DestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirm]
+    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
 
     def destroy(self, request, *args, **kwargs):
         item = self.get_object()

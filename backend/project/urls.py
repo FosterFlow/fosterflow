@@ -6,8 +6,6 @@ from django.conf.urls.static import static
 from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
     ConfirmEmailGenericAPIView, SendEmailConfirmationTokenAPIView, \
     ChangePasswordView
-from chat_app.views import ChatModelViewSet
-from message_app.views import MessageModelViewSet
 from user_app.views import SelfUserAPIView
 from user_agent_profile_app.views import UserAgentProfileDetailsView, UserAgentProfileByAgentIdView, UserAgentProfileAvatarView
 from auth_app.views import CustomTokenRefreshView

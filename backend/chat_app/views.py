@@ -3,9 +3,12 @@ import environ
 from django.contrib.auth import get_user_model
 from .models import Chat
 from .serializers import ChatModelSerializer
-from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
+from rest_framework.generics import (
+    ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+)
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsOwnerChat, IsEmailConfirm
+from .permissions import IsChatOwner
+from auth_app.permissions import IsEmailConfirmed
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -20,7 +23,7 @@ class ChatListView(ListAPIView):
     """
     queryset = Chat.objects.all()
     serializer_class = ChatModelSerializer
-    permission_classes = [IsAuthenticated, IsOwnerChat, IsEmailConfirm]
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
     def get_queryset(self):
         chat_owner_agent_id = self.request.query_params.get('owner_agent_id')
@@ -34,10 +37,26 @@ class ChatCreateView(CreateAPIView):
     """
     queryset = Chat.objects.all()
     serializer_class = ChatModelSerializer
-    permission_classes = [IsAuthenticated, IsOwnerChat, IsEmailConfirm]
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
     def perform_create(self, serializer):
         serializer.save(owner_agent=self.request.user.agent)
+
+class ChatDetailView(RetrieveAPIView):
+    """
+    View class for retrieving a Chat detail.
+    """
+    queryset = Chat.objects.all()
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
+
+class ChatUpdateView(UpdateAPIView):
+    """
+    View class for updating a Chat.
+    """
+    queryset = Chat.objects.all()
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
 class ChatDeleteView(DestroyAPIView):
     """
@@ -45,7 +64,7 @@ class ChatDeleteView(DestroyAPIView):
     """
     queryset = Chat.objects.all()
     serializer_class = ChatModelSerializer
-    permission_classes = [IsAuthenticated, IsOwnerChat, IsEmailConfirm]
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
     def destroy(self, request, *args, **kwargs):
         item = self.get_object()

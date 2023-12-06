@@ -1,8 +1,9 @@
 from rest_framework import permissions
 from agent_app.models import Agent
 from django.shortcuts import get_object_or_404
+from .models import Chat
 
-class IsOwnerChat(permissions.BasePermission):
+class IsChatOwner(permissions.BasePermission):
     message = {"errors": {"details": ["Available only for the owner"]}}
 
     def has_permission(self, request, view):
