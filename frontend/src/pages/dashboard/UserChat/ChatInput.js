@@ -17,10 +17,11 @@ function ChatInput(props) {
         activeAgentId,
         activeChatId,
         authorizedUser,
+        userAgents,
         newChat,
         fetchMessagesLoading,
         addChat,
-        sendMessage
+        sendMessage,
     } = props;
 
     useEffect(() => {
@@ -57,7 +58,8 @@ function ChatInput(props) {
     const addMessage = (textMessage) => {
         const trimmedText = _.trim(textMessage);
 
-        if (authorizedUser === null ||
+        if (userAgents.length === 0 ||
+            authorizedUser === null,
             authorizedUser.is_email_confirmed === false ||
             trimmedText === ""){
             return;
@@ -65,7 +67,7 @@ function ChatInput(props) {
 
         if (newChat){
             addChat({
-                "user_id": authorizedUser.id,
+                "owner_agent_id": userAgents[0].id,
                 "name": trimmedText.substring(0, 32),
                 "message": trimmedText
             });
@@ -74,10 +76,10 @@ function ChatInput(props) {
         }
 
         sendMessage({
-            "addressee_id": activeAgentId,
+            "addressee_agent_id": activeAgentId,
             "chat_id": activeChatId,
             "message_text": trimmedText,
-            "owner_id": authorizedUser.id
+            "owner_agent_id": userAgents[0].id
         });
         settextMessage("");
     }
@@ -140,6 +142,7 @@ const mapStateToProps = (state) => {
         newChat,
         fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
+        userAgents: state.Agents.userAgents,
     }
 };
 

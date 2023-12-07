@@ -18,7 +18,7 @@ class IsChatOwner(permissions.BasePermission):
             bool: True if the user has permission, False otherwise.
         """
 
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in ['GET']:
             # For safe methods (GET), check if the agent ID matches the logged-in user's agent
             chat_owner_agent_id = request.query_params.get('owner_agent_id')
             if chat_owner_agent_id:
@@ -26,12 +26,20 @@ class IsChatOwner(permissions.BasePermission):
                 return request.user == chat_owner_agent.user
             return False
 
-        elif request.method in ['POST', 'DELETE']:
-            # For POST and DELETE, check if the user is trying to modify their own chat
-            chat_id = request.data.get('chat_id') if request.method == 'POST' else view.kwargs.get('pk')
+        elif request.method in ['DELETE', 'PATCH']:
+            # For DELETE, check if the user is trying to modify their own chat
+            chat_id = view.kwargs.get('pk')
             if chat_id:
                 chat = get_object_or_404(Chat, pk=chat_id)
                 return request.user == chat.owner_agent.user
+            return False
+
+        elif request.method in ['POST']:
+            # For POST check if the user is trying to  their own chat
+            chat_owner_agent_id = request.data.get('owner_agent_id')
+            if chat_owner_agent_id:
+                chat_owner_agent = get_object_or_404(Agent, pk=chat_owner_agent_id)
+                return request.user == chat_owner_agent.user
             return False
 
         return False

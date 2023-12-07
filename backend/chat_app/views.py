@@ -39,9 +39,6 @@ class ChatCreateView(CreateAPIView):
     serializer_class = ChatModelSerializer
     permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
-    def perform_create(self, serializer):
-        serializer.save(owner_agent=self.request.user.agent)
-
 class ChatDetailView(RetrieveAPIView):
     """
     View class for retrieving a Chat detail.

@@ -59,9 +59,9 @@ function* fetchChatsSaga(action) {
 function* addChatSaga(action) {
   const data = action.payload;
   try {
-      const newChatData = yield call(api.post, `/chats/`, {
+      const newChatData = yield call(api.post, `/chats/create/`, {
         "addressee_agent_id": config.BASE_MODEL_AGENT_ID,
-        "owner_agent_id": data.ownerAgentId,
+        "owner_agent_id": data.owner_agent_id,
         "name": data.name
       });
       yield put(addChatSuccess({
@@ -77,17 +77,17 @@ function* addChatSaga(action) {
 function* addChatSuccessSaga(action) {
   const chatData = action.payload;
   yield put(sendMessage({
-    "addressee_agent_id": chatData.addresseeAgentId,
+    "addressee_agent_id": chatData.addressee_agent_id,
     "chat_id": chatData.id,
-    "message_text": chatData.newChatMessage,
-    "owner_agent_id": chatData.ownerAgentId,
+    "message_text": chatData.new_chat_message,
+    "owner_agent_id": chatData.owner_agent_id,
   }));
 }
 
 function* deleteChatSaga(action) {
   console.log("chat saga deleteChat action ", action);
   try {
-    yield call(api.delete, `/chats/${action.payload}/`);
+    yield call(api.delete, `/chats/${action.payload}/delete/`);
     yield put(deleteChatSuccess(action.payload));
     yield delay(5000);
     yield put(deleteChatInitState());
@@ -113,7 +113,7 @@ function* sendMessageSaga(action) {
   const newMessage = action.payload;
   const messageHash = newMessage.messageHash;
   try {
-    const message = yield call(api.post, '/messages/', newMessage);
+    const message = yield call(api.post, '/messages/create/', newMessage);
     yield put(sendMessageSuccess({...message, messageHash}));
   } catch (errors) {
     yield put(sendMessageFailed({
@@ -127,7 +127,7 @@ function* sendMessageSaga(action) {
 
 function* deleteMessageSaga(action) {
   try {
-    yield call(api.delete, `/messages/${action.payload}/`);
+    yield call(api.delete, `/messages/${action.payload}/delete/`);
     yield put(deleteMessageSuccess(action.payload));
     yield delay(5000);
     yield put(deleteMessageInitState());
