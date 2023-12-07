@@ -47,17 +47,21 @@ const Chats = (props) => {
         activeChatId,
         chatWindow,
         newChat,
-        authorizedUser
+
+        authorizedUser,
+        userAgents
     } = props;
 
     useEffect(() => {
         if (authorizedUser === null ||
-            authorizedUser.is_email_confirmed === false){
+            authorizedUser.is_email_confirmed === false ||
+            userAgents.length === 0
+            ){
             return;
         }
 
-        fetchChats();
-    }, [authorizedUser]);
+        fetchChats(userAgents[0]);
+    }, [authorizedUser, userAgents]);
 
     useEffect(() => {
         if (chats && chats.length === 0) {
@@ -222,6 +226,7 @@ const mapStateToProps = state => {
         fetchChatsErrors,
         //TODO: cause redundun re-render
         authorizedUser: state.User.authorizedUser,
+        userAgents: state.Agents.userAgents,
     };
 };
 

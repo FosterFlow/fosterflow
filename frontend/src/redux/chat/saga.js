@@ -39,15 +39,15 @@ import {
   deleteMessageInitState,
   deleteMessageSuccess,
   deleteMessageFailed,
-  sendMessagesFailed
 } from './actions';
 import config from '../../config';
 
 const api = apiAuthorizedClient;
 
-function* fetchChatsSaga() {
+function* fetchChatsSaga(action) {
   try {
-    const chats = yield call(api.get, '/chats/');
+    const chatsOwnerAgent = action.payload;
+    const chats = yield call(api.get, `/chats/?owner_agent_id=${chatsOwnerAgent.id}`);
     yield put(fetchChatsSuccess(chats));
     yield delay(5000);
     yield put(fetchChatsInitState());
@@ -59,9 +59,9 @@ function* fetchChatsSaga() {
 function* addChatSaga(action) {
   const data = action.payload;
   try {
-      const newChatData = yield call(api.post, '/chats/', {
-        "addressee_id": config.BASE_MODEL_AGENT_ID,
-        "owner_id": data.user_id,
+      const newChatData = yield call(api.post, `/chats/`, {
+        "addressee_agent_id": config.BASE_MODEL_AGENT_ID,
+        "owner_agent_id": data.ownerAgentId,
         "name": data.name
       });
       yield put(addChatSuccess({
@@ -77,10 +77,10 @@ function* addChatSaga(action) {
 function* addChatSuccessSaga(action) {
   const chatData = action.payload;
   yield put(sendMessage({
-    "addressee_id": chatData.addressee_id,
+    "addressee_agent_id": chatData.addresseeAgentId,
     "chat_id": chatData.id,
-    "message_text": chatData.new_chat_message,
-    "owner_id": chatData.owner_id,
+    "message_text": chatData.newChatMessage,
+    "owner_agent_id": chatData.ownerAgentId,
   }));
 }
 

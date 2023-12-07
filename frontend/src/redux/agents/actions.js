@@ -94,7 +94,7 @@ export const getUserAgentsInitState = () => ({
 });
 
 export const getUserAgentsSuccess = (agents) => ({
-    type: GET_USER_AGENTS_FAILED,
+    type: GET_USER_AGENTS_SUCCESS,
     payload: agents
 });
 

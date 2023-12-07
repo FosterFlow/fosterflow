@@ -77,8 +77,9 @@ export const chatInit = () => ({
     payload: set
   });
 
-  export const fetchChats = () => ({
-    type: FETCH_CHATS
+  export const fetchChats = (chatsOwnerAgent) => ({
+    type: FETCH_CHATS,
+    payload: chatsOwnerAgent
   });
 
   export const fetchChatsInitState = () => ({

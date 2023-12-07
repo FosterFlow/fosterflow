@@ -30,12 +30,12 @@ urlpatterns = [
     path('api/register/', RegisterApi.as_view()),
     path('api/users/self/', SelfUserAPIView.as_view(), name='user'),
     
-    path('api/user_agent_profiles_by_agent_id/<int:agent_id>', UserAgentProfileByAgentIdView.as_view(), name='user_agent_profile_by_agent_id'),
+    path('api/user_agent_profiles_by_agent_id/<int:agent_id>/', UserAgentProfileByAgentIdView.as_view(), name='user_agent_profile_by_agent_id'),
     path('api/user_agent_profiles/<int:pk>/', UserAgentProfileDetailsView.as_view(), name='user_agent_profile_details'),
     path('api/user_agent_profiles/<int:pk>/avatar/', UserAgentProfileAvatarView.as_view(), name='user_agent_profile_avatar'),
 
     path('api/agents/', AgentListView.as_view(), name='agent-list'),
-    path('api/agents/self', AgentSelfView.as_view(), name='agent-self'),
+    path('api/agents/self/', AgentSelfView.as_view(), name='agent-self'),
     path('api/agents/<int:pk>/', AgentDetailsView.as_view(), name='agent-detail'),
 
     path('api/ai_agent_profiles_by_agent_id/<int:agent_id>/', AiAgentProfileDetailsView.as_view(), name='ai_agent_profile_details_by_agent_id'),
