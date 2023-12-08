@@ -7,7 +7,7 @@ class Chat(models.Model):
     Model representing a chat.
 
     Attributes:
-        user_id (ForeignKey): The user associated with the chat.
+        owner_agent_id (ForeignKey): The user associated with the chat.
         name (TextField): The name of the chat.
         created_at (DateTimeField): The date and time of chat creation.
         updated_at (DateTimeField): The date and time of chat update.

@@ -66,7 +66,9 @@ function* addChatSaga(action) {
       });
       yield put(addChatSuccess({
         ...newChatData,
-        new_chat_message: data.message 
+        new_chat_message: data.message,
+        addressee_agent_id: config.BASE_MODEL_AGENT_ID,
+        owner_agent_id: data.owner_agent_id, 
       }));
       yield put(addChatInitState());
   } catch (errors) {
@@ -109,6 +111,7 @@ function* fetchMessagesSaga(action) {
   }
 }
 
+//messageHas allows to follow message status (success, failed, in progress) by different types of requests: AJAX and Web Sockets
 function* sendMessageSaga(action) {
   const newMessage = action.payload;
   const messageHash = newMessage.messageHash;

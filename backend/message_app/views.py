@@ -2,7 +2,7 @@
 import environ
 from django.contrib.auth import get_user_model
 from .models import Message
-from .permissions import IsOwnerMessage
+from .permissions import IsMessageOwner
 from .serializers import MessageModelSerializer
 from rest_framework.generics import (
     ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
@@ -13,7 +13,6 @@ from auth_app.permissions import IsEmailConfirmed
 from rest_framework.exceptions import NotFound
 from django.db.models import Q
 from agent_app.models import Agent
-from .tasks import send_feedback_ai_task
 
 User = get_user_model()
 
@@ -23,7 +22,7 @@ environ.Env.read_env()
 class MessageListView(ListAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
+    permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
     def get_queryset(self):
         user_agent = Agent.objects.get(user=self.request.user)
@@ -40,7 +39,7 @@ class MessageListView(ListAPIView):
 class MessageCreateView(CreateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
+    permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
     def perform_create(self, serializer):
         serializer.save(owner_agent=self.request.user.agent)
@@ -48,17 +47,17 @@ class MessageCreateView(CreateAPIView):
 class MessageDetailView(RetrieveAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
+    permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
 class MessageUpdateView(UpdateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
+    permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
 class MessageDeleteView(DestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageModelSerializer
-    permission_classes = [IsOwnerMessage, IsEmailConfirmed]
+    permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
     def destroy(self, request, *args, **kwargs):
         item = self.get_object()

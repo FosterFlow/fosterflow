@@ -23,7 +23,7 @@ class IsChatOwner(permissions.BasePermission):
             chat_owner_agent_id = request.query_params.get('owner_agent_id')
             if chat_owner_agent_id:
                 chat_owner_agent = get_object_or_404(Agent, pk=chat_owner_agent_id)
-                return request.user == chat_owner_agent.user
+                return request.user_agent == chat_owner_agent
             return False
 
         elif request.method in ['DELETE', 'PATCH']:
@@ -31,7 +31,7 @@ class IsChatOwner(permissions.BasePermission):
             chat_id = view.kwargs.get('pk')
             if chat_id:
                 chat = get_object_or_404(Chat, pk=chat_id)
-                return request.user == chat.owner_agent.user
+                return request.user_agent == chat.owner_agent
             return False
 
         elif request.method in ['POST']:
@@ -39,7 +39,7 @@ class IsChatOwner(permissions.BasePermission):
             chat_owner_agent_id = request.data.get('owner_agent_id')
             if chat_owner_agent_id:
                 chat_owner_agent = get_object_or_404(Agent, pk=chat_owner_agent_id)
-                return request.user == chat_owner_agent.user
+                return request.user_agent == chat_owner_agent
             return False
 
         return False

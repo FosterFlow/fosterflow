@@ -12,19 +12,19 @@ class Message(models.Model):
         answer_text (TextField): The text of the answer (optional).
     """
 
-    chat_id = models.ForeignKey(
+    chat = models.ForeignKey(
         Chat,
         on_delete=models.CASCADE,
     )
     message_text = models.TextField()
-    owner_agent_id = models.ForeignKey(
+    owner_agent = models.ForeignKey(
         Agent,
         on_delete=models.CASCADE,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    request_id = models.ForeignKey(
+    request = models.ForeignKey(
         'self',
         null=True,
         blank=True,
@@ -32,7 +32,7 @@ class Message(models.Model):
         related_name='replies',
     )
 
-    addressee_agent_id = models.ForeignKey(
+    addressee_agent = models.ForeignKey(
         Agent,
         null=True,
         blank=True,

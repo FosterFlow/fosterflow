@@ -1,3 +1,5 @@
+from django.utils.deprecation import MiddlewareMixin
+from agent_app.models import Agent
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from django.contrib.auth.models import AnonymousUser
@@ -6,7 +8,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 
 Users = get_user_model()
-
 
 @database_sync_to_async
 def get_user(token):
@@ -30,3 +31,14 @@ class TokenAuthMiddleWare:
             return await self.app(scope, receive, send)
         except Exception as e:
             await send({"type": "websocket.close"})
+
+class CurrentAgentMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        request.user_agent = None
+        print(f"CurrentAgentMiddleware request.user_agent {request} request.user {request.user}")
+        if request.user.is_authenticated:
+            try:
+                print(f"Agent.objects.get(user=request.user) {Agent.objects.get(user=request.user)}")
+                request.user_agent = Agent.objects.get(user=request.user)[0]
+            except Agent.DoesNotExist:
+                pass
