@@ -39,8 +39,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile.dev
     ports:
-      - "8000:8000"  # Django server port
-      - "5678:5678"  # Debug port for debugpy
+      - 8000:8000  # Django server port
+      - 5678:5678  # Debug port for debugpy
     entrypoint: sh ./django-entrypoint-dev.sh
     environment:
       - REDIS_HOST=redis

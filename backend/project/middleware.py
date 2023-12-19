@@ -39,6 +39,7 @@ class CurrentAgentMiddleware:
 
     def __call__(self, request):
         request.user_agent = None
+        print(f"CurrentAgentMiddleware request {request}")
 
         try:
             user = request.user

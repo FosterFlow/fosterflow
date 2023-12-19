@@ -8,4 +8,4 @@ python manage.py migrate
 
 # Start the Django development server with debugpy
 # debugpy will listen on port 5678 for a debugger connection
-python -m debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver $SERVER_API_URL
+python -m debugpy --listen 5678 --wait-for-client manage.py runserver $SERVER_API_URL
