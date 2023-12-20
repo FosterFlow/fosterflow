@@ -37,11 +37,11 @@ services:
     container_name: backend
     build: 
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - 8000:8000  # Django server port
       - 5678:5678  # Debug port for debugpy
-    entrypoint: sh ./django-entrypoint-dev.sh
+    entrypoint: sh ./django-entrypoint-prod.sh
     environment:
       - REDIS_HOST=redis
     restart: always
@@ -64,7 +64,7 @@ services:
     container_name: celery
     build: 
       context: ./backend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     command: celery -A project worker --loglevel=info
     volumes:
       - ./backend:/backend
@@ -80,7 +80,7 @@ services:
     container_name: frontend
     build: 
       context: ./frontend
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - "3000:3000"
     expose:
@@ -105,7 +105,7 @@ services:
     container_name: swagger
     build: 
       context: ./swagger
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - "8080:8080"
     volumes:
