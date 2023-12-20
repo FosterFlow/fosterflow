@@ -42,9 +42,9 @@ services:
     networks:
       - myNetwork
     build: 
-      context: .
-      dockerfile: /backend/Dockerfile.dev
-    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 backend/manage.py runserver 0.0.0.0:8000 --nothreading --noreload"]
+      context: ./backend
+      dockerfile: /Dockerfile.dev
+    command: ["sh", "-c", "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 /manage.py runserver 0.0.0.0:8000 --nothreading --noreload"]
     ports:
       - 8000:8000
       - 5678:5678
@@ -53,8 +53,8 @@ services:
   celery:
     container_name: celery
     build: 
-      context: .
-      dockerfile: /backend/Dockerfile.dev
+      context: ./backend
+      dockerfile: Dockerfile.dev
     command: celery -A project worker --loglevel=info
     volumes:
       - ./backend:/backend
