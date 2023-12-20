@@ -53,7 +53,7 @@ services:
   celery:
     container_name: celery
     build: 
-      context: ./backend
+      context: .
       dockerfile: /backend/Dockerfile.dev
     command: celery -A project worker --loglevel=info
     volumes:
