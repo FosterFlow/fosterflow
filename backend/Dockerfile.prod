@@ -9,4 +9,4 @@ COPY . .
 RUN pip3 install -r requirements.txt
 
 RUN chmod +x ./wait-for-postgres.sh
-RUN chmod +x ./django-entrypoint.sh
+RUN chmod +x ./django-entrypoint-prod.sh

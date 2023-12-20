@@ -1,19 +1,26 @@
+# For more information, please refer to https://aka.ms/vscode-docker-python
 FROM python:3.10.12
 
-WORKDIR /backend
-
 # Install PostgreSQL client and other dependencies
-RUN apt-get update && apt-get install -y postgresql-client
+RUN apt-get update && apt-get install -y git postgresql-client
 
-# Upgrade pip
-RUN pip install --upgrade pip
+EXPOSE 8000
 
-# Copy project files to the container
-COPY . .
+# Keeps Python from generating .pyc files in the container
+ENV PYTHONDONTWRITEBYTECODE=1
 
-# Install project dependencies including debugpy
-RUN pip3 install -r requirements.txt
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED=1
 
-# Make scripts executable
-RUN chmod +x ./wait-for-postgres.sh
-RUN chmod +x ./django-entrypoint-dev.sh
+WORKDIR /app
+COPY . /app
+
+RUN python -m pip install -r /app/backend/requirements.txt
+
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "project.wsgi"]
