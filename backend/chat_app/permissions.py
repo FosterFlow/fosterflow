@@ -21,10 +21,8 @@ class IsChatOwner(permissions.BasePermission):
         if request.method in ['GET']:
             # For safe methods (GET), check if the agent ID matches the logged-in user's agent
             chat_owner_agent_id = request.query_params.get('owner_agent_id')
-            print(f"IsChatOwner has_permission chat_owner_agent_id {chat_owner_agent_id}")
             if chat_owner_agent_id:
                 chat_owner_agent = get_object_or_404(Agent, pk=chat_owner_agent_id)
-                print(f"IsChatOwner has_permission chat_owner_agent {chat_owner_agent} request.user_agent {request.user_agent}")
                 return request.user_agent == chat_owner_agent
             return False
 

@@ -60,7 +60,6 @@ class CustomAuthentication(JWTAuthentication):
             return None
 
         validated_token = self.get_validated_token(raw_token)
-        print(f"CustomAuthentication authenticate validated_token {validated_token}")
         return self.get_user(validated_token), validated_token
 
     def get_validated_token(self, raw_token):

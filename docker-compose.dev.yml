@@ -44,6 +44,8 @@ services:
     build: 
       context: ./backend
       dockerfile: /Dockerfile.dev
+    volumes:
+      - ./backend:/backend
     entrypoint: sh ./django-entrypoint-dev.sh
     restart: always  
     ports:

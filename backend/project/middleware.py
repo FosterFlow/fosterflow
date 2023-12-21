@@ -26,9 +26,8 @@ class TokenAuthMiddleWare:
         try:
             token = parse_qs(scope["query_string"].decode("utf8"))["access"][0]
             user = await get_user(token)
-            print(f"TokenAuthMiddleWare user {user}")
             scope["user"] = user
-            scope["user_agent"] = Agent.objects.get(user=user)
+            scope["user_agent"] = await database_sync_to_async(Agent.objects.get)(user=user)
             return await self.app(scope, receive, send)
         except Exception as e:
             await send({"type": "websocket.close"})
