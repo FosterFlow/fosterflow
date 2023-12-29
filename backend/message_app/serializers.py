@@ -1,33 +1,32 @@
-from rest_framework.serializers import ModelSerializer
-from .models import Message
+from rest_framework import serializers
+from .models import Message, Agent, Chat
 
-class MessageModelSerializer(ModelSerializer):
-    """
-    Serializer class for the Message model.
-
-    This serializer is used to serialize and deserialize Message objects.
-
-    Methods:
-        create(self, validated_data): Creates a new message instance.
-    """
+class MessageModelSerializer(serializers.ModelSerializer):
+    chat_id = serializers.PrimaryKeyRelatedField(
+        queryset=Chat.objects.all(), source='chat', write_only=True
+    )
+    owner_agent_id = serializers.PrimaryKeyRelatedField(
+        queryset=Agent.objects.all(), source='owner_agent', write_only=True
+    )
+    addressee_agent_id = serializers.PrimaryKeyRelatedField(
+        queryset=Agent.objects.all(), source='addressee_agent', write_only=True, required=False, allow_null=True
+    )
 
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = [
+            'id',  # Assuming you want the message ID in the serialized output
+            'chat_id',
+            'message_text',
+            'owner_agent_id',
+            'addressee_agent_id',
+            'created_at',  # If you want to include timestamps
+            'updated_at',  # If you want to include timestamps
+            # Any other fields you want to include
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']  # Make non-writable fields read-only
 
     def create(self, validated_data):
-        """
-        Creates a new message instance.
-
-        This method creates a new Message instance with the provided data.
-        It generates an answer text using the `take_answer` utility function.
-
-        Args:
-            validated_data (dict): The validated data containing message_text and chat_id.
-
-        Returns:
-            Message: The created message instance.
-        """
-
+        # Since we're using `source` in the extra fields, `validated_data` will have the correct structure
         message = Message.objects.create(**validated_data)
         return message
