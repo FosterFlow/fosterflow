@@ -18,15 +18,16 @@ class IsMessageOwner(permissions.BasePermission):
         Returns:
             bool: True if the user has permission, False otherwise.
         """
+        user = request.user
+        user_agent = Agent.objects.get(user=user)
 
         if request.method in ['GET']:
             # For safe methods (GET), check if the agent ID matches the logged-in user's agent
             message_chat_id = request.query_params.get('chat_id')
             if message_chat_id:
                 message_chat = get_object_or_404(Chat, pk=message_chat_id)
-                print(f"message_chat.owner_agent {message_chat.owner_agent}")
                 if message_chat.owner_agent:
-                    return request.user_agent == message_chat.owner_agent
+                    return user_agent == message_chat.owner_agent
             return False
 
         elif request.method in ['DELETE', 'PATCH']:
@@ -35,7 +36,7 @@ class IsMessageOwner(permissions.BasePermission):
             if message_id:
                 message = get_object_or_404(Message, pk=message_id)
                 chat = message.chat
-                return request.user_agent == chat.owner_agent
+                return user_agent == chat.owner_agent
             return False
 
         elif request.method in ['POST']:
@@ -43,7 +44,7 @@ class IsMessageOwner(permissions.BasePermission):
             message_owner_agent_id = request.data.get('owner_agent_id')
             if message_owner_agent_id:
                 message_owner_agent = get_object_or_404(Agent, pk=message_owner_agent_id)
-                return request.user_agent == message_owner_agent
+                return user_agent == message_owner_agent
             return False
 
         return False

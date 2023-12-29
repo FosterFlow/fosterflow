@@ -1,3 +1,4 @@
+from django.http import HttpResponseServerError
 from agent_app.models import Agent
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
@@ -5,6 +6,10 @@ from django.contrib.auth.models import AnonymousUser
 from jwt import decode as jwt_decode
 from django.conf import settings
 from django.contrib.auth import get_user_model
+import logging
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 @database_sync_to_async
 def get_user(token):
@@ -29,26 +34,12 @@ class TokenAuthMiddleWare:
             scope["user"] = user
             scope["user_agent"] = await database_sync_to_async(Agent.objects.get)(user=user)
             return await self.app(scope, receive, send)
-        except Exception as e:
-            await send({"type": "websocket.close"})
-
-class CurrentAgentMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        request.user_agent = None
-        print(f"CurrentAgentMiddleware request {request}")
-
-        try:
-            user = request.user
-            print(f"CurrentAgentMiddleware user {user}")
-            if user.is_authenticated:
-                request.user_agent = Agent.objects.get(user=user)
-                print(f"CurrentAgentMiddleware request.user_agent {request.user_agent}")
-        except Exception as e:
-            print(f"CurrentAgentMiddleware Exception {e}")
-            pass
-        
-        response = self.get_response(request)
-        return response
+        except Exception as error:
+            # Define a close code, e.g., 4000 for application-specific error
+            close_code = 4000
+            # Optionally, you can include a text reason
+            await send({
+                "type": "websocket.close",
+                "code": close_code,
+                "details": str(error)
+            })

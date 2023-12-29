@@ -6,8 +6,8 @@ sh ./wait-for-postgres.sh
 # Apply database migrations
 python manage.py migrate
 
-# Check if DEBUG is set to "true"
-if [ "$DEBUG" = "true" ]; then
+# # Check if DEBUG is set to "true"
+if [ $DEBUG = True ]; then
     # Start the Django development server with debugpy
     python -m debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver $SERVER_API_URL --noreload
 else
