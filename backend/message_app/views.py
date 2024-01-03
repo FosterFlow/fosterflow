@@ -29,8 +29,8 @@ class MessageListView(ListAPIView):
         chat_id = self.request.query_params.get('chat_id')
         if chat_id:
             agent_messages = self.queryset.filter(
-                Q(chat_id=chat_id),
-                Q(owner_agent_id=user_agent) | Q(addressee_agent_id=user_agent)
+                Q(chat=chat_id),
+                Q(owner_agent=user_agent) | Q(addressee_agent=user_agent)
             )
             if not agent_messages.exists():
                 raise NotFound({"errors": {"details": ["No messages found for the given chat_id and agent."]}})
@@ -42,7 +42,8 @@ class MessageCreateView(CreateAPIView):
     permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
     def perform_create(self, serializer):
-        serializer.save(owner_agent=self.request.user.agent)
+        user_agent = Agent.objects.get(user=self.request.user)
+        serializer.save(owner_agent=user_agent)
 
 class MessageDetailView(RetrieveAPIView):
     queryset = Message.objects.all()

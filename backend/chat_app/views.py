@@ -11,6 +11,8 @@ from .permissions import IsChatOwner
 from auth_app.permissions import IsEmailConfirmed
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
+from agent_app.models import Agent
 
 User = get_user_model()
 
@@ -28,7 +30,7 @@ class ChatListView(ListAPIView):
     def get_queryset(self):
         chat_owner_agent_id = self.request.query_params.get('owner_agent_id')
         if chat_owner_agent_id is not None:
-            return self.queryset.filter(owner_agent_id=chat_owner_agent_id)
+            return self.queryset.filter(owner_agent=chat_owner_agent_id)
         return Chat.objects.none()
 
 class ChatCreateView(CreateAPIView):
