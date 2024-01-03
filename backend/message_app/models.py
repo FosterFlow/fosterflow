@@ -29,7 +29,7 @@ class Message(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='replies',
+        related_name='request_messages',
     )
 
     addressee_agent = models.ForeignKey(
@@ -37,7 +37,7 @@ class Message(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='addressee',
+        related_name='addresse_agent_messages',
     )
 
     def __str__(self):

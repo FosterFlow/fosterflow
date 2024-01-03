@@ -9,7 +9,7 @@ class MessageModelSerializer(serializers.ModelSerializer):
         queryset=Agent.objects.all(), source='owner_agent'
     )
     addressee_agent_id = serializers.PrimaryKeyRelatedField(
-        queryset=Agent.objects.all(), source='addressee_agent', required=False, allow_null=True
+        queryset=Agent.objects.all(), source='addressee_agent'
     )
 
     class Meta:

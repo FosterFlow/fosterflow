@@ -13,12 +13,17 @@ class ChatModelSerializer(ModelSerializer):
         queryset=Agent.objects.all(), source='owner_agent'
     )
 
+    addressee_agent_id = serializers.PrimaryKeyRelatedField(
+        queryset=Agent.objects.all(), source='addressee_agent'
+    )
+
     class Meta:
         model = Chat
         fields = [
             'id',  # Assuming you want the message ID in the serialized output
             'name',
             'owner_agent_id',
+            'addressee_agent_id',
             'created_at',  
             'updated_at',  
         ]
