@@ -198,7 +198,7 @@ function UserChat(props) {
                                     relevantMessages.map((message, key) =>
                                         <React.Fragment key={key}>
                                             {
-                                                authorizedUser.id === message.owner_id ? (
+                                                authorizedUser.id === message.owner_agent_id ? (
                                                     <li className="user-chat-conversation-list-item right">
                                                         <div className="user-chat-message user-chat-message-formatting">
                                                             {message.message_text}

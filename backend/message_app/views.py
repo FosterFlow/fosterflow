@@ -13,6 +13,7 @@ from auth_app.permissions import IsEmailConfirmed
 from rest_framework.exceptions import NotFound
 from django.db.models import Q
 from agent_app.models import Agent
+from .tasks import send_feedback_ai_task
 
 User = get_user_model()
 
@@ -43,7 +44,11 @@ class MessageCreateView(CreateAPIView):
 
     def perform_create(self, serializer):
         user_agent = Agent.objects.get(user=self.request.user)
-        serializer.save(owner_agent=user_agent)
+        instance = serializer.save(owner_agent=user_agent)
+
+        instance = serializer.save()
+        send_feedback_ai_task.delay({'message_id': instance.id, })
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class MessageDetailView(RetrieveAPIView):
     queryset = Message.objects.all()
