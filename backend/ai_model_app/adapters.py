@@ -38,6 +38,7 @@ class ResponseWebsocketInterface:
         self.channel_layer = get_channel_layer()
 
     def send_chunk(self, chunk, group):
+        print(f"ResponseWebsocketInterface send_chunk {chunk} , group {group}")
         async_to_sync(self.channel_layer.group_send)(group, {"type": "chat.message", "text": chunk})
 
 
@@ -72,12 +73,13 @@ class GptAdapter(Adapter):
     def generate_response(self, sent_message):
         messages = self.get_messages(sent_message)
         generator = self.from_interface().create_generator(messages)
-        nlp_message = self.create_nlp_message(sent_message.chat_id, sent_message.addressee_agent_id, sent_message)
-
+        # print(f"GptAdapter self.create_nlp_message ent_message.chat_id {sent_message.chat_id} sent_message.addressee_agent_id {sent_message.addressee_agent_id} sent_message.id {sent_message.id}")
+        nlp_message = self.create_nlp_message(sent_message.chat_id, sent_message.addressee_agent_id, sent_message.id)
+        # print(f"GptAdapter nlp_message.chat_id {nlp_message.chat_id}")
         complete = ""
         data = {
             "type": "chat_message_chunk",
-            "chat_id": nlp_message.chat_id.id,
+            "chat_id": nlp_message.chat_id,
             "created_at": str(nlp_message.created_at),
             "request_id": sent_message.id,
             "id": nlp_message.id,
@@ -88,6 +90,7 @@ class GptAdapter(Adapter):
         self.to_interface().send_chunk(data, str(sent_message.owner_agent_id))
 
         for event in generator:
+            # print(f"GptAdapter event in generator: {event}")
             try:
                 if event['choices'][0]['finish_reason'] != 'stop':
                     event_text = event['choices'][0]['delta']['content']
@@ -96,6 +99,7 @@ class GptAdapter(Adapter):
                     data['status'] = 'progress'
 
                     self.to_interface().send_chunk(data, str(sent_message.owner_agent_id))
+                    # print(f"GptAdapter self.to_interface().send_chunk {data} sent_message.owner_agent_id {sent_message.owner_agent_id}")
                 else:
                     data['status'] = 'done'
                     data['message_chunk'] = ''

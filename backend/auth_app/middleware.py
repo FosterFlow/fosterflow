@@ -1,4 +1,3 @@
-from django.http import HttpResponseServerError
 from agent_app.models import Agent
 from urllib.parse import parse_qs
 from channels.db import database_sync_to_async

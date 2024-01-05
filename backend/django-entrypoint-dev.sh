@@ -9,8 +9,7 @@ python manage.py migrate
 # # Check if DEBUG is set to "true"
 if [ $DEBUG = True ]; then
     # Start the Django development server with debugpy
-    python -m debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver $SERVER_API_URL --noreload
-else
+    python -m debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver $SERVER_API_URL --nothreading
     # Start the Django development server normally with auto-reloading
     python manage.py runserver $SERVER_API_URL
 fi
