@@ -42,7 +42,7 @@ const INIT_STATE = {
     agent: null,
 
     //current ML model
-    activeAgentId: 0,
+    activeAgentId: config.BASE_MODEL_AGENT_ID,
     newAgentChatShow: false,
     activeAgent: null,
 

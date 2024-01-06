@@ -5,6 +5,9 @@ import {
     addChat, 
     sendMessage
 } from "../../../redux/chat/actions";
+import { 
+    useLocation 
+} from "react-router-dom";
 import { isMobileDevice } from '../../../helpers/mobileDevices';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
@@ -23,7 +26,9 @@ function ChatInput(props) {
         addChat,
         sendMessage,
     } = props;
-
+    const location = useLocation();
+    const isAgentsPage = location.pathname.startsWith('/agents');
+    // const isNewChat = location.pathname === '/chats/new_chat';
     useEffect(() => {
         textAreaRef.current.style.height = "auto";
         textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 3}px`;
@@ -65,15 +70,21 @@ function ChatInput(props) {
             return;
         }
 
-        if (newChat){
+        if (newChat || isAgentsPage){
             addChat({
+                "addressee_agent_id": activeAgentId, 
                 "owner_agent_id": userAgents[0].id,
                 "name": trimmedText.substring(0, 32),
                 "message": trimmedText
             });
             settextMessage("");
+
+            if (isAgentsPage) {
+                // TODO: redirect to new page
+            }
             return;        
         }
+        
 
         sendMessage({
             "addressee_agent_id": activeChatData.addressee_agent_id,

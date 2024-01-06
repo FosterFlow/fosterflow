@@ -77,6 +77,7 @@ const Chats = (props) => {
     }, [chats]);
 
     useEffect(() => {
+        //TODO: it doesn't work with agents page, I guess it's better to check the state by the url
         if (isNewChat) {
             setActiveChat(0);
             showChatWindow(false);

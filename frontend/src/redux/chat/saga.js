@@ -59,15 +59,11 @@ function* fetchChatsSaga(action) {
 function* addChatSaga(action) {
   const data = action.payload;
   try {
-      const newChatData = yield call(api.post, `/chats/create/`, {
-        "addressee_agent_id": config.BASE_MODEL_AGENT_ID,
-        "owner_agent_id": data.owner_agent_id,
-        "name": data.name
-      });
+      const newChatData = yield call(api.post, `/chats/create/`, data);
       yield put(addChatSuccess({
         ...newChatData,
         new_chat_message: data.message,
-        addressee_agent_id: config.BASE_MODEL_AGENT_ID,
+        addressee_agent_id: data.addressee_agent_id,
         owner_agent_id: data.owner_agent_id, 
       }));
       yield put(addChatInitState());
