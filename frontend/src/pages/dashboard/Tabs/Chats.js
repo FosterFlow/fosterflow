@@ -114,7 +114,7 @@ const Chats = (props) => {
         const search = event.target.value.toLowerCase();
         setSearchChat(search);
         const filteredChats = chats.filter(
-            chat => chat.latest_message && chat.latest_message.toString().toLowerCase().includes(search)
+            chat => chat.name && chat.name.toString().toLowerCase().includes(search)
         );
         setRecentChatList(filteredChats);
     }, [chats]);
