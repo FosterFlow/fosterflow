@@ -60,11 +60,12 @@ class Adapter:
 
         return messages
 
-    def create_nlp_message(self, chat_id, owner_agent_id, request_id):
+    def create_nlp_message(self, chat_id, owner_agent_id, addressee_agent_id, request_id):
         return Message.objects.create(
             chat_id=chat_id,
             message_text='',
             owner_agent_id=owner_agent_id,
+            addressee_agent_id = addressee_agent_id,
             request_id=request_id,
         )
 
@@ -74,7 +75,7 @@ class GptAdapter(Adapter):
         messages = self.get_messages(sent_message)
         generator = self.from_interface().create_generator(messages)
         # print(f"GptAdapter self.create_nlp_message ent_message.chat_id {sent_message.chat_id} sent_message.addressee_agent_id {sent_message.addressee_agent_id} sent_message.id {sent_message.id}")
-        nlp_message = self.create_nlp_message(sent_message.chat_id, sent_message.addressee_agent_id, sent_message.id)
+        nlp_message = self.create_nlp_message(sent_message.chat_id, sent_message.addressee_agent_id, sent_message.owner_agent_id, sent_message.id)
         # print(f"GptAdapter nlp_message.chat_id {nlp_message.chat_id}")
         complete = ""
         data = {
@@ -85,6 +86,7 @@ class GptAdapter(Adapter):
             "id": nlp_message.id,
             "message_chunk": '',
             "owner_agent_id": nlp_message.owner_agent_id,
+            "addressee_agent_id": sent_message.owner_agent_id,
             "status": "start"
         }
         self.to_interface().send_chunk(data, str(sent_message.owner_agent_id))
