@@ -16,13 +16,13 @@ openai.api_key = env('OPENAI_API_KEY')
 
 class ChatConsumer(WebsocketConsumer):
     def connect(self):
-        self.user_channel = 'None'
+        self.agent_channel = 'None'
 
         if self.scope["user"] == AnonymousUser():
             self.close()
             return False
         else:
-            self.user_channel = str(self.scope["user"].id)
+            self.agent_channel = str(self.scope["user_agent"].id)
 
         self.agents = Agent.objects.filter(user_id=self.scope["user"])
         self.available_chats = list(
@@ -32,7 +32,7 @@ class ChatConsumer(WebsocketConsumer):
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
-            self.user_channel, self.channel_name
+            self.agent_channel, self.channel_name
         )
 
         self.accept()
@@ -40,7 +40,7 @@ class ChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
-            self.user_channel, self.channel_name
+            self.agent_channel, self.channel_name
         )
 
     def chat_message(self, event):
