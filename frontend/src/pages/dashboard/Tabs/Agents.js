@@ -64,8 +64,8 @@ const Agents = (props) => {
         setSearchAgent(search);
         const filteredAgents = agents.filter(
             agent=> {
-                const agentFullName = agent.first_name + " " + agent.last_name  
-                return agentFullName.toString().toLowerCase().includes(search)
+                const agentName = agent.name  
+                return agentName.toString().toLowerCase().includes(search)
             }
         );
         setRecentAgentsList(filteredAgents);

@@ -1,6 +1,5 @@
 import {
     AGENT_INIT,
-    SET_ACTIVE_AGENT_ID,
     SHOW_NEW_AGENT_CHAT,
 
     SET_ACTIVE_AGENT,
