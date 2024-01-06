@@ -43,6 +43,7 @@ import {
 const INIT_STATE = {
     chats: [],
     activeChatId: 0,
+    activeChatData: null, 
     chatWindow: false,
     newChat: false,
 
@@ -78,11 +79,18 @@ const Chat = (state = INIT_STATE, action) => {
         case CHAT_INIT:
             return INIT_STATE;
 
-        case SET_ACTIVE_CHAT:
+        case SET_ACTIVE_CHAT: {
+            let activeChat = state.activeChatData;
+            if (state.chats.length > 0) {
+                activeChat = state.chats.find(chat => chat.id === Number(action.payload));
+            }
+
             return { 
                 ...state,
-                activeChatId: Number(action.payload)
+                activeChatId: Number(action.payload),
+                activeChatData: activeChat
             };
+        }
 
         case SHOW_CHAT_WINDOW:
             return { 
@@ -114,9 +122,15 @@ const Chat = (state = INIT_STATE, action) => {
 
         case FETCH_CHATS_SUCCESS: {
             const chats = action.payload;
+            const activeChatId = state.activeChatId;
+            let activeChat = state.activeChatData;
             let filteredChats = (Array.isArray(chats) && chats) || [];
 
             filteredChats = filteredChats.reverse();
+            
+            if (activeChatId > 0) {
+                activeChat = chats.find(chat => chat.id === Number(activeChatId));
+            }
 
             return {
                 ...state,
@@ -124,6 +138,7 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsLoading: false,
                 fetchChatsSuccess: true,
                 fetchChatsErrors: null,
+                activeChatData: activeChat
             };
         }
             
@@ -165,6 +180,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatErrors: null,
                 chats: [action.payload, ...state.chats],
                 activeChatId: Number(action.payload.id),
+                activeChatData: action.payload,
                 chatWindow: true,
                 newChat: false
             };
@@ -210,14 +226,21 @@ const Chat = (state = INIT_STATE, action) => {
                 deleteChatErrors: action.payload,
             };
             
-        case FETCH_MESSAGES:
+        case FETCH_MESSAGES: {
+            let activeChat = state.activeChatData;
+            if (state.chats.length > 0) {
+                activeChat = state.chats.find(chat => chat.id === Number(action.payload));
+            }
+             
             return {
                 ...state,
                 fetchMessagesLoading: true,
                 fetchMessagesSuccess: false,
                 fetchMessagesErrors: null,
-                activeChatId: Number(action.payload)
+                activeChatId: Number(action.payload),
+                activeChatData: activeChat
             };
+        }
 
         case FETCH_MESSAGES_INIT_STATE:
             return {

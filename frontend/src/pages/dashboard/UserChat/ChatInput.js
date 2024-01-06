@@ -15,7 +15,7 @@ function ChatInput(props) {
     const { t } = useTranslation();
     const {
         activeAgentId,
-        activeChatId,
+        activeChatData,
         authorizedUser,
         userAgents,
         newChat,
@@ -76,8 +76,8 @@ function ChatInput(props) {
         }
 
         sendMessage({
-            "addressee_agent_id": activeAgentId,
-            "chat_id": activeChatId,
+            "addressee_agent_id": activeChatData.addressee_agent_id,
+            "chat_id": activeChatData.id,
             "message_text": trimmedText,
             "owner_agent_id": userAgents[0].id
         });
@@ -131,14 +131,14 @@ function ChatInput(props) {
 
 const mapStateToProps = (state) => {
     const {
-        activeChatId,
+        activeChatData,
         newChat,
         fetchMessagesLoading
     } = state.Chat;
 
     return {
         activeAgentId: state.Agents.activeAgentId, 
-        activeChatId,
+        activeChatData,
         newChat,
         fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
