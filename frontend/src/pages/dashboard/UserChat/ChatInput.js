@@ -77,10 +77,6 @@ function ChatInput(props) {
                 "message": trimmedText
             });
             settextMessage("");
-
-            if (isAgentsPage) {
-                // TODO: redirect to new page
-            }
             return;        
         }
         

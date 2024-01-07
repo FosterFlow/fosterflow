@@ -63,7 +63,7 @@ const Chats = (props) => {
 
         setRecentChatList(chats);
         
-        if (id === 0 && activeChatId > 0) {
+        if (isNewChat && activeChatId > 0) {
             //added new chats
             router.navigate(`/chats/${activeChatId}`);
         }

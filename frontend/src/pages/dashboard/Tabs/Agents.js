@@ -32,10 +32,11 @@ const Agents = (props) => {
         setActiveAgent,
         getAgents,
         getAgentsLoading,
-        getAgentsSucess,
         getAgentsErrors,
         authorizedUser,
-        showNewAgentChat 
+        showNewAgentChat,
+        chats,
+        activeChatId, 
     } = props;
 
     useEffect(() => {
@@ -87,6 +88,17 @@ const Agents = (props) => {
         showNewAgentChat(true);
         setActiveAgent(id);
     }, [id]);
+
+    useEffect(() => {
+        if (chats && chats.length === 0) {
+            return;
+        }
+
+        if (activeChatId > 0) {
+            //added new chats
+            router.navigate(`/chats/${activeChatId}`);
+        }
+    }, [chats]);
 
     return (
         <React.Fragment>
@@ -177,6 +189,8 @@ const mapStateToProps = state => {
         getAgentsErrors,
         //TODO: cause redundun re-render
         authorizedUser: state.User.authorizedUser,
+        chats: state.Chat.chats,
+        activeChatId: state.Chat.activeChatId
     };
 };
 
