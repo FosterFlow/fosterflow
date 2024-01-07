@@ -21,14 +21,13 @@ function ChatInput(props) {
         activeChatData,
         authorizedUser,
         userAgents,
-        newChat,
         fetchMessagesLoading,
         addChat,
         sendMessage,
     } = props;
     const location = useLocation();
     const isAgentsPage = location.pathname.startsWith('/agents');
-    // const isNewChat = location.pathname === '/chats/new_chat';
+    const isNewChat = location.pathname.startsWith('/chats/new_chat');
     useEffect(() => {
         textAreaRef.current.style.height = "auto";
         textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 3}px`;
@@ -70,7 +69,7 @@ function ChatInput(props) {
             return;
         }
 
-        if (newChat || isAgentsPage){
+        if (isNewChat || isAgentsPage){
             addChat({
                 "addressee_agent_id": activeAgentId, 
                 "owner_agent_id": userAgents[0].id,
@@ -85,7 +84,6 @@ function ChatInput(props) {
             return;        
         }
         
-
         sendMessage({
             "addressee_agent_id": activeChatData.addressee_agent_id,
             "chat_id": activeChatData.id,
@@ -143,14 +141,12 @@ function ChatInput(props) {
 const mapStateToProps = (state) => {
     const {
         activeChatData,
-        newChat,
         fetchMessagesLoading
     } = state.Chat;
 
     return {
         activeAgentId: state.Agents.activeAgentId, 
         activeChatData,
-        newChat,
         fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
         userAgents: state.Agents.userAgents,

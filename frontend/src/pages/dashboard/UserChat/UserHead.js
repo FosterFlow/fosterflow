@@ -10,7 +10,7 @@ import { deleteChat as actionDeleteChat} from "../../../redux/chat/actions";
 
 function UserHead(props) {
     const location = useLocation();
-    const isNewChat = location.pathname === '/chats/new_chat';
+    const isNewChat = location.pathname.startsWith('/chats/new_chat');
 
     function deleteChat(event) {
         event.preventDefault();

@@ -24,7 +24,7 @@ import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 const Chats = (props) => {
     const id = Number(props.router.params.id) || 0;
     const location = useLocation();
-    const isNewChat = location.pathname === '/chats/new_chat';
+    const isNewChat = location.pathname.startsWith('/chats/new_chat');
     const [searchChat, setSearchChat] = useState("");
     const [recentChatList, setRecentChatList] = useState([]);
     const supportEmail =  config.SUPPORT_EMAIL;

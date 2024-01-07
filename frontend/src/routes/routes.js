@@ -20,6 +20,7 @@ const authProtectedRoutes = [
   { path: "/chats/:id", component: <Chats /> },
   ///chats/new_chat url requires for mobile devices
   { path: "/chats/new_chat", component: <Chats /> },
+  { path: "/chats/new_chat/:agentId", component: <Chats /> },
   { path: "/agents", component: <Agents /> },
   { path: "/agents/:id", component: <Agents /> },
   { path: "/chats/email-verify-token/:emailVerifyToken", component: <Chats /> },

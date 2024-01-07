@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import { 
-    useLocation 
+    useLocation,
+    Link 
 } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
@@ -11,16 +12,11 @@ import {
     Card, 
     CardBody, 
     CardHeader,
-    Form, 
-    FormGroup,
-    Dropdown,
-    DropdownToggle, 
-    DropdownMenu, 
-    DropdownItem
 } from "reactstrap";
 import { useTranslation } from 'react-i18next';
 import {
-    getAgents, 
+    getAgents,
+    setActiveAgent 
 } from "../../../redux/actions";
 import config from '../../../config';
 
@@ -34,11 +30,8 @@ function UserChat(props) {
     } = props;
     const supportEmail =  config.SUPPORT_EMAIL;
     const location = useLocation();
-    const isNewChat = location.pathname === '/chats/new_chat';
-
-    // State to manage dropdown toggle
-    const [dropdownOpen, setDropdownOpen] = useState(false);
-    const toggle = () => setDropdownOpen(prevState => !prevState);
+    const isNewChat = location.pathname.startsWith('/chats/new_chat');
+    const agentId = Number(props.router.params.agentId) || 0;
 
     useEffect(() => {
         if (authorizedUser === null ||
@@ -48,6 +41,10 @@ function UserChat(props) {
 
         getAgents();
     }, [authorizedUser, getAgents]);
+
+    useEffect(() => {
+        setActiveAgent(agentId);
+    }, [agentId]);
 
     return (
         <React.Fragment>
@@ -63,24 +60,15 @@ function UserChat(props) {
                                 {t('Agents')}
                             </CardHeader>
                             <CardBody>
-                                <Form>
-                                    <FormGroup>
-                                        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-                                            <DropdownToggle caret>
-                                                {t('Select an agent to chat with')}
-                                            </DropdownToggle>
-                                            <DropdownMenu>
-                                                {agents && agents.map((agent, index) => 
-                                                <DropdownItem key={index} onClick={() => {/* handle agent select */}}>
-                                                    {agent.name}
-                                                </DropdownItem>
-                                                )}
-                                            </DropdownMenu>
-                                        </Dropdown>
-                                    </FormGroup>
-                                </Form>
+                                <div className="agent-tiles-container">
+                                    {agents && agents.map((agent, index) => (
+                                        <Link to={`/chats/new_chat/${agent.id}`} key={index} className="agent-tile">
+                                            {agent.name}
+                                        </Link>
+                                    ))}
+                                </div>
                             </CardBody>
-                         </Card>
+                        </Card>
                          { addChatErrors && (
                             <Alert color="danger">
                                 {t("The message wasn't delivered to the server. Errors details")}:
@@ -120,7 +108,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-    getAgents
+    getAgents,
+    setActiveAgent
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));
