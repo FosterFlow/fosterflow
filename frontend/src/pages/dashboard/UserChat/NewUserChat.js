@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { 
+    useLocation 
+} from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ChatInput from "./ChatInput";
@@ -27,10 +30,11 @@ function UserChat(props) {
         getAgents,
         authorizedUser,
         agents,
-        newChat,
         addChatErrors
     } = props;
     const supportEmail =  config.SUPPORT_EMAIL;
+    const location = useLocation();
+    const isNewChat = location.pathname === '/chats/new_chat';
 
     // State to manage dropdown toggle
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -48,7 +52,7 @@ function UserChat(props) {
     return (
         <React.Fragment>
             
-            <div className={`user-chat user-chat-new ${newChat ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat user-chat-new ${isNewChat ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <UserHead />
                     <div className="user-chat-conversation" id="messages">
@@ -109,7 +113,6 @@ function UserChat(props) {
 const mapStateToProps = (state) => {
     return { 
         messages: state.Chat.messages,
-        newChat: state.Chat.newChat,
         addChatErrors: state.Chat.addChatErrors,
         authorizedUser: state.User.authorizedUser,
         agents: state.Agents.agents,

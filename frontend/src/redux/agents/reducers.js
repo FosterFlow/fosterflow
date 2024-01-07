@@ -43,7 +43,6 @@ const INIT_STATE = {
 
     //current ML model
     activeAgentId: config.BASE_MODEL_AGENT_ID,
-    newAgentChatShow: false,
     activeAgent: null,
 
     agents: [],
@@ -80,12 +79,6 @@ const Agents = (state = INIT_STATE, action) => {
     switch (action.type) {
         case AGENT_INIT:
             return INIT_STATE;
-
-        case SHOW_NEW_AGENT_CHAT:
-            return { 
-                ...state, 
-                newAgentChatShow: action.payload,
-        }
 
         case GET_AGENTS:
             return { 

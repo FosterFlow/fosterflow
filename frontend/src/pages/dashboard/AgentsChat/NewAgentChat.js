@@ -4,13 +4,17 @@ import withRouter from "../../../components/withRouter";
 import ChatInput from "../UserChat/ChatInput";
 import AgentHead from "./AgentHead";
 import { useTranslation } from 'react-i18next';
+import { 
+    useLocation 
+} from "react-router-dom";
 
 function UserChat(props) {
     const {
-        newAgentChatShow,
         activeAgent
     } = props;
     const { t } = useTranslation();
+    const location = useLocation();
+    const isNewAgentChat = location.pathname === '/agents/';
 
     const renderAgentName = () => {
         if (activeAgent === null) {
@@ -27,7 +31,7 @@ function UserChat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat user-chat-new ${newAgentChatShow ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat user-chat-new ${isNewAgentChat ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <AgentHead />
                     <div
@@ -46,8 +50,7 @@ function UserChat(props) {
 
 const mapStateToProps = (state) => {
     return { 
-        activeAgent: state.Agents.activeAgent,
-        newAgentChatShow: state.Agents.newAgentChatShow
+        activeAgent: state.Agents.activeAgent
     }
 };
 
