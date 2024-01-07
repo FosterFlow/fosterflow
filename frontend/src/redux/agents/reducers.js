@@ -47,6 +47,7 @@ const INIT_STATE = {
     activeAgent: null,
 
     agents: [],
+    //Agents, that represents authorized user, currently it's only one
     userAgents: [],
 
     setActiveAgentLoading: false,
@@ -126,6 +127,7 @@ const Agents = (state = INIT_STATE, action) => {
                 getAgentsErrors: action.payload, 
             };
 
+        //Setting default AI agent of the current chat, who will answer us
         case SET_ACTIVE_AGENT:
             return { 
                 ...state, 

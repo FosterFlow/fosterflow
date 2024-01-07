@@ -32,6 +32,7 @@ function UserChat(props) {
         fetchMessagesErrors, 
         activeChatId, 
         authorizedUser,
+        userAgents,
         addChatRequestMessage,
         fetchMessages,
         chatWindow
@@ -198,7 +199,7 @@ function UserChat(props) {
                                     relevantMessages.map((message, key) =>
                                         <React.Fragment key={key}>
                                             {
-                                                authorizedUser.id === message.owner_agent_id ? (
+                                                userAgents[0].id === message.owner_agent_id ? (
                                                     <li className="user-chat-conversation-list-item right">
                                                         <div className="user-chat-message user-chat-message-formatting">
                                                             {message.message_text}
@@ -291,7 +292,8 @@ const mapStateToProps = (state) => {
         activeChatId,
         chatWindow,
         addChatRequestMessage,
-        authorizedUser: state.User.authorizedUser
+        authorizedUser: state.User.authorizedUser,
+        userAgents: state.Agents.userAgents
     }
 };
 
