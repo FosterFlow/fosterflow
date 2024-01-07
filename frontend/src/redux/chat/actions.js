@@ -36,8 +36,6 @@ import {
   DELETE_MESSAGE_FAILED,
     
   SET_ACTIVE_CHAT,
-  SHOW_CHAT_WINDOW,
-  SET_ACTIVE_NEW_CHAT,
 } from './constants';
 
 export const chatInit = () => ({
@@ -54,27 +52,6 @@ export const chatInit = () => ({
   export const setActiveChat = (chatId) => ({
     type: SET_ACTIVE_CHAT,
     payload: chatId
-  });
-
-  /**
-   * Window that shows list of messages. That action is actula for mobile version
-   * @param {boolean} show - show chat window or not. 
-   * 
-   *  */ 
-  export const showChatWindow = (show) => ({
-    type: SHOW_CHAT_WINDOW,
-    payload: show
-  });
-
-  /**
-   * New chat by /chats url
-   * 
-   * @param {boolean} set - show window of a new chat or not 
-   * @returns 
-   */
-  export const setActiveNewChat = (set) => ({
-    type: SET_ACTIVE_NEW_CHAT,
-    payload: set
   });
 
   export const fetchChats = (chatsOwnerAgent) => ({

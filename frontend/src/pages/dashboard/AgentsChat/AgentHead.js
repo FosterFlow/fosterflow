@@ -1,26 +1,19 @@
 import React from 'react';
 import { Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import { 
+    Link, 
+    useLocation 
+} from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import { deleteChat as actionDeleteChat, showChatWindow, setActiveNewChat} from "../../../redux/chat/actions";
+import { deleteChat as actionDeleteChat} from "../../../redux/chat/actions";
 
 function UserHead(props) {
-    const id = Number(props.router.params.id) || 0;
-
-    function closeUserChat(event) {
-        event.preventDefault();
-        if (id > 0){
-            props.showChatWindow(false);
-            return;
-        }
-        
-        props.setActiveNewChat(false);
-    }
+    const location = useLocation();
+    const isNewChat = location.pathname === '/chats/new_chat';
 
     function deleteChat(event) {
         event.preventDefault();
-        console.log("UserHead deleteChat activeChatId ", props.activeChatId);
         props.actionDeleteChat(props.activeChatId);
         props.router.navigate("/chats/");
     }
@@ -36,7 +29,7 @@ function UserHead(props) {
                     </Col>
                     {/* TODO: don't show on intial "/chats" page */}
                     <Col sm={1} xs={2} >
-                        {!props.newChat && (
+                        {!isNewChat && (
                             <a href="#" onClick={(event) => deleteChat(event)} className="user-chat-delete p-2 ri-delete-bin-line"></a>
                         )}
                     </Col>
@@ -53,14 +46,11 @@ const mapStateToProps = (state) => {
     console.log("Dashabord Tabs UserHead mapStateToProps state", state);
     return { 
         activeChatId: state.Chat.activeChatId,
-        newChat: state.Chat.newChat,
     };
 };
 
 const mapDispatchToProps = {
-    actionDeleteChat,
-    showChatWindow,
-    setActiveNewChat
+    actionDeleteChat
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserHead));

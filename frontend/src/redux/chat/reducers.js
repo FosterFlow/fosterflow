@@ -36,16 +36,12 @@ import {
     RECEIVE_MESSAGE_CHUNK_FAILED,
     
     SET_ACTIVE_CHAT,
-    SHOW_CHAT_WINDOW,
-    SET_ACTIVE_NEW_CHAT,
 } from './constants';
 
 const INIT_STATE = {
     chats: [],
     activeChatId: 0,
     activeChatData: null, 
-    chatWindow: false,
-    newChat: false,
 
     fetchChatsLoading: false,
     fetchChatsSuccess: false,
@@ -92,18 +88,6 @@ const Chat = (state = INIT_STATE, action) => {
             };
         }
 
-        case SHOW_CHAT_WINDOW:
-            return { 
-                ...state,
-                chatWindow: action.payload
-            };
-
-        case SET_ACTIVE_NEW_CHAT:
-            return { 
-                ...state,
-                newChat: action.payload
-            };
-   
         case FETCH_CHATS:
             return {
                 ...state,

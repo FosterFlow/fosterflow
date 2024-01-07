@@ -17,12 +17,9 @@ import config from '../../../config';
 import { 
     fetchChats,
     setActiveChat,
-    setActiveNewChat,
-    showChatWindow 
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
-import { isMobileDevice } from '../../../helpers/mobileDevices';
 
 const Chats = (props) => {
     const id = Number(props.router.params.id) || 0;
@@ -37,16 +34,12 @@ const Chats = (props) => {
 
         fetchChats,
         setActiveChat,
-        setActiveNewChat,
-        showChatWindow,
 
         chats,
         fetchChatsLoading,
         fetchChatsErrors,
 
         activeChatId,
-        chatWindow,
-        newChat,
 
         authorizedUser,
         userAgents
@@ -77,38 +70,16 @@ const Chats = (props) => {
     }, [chats]);
 
     useEffect(() => {
-        //TODO: it doesn't work with agents page, I guess it's better to check the state by the url
-        if (isNewChat) {
+        if (isNewChat || id === 0) {
             setActiveChat(0);
-            showChatWindow(false);
-            setActiveNewChat(true);
             return;
         }
         
-        if (isMobileDevice()){
-            if (id === 0) {
-                setActiveChat(0);
-                showChatWindow(false);
-                setActiveNewChat(false);
-                return;
-            }
-        }
-        
-        if (id === 0) {
-            setActiveChat(0);
-            showChatWindow(false);
-            setActiveNewChat(true);
-            return;
-        }
-
         if (activeChatId === id){
             return;
         }
         
-        //Opened specific chat by id in url
-        showChatWindow(true);
         setActiveChat(id);
-        setActiveNewChat(false);
     }, [id, isNewChat]);
 
     const handleSearchChange = useCallback((event) => {
@@ -121,28 +92,11 @@ const Chats = (props) => {
     }, [chats]);
 
 
-    const newChatHandleLinkClick = useCallback(() => {
-        //TODO: do we need to make check that param is not already the same?
-        if (newChat){
-            return;
-        }
-
-        setActiveNewChat(true);
-    });
-
-    const chatHandleLinkClick = useCallback(() => {
-        //TODO: do we need to make check that param is not already the same?
-        if (chatWindow){
-            return;
-        }
-        showChatWindow(true);
-    });
-
     return (
         <React.Fragment>
             <div className="chat-leftsidebar me-lg-1">
                 <div className="px-2 pt-2">
-                    <Link to="/chats/new_chat" className="btn btn-primary w-100 text-start new-chat-button" onClick={newChatHandleLinkClick}>{t('New Chat')}</Link>
+                    <Link to="/chats/new_chat" className="btn btn-primary w-100 text-start new-chat-button">{t('New Chat')}</Link>
                 </div>
                 <div className="px-2 pt-2">
                     <div className="search-box chat-search-box">
@@ -187,7 +141,7 @@ const Chats = (props) => {
                                     id={"conversation"+ chat.id} 
                                     className={`px-2 pt-2 ${activeChatId === chat.id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/chats/${chat.id}`} onClick={chatHandleLinkClick}>
+                                        <Link to={`/chats/${chat.id}`}>
                                         {chat.latest_message 
                                             ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
                                             : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
@@ -213,16 +167,12 @@ const mapStateToProps = state => {
     const {
         chats,
         activeChatId,
-        chatWindow,
-        newChat,
         fetchChatsLoading,
         fetchChatsErrors
     } = state.Chat;
     return {
         chats,
         activeChatId,
-        chatWindow,
-        newChat,
         fetchChatsLoading,
         fetchChatsErrors,
         //TODO: cause redundun re-render
@@ -233,9 +183,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     fetchChats,
-    setActiveChat,
-    setActiveNewChat,
-    showChatWindow
+    setActiveChat
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Chats));
