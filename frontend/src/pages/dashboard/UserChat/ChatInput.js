@@ -91,9 +91,11 @@ function ChatInput(props) {
     }
 
     useEffect(() => {
-        const activeChatDataId = activeChatData?.id || 0;
-        if (currentActiveChatId !== activeChatDataId) {
-            props.router.navigate(`/chats/${activeChatData.id}`);
+        if (isAgentsPage || isNewChat) {
+            const activeChatDataId = activeChatData?.id || 0;
+            if (currentActiveChatId !== activeChatDataId) {
+                props.router.navigate(`/chats/${activeChatDataId}`);
+            }
         }
     }, [activeChatData]);
 
