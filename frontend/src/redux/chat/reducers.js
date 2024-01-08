@@ -43,6 +43,10 @@ const INIT_STATE = {
     activeChatId: 0,
     activeChatData: null, 
 
+    //Actual if we came to the chat page from New Chat page.
+    //Allows to prevent double request to API
+    skipMessagesFetching: false,
+
     fetchChatsLoading: false,
     fetchChatsSuccess: false,
     fetchChatsErrors: null,

@@ -3,6 +3,7 @@ import {
   put, 
   takeEvery,
   delay,
+  select
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import {
@@ -31,6 +32,8 @@ import {
   fetchMessagesSuccess,
   fetchMessagesFailed,
 
+  setSkipFetchMessages,
+
   sendMessage,
   sendMessageInitState,
   sendMessageSuccess,
@@ -40,7 +43,6 @@ import {
   deleteMessageSuccess,
   deleteMessageFailed,
 } from './actions';
-import config from '../../config';
 
 const api = apiAuthorizedClient;
 
@@ -98,6 +100,13 @@ function* deleteChatSaga(action) {
 
 function* fetchMessagesSaga(action) {
   try {
+    const messagesFetchingSkipped = yield select(state => state.Chat.skipMessagesFetching);
+
+    if (messagesFetchingSkipped) {
+      setSkipFetchMessages(false);
+      return;
+    }
+    
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
     yield delay(5000);

@@ -21,6 +21,8 @@ import {
   FETCH_MESSAGES_INIT_STATE,
   FETCH_MESSAGES_SUCCESS,
   FETCH_MESSAGES_FAILED,
+
+  SET_SKIP_FETCH_MESSAGES,
   
   SEND_MESSAGE,
   SEND_MESSAGE_INIT_STATE,
@@ -145,6 +147,16 @@ export const chatInit = () => ({
   export const fetchMessagesFailed = (errors) => ({
     type: FETCH_MESSAGES_FAILED,
     payload: errors
+  });
+
+  /**
+   * Skip or not
+   * @param {Boolean} set 
+   * @returns 
+   */
+  export const setSkipFetchMessages = (set) => ({
+    type: SET_SKIP_FETCH_MESSAGES,
+    payload: set
   });
 
   export const sendMessage = (messageData) => {

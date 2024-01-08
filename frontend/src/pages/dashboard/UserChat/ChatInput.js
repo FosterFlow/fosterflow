@@ -3,7 +3,8 @@ import { Button, Form } from "reactstrap";
 import { connect } from "react-redux";
 import { 
     addChat, 
-    sendMessage
+    sendMessage,
+    setSkipFetchMessages
 } from "../../../redux/chat/actions";
 import { 
     useLocation 
@@ -25,6 +26,7 @@ function ChatInput(props) {
         fetchMessagesLoading,
         addChat,
         sendMessage,
+        setSkipFetchMessages
     } = props;
     const location = useLocation();
     const isAgentsPage = location.pathname.startsWith('/agents');
@@ -94,6 +96,7 @@ function ChatInput(props) {
         if (isAgentsPage || isNewChat) {
             const activeChatDataId = activeChatData?.id || 0;
             if (currentActiveChatId !== activeChatDataId) {
+                setSkipFetchMessages(true);
                 props.router.navigate(`/chats/${activeChatDataId}`);
             }
         }
@@ -161,7 +164,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     addChat,
-    sendMessage
+    sendMessage,
+    setSkipFetchMessages
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatInput));
