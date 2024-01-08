@@ -30,8 +30,6 @@ const Chats = (props) => {
     const supportEmail =  config.SUPPORT_EMAIL;
     const { t } = useTranslation();
     const {
-        router,
-
         fetchChats,
         setActiveChat,
 
@@ -62,11 +60,6 @@ const Chats = (props) => {
         }
 
         setRecentChatList(chats);
-        
-        if (isNewChat && activeChatId > 0) {
-            //added new chats
-            router.navigate(`/chats/${activeChatId}`);
-        }
     }, [chats]);
 
     useEffect(() => {

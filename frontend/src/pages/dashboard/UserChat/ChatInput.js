@@ -11,6 +11,7 @@ import {
 import { isMobileDevice } from '../../../helpers/mobileDevices';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
+import withRouter from "../../../components/withRouter";
 
 function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
@@ -36,7 +37,7 @@ function ChatInput(props) {
     const handleChange = event => {
         settextMessage(event.target.value);
     }
-
+    const [currentActiveChatId] = useState(activeChatData?.id || 0);
     const formSubmit = (event, textMessage) => {
         if (isMobileDevice()) {
             //Form submit happen when user clicks to Enter button.
@@ -88,6 +89,13 @@ function ChatInput(props) {
         });
         settextMessage("");
     }
+
+    useEffect(() => {
+        const activeChatDataId = activeChatData?.id || 0;
+        if (currentActiveChatId !== activeChatDataId) {
+            props.router.navigate(`/chats/${activeChatData.id}`);
+        }
+    }, [activeChatData]);
 
     //function for handling 'Enter' key press
     const handleKeyDown = (event) => {
@@ -154,4 +162,4 @@ const mapDispatchToProps = {
     sendMessage
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatInput);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatInput));
