@@ -62,14 +62,18 @@ function UserChat(props) {
                             <CardBody>
                                 <div className="agent-tiles-container">
                                     {agents && agents.map((agent, index) => (
-                                        <Link to={`/chats/new_chat/${agent.id}`} key={index} className="agent-tile">
-                                            {agent.name}
+                                        <Link 
+                                            to={`/chats/new_chat/${agent.id}`} 
+                                            key={index} 
+                                            className={`agent-tile ${agent.id === agentId ? 'active' : ''}`}
+                                        >
+                                                {agent.name}
                                         </Link>
                                     ))}
                                 </div>
                             </CardBody>
                         </Card>
-                         { addChatErrors && (
+                         {addChatErrors && (
                             <Alert color="danger">
                                 {t("The message wasn't delivered to the server. Errors details")}:
                                 {addChatErrors.details && 

@@ -16,9 +16,7 @@
     color: var(--#{$prefix}secondary-color);
     
     &.active {
-      a {
-          background-color: var(--#{$prefix}light);
-      }
+      background-color: var(--#{$prefix}light);
   }
 
     &:hover {
