@@ -28,9 +28,9 @@ function UserHead(props) {
                         </Link>
                     </Col>
                     {/* TODO: don't show on intial "/chats" page */}
-                    <Col sm={1} xs={2} >
+                    <Col sm={1} xs={2} className="text-end">
                         {!isNewChat && (
-                            <a href="#" onClick={(event) => deleteChat(event)} className="user-chat-delete p-2 ri-delete-bin-line"></a>
+                            <a href="#" onClick={(event) => deleteChat(event)} className="user-chat-delete p-2 pe-4 ri-delete-bin-line"></a>
                         )}
                     </Col>
                 </Row>

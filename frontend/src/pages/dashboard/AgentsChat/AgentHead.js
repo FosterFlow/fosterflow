@@ -1,23 +1,13 @@
 import React from 'react';
 import { Row, Col } from "reactstrap";
 import { 
-    Link, 
-    useLocation 
+    Link
 } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import { deleteChat as actionDeleteChat} from "../../../redux/chat/actions";
 
 function UserHead(props) {
-    const location = useLocation();
-    const isNewChat = location.pathname.startsWith('/chats/new_chat');
-
-    function deleteChat(event) {
-        event.preventDefault();
-        props.actionDeleteChat(props.activeChatId);
-        props.router.navigate("/chats/");
-    }
-
     return (
         <React.Fragment>
             <div className="container-fluid user-chat-header">
@@ -26,12 +16,6 @@ function UserHead(props) {
                         <Link to="/agents" className="user-chat-back d-lg-none text-muted p-2">
                             <i className="ri-arrow-left-s-line"></i>
                         </Link>
-                    </Col>
-                    {/* TODO: don't show on intial "/chats" page */}
-                    <Col sm={1} xs={2} >
-                        {!isNewChat && (
-                            <a href="#" onClick={(event) => deleteChat(event)} className="user-chat-delete p-2 ri-delete-bin-line"></a>
-                        )}
                     </Col>
                 </Row>
             </div>
