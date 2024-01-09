@@ -33,7 +33,7 @@ function UserHead(props) {
                         <Link to="/chats" className="user-chat-back text-muted p-2 d-lg-none">
                             <i className="ri-arrow-left-s-line"></i>
                         </Link>
-                        {!isNewChat && (
+                        {(!isNewChat && agents.length > 0) && (
                             <span className="user-chat-agent pt-2 ps-2">Agent: {agents[activeChatData?.addressee_agent_id]}</span>
                         )}
                     </Col>
