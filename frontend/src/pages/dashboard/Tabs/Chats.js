@@ -40,7 +40,8 @@ const Chats = (props) => {
         activeChatId,
 
         authorizedUser,
-        userAgents
+        userAgents,
+        agents
     } = props;
 
     useEffect(() => {
@@ -128,25 +129,28 @@ const Chats = (props) => {
                     )}
                     <ul className="list-unstyled chats-list" id="chat-list">
                         {
-                            recentChatList.map((chat, key) =>
-                                <li 
+                            recentChatList.map((chat, key) => {
+                                const agent = agents.find(agent => agent.id === chat.addressee_agent_id);
+
+                                return <li 
                                     key={key} 
                                     id={"conversation"+ chat.id} 
                                     className={`px-2 pt-2 ${activeChatId === chat.id ? 'active' : ''}`}
                                     >
                                         <Link to={`/chats/${chat.id}`}>
-                                        {chat.latest_message 
-                                            ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
-                                            : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
-                                        }
+                                            {chat.latest_message 
+                                                ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
+                                                : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
+                                            }
+                                            <p>Agent: {agent ? agent.name : 'Unknown'}</p>
                                             <p className="chat-user-message text-truncate mb-0">
                                                 {t('Click to open chat')}
                                             </p>
                                         </Link>
                                 </li>
-                                )
-                            }
-                        </ul>
+                            })
+                        }
+                    </ul>
                 </div>
                 <SideBarMenuMobile />
             </div>
@@ -171,6 +175,7 @@ const mapStateToProps = state => {
         //TODO: cause redundun re-render
         authorizedUser: state.User.authorizedUser,
         userAgents: state.Agents.userAgents,
+        agents: state.Agents.agents,
     };
 };
 
