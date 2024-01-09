@@ -25,16 +25,21 @@ function UserHead(props) {
         router.navigate("/chats/");
     }
 
+    function getChatAdresseeAgent (){
+        return agents.find(agent => agent.id === activeChatData?.addressee_agent_id);
+    }
+
     return (
         <React.Fragment>
             <div className="container-fluid user-chat-header">
                 <Row className="m-0">
-                    <Col sm={1} xs={2} >
+                    <Col sm={3} xs={3} >
                         <Link to="/chats" className="user-chat-back text-muted p-2 d-lg-none">
                             <i className="ri-arrow-left-s-line"></i>
                         </Link>
-                        {(!isNewChat && agents.length > 0) && (
-                            <span className="user-chat-agent pt-2 ps-2">Agent: {agents[activeChatData?.addressee_agent_id]}</span>
+                        {
+                        (!isNewChat && agents.length > 0) && (
+                            <span className="user-chat-agent pt-2 ps-2">Agent: {getChatAdresseeAgent()?.name}</span>
                         )}
                     </Col>
                     {/* TODO: don't show on intial "/chats" page */}
