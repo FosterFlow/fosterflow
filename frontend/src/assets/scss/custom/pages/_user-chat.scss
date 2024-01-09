@@ -153,19 +153,25 @@
 }
 
 .user-chat-header {
-    font-size: 20px;
     background-color: $sidebar-sub-bg;
     box-shadow: 0 2px 4px rgba(15, 34, 58, .12);
     position: relative;
     z-index: 1;
 }
 
+.user-chat-agent {
+    display: flex;
+    line-height: 29px;
+}
+
 .user-chat-back {
-    display: block;
+    display: flex;
+    font-size: 20px;
 }
 
 .user-chat-delete {
     display: block;
+    font-size: 20px;
 }
 
 .user-chat-new {
