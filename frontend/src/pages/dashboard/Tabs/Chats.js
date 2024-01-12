@@ -17,6 +17,7 @@ import config from '../../../config';
 import { 
     fetchChats,
     setActiveChat,
+    getAgents
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
@@ -41,7 +42,8 @@ const Chats = (props) => {
 
         authorizedUser,
         userAgents,
-        agents
+        agents,
+        getAgents
     } = props;
 
     useEffect(() => {
@@ -60,8 +62,13 @@ const Chats = (props) => {
             return;
         }
 
+        if (agents && agents.length === 0) {
+            getAgents();
+            return;
+        }
+
         setRecentChatList(chats);
-    }, [chats]);
+    }, [chats, agents]);
 
     useEffect(() => {
         if (isNewChat || id === 0) {
@@ -181,7 +188,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     fetchChats,
-    setActiveChat
+    setActiveChat,
+    getAgents
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Chats));
