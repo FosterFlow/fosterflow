@@ -6,82 +6,81 @@ import {
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import {
-    SET_ACTIVE_AGENT,
-    GET_AGENT, 
-    UPDATE_AGENT_DATA, 
-    UPDATE_AGENT_AVATAR 
+    SET_ACTIVE_USER_AGENT_PROFILE,
+    GET_USER_AGENT_PROFILE, 
+    UPDATE_USER_AGENT_PROFILE_DATA, 
+    UPDATE_USER_AGENT_PROFILE_AVATAR 
 } from './constants';
 import {
-    setActiveAgentSuccess,
-    setActiveAgentFailed,
+    setActiveUserAgentProfileSuccess,
+    setActiveUserAgentProfileFailed,
 
-    getAgentSuccess,
-    getAgentFailed,
+    getUserAgentProfileSuccess,
+    getUserAgentProfileFailed,
 
-    updateAgentDataInitState,
-    updateAgentDataSuccess,
-    updateAgentDataFailed,
+    updateUserAgentProfileDataInitState,
+    updateUserAgentProfileDataSuccess,
+    updateUserAgentProfileDataFailed,
     
-    updateAgentAvatarInitState,
-    updateAgentAvatarSuccess,
-    updateAgentAvatarFailed
+    updateUserAgentProfileAvatarInitState,
+    updateUserAgentProfileAvatarSuccess,
+    updateUserAgentProfileAvatarFailed
  } from './actions';
 const api = apiAuthorizedClient;
 
-function* setActiveAgentSaga(action) {
-    const agentId = action.payload;
+function* setActiveUserAgentProfileSaga(action) {
+    const userAgentProfileId = action.payload;
 
     try {
-        const response = yield call(api.get, `/agents/${agentId}/`);
-        yield put(setActiveAgentSuccess(response));
+        const response = yield call(api.get, `/user-agent-profiles/${userAgentProfileId}/`);
+        yield put(setActiveUserAgentProfileSuccess(response));
     } catch (error) {
-        yield put(setActiveAgentFailed(error));
+        yield put(setActiveUserAgentProfileFailed(error));
     }
 }
 
-//TODO does saga reach API by each user request?
-function* getAgentSaga({ payload: { id } }) {
+function* getUserAgentProfileSaga({ payload: { id } }) {
     try {
-        const response = yield call(api.get, `/agents/${id}/`);
-        yield put(getAgentSuccess(response));
+        const response = yield call(api.get, `/user-agent-profiles/${id}/`);
+        yield put(getUserAgentProfileSuccess(response));
     } catch (error) {
-        yield put(getAgentFailed(error));
+        yield put(getUserAgentProfileFailed(error));
     }
 }
 
-function* updateAgentDataSaga({ payload: { id, data } }) {
+function* updateUserAgentProfileDataSaga({ payload: { id, data } }) {
     try {
-        const response = yield call(api.patch, `/agents/${id}/`, data);
-        yield put(updateAgentDataSuccess(response));
+        const response = yield call(api.patch, `/user-agent-profiles/${id}/`, data);
+        yield put(updateUserAgentProfileDataSuccess(response));
         yield delay(10000);
-        yield put(updateAgentDataInitState());
+        yield put(updateUserAgentProfileDataInitState());
     } catch (errors) {
-        yield put(updateAgentDataFailed(errors));
+        yield put(updateUserAgentProfileDataFailed(errors));
     }
 }
 
-function* updateAgentAvatarSaga({ payload: { id, avatar } }) {
+function* updateUserAgentProfileAvatarSaga({ payload: { id, avatar } }) {
     try {
         let avatarData = new FormData();
         
         avatarData.append('avatar', avatar);
-        const response = yield call(api.patch, `/agents/${id}/`, avatarData, {
+        const response = yield call(api.patch, `/user-agent-profiles/${id}/`, avatarData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
 
-        yield put(updateAgentAvatarSuccess(response.avatar));
+        yield put(updateUserAgentProfileAvatarSuccess(response.avatar));
         yield delay(10000);
-        yield put(updateAgentAvatarInitState());
+        yield put(updateUserAgentProfileAvatarInitState());
     } catch (error) {
-        yield put(updateAgentAvatarFailed(error));
+        yield put(updateUserAgentProfileAvatarFailed(error));
     }
 }
 
-export default function* agentSaga() {
-    yield takeEvery(SET_ACTIVE_AGENT, setActiveAgentSaga);
-    yield takeEvery(GET_AGENT, getAgentSaga);
-    yield takeEvery(UPDATE_AGENT_DATA, updateAgentDataSaga);
-    yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatarSaga);
+export default function* userAgentProfileSaga() {
+    yield takeEvery(SET_ACTIVE_USER_AGENT_PROFILE, setActiveUserAgentProfileSaga);
+    yield takeEvery(GET_USER_AGENT_PROFILE, getUserAgentProfileSaga);
+    yield takeEvery(UPDATE_USER_AGENT_PROFILE_DATA, updateUserAgentProfileDataSaga);
+    yield takeEvery(UPDATE_USER_AGENT_PROFILE_AVATAR, updateUserAgentProfileAvatarSaga);
 }

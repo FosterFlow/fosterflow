@@ -1,79 +1,79 @@
 import {
-    AGENT_INIT,
+    USER_AGENT_PROFILE_INIT,
 
-    GET_AGENT,
-    GET_AGENT_INIT_STATE,
-    GET_AGENT_SUCCESS,
-    GET_AGENT_FAILED,
-    
-    UPDATE_AGENT_DATA,
-    UPDATE_AGENT_DATA_INIT_STATE,
-    UPDATE_AGENT_DATA_SUCCESS,
-    UPDATE_AGENT_DATA_FAILED,
-    
-    UPDATE_AGENT_AVATAR,
-    UPDATE_AGENT_AVATAR_INIT_STATE,
-    UPDATE_AGENT_AVATAR_SUCCESS,
-    UPDATE_AGENT_AVATAR_FAILED,
+    GET_USER_AGENT_PROFILE,
+    GET_USER_AGENT_PROFILE_INIT_STATE,
+    GET_USER_AGENT_PROFILE_SUCCESS,
+    GET_USER_AGENT_PROFILE_FAILED,
+
+    UPDATE_USER_AGENT_PROFILE_DATA,
+    UPDATE_USER_AGENT_PROFILE_DATA_INIT_STATE,
+    UPDATE_USER_AGENT_PROFILE_DATA_SUCCESS,
+    UPDATE_USER_AGENT_PROFILE_DATA_FAILED,
+
+    UPDATE_USER_AGENT_PROFILE_AVATAR,
+    UPDATE_USER_AGENT_PROFILE_AVATAR_INIT_STATE,
+    UPDATE_USER_AGENT_PROFILE_AVATAR_SUCCESS,
+    UPDATE_USER_AGENT_PROFILE_AVATAR_FAILED
 } from './constants';
 
-export const agentInit = () => ({
-    type: AGENT_INIT,
+export const initUserAgentProfile = () => ({
+    type: USER_AGENT_PROFILE_INIT,
 });
 
-export const getAgent = (id) => ({
-    type: GET_AGENT,
+export const getUserAgentProfile = (id) => ({
+    type: GET_USER_AGENT_PROFILE,
     payload: { id }
 });
 
-export const getAgentInitState = () => ({
-    type: GET_AGENT_INIT_STATE,
+export const getUserAgentProfileInitState = () => ({
+    type: GET_USER_AGENT_PROFILE_INIT_STATE,
 });
 
-export const getAgentSuccess = (agent) => ({
-    type: GET_AGENT_SUCCESS,
+export const getUserAgentProfileSuccess = (agent) => ({
+    type: GET_USER_AGENT_PROFILE_SUCCESS,
     payload: agent
 });
 
-export const getAgentFailed = (error) => ({
-    type: GET_AGENT_FAILED,
+export const getUserAgentProfileFailed = (error) => ({
+    type: GET_USER_AGENT_PROFILE_FAILED,
     payload: error
 });
 
-export const updateAgentData = (id, data) => ({
-    type: UPDATE_AGENT_DATA,
+export const updateUserAgentProfileData = (id, data) => ({
+    type: UPDATE_USER_AGENT_PROFILE_DATA,
     payload: { id, data }
 });
 
-export const updateAgentDataInitState = () => ({
-    type: UPDATE_AGENT_DATA_INIT_STATE
+export const updateUserAgentProfileDataInitState = () => ({
+    type: UPDATE_USER_AGENT_PROFILE_DATA_INIT_STATE
 });
 
-export const updateAgentDataSuccess = (agent) => ({
-    type: UPDATE_AGENT_DATA_SUCCESS,
+export const updateUserAgentProfileDataSuccess = (agent) => ({
+    type: UPDATE_USER_AGENT_PROFILE_DATA_SUCCESS,
     payload: agent
 });
 
-export const updateAgentDataFailed = (errors) => ({
-    type: UPDATE_AGENT_DATA_FAILED,
+export const updateUserAgentProfileDataFailed = (errors) => ({
+    type: UPDATE_USER_AGENT_PROFILE_DATA_FAILED,
     payload: errors
 });
 
-export const updateAgentAvatar = (id, avatar) => ({
-    type: UPDATE_AGENT_AVATAR,
+export const updateUserAgentProfileAvatar = (id, avatar) => ({
+    type: UPDATE_USER_AGENT_PROFILE_AVATAR,
     payload: { id, avatar }
 });
 
-export const updateAgentAvatarInitState = () => ({
-    type: UPDATE_AGENT_AVATAR_INIT_STATE,
+export const updateUserAgentProfileAvatarInitState = () => ({
+    type: UPDATE_USER_AGENT_PROFILE_AVATAR_INIT_STATE,
 });
 
-export const updateAgentAvatarSuccess = (avatar) => ({
-    type: UPDATE_AGENT_AVATAR_SUCCESS,
+export const updateUserAgentProfileAvatarSuccess = (avatar) => ({
+    type: UPDATE_USER_AGENT_PROFILE_AVATAR_SUCCESS,
     payload: avatar
 });
 
-export const updateAgentAvatarFailed = (error) => ({
-    type: UPDATE_AGENT_AVATAR_FAILED,
+export const updateUserAgentProfileAvatarFailed = (error) => ({
+    type: UPDATE_USER_AGENT_PROFILE_AVATAR_FAILED,
     payload: error
 });
