@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
@@ -7,8 +7,22 @@ import { useTranslation } from "react-i18next";
 
 function Profile(props) {
   /* intilize t variable for multi language implementation */
-  const { agent } = props;
+  const { 
+    agent,
+    user
+  } = props;
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (user === null) {
+      return
+    }
+
+    if (agent === null) {
+      return
+    }
+
+}, [user, agent]);
 
 //TODO: redevelop to flat structure into agent and remove this method
 function getAgentAvatar (){
@@ -19,7 +33,7 @@ function getAgentAvatar (){
 }
 
   function fullName (){
-    if (agent && agent.agent) {
+    if (agent !== null) {
       const agentData = agent.agent;
       const firstName = agentData.first_name;
       const lastName = agentData.last_name;
@@ -68,8 +82,8 @@ function getAgentAvatar (){
 
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
-  agent: state.Agent,
-  user: state.User  
+  agent: state.Agent.agent,
+  user: state.User.user  
 });
 
 const mapDispatchToProps = {
