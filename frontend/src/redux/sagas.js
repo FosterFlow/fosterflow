@@ -3,6 +3,8 @@ import authSaga from './auth/saga';
 import webSoketSaga from './webSocket/saga';
 import userSaga from './user/saga';
 import agentSaga from './agents/saga';
+import aiAgentProfileSaga from './aiAgentProfile/saga';
+import userAgentProfileSaga from './userAgentProfile/saga';
 import chatSaga from './chat/saga';
 import LayoutSaga from './layout/saga';
 
@@ -12,6 +14,8 @@ export default function* rootSaga() {
         webSoketSaga(),
         userSaga(),
         agentSaga(),
+        aiAgentProfileSaga(),
+        userAgentProfileSaga(),
         chatSaga(),
         LayoutSaga()
     ]);

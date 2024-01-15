@@ -21,25 +21,25 @@ import defaultAvatarImage from "../../assets/images/users/avatar_default.png";
 import config from '../../config';
 
 const INIT_STATE = {
-    AgentAiProfile: null,
-    activeAgentAiProfileId: config.BASE_MODEL_AGENT_ID,
-    activeAgentAiProfile: null,
+    AiAgentProfile: null,
+    activeAiAgentProfileId: config.BASE_MODEL_AGENT_ID,
+    activeAiAgentProfile: null,
 
-    getAgentAiProfileLoading: false,
-    getAgentAiProfileSuccess: false,
-    getAgentAiProfileErrors: null,
+    getAiAgentProfileLoading: false,
+    getAiAgentProfileSuccess: false,
+    getAiAgentProfileErrors: null,
 
-    agentAiProfileDataLoading: false,
-    agentAiProfileDataErrors: null,
-    agentAiProfileDataSuccess: false,
+    aiAgentProfileDataLoading: false,
+    aiAgentProfileDataErrors: null,
+    aiAgentProfileDataSuccess: false,
 
-    agentAiProfileAvatar: defaultAvatarImage,
-    agentAiProfileAvatarLoading: false,
-    agentAiProfileAvatarErrors: null,
-    agentAiProfileAvatarSuccess: false
+    aiAgentProfileAvatar: defaultAvatarImage,
+    aiAgentProfileAvatarLoading: false,
+    aiAgentProfileAvatarErrors: null,
+    aiAgentProfileAvatarSuccess: false
 };
 
-const AgentAiProfile = (state = INIT_STATE, action) => {
+const AiAgentProfile = (state = INIT_STATE, action) => {
     switch (action.type) {
         case AI_AGENT_PROFILE_INIT:
             return INIT_STATE;
@@ -47,20 +47,20 @@ const AgentAiProfile = (state = INIT_STATE, action) => {
         case GET_AI_AGENT_PROFILE:
             return { 
                 ...state, 
-                getAgentAiProfileLoading: true,
-                getAgentAiProfileSuccess: false,
-                getAgentAiProfileErrors: null 
+                getAiAgentProfileLoading: true,
+                getAiAgentProfileSuccess: false,
+                getAiAgentProfileErrors: null 
             };
 
         case GET_AI_AGENT_PROFILE_INIT_STATE:
             return { 
                 ...state,
-                getAgentAiProfileLoading: false,
-                getAgentAiProfileSuccess: false,
-                getAgentAiProfileErrors: null 
+                getAiAgentProfileLoading: false,
+                getAiAgentProfileSuccess: false,
+                getAiAgentProfileErrors: null 
             };
 
-        case GET_AI_AGENT_PROFILE_SUCCESS:
+        case GET_AI_AGENT_PROFILE_SUCCESS: {
             const serverAvatar = action.payload.avatar;
             let avatar = defaultAvatarImage; 
             
@@ -70,97 +70,100 @@ const AgentAiProfile = (state = INIT_STATE, action) => {
 
             return { 
                 ...state, 
-                AgentAiProfile: action.payload,
-                agentAiProfileAvatar: avatar,
-                getAgentAiProfileLoading: false,
-                getAgentAiProfileSuccess: true,
-                getAgentAiProfileErrors: null 
+                AiAgentProfile: action.payload,
+                aiAgentProfileAvatar: avatar,
+                getAiAgentProfileLoading: false,
+                getAiAgentProfileSuccess: true,
+                getAiAgentProfileErrors: null 
             };
+        }
 
         case GET_AI_AGENT_PROFILE_FAILED:
             return { 
                 ...state,
-                getAgentAiProfileLoading: false,
-                getAgentAiProfileSuccess: false,
-                getAgentAiProfileErrors: action.payload 
+                getAiAgentProfileLoading: false,
+                getAiAgentProfileSuccess: false,
+                getAiAgentProfileErrors: action.payload 
             };
 
         case UPDATE_AI_AGENT_PROFILE_DATA:
             return { 
                 ...state,
-                agentAiProfileDataLoading: true,
-                agentAiProfileDataErrors: null,
-                agentAiProfileDataSuccess: false 
+                aiAgentProfileDataLoading: true,
+                aiAgentProfileDataErrors: null,
+                aiAgentProfileDataSuccess: false 
             };
 
         case UPDATE_AI_AGENT_PROFILE_DATA_INIT_STATE:
             return { 
                 ...state,
-                agentAiProfileDataLoading: false,
-                agentAiProfileDataErrors: null,
-                agentAiProfileDataSuccess: false 
+                aiAgentProfileDataLoading: false,
+                aiAgentProfileDataErrors: null,
+                aiAgentProfileDataSuccess: false
             };
-
+    
         case UPDATE_AI_AGENT_PROFILE_DATA_SUCCESS:
             return { 
                 ...state,
-                AgentAiProfile: action.payload,
-                agentAiProfileDataLoading: false,
-                agentAiProfileDataErrors: null,
-                agentAiProfileDataSuccess: true 
+                AiAgentProfile: action.payload,
+                aiAgentProfileDataLoading: false,
+                aiAgentProfileDataErrors: null,
+                aiAgentProfileDataSuccess: true 
             };
-
+    
         case UPDATE_AI_AGENT_PROFILE_DATA_FAILED:
             return { 
                 ...state,
-                agentAiProfileDataLoading: false,
-                agentAiProfileDataErrors: action.payload,
-                agentAiProfileDataSuccess: false 
+                aiAgentProfileDataLoading: false,
+                aiAgentProfileDataErrors: action.payload,
+                aiAgentProfileDataSuccess: false 
             };
-
+    
         case UPDATE_AI_AGENT_PROFILE_AVATAR:
             return { 
                 ...state, 
-                agentAiProfileAvatarLoading: true, 
-                agentAiProfileAvatarErrors: null,
-                agentAiProfileAvatarSuccess: false 
+                aiAgentProfileAvatarLoading: true, 
+                aiAgentProfileAvatarErrors: null,
+                aiAgentProfileAvatarSuccess: false 
             };
         
         case UPDATE_AI_AGENT_PROFILE_AVATAR_INIT_STATE:
             return { 
                 ...state, 
-                agentAiProfileAvatarLoading: false, 
-                agentAiProfileAvatarErrors: null,
-                agentAiProfileAvatarSuccess: false 
+                aiAgentProfileAvatarLoading: false, 
+                aiAgentProfileAvatarErrors: null,
+                aiAgentProfileAvatarSuccess: false 
             };
             
-        case UPDATE_AI_AGENT_PROFILE_AVATAR_SUCCESS:
+        case UPDATE_AI_AGENT_PROFILE_AVATAR_SUCCESS: {
             const newAvatar = action.payload;
             let updatedAvatar = defaultAvatarImage;
             
             if (newAvatar) {
                 updatedAvatar = config.BACKEND_URL + newAvatar;
             }
-
+    
             return { 
                 ...state, 
-                agentAiProfileAvatar: updatedAvatar, 
-                agentAiProfileAvatarLoading: false,
-                agentAiProfileAvatarErrors: null,
-                agentAiProfileAvatarSuccess: true
+                aiAgentProfileAvatar: updatedAvatar, 
+                aiAgentProfileAvatarLoading: false,
+                aiAgentProfileAvatarErrors: null,
+                aiAgentProfileAvatarSuccess: true
             };
-            case UPDATE_AI_AGENT_PROFILE_AVATAR_FAILED:
-                return { 
-                    ...state, 
-                    agentAiProfileAvatar: defaultAvatarImage, 
-                    agentAiProfileAvatarLoading: false, 
-                    agentAiProfileAvatarErrors: action.payload,
-                    agentAiProfileAvatarSuccess: false 
-                };
-        
-            default:
-                return { ...state };
         }
+    
+        case UPDATE_AI_AGENT_PROFILE_AVATAR_FAILED:
+            return { 
+                ...state, 
+                aiAgentProfileAvatar: defaultAvatarImage, 
+                aiAgentProfileAvatarLoading: false, 
+                aiAgentProfileAvatarErrors: action.payload,
+                aiAgentProfileAvatarSuccess: false 
+            };
+    
+        default:
+            return { ...state };
     }
+};
 
-    export default AgentAiProfile;
+export default AiAgentProfile;

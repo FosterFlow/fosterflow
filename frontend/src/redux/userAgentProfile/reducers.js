@@ -7,7 +7,7 @@ import {
     GET_USER_AGENT_PROFILE_FAILED,
 
     UPDATE_USER_AGENT_PROFILE_DATA,
-    UPDATE_USER_AGENT PROFILE_DATA_INIT_STATE,
+    UPDATE_USER_AGENT_PROFILE_DATA_INIT_STATE,
     UPDATE_USER_AGENT_PROFILE_DATA_SUCCESS,
     UPDATE_USER_AGENT_PROFILE_DATA_FAILED,
 
@@ -21,25 +21,25 @@ import defaultAvatarImage from "../../assets/images/users/avatar_default.png";
 import config from '../../config';
 
 const INIT_STATE = {
-    AgentUserProfile: null,
-    activeAgentUserProfileId: config.BASE_MODEL_AGENT_ID,
-    activeAgentUserProfile: null,
+    UserAgentProfile: null,
+    activeUserAgentProfileId: config.BASE_MODEL_AGENT_ID,
+    activeUserAgentProfile: null,
 
-    getAgentUserProfileLoading: false,
-    getAgentUserProfileSuccess: false,
-    getAgentUserProfileErrors: null,
+    getUserAgentProfileLoading: false,
+    getUserAgentProfileSuccess: false,
+    getUserAgentProfileErrors: null,
 
-    agentUserProfileDataLoading: false,
-    agentUserProfileDataErrors: null,
-    agentUserProfileDataSuccess: false,
+    userAgentProfileDataLoading: false,
+    userAgentProfileDataErrors: null,
+    userAgentProfileDataSuccess: false,
 
-    agentUserProfileAvatar: defaultAvatarImage,
-    agentUserProfileAvatarLoading: false,
-    agentUserProfileAvatarErrors: null,
-    agentUserProfileAvatarSuccess: false
+    userAgentProfileAvatar: defaultAvatarImage,
+    userAgentProfileAvatarLoading: false,
+    userAgentProfileAvatarErrors: null,
+    userAgentProfileAvatarSuccess: false
 };
 
-const AgentUserProfile = (state = INIT_STATE, action) => {
+const UserAgentProfile = (state = INIT_STATE, action) => {
     switch (action.type) {
         case USER_AGENT_PROFILE_INIT:
             return INIT_STATE;
@@ -47,17 +47,17 @@ const AgentUserProfile = (state = INIT_STATE, action) => {
         case GET_USER_AGENT_PROFILE:
             return { 
                 ...state, 
-                getAgentUserProfileLoading: true,
-                getAgentUserProfileSuccess: false,
-                getAgentUserProfileErrors: null 
+                getUserAgentProfileLoading: true,
+                getUserAgentProfileSuccess: false,
+                getUserAgentProfileErrors: null 
             };
 
         case GET_USER_AGENT_PROFILE_INIT_STATE:
             return { 
                 ...state,
-                getAgentUserProfileLoading: false,
-                getAgentUserProfileSuccess: false,
-                getAgentUserProfileErrors: null 
+                getUserAgentProfileLoading: false,
+                getUserAgentProfileSuccess: false,
+                getUserAgentProfileErrors: null 
             };
 
         case GET_USER_AGENT_PROFILE_SUCCESS:
@@ -70,68 +70,68 @@ const AgentUserProfile = (state = INIT_STATE, action) => {
 
             return { 
                 ...state, 
-                AgentUserProfile: action.payload,
-                agentUserProfileAvatar: avatar,
-                getAgentUserProfileLoading: false,
-                getAgentUserProfileSuccess: true,
-                getAgentUserProfileErrors: null 
+                UserAgentProfile: action.payload,
+                userAgentProfileAvatar: avatar,
+                getUserAgentProfileLoading: false,
+                getUserAgentProfileSuccess: true,
+                getUserAgentProfileErrors: null 
             };
 
         case GET_USER_AGENT_PROFILE_FAILED:
             return { 
                 ...state,
-                getAgentUserProfileLoading: false,
-                getAgentUserProfileSuccess: false,
-                getAgentUserProfileErrors: action.payload 
+                getUserAgentProfileLoading: false,
+                getUserAgentProfileSuccess: false,
+                getUserAgentProfileErrors: action.payload 
             };
 
         case UPDATE_USER_AGENT_PROFILE_DATA:
             return { 
                 ...state,
-                agentUserProfileDataLoading: true,
-                agentUserProfileDataErrors: null,
-                agentUserProfileDataSuccess: false 
+                userAgentProfileDataLoading: true,
+                userAgentProfileDataErrors: null,
+                userAgentProfileDataSuccess: false 
             };
 
         case UPDATE_USER_AGENT_PROFILE_DATA_INIT_STATE:
             return { 
                 ...state,
-                agentUserProfileDataLoading: false,
-                agentUserProfileDataErrors: null,
-                agentUserProfileDataSuccess: false 
+                userAgentProfileDataLoading: false,
+                userAgentProfileDataErrors: null,
+                userAgentProfileDataSuccess: false 
             };
 
         case UPDATE_USER_AGENT_PROFILE_DATA_SUCCESS:
             return { 
                 ...state,
-                AgentUserProfile: action.payload,
-                agentUserProfileDataLoading: false,
-                agentUserProfileDataErrors: null,
-                agentUserProfileDataSuccess: true 
+                UserAgentProfile: action.payload,
+                userAgentProfileDataLoading: false,
+                userAgentProfileDataErrors: null,
+                userAgentProfileDataSuccess: true 
             };
 
         case UPDATE_USER_AGENT_PROFILE_DATA_FAILED:
             return { 
                 ...state,
-                agentUserProfileDataLoading: false,
-                agentUserProfileDataErrors: action.payload,
-                agentUserProfileDataSuccess: false 
+                userAgentProfileDataLoading: false,
+                userAgentProfileDataErrors: action.payload,
+                userAgentProfileDataSuccess: false 
             };
 
         case UPDATE_USER_AGENT_PROFILE_AVATAR:
             return { 
                 ...state, 
-                agentUserProfileAvatarLoading: true, 
-                agentUserProfileAvatarErrors: null,
-                agentUserProfileAvatarSuccess: false 
+                userAgentProfileAvatarLoading: true, 
+                userAgentProfileAvatarErrors: null,
+                userAgentProfileAvatarSuccess: false 
             };
         
         case UPDATE_USER_AGENT_PROFILE_AVATAR_INIT_STATE:
             return { 
                 ...state, 
-                agentUserProfileAvatarLoading: false, 
-                agentUserProfileAvatarErrors: null,
-                agentUserProfileAvatarSuccess: false 
+                userAgentProfileAvatarLoading: false, 
+                userAgentProfileAvatarErrors: null,
+                userAgentProfileAvatarSuccess: false 
             };
             
         case UPDATE_USER_AGENT_PROFILE_AVATAR_SUCCESS:
@@ -144,24 +144,24 @@ const AgentUserProfile = (state = INIT_STATE, action) => {
 
             return { 
                 ...state, 
-                agentUserProfileAvatar: updatedAvatar,
-                agentUserProfileAvatarLoading: false,
-                agentUserProfileAvatarErrors: null,
-                agentUserProfileAvatarSuccess: true
+                userAgentProfileAvatar: updatedAvatar,
+                userAgentProfileAvatarLoading: false,
+                userAgentProfileAvatarErrors: null,
+                userAgentProfileAvatarSuccess: true
                 };
         
         case UPDATE_USER_AGENT_PROFILE_AVATAR_FAILED:
             return { 
                 ...state, 
-                agentUserProfileAvatar: defaultAvatarImage, 
-                agentUserProfileAvatarLoading: false, 
-                agentUserProfileAvatarErrors: action.payload, 
-                agentUserProfileAvatarSuccess: false 
+                userAgentProfileAvatar: defaultAvatarImage, 
+                userAgentProfileAvatarLoading: false, 
+                userAgentProfileAvatarErrors: action.payload, 
+                userAgentProfileAvatarSuccess: false 
             };
             
-            default:
-                return { ...state };
-        }
+        default:
+            return { ...state };
     }
+}
 
-export default AgentUserProfile;
+export default UserAgentProfile;

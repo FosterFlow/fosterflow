@@ -5,7 +5,7 @@ import {
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import {
-    GET_AI_AGENT_PROFILE_BY_AGENT_ID,
+    GET_AI_AGENT_PROFILE,
 } from './constants';
 import {
     getAiAgentProfileSuccess,
@@ -24,5 +24,5 @@ function* getAiAgentProfileSaga({ payload: { agent_id } }) {
 }
 
 export default function* aiAgentProfileSaga() {
-    yield takeEvery(GET_AI_AGENT_PROFILE_BY_AGENT_ID, getAiAgentProfileSaga);
+    yield takeEvery(GET_AI_AGENT_PROFILE, getAiAgentProfileSaga);
 }

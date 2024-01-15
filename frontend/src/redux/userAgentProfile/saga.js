@@ -1,14 +1,11 @@
 import { call, put, takeEvery, delay } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import {
-    SET_ACTIVE_USER_AGENT_PROFILE,
     GET_USER_AGENT_PROFILE,
     UPDATE_USER_AGENT_PROFILE_DATA,
     UPDATE_USER_AGENT_PROFILE_AVATAR
 } from './constants';
 import {
-    setActiveUserAgentProfileSuccess,
-    setActiveUserAgentProfileFailed,
     getUserAgentProfileSuccess,
     getUserAgentProfileFailed,
     updateUserAgentProfileDataInitState,
@@ -20,16 +17,6 @@ import {
 } from './actions';
 
 const api = apiAuthorizedClient;
-
-function* setActiveUserAgentProfileSaga(action) {
-    const userAgentProfileId = action.payload;
-    try {
-        const response = yield call(api.get, `/user-agent-profiles/${userAgentProfileId}/`);
-        yield put(setActiveUserAgentProfileSuccess(response.data));
-    } catch (error) {
-        yield put(setActiveUserAgentProfileFailed(error));
-    }
-}
 
 function* getUserAgentProfileSaga(action) {
     const { id } = action.payload;
@@ -73,7 +60,6 @@ function* updateUserAgentProfileAvatarSaga(action) {
 }
 
 export default function* userAgentProfileSaga() {
-    yield takeEvery(SET_ACTIVE_USER_AGENT_PROFILE, setActiveUserAgentProfileSaga);
     yield takeEvery(GET_USER_AGENT_PROFILE, getUserAgentProfileSaga);
     yield takeEvery(UPDATE_USER_AGENT_PROFILE_DATA, updateUserAgentProfileDataSaga);
     yield takeEvery(UPDATE_USER_AGENT_PROFILE_AVATAR, updateUserAgentProfileAvatarSaga);
