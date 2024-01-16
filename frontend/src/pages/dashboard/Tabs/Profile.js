@@ -4,36 +4,37 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import { useTranslation } from "react-i18next";
+import { 
+  getUserAgentProfile
+} from "../../../redux/actions";
 
 function Profile(props) {
   /* intilize t variable for multi language implementation */
   const { 
     agent,
-    agentAvatar,
-    user
+    profile,
+    avatar,
+    firstName,
+    lastName
   } = props;
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (user === null) {
-      return
-    }
-
     if (agent === null) {
       return
     }
 
-}, [user, agent]);
+    if (profile === null) {
+      getUserAgentProfile(agent.id)
+    }
+
+}, [profile, agent]);
 
   function fullName (){
-    if (agent !== null) {
-      const agentData = agent.agent;
-      const firstName = agentData.first_name;
-      const lastName = agentData.last_name;
-      if (firstName || lastName) {
-          return firstName + " " + lastName; 
-      }
+    if (profile !== null) {
+      return firstName + " " + lastName; 
     }
+
     return t("Name not specified");
   }
 
@@ -54,7 +55,7 @@ function Profile(props) {
             <div className="px-4 pb-4">
               <div className="mb-4">
                 <img
-                  src={agentAvatar}
+                  src={avatar}
                   className="rounded-circle avatar-lg img-thumbnail"
                 />
               </div>
@@ -76,11 +77,14 @@ function Profile(props) {
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
   agent: state.Agents.agent,
-  agentAvatar: state.Agents.avatar,
-  user: state.User.user  
+  profile: state.UserAgentProfile.userAgentProfile,
+  avatar: state.UserAgentProfile.userAgentProfileAvatar,
+  firstName: state.UserAgentProfile.firstName,
+  lastName: state.UserAgentProfile.lastName
 });
 
 const mapDispatchToProps = {
+  getUserAgentProfile
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile));

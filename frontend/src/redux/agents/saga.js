@@ -59,9 +59,9 @@ function* getAgentsSaga() {
 function* getUserAgentsSaga() {
     try {
         const response = yield call(api.get, `/agents/self/`);
-        yield put(getUserAgentsSuccess(response));
+        yield put(getAgentSuccess(response[0]));
     } catch (errors) {
-        yield put(getUserAgentsFailed(errors));
+        yield put(getAgentFailed(errors));
     }
 }
 
