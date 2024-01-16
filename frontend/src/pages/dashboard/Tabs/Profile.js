@@ -9,6 +9,7 @@ function Profile(props) {
   /* intilize t variable for multi language implementation */
   const { 
     agent,
+    agentAvatar,
     user
   } = props;
   const { t } = useTranslation();
@@ -23,14 +24,6 @@ function Profile(props) {
     }
 
 }, [user, agent]);
-
-//TODO: redevelop to flat structure into agent and remove this method
-function getAgentAvatar (){
-  if (agent) {
-    return agent.avatar;
-  }
-  return "";
-}
 
   function fullName (){
     if (agent !== null) {
@@ -61,7 +54,7 @@ function getAgentAvatar (){
             <div className="px-4 pb-4">
               <div className="mb-4">
                 <img
-                  src={getAgentAvatar()}
+                  src={agentAvatar}
                   className="rounded-circle avatar-lg img-thumbnail"
                 />
               </div>
@@ -82,7 +75,8 @@ function getAgentAvatar (){
 
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
-  agent: state.Agent.agent,
+  agent: state.Agents.agent,
+  agentAvatar: state.Agents.avatar,
   user: state.User.user  
 });
 
