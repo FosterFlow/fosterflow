@@ -8,14 +8,15 @@ import {
   getUserAgentProfile
 } from "../../../redux/actions";
 
-function Profile(props) {
+const Profile = (props) => {
   /* intilize t variable for multi language implementation */
   const { 
     agent,
     profile,
     avatar,
     firstName,
-    lastName
+    lastName,
+    getUserAgentProfile
   } = props;
   const { t } = useTranslation();
 

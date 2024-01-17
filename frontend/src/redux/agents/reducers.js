@@ -1,6 +1,5 @@
 import {
     AGENT_INIT,
-    SHOW_NEW_AGENT_CHAT,
 
     SET_ACTIVE_AGENT,
     SET_ACTIVE_AGENT_INIT_STATE,
@@ -75,6 +74,7 @@ const INIT_STATE = {
     avatarSuccess: false
 };
 
+/**TODO: rename to singular */
 const Agents = (state = INIT_STATE, action) => {
     switch (action.type) {
         case AGENT_INIT:

@@ -21,10 +21,14 @@ export const initUserAgentProfile = () => ({
     type: USER_AGENT_PROFILE_INIT,
 });
 
-export const getUserAgentProfile = (id) => ({
-    type: GET_USER_AGENT_PROFILE,
-    payload: { id }
-});
+export const getUserAgentProfile = (id) => {
+
+    return {
+        type: GET_USER_AGENT_PROFILE,
+        payload: { id }
+    }
+    
+};
 
 export const getUserAgentProfileInitState = () => ({
     type: GET_USER_AGENT_PROFILE_INIT_STATE,

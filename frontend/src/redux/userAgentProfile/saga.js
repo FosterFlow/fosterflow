@@ -21,7 +21,7 @@ const api = apiAuthorizedClient;
 function* getUserAgentProfileSaga(action) {
     const { id } = action.payload;
     try {
-        const response = yield call(api.get, `/user-agent-profiles/${id}/`);
+        const response = yield call(api.get, `/user_agent_profiles_by_agent_id/${id}/`);
         yield put(getUserAgentProfileSuccess(response.data));
     } catch (error) {
         yield put(getUserAgentProfileFailed(error));
