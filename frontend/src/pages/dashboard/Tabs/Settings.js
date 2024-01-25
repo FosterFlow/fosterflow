@@ -24,15 +24,16 @@ import _ from 'lodash';
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import {
-    updateAgentData,
-    updateAgentDataInitState,
-    updateAgentDataFailed,
+    updateUserAgentProfileData,
+    updateUserAgentProfileDataInitState,
+    updateUserAgentProfileDataFailed,
 
     changePassword,
     changePasswordInitState,
     changePasswordFailure,
 
-    updateAgentAvatar 
+    updateUserAgentProfileAvatar,
+    getUserAgentProfile 
 } from '../../../redux/actions';
 import AvatarEditor from 'react-avatar-editor'
 
@@ -40,18 +41,20 @@ function Settings(props) {
     const { t } = useTranslation();
     const { 
         agents,
+        agent,
+        profile,
         user,
         auth,
 
-        updateAgentDataInitState,
-        updateAgentData,
-        updateAgentDataFailed,
+        updateUserAgentProfileData,
+        updateUserAgentProfileDataInitState,
+        updateUserAgentProfileDataFailed,
         
         changePassword,
         changePasswordInitState,
         changePasswordFailure,
         
-        updateAgentAvatar
+        updateUserAgentProfileAvatar
     } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const avatarEditorRef = useRef(null);
@@ -80,7 +83,7 @@ function Settings(props) {
                 formData.append('avatar', blob);
     
                 if (user && user.authorizedUser) {
-                    updateAgentAvatar(user.authorizedUser.id, formData);
+                    updateUserAgentProfileAvatar(user.authorizedUser.id, formData);
                     return;
                 }
                 
@@ -90,15 +93,13 @@ function Settings(props) {
     }
 
     function getFirstName (){
-        return (agents
-        && agents.agent 
-        && agents.agent.first_name) || '';
+        return (agent 
+        && agent.first_name) || '';
     }
 
     function getLastName (){
-        return (agents
-            && agents.agent  
-            && agents.agent.last_name) || ''
+        return (agent  
+            && agent.last_name) || ''
     }
 
     /**
@@ -140,7 +141,7 @@ function Settings(props) {
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
             if (user.authorizedUser) {
-                updateAgentData(user.authorizedUser.id, values);
+                updateUserAgentProfileData(user.authorizedUser.id, values);
                 return;
             } 
             //TODO: handle error if we don't have active User;
@@ -157,7 +158,7 @@ function Settings(props) {
                 return;
             }
 
-            updateAgentDataInitState();
+            updateUserAgentProfileDataInitState();
             return;
         }
 
@@ -179,7 +180,7 @@ function Settings(props) {
             }
         }
 
-        updateAgentDataFailed(errors);
+        updateUserAgentProfileDataFailed(errors);
     }, [personalInfoForm.errors]);
 
     const securityForm = useFormik({
@@ -238,6 +239,17 @@ function Settings(props) {
 
         changePasswordFailure(errors);
     }, [securityForm.errors]);
+
+    useEffect(() => {
+        if (agent === null) {
+          return
+        }
+    
+        if (profile === null) {
+          getUserAgentProfile(agent.id)
+        }
+    
+    }, [profile, agent]);
 
     return (
         <React.Fragment>
@@ -512,20 +524,23 @@ function Settings(props) {
 //TODO: suscribe only to required fields
 const mapStateToProps = (state) => ({
     agents: state.Agents,
+    agent: state.Agents.agent,
+    profile: state.UserAgentProfile.userAgentProfile,
     user: state.User,
     auth: state.Auth
 });
 
 const mapDispatchToProps = {
-    updateAgentDataInitState,
-    updateAgentData,
-    updateAgentDataFailed,
+    updateUserAgentProfileData,
+    updateUserAgentProfileDataInitState,
+    updateUserAgentProfileDataFailed,
 
     changePassword,
     changePasswordInitState,
     changePasswordFailure,
 
-    updateAgentAvatar
+    updateUserAgentProfileAvatar,
+    getUserAgentProfile
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));
