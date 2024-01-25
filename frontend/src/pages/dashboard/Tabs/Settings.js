@@ -57,7 +57,8 @@ function Settings(props) {
         changePasswordInitState,
         changePasswordFailure,
         
-        updateUserAgentProfileAvatar
+        updateUserAgentProfileAvatar,
+        getUserAgentProfile
     } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const avatarEditorRef = useRef(null);
