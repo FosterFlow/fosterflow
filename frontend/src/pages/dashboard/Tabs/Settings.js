@@ -46,6 +46,9 @@ function Settings(props) {
         user,
         auth,
 
+        firstName,
+        lastName,
+
         updateUserAgentProfileData,
         updateUserAgentProfileDataInitState,
         updateUserAgentProfileDataFailed,
@@ -92,16 +95,6 @@ function Settings(props) {
         }
     }
 
-    function getFirstName (){
-        return (agent 
-        && agent.first_name) || '';
-    }
-
-    function getLastName (){
-        return (agent  
-            && agent.last_name) || ''
-    }
-
     /**
      * Filling the form after page reloading, once agent information is loaded
      * 
@@ -114,12 +107,10 @@ function Settings(props) {
             return;
         }
 
-        const lastName = getLastName();
         if (lastName !== "") {
             personalInfoForm.setFieldValue('last_name', lastName);
         }
 
-        const firstName = getFirstName();
         if (firstName !== "") {
             personalInfoForm.setFieldValue('first_name', firstName);
         }
@@ -127,8 +118,8 @@ function Settings(props) {
 
     const personalInfoForm = useFormik({
         initialValues: {
-            first_name: getFirstName(),
-            last_name: getLastName(),
+            first_name: firstName,
+            last_name: lastName,
         },
         validationSchema: Yup.object({
             first_name: Yup.string()
@@ -526,6 +517,8 @@ const mapStateToProps = (state) => ({
     agents: state.Agents,
     agent: state.Agents.agent,
     profile: state.UserAgentProfile.userAgentProfile,
+    firstName: state.UserAgentProfile.firstName,
+    lastName: state.UserAgentProfile.lastName,
     user: state.User,
     auth: state.Auth
 });
