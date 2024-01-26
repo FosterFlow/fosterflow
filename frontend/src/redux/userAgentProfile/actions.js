@@ -34,9 +34,9 @@ export const getUserAgentProfileInitState = () => ({
     type: GET_USER_AGENT_PROFILE_INIT_STATE,
 });
 
-export const getUserAgentProfileSuccess = (agent) => ({
+export const getUserAgentProfileSuccess = (profile) => ({
     type: GET_USER_AGENT_PROFILE_SUCCESS,
-    payload: agent
+    payload: profile
 });
 
 export const getUserAgentProfileFailed = (error) => ({

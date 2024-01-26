@@ -22,6 +22,7 @@ import config from '../../config';
 
 const INIT_STATE = {
     userAgentProfile: null,
+    id: 0,
     firstName: '',
     lastName: '',
     activeUserAgentProfileId: config.BASE_MODEL_AGENT_ID,
@@ -57,14 +58,18 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
         case GET_USER_AGENT_PROFILE_INIT_STATE:
             return { 
                 ...state,
+                userAgentProfile: null,
+                id: 0,
+                firstName: '',
+                lastName: '',
                 getUserAgentProfileLoading: false,
                 getUserAgentProfileSuccess: false,
                 getUserAgentProfileErrors: null 
             };
 
         case GET_USER_AGENT_PROFILE_SUCCESS:
-            const userData = action.payload;    
-            const serverAvatar = userData.avatar;
+            const profileData = action.payload;    
+            const serverAvatar = profileData.avatar;
             
             let avatar = defaultAvatarImage; 
             
@@ -74,10 +79,11 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
 
             return { 
                 ...state, 
-                UserAgentProfile: userData,
+                UserAgentProfile: profileData,
                 userAgentProfileAvatar: avatar,
-                firstName: userData.first_name,
-                lastName: userData.last_name,
+                firstName: profileData.first_name,
+                lastName: profileData.last_name,
+                id: profileData.id,
                 getUserAgentProfileLoading: false,
                 getUserAgentProfileSuccess: true,
                 getUserAgentProfileErrors: null 

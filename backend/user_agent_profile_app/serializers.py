@@ -23,7 +23,7 @@ class UserAgentProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserAgentProfile
-        fields = ('user_agent_id', 'first_name', 'last_name', 'avatar')
+        fields = ('user_agent_id', 'first_name', 'last_name', 'avatar', 'id')
 
 
 class UserAgentProfileAvatarSerializer(serializers.ModelSerializer):

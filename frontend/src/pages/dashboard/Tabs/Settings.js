@@ -48,6 +48,7 @@ function Settings(props) {
 
         firstName,
         lastName,
+        profileId,
 
         updateUserAgentProfileData,
         updateUserAgentProfileDataInitState,
@@ -97,25 +98,19 @@ function Settings(props) {
     }
 
     /**
-     * Filling the form after page reloading, once agent information is loaded
+     * Setting the lastName, once we get it from the server
      * 
-     * TODO: need to move agent.last_name, agent.first_name params to the level above, in this case
-     * we could subscribe to these params changing and re-render the form once we get information 
-     * from the server 
     **/
     useEffect(() => {
-        if (!agents.getAgentSuccess) {
-            return;
+        // Check if both firstName and lastName have values
+        if (firstName !== "" && lastName !== "") {
+            personalInfoForm.setValues({
+                ...personalInfoForm.values, // Preserve other form values
+                first_name: firstName,
+                last_name: lastName
+            });
         }
-
-        if (lastName !== "") {
-            personalInfoForm.setFieldValue('last_name', lastName);
-        }
-
-        if (firstName !== "") {
-            personalInfoForm.setFieldValue('first_name', firstName);
-        }
-    }, [agents.getAgentSuccess]);
+    }, [profile]);
 
     const personalInfoForm = useFormik({
         initialValues: {
@@ -132,12 +127,12 @@ function Settings(props) {
         }),
         onSubmit: values => {
             console.log('Settings page personalInfoForm', 'onSubmit', values);
-            if (user.authorizedUser) {
-                updateUserAgentProfileData(user.authorizedUser.id, values);
+            if (profileId !== 0) {
+                updateUserAgentProfileData(profileId, values);
                 return;
             } 
             //TODO: handle error if we don't have active User;
-            console.log ('Settings page personalInfoForm', 'onSubmit error', "No active user");
+            console.log ('Settings page personalInfoForm', 'onSubmit error', "No profile id");
         },
     });
 
@@ -520,6 +515,7 @@ const mapStateToProps = (state) => ({
     profile: state.UserAgentProfile.userAgentProfile,
     firstName: state.UserAgentProfile.firstName,
     lastName: state.UserAgentProfile.lastName,
+    profileId: state.UserAgentProfile.id,
     user: state.User,
     auth: state.Auth
 });
