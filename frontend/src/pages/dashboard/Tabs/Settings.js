@@ -512,7 +512,7 @@ function Settings(props) {
 const mapStateToProps = (state) => ({
     agents: state.Agents,
     agent: state.Agents.agent,
-    profile: state.UserAgentProfile.userAgentProfile,
+    profile: state.UserAgentProfile.profile,
     firstName: state.UserAgentProfile.firstName,
     lastName: state.UserAgentProfile.lastName,
     profileId: state.UserAgentProfile.id,

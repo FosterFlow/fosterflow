@@ -21,7 +21,7 @@ import defaultAvatarImage from "../../assets/images/users/avatar_default.png";
 import config from '../../config';
 
 const INIT_STATE = {
-    userAgentProfile: null,
+    profile: null,
     id: 0,
     firstName: '',
     lastName: '',
@@ -58,7 +58,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
         case GET_USER_AGENT_PROFILE_INIT_STATE:
             return { 
                 ...state,
-                userAgentProfile: null,
+                profile: null,
                 id: 0,
                 firstName: '',
                 lastName: '',
@@ -79,7 +79,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
 
             return { 
                 ...state, 
-                UserAgentProfile: profileData,
+                profile: profileData,
                 userAgentProfileAvatar: avatar,
                 firstName: profileData.first_name,
                 lastName: profileData.last_name,
@@ -116,7 +116,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
         case UPDATE_USER_AGENT_PROFILE_DATA_SUCCESS:
             return { 
                 ...state,
-                UserAgentProfile: action.payload,
+                profile: action.payload,
                 userAgentProfileDataLoading: false,
                 userAgentProfileDataErrors: null,
                 userAgentProfileDataSuccess: true 
