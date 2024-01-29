@@ -32,7 +32,7 @@ function* updateUserAgentProfileDataSaga(action) {
     const { id, data } = action.payload;
     try {
         const response = yield call(api.patch, `/user-agent-profiles/${id}/`, data);
-        yield put(updateUserAgentProfileDataSuccess(response.data));
+        yield put(updateUserAgentProfileDataSuccess(response));
         yield delay(10000);
         yield put(updateUserAgentProfileDataInitState());
     } catch (errors) {

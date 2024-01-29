@@ -68,7 +68,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
                 getUserAgentProfileErrors: null 
             };
 
-        case GET_USER_AGENT_PROFILE_SUCCESS:
+        case GET_USER_AGENT_PROFILE_SUCCESS:{
             const profileData = action.payload;    
             const serverAvatar = profileData.avatar;
             
@@ -89,6 +89,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
                 getUserAgentProfileSuccess: true,
                 getUserAgentProfileErrors: null 
             };
+        }
 
         case GET_USER_AGENT_PROFILE_FAILED:
             return { 
@@ -114,14 +115,28 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
                 userAgentProfileDataSuccess: false 
             };
 
-        case UPDATE_USER_AGENT_PROFILE_DATA_SUCCESS:
+        case UPDATE_USER_AGENT_PROFILE_DATA_SUCCESS:{
+            const profileData = action.payload;    
+            const serverAvatar = profileData.avatar;
+            
+            let avatar = defaultAvatarImage; 
+            
+            if (serverAvatar) {
+                avatar = serverAvatar;
+            }
+
             return { 
-                ...state,
-                profile: action.payload,
+                ...state, 
+                profile: profileData,
+                avatar: avatar,
+                firstName: profileData.first_name,
+                lastName: profileData.last_name,
+                id: profileData.id,
                 userAgentProfileDataLoading: false,
                 userAgentProfileDataErrors: null,
                 userAgentProfileDataSuccess: true 
             };
+        }
 
         case UPDATE_USER_AGENT_PROFILE_DATA_FAILED:
             return { 
