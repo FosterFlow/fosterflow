@@ -13,23 +13,21 @@ import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
 function LeftSidebarMenu(props) {
-    const { agents } = props;
+    const {
+        layoutMode,
+        language, 
+        avatar,
+        setLayoutMode,
+        setLanguage
+    } = props;
     const { t } = useTranslation();
-
-    //TODO: redevelop to flat structure into agent and remove this method
-    function getAgentAvatar (){
-        if (agents) {
-            return agents.avatar;
-        }
-        return "";
-    }
 
     const onChangeLayoutMode = (event) => { 
         event.preventDefault();
-        let layoutMode = props.layoutMode; 
-        layoutMode === "dark" ? layoutMode = "light" : layoutMode = "dark";
+        let newLayoutMode = layoutMode;
+        newLayoutMode === "dark" ? newLayoutMode = "light" : newLayoutMode = "dark";
 
-        props.setLayoutMode(layoutMode);
+        setLayoutMode(newLayoutMode);
     }
 
     const [dropdownProfile, setDropdownProfile] = useState(false);
@@ -68,19 +66,19 @@ function LeftSidebarMenu(props) {
                                 <i className="ri-global-line"></i>
                             </DropdownToggle>
                             <DropdownMenu>
-                                <DropdownItem onClick={() => props.setLanguage('en')} active={props.language === "en"}>
+                                <DropdownItem onClick={() => setLanguage('en')} active={language === "en"}>
                                     <img src={usFlag} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('English')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => props.setLanguage('es')} active={props.language === "es"}>
+                                <DropdownItem onClick={() => setLanguage('es')} active={language === "es"}>
                                     <img src={spain} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Spanish')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => props.setLanguage('de')} active={props.language === "de"}>
+                                <DropdownItem onClick={() => setLanguage('de')} active={language === "de"}>
                                     <img src={germany} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('German')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => props.setLanguage('it')} active={props.language === "it"}>
+                                <DropdownItem onClick={() => setLanguage('it')} active={language === "it"}>
                                     <img src={italy} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Italian')}</span>
                                 </DropdownItem>
-                                <DropdownItem onClick={() => props.setLanguage('ru')} active={props.language === "ru"}>
+                                <DropdownItem onClick={() => setLanguage('ru')} active={language === "ru"}>
                                     <img src={russia} alt="user" className="me-1" height="12" /> <span className="align-middle">{t('Russian')}</span>
                                 </DropdownItem>
                             </DropdownMenu>
@@ -92,7 +90,7 @@ function LeftSidebarMenu(props) {
                         </NavItem>
                         <Dropdown nav isOpen={dropdownProfile} className="nav-item btn-group dropup profile-user-dropdown" toggle={toggleProfile}>
                             <DropdownToggle title={t('Profile')} className="nav-link" tag="a">
-                                <img src={getAgentAvatar()} alt="" className="profile-user rounded-circle" />
+                                <img src={avatar} alt="" className="profile-user rounded-circle" />
                             </DropdownToggle>
                             <DropdownMenu>
                                 <DropdownItem>
@@ -125,7 +123,7 @@ const mapStatetoProps = state => {
     return {
         layoutMode: state.Layout.layoutMode,
         language: state.Layout.language,
-        agents: state.Agents
+        avatar: state.UserAgentProfile.avatar,
     };
 };
 

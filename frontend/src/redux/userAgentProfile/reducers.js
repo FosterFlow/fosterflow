@@ -152,12 +152,12 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
             let updatedAvatar = defaultAvatarImage;
             
             if (newAvatar) {
-                updatedAvatar = config.BACKEND_URL + newAvatar;
+                updatedAvatar = newAvatar;
             }
 
             return { 
                 ...state, 
-                userAgentProfileAvatar: updatedAvatar,
+                avatar: updatedAvatar,
                 userAgentProfileAvatarLoading: false,
                 userAgentProfileAvatarErrors: null,
                 userAgentProfileAvatarSuccess: true
