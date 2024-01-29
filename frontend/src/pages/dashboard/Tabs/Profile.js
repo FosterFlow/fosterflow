@@ -81,7 +81,7 @@ const mapStateToProps = (state) => ({
   profile: state.UserAgentProfile.profile,
   firstName: state.UserAgentProfile.firstName,
   lastName: state.UserAgentProfile.lastName,
-  avatar: state.UserAgentProfile.userAgentProfileAvatar,
+  avatar: state.UserAgentProfile.avatar,
 });
 
 const mapDispatchToProps = {
