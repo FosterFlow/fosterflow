@@ -36,7 +36,7 @@ const INIT_STATE = {
     userAgentProfileDataErrors: null,
     userAgentProfileDataSuccess: false,
 
-    userAgentProfileAvatar: defaultAvatarImage,
+    avatar: defaultAvatarImage,
     userAgentProfileAvatarLoading: false,
     userAgentProfileAvatarErrors: null,
     userAgentProfileAvatarSuccess: false
@@ -62,6 +62,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
                 id: 0,
                 firstName: '',
                 lastName: '',
+                avatar: defaultAvatarImage,
                 getUserAgentProfileLoading: false,
                 getUserAgentProfileSuccess: false,
                 getUserAgentProfileErrors: null 
@@ -80,7 +81,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
             return { 
                 ...state, 
                 profile: profileData,
-                userAgentProfileAvatar: avatar,
+                avatar: avatar,
                 firstName: profileData.first_name,
                 lastName: profileData.last_name,
                 id: profileData.id,

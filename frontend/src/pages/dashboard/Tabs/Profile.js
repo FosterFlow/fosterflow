@@ -78,10 +78,10 @@ const Profile = (props) => {
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
   agent: state.Agents.agent,
-  profile: state.UserAgentProfile.userAgentProfile,
-  avatar: state.UserAgentProfile.userAgentProfileAvatar,
+  profile: state.UserAgentProfile.profile,
   firstName: state.UserAgentProfile.firstName,
-  lastName: state.UserAgentProfile.lastName
+  lastName: state.UserAgentProfile.lastName,
+  avatar: state.UserAgentProfile.userAgentProfileAvatar,
 });
 
 const mapDispatchToProps = {
