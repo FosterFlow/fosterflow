@@ -75,7 +75,7 @@ const UserAgentProfile = (state = INIT_STATE, action) => {
             let avatar = defaultAvatarImage; 
             
             if (serverAvatar) {
-                avatar = config.BACKEND_URL + serverAvatar;
+                avatar = serverAvatar;
             }
 
             return { 

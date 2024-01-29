@@ -43,15 +43,13 @@ function* updateUserAgentProfileDataSaga(action) {
 function* updateUserAgentProfileAvatarSaga(action) {
     const { id, avatar } = action.payload;
     try {
-        let avatarData = new FormData();
-        avatarData.append('avatar', avatar);
-        const response = yield call(api.patch, `/user-agent-profiles/${id}/avatar/`, avatarData, {
+        const response = yield call(api.patch, `/user-agent-profiles/${id}/avatar/`, avatar, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         });
 
-        yield put(updateUserAgentProfileAvatarSuccess(response.data.avatar));
+        yield put(updateUserAgentProfileAvatarSuccess(response.avatar));
         yield delay(10000);
         yield put(updateUserAgentProfileAvatarInitState());
     } catch (error) {

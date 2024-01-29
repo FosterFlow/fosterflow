@@ -86,11 +86,13 @@ function Settings(props) {
     
         if (avatarEditorRef.current) {
             const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+            
+            // Specify the MIME type for the Blob
             canvas.toBlob((blob) => {
-                // You now have the cropped image as a blob
+                // You now have the cropped image as a blob with an extension
                 
                 const formData = new FormData();
-                formData.append('avatar', blob);
+                formData.append('avatar', blob, 'avatar.png'); // Add a file name with extension
     
                 if (profileId) {
                     updateUserAgentProfileAvatar(profileId, formData);
@@ -98,7 +100,7 @@ function Settings(props) {
                 }
                 
                 // TODO: Handle any errors or other scenarios here
-            });
+            }, 'image/png'); // MIME type for PNG
         }
     }
 
@@ -279,18 +281,18 @@ function Settings(props) {
                                         <FormGroup>
                                             <Label>{t('Photo')}</Label>
                                             <div className='pb-3'>
+                                                <AvatarEditor
+                                                    ref={avatarEditorRef}
+                                                    image={getAgentAvatar ()} 
+                                                    className="rounded-circle avatar-lg img-thumbnail"
+                                                    width={150}
+                                                    height={150}
+                                                    border={0}
+                                                    color={[255, 255, 255, 0.6]} // RGBA
+                                                    scale={1}
+                                                    rotate={0}
+                                                />
                                             </div>
-                                            <AvatarEditor
-                                                ref={avatarEditorRef}
-                                                image={getAgentAvatar ()} 
-                                                className="rounded-circle avatar-lg img-thumbnail"
-                                                width={150}
-                                                height={150}
-                                                border={0}
-                                                color={[255, 255, 255, 0.6]} // RGBA
-                                                scale={1}
-                                                rotate={0}
-                                            />
                                             <Input
                                                 id="exampleFile"
                                                 name="file"
