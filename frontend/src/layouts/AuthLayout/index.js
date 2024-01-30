@@ -41,7 +41,7 @@ const Index = (props) => {
         getUserAgents,
         sendConfirmationEmail,
         getUserAgentProfile,
-        agent,
+        userAgent,
         profile
     } = props;
 
@@ -78,15 +78,15 @@ const Index = (props) => {
     }, [emailVerifyToken]);
 
     useEffect(() => {
-        if (agent === null) {
+        if (userAgent === null) {
           return
         }
     
         if (profile === null) {
-          getUserAgentProfile(agent.id)
+          getUserAgentProfile(userAgent.id)
         }
     
-    }, [profile, agent]);
+    }, [profile, userAgent]);
 
 
     return (
@@ -211,7 +211,7 @@ const mapStateToProps = state => {
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
-        agent: state.Agents.agent,
+        userAgent: state.Agents.userAgent,
         profile: state.UserAgentProfile.profile,
         authorizedUser: state.User.authorizedUser,
         layoutMode: state.Layout.layoutMode

@@ -39,7 +39,7 @@ import AvatarEditor from 'react-avatar-editor'
 function Settings(props) {
     const { t } = useTranslation();
     const { 
-        agent,
+        userAgent,
         profile,
         user,
         auth,
@@ -70,7 +70,6 @@ function Settings(props) {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const avatarEditorRef = useRef(null);
 
-    //TODO: redevelop to flat structure into agent and remove this method
     function getAgentAvatar (){
         if (selectedAvatar !== null){
             return URL.createObjectURL(selectedAvatar);
@@ -242,8 +241,8 @@ function Settings(props) {
 
                     <div className="user-profile-sroll-area">
                         {
-                            (agent && agent.errors) &&
-                            <Alert color="danger">{agent.errors}</Alert>
+                            (userAgent && userAgent.errors) &&
+                            <Alert color="danger">{userAgent.errors}</Alert>
                         }
                         {
                             (profile && profile.errors) &&
@@ -505,7 +504,7 @@ function Settings(props) {
 
 //TODO: suscribe only to required fields
 const mapStateToProps = (state) => ({
-    agent: state.Agents.agent,
+    userAgent: state.Agents.userAgent,
     profile: state.UserAgentProfile.profile,
     firstName: state.UserAgentProfile.firstName,
     lastName: state.UserAgentProfile.lastName,

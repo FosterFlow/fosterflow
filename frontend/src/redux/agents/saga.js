@@ -9,7 +9,6 @@ import {
     SET_ACTIVE_AGENT,
     GET_AGENTS,
     GET_USER_AGENTS,   
-    GET_AGENT, 
     UPDATE_AGENT_DATA, 
     UPDATE_AGENT_AVATAR 
 } from './constants';
@@ -22,9 +21,6 @@ import {
     
     getUserAgentsSuccess,
     getUserAgentsFailed,
-
-    getAgentSuccess,
-    getAgentFailed,
 
     updateAgentDataInitState,
     updateAgentDataSuccess,
@@ -59,19 +55,9 @@ function* getAgentsSaga() {
 function* getUserAgentsSaga() {
     try {
         const response = yield call(api.get, `/agents/self/`);
-        yield put(getAgentSuccess(response[0]));
+        yield put(getUserAgentsSuccess(response));
     } catch (errors) {
-        yield put(getAgentFailed(errors));
-    }
-}
-
-//TODO does saga reach API by each user request?
-function* getAgentSaga({ payload: { id } }) {
-    try {
-        const response = yield call(api.get, `/agents/${id}/`);
-        yield put(getAgentSuccess(response));
-    } catch (error) {
-        yield put(getAgentFailed(error));
+        yield put(getUserAgentsFailed(errors));
     }
 }
 
@@ -109,7 +95,6 @@ export default function* agentSaga() {
     yield takeEvery(SET_ACTIVE_AGENT, setActiveAgentSaga);
     yield takeEvery(GET_AGENTS, getAgentsSaga);
     yield takeEvery(GET_USER_AGENTS, getUserAgentsSaga);
-    yield takeEvery(GET_AGENT, getAgentSaga);
     yield takeEvery(UPDATE_AGENT_DATA, updateAgentDataSaga);
     yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatarSaga);
 }

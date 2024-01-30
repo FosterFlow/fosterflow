@@ -13,11 +13,6 @@ import {
     GET_USER_AGENTS_SUCCESS,
     GET_USER_AGENTS_FAILED,
 
-    GET_AGENT,
-    GET_AGENT_INIT_STATE,
-    GET_AGENT_SUCCESS,
-    GET_AGENT_FAILED,
-    
     UPDATE_AGENT_DATA,
     UPDATE_AGENT_DATA_INIT_STATE,
     UPDATE_AGENT_DATA_SUCCESS,
@@ -101,25 +96,6 @@ export const getUserAgentsSuccess = (agents) => ({
 export const getUserAgentsFailed = (errors) => ({
     type: GET_USER_AGENTS_FAILED,
     payload: errors
-});
-
-export const getAgent = (id) => ({
-    type: GET_AGENT,
-    payload: { id }
-});
-
-export const getAgentInitState = () => ({
-    type: GET_AGENT_INIT_STATE,
-});
-
-export const getAgentSuccess = (agent) => ({
-    type: GET_AGENT_SUCCESS,
-    payload: agent
-});
-
-export const getAgentFailed = (error) => ({
-    type: GET_AGENT_FAILED,
-    payload: error
 });
 
 export const updateAgentData = (id, data) => ({

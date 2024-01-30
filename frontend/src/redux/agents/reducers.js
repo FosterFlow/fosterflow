@@ -35,18 +35,13 @@ import defaultAvatarImage from  "../../assets/images/users/avatar_default.png";
 import config from '../../config';
 
 const INIT_STATE = {
-    //TODO: rename param names according to agents / current user/ current model 
-    
-    //current user's agent
-    agent: null,
-
     //current ML model
     activeAgentId: config.BASE_MODEL_AGENT_ID,
     activeAgent: null,
 
     agents: [],
-    //Agents, that represents authorized user, currently it's only one
-    userAgents: [],
+    //Agent, that represents authorized user, currently it's only one
+    userAgent: null,
 
     setActiveAgentLoading: false,
     setActiveAgentSucess: false,
@@ -168,7 +163,7 @@ const Agents = (state = INIT_STATE, action) => {
         case GET_USER_AGENTS_INIT_STATE:
             return { 
                 ...state,
-                userAgents: [], 
+                userAgent: null, 
                 getUserAgentLoading: false,
                 getUserAgentSucess: false,
                 getUserAgentErrors: null, 
@@ -177,7 +172,7 @@ const Agents = (state = INIT_STATE, action) => {
         case GET_USER_AGENTS_SUCCESS: {
             return { 
                 ...state, 
-                userAgents: action.payload,
+                userAgent: action.payload[0],
                 getUserAgentLoading: false,
                 getUserAgentSucess: true,
                 getUserAgentErrors: null, 
@@ -192,47 +187,6 @@ const Agents = (state = INIT_STATE, action) => {
                 getUserAgentErrors: action.payload, 
             };
             
-        case GET_AGENT:
-            return { 
-                ...state, 
-                getAgentLoading: true,
-                getAgentSuccess: false,
-                getAgentErrors: null, 
-            }
-
-        case GET_AGENT_INIT_STATE:
-            return { 
-                ...state, 
-                getAgentLoading: false,
-                getAgentSuccess: false,
-                getAgentErrors: null, 
-            }
-        
-        case GET_AGENT_SUCCESS: {
-            const serverAvatar = action.payload.avatar;
-            let avatar = defaultAvatarImage; 
-            
-            if (serverAvatar) {
-                avatar = config.BACKEND_URL + serverAvatar
-            }
-
-            return { 
-                ...state, 
-                agent: action.payload,
-                avatar: avatar, 
-                getAgentLoading: false,
-                getAgentSuccess: true,
-                getAgentErrors: null, 
-            };
-        }
-        case GET_AGENT_FAILED:
-            return { 
-                ...state,
-                getAgentLoading: false,
-                getAgentSuccess: false,
-                getAgentErrors: action.payload, 
-            };
-        
         case UPDATE_AGENT_DATA:
             return { 
                 ...state,
