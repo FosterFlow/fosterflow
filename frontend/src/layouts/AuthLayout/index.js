@@ -12,7 +12,8 @@ import {
     confirmEmail, 
     sendConfirmationEmail, 
     getAuthorizedUser, 
-    getUserAgents
+    getUserAgents,
+    getUserAgentProfile
 } from '../../redux/actions';
 import config from '../../config';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +39,10 @@ const Index = (props) => {
 
         getAuthorizedUser,
         getUserAgents,
-        sendConfirmationEmail
+        sendConfirmationEmail,
+        getUserAgentProfile,
+        agent,
+        profile
     } = props;
 
     if (layoutMode){
@@ -72,6 +76,18 @@ const Index = (props) => {
         } 
         confirmEmail(emailVerifyToken);
     }, [emailVerifyToken]);
+
+    useEffect(() => {
+        if (agent === null) {
+          return
+        }
+    
+        if (profile === null) {
+          getUserAgentProfile(agent.id)
+        }
+    
+    }, [profile, agent]);
+
 
     return (
         <React.Fragment>
@@ -195,7 +211,8 @@ const mapStateToProps = state => {
         confirmEmailLoading,
         confirmEmailSuccess,
         confirmEmailErrors,
-
+        agent: state.Agents.agent,
+        profile: state.UserAgentProfile.profile,
         authorizedUser: state.User.authorizedUser,
         layoutMode: state.Layout.layoutMode
     };
@@ -205,7 +222,8 @@ const mapDispatchToProps = {
     confirmEmail,
     sendConfirmationEmail,
     getAuthorizedUser,
-    getUserAgents
+    getUserAgents,
+    getUserAgentProfile
   };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Index));

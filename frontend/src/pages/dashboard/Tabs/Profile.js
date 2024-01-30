@@ -1,35 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import { useTranslation } from "react-i18next";
-import { 
-  getUserAgentProfile
-} from "../../../redux/actions";
 
 const Profile = (props) => {
   /* intilize t variable for multi language implementation */
   const { 
-    agent,
     profile,
     avatar,
     firstName,
-    lastName,
-    getUserAgentProfile
+    lastName
   } = props;
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (agent === null) {
-      return
-    }
-
-    if (profile === null) {
-      getUserAgentProfile(agent.id)
-    }
-
-}, [profile, agent]);
 
   function fullName (){
     if (profile !== null) {
@@ -77,15 +61,10 @@ const Profile = (props) => {
 
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = (state) => ({
-  agent: state.Agents.agent,
   profile: state.UserAgentProfile.profile,
   firstName: state.UserAgentProfile.firstName,
   lastName: state.UserAgentProfile.lastName,
   avatar: state.UserAgentProfile.avatar,
 });
 
-const mapDispatchToProps = {
-  getUserAgentProfile
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Profile));
+export default withRouter(connect(mapStateToProps)(Profile));

@@ -32,8 +32,7 @@ import {
     changePasswordInitState,
     changePasswordFailure,
 
-    updateUserAgentProfileAvatar,
-    getUserAgentProfile 
+    updateUserAgentProfileAvatar
 } from '../../../redux/actions';
 import AvatarEditor from 'react-avatar-editor'
 
@@ -67,7 +66,6 @@ function Settings(props) {
         changePasswordFailure,
         
         updateUserAgentProfileAvatar,
-        getUserAgentProfile
     } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const avatarEditorRef = useRef(null);
@@ -233,17 +231,6 @@ function Settings(props) {
 
         changePasswordFailure(errors);
     }, [securityForm.errors]);
-
-    useEffect(() => {
-        if (agent === null) {
-          return
-        }
-    
-        if (profile === null) {
-          getUserAgentProfile(agent.id)
-        }
-    
-    }, [profile, agent]);
 
     return (
         <React.Fragment>
@@ -538,13 +525,10 @@ const mapDispatchToProps = {
     updateUserAgentProfileData,
     updateUserAgentProfileDataInitState,
     updateUserAgentProfileDataFailed,
-
     changePassword,
     changePasswordInitState,
     changePasswordFailure,
-
-    updateUserAgentProfileAvatar,
-    getUserAgentProfile
+    updateUserAgentProfileAvatar    
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));
