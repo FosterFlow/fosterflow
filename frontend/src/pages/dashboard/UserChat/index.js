@@ -19,8 +19,6 @@ import {
     fetchMessages
 } from "../../../redux/chat/actions";
 
-
-
 function UserChat(props) {
     const chatWindowRef = useRef();
     const userWasAtBottomRef = useRef(true);
@@ -96,7 +94,7 @@ function UserChat(props) {
             {children}
           </code>
         );
-      }
+    }
     
     function TableWrapper({node, ...props}) {
         return (
@@ -109,12 +107,12 @@ function UserChat(props) {
     function handleChatScroll() {
         if (chatWindowRef.current !== null &&
             userWasAtBottomRef.current !== null){
-                const { 
-                    scrollHeight, 
-                    scrollTop, 
-                    clientHeight 
-                } = chatWindowRef.current;
-                userWasAtBottomRef.current = (Math.ceil(scrollHeight - Math.floor(scrollTop)) >= clientHeight);
+                const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
+        
+                // Determine if the user is at the bottom of the chat window
+                // The sum of scrollTop and clientHeight should be equal to scrollHeight when at the bottom
+                // Using Math.abs to account for fractional differences in measurements
+                userWasAtBottomRef.current = Math.abs(scrollTop + clientHeight - scrollHeight) < 1;
         }
     };
 
