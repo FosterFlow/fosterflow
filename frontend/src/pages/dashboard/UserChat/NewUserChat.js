@@ -26,7 +26,8 @@ function UserChat(props) {
         getAgents,
         authorizedUser,
         agents,
-        addChatErrors
+        addChatErrors,
+        setActiveAgent
     } = props;
     const supportEmail =  config.SUPPORT_EMAIL;
     const location = useLocation();

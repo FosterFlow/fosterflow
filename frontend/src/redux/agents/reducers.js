@@ -36,7 +36,7 @@ import config from '../../config';
 
 const INIT_STATE = {
     //current ML model
-    activeAgentId: config.BASE_MODEL_AGENT_ID,
+    activeAgentId: Number(config.BASE_MODEL_AGENT_ID),
     activeAgent: null,
 
     agents: [],
@@ -119,7 +119,7 @@ const Agents = (state = INIT_STATE, action) => {
         case SET_ACTIVE_AGENT:
             return { 
                 ...state, 
-                activeAgentId: action.payload,
+                activeAgentId: Number(action.payload),
                 setActiveAgentLoading: false,
                 setActiveAgentSucess: false,
                 setActiveAgentErrors: null,
