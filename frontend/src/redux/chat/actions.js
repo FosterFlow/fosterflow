@@ -160,6 +160,7 @@ export const chatInit = () => ({
   });
 
   export const sendMessage = (messageData) => {
+    //Using message hash we can identify which message request websockets chunks are related to  
     const messageHash = new Date().getTime().toString() + Math.floor(Math.random() * 1000000).toString();
     return {
       type: SEND_MESSAGE,

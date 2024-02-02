@@ -224,6 +224,7 @@ function UserChat(props) {
                                         </React.Fragment>
                                     )
                                 }
+                                {/* List of missages that we are sending to the server, we show loader for them */}
                                 {
                                     relevantSendingMessages.map((message, key) =>
                                         <React.Fragment key={key}>

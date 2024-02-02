@@ -271,6 +271,7 @@ const Chat = (state = INIT_STATE, action) => {
               return {
                 ...state,
                 sendMessageErrors: null,
+                //List of messages, for which we didn't get an approval from server, that they were added to the database.
                 sendingMessagesQueue: [...state.sendingMessagesQueue, action.payload]
               };
         }
@@ -287,10 +288,23 @@ const Chat = (state = INIT_STATE, action) => {
                 message => message.messageHash !== action.payload.messageHash
               );
 
+            const existingMessagesMap = state.messages.reduce((map, message) => {
+                map[message.id] = message;
+                return map;
+            }, {});
+
+            //I did to rewrite existing messages with same ids to do not duploicate them.
+            //It's relevant when we create a new chat.
+            //TODO: in case f the new chat we don't have to make an additional API request for messages list
+            const newMessage = action.payload
+            existingMessagesMap[newMessage.id] = newMessage;
+
+            const updatedMessages = Object.values(existingMessagesMap);
+
             return {
                 ...state,
                 sendMessageErrors: null,
-                messages: [...state.messages, action.payload],
+                messages: updatedMessages,
                 sendingMessagesQueue: filteredQueue
             }; 
         }

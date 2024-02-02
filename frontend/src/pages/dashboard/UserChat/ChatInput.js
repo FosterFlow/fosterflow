@@ -72,7 +72,9 @@ function ChatInput(props) {
             return;
         }
 
-        if (isNewChat || isAgentsPage){
+        const newOrAgentChat = isNewChat || isAgentsPage;
+
+        if (newOrAgentChat){
             addChat({
                 "addressee_agent_id": activeAgentId, 
                 "owner_agent_id": userAgent.id,
