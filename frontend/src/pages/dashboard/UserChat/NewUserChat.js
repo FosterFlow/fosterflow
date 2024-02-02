@@ -26,7 +26,8 @@ function UserChat(props) {
         authorizedUser,
         agents,
         addChatErrors,
-        setActiveAgent
+        setActiveAgent,
+        activeAgent
     } = props;
     const supportEmail =  config.SUPPORT_EMAIL;
     const location = useLocation();
@@ -56,7 +57,8 @@ function UserChat(props) {
                         
                         <Card className="border">
                             <CardHeader>
-                                {t('Agents')}
+                                {agentId === 0 && `${t('Choose agent for the new chat')}:`} 
+                                {activeAgent !== null && `${t('Agent')}: ${activeAgent.name}`}
                             </CardHeader>
                             <CardBody>
                                 <div className="agent-tiles-container">
@@ -107,6 +109,7 @@ const mapStateToProps = (state) => {
         addChatErrors: state.Chat.addChatErrors,
         authorizedUser: state.User.authorizedUser,
         agents: state.Agents.agents,
+        activeAgent: state.Agents.activeAgent,
     }
 };
 

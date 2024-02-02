@@ -37,7 +37,7 @@ function* setActiveAgentSaga(action) {
     const agentId = action.payload;
 
     if (agentId === 0) {
-        put(setActiveAgentinitState());
+        yield put(setActiveAgentinitState());
         return; 
     }
 

@@ -122,6 +122,18 @@ function ChatInput(props) {
         }
     }
 
+    function getPlaceHolder () {
+        if (fetchMessagesLoading) {
+            return t('Loading chat history') + '...';
+        }
+        
+        if (activeAgentId === 0) {
+            return t('Choose agent for the new chat') + '...';
+        }
+        
+        return t('Enter message') + '...';   
+    }
+
     return (
         <React.Fragment>
             <div className="chat-input">
@@ -132,14 +144,8 @@ function ChatInput(props) {
                         onChange={handleChange} 
                         onKeyDown={handleKeyDown}
                         className="form-control form-control-lg bg-light border-light" 
-                        placeholder={
-                            fetchMessagesLoading ? (
-                                t('Loading chat history') + '...'
-                            ) : (
-                                t('Enter message') + '...'   
-                            )
-                        } 
-                        disabled={fetchMessagesLoading}
+                        placeholder={getPlaceHolder()} 
+                        disabled={fetchMessagesLoading || activeAgentId === 0}
                     />
                         <Button 
                             onClick={(event) => handleButtonClick(event, textMessage)} 

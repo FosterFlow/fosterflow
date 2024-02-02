@@ -43,14 +43,18 @@ export const agentInit = () => ({
     type: AGENT_INIT,
 });
 
-export const setActiveAgent = (agentId) => ({
-    type: SET_ACTIVE_AGENT,
-    payload: agentId
-});
+export const setActiveAgent = (agentId) => {
+    return {
+        type: SET_ACTIVE_AGENT,
+        payload: agentId
+    };
+};
 
-export const setActiveAgentinitState = () => ({
-    type: SET_ACTIVE_AGENT_INIT_STATE,
-});
+export const setActiveAgentinitState = () => {
+    return {
+        type: SET_ACTIVE_AGENT_INIT_STATE,
+    };
+};
 
 export const setActiveAgentSuccess = (agent) => ({
     type: SET_ACTIVE_AGENT_SUCCESS,
