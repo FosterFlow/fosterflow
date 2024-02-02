@@ -95,6 +95,12 @@ function ChatInput(props) {
     useEffect(() => {
         if (isAgentsPage || isNewChat) {
             const activeChatDataId = activeChatData?.id || 0;
+            
+            if (activeChatDataId === 0) {
+                return;
+            }
+
+            //Redirect to specific chat page once message was sent
             if (currentActiveChatId !== activeChatDataId) {
                 setSkipFetchMessages(true);
                 props.router.navigate(`/chats/${activeChatDataId}`);
