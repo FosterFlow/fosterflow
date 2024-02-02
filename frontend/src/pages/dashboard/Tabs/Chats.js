@@ -150,9 +150,6 @@ const Chats = (props) => {
                                                 : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
                                             }
                                             <p>Agent: {agent ? agent.name : 'Unknown'}</p>
-                                            <p className="chat-user-message text-truncate mb-0">
-                                                {t('Click to open chat')}
-                                            </p>
                                         </Link>
                                 </li>
                             })
