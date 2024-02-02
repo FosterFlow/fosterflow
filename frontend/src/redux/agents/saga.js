@@ -13,6 +13,7 @@ import {
     UPDATE_AGENT_AVATAR 
 } from './constants';
 import {
+    setActiveAgentinitState,
     setActiveAgentSuccess,
     setActiveAgentFailed,
 
@@ -34,6 +35,11 @@ const api = apiAuthorizedClient;
 
 function* setActiveAgentSaga(action) {
     const agentId = action.payload;
+
+    if (agentId === 0) {
+        put(setActiveAgentinitState());
+        return; 
+    }
 
     try {
         const response = yield call(api.get, `/agents/${agentId}/`);

@@ -6,7 +6,6 @@ import {
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import ChatInput from "./ChatInput";
-import UserHead from "./UserHead";
 import {
     Alert, 
     Card, 
@@ -52,7 +51,6 @@ function UserChat(props) {
             
             <div className={`user-chat user-chat-new ${isNewChat ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
-                    <UserHead />
                     <div className="user-chat-conversation" id="messages">
                         {/* Styled Selector using Reactstrap */}
                         
