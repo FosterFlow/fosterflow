@@ -16,8 +16,9 @@ import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
 import config from '../../../config';
 import { 
-    fetchMessages
-} from "../../../redux/chat/actions";
+    fetchMessages,
+    setActiveAgent
+} from "../../../redux/actions";
 
 function UserChat(props) {
     const chatWindowRef = useRef();
@@ -28,7 +29,9 @@ function UserChat(props) {
         messages,
         fetchMessagesLoading,
         fetchMessagesErrors, 
-        activeChatId, 
+        activeChatId,
+        activeChatData, 
+        setActiveAgent,
         authorizedUser,
         userAgent,
         addChatRequestMessage,
@@ -143,13 +146,18 @@ function UserChat(props) {
                 chatWindowRef.current.scrollTop = scrollHeight;
             }
         }
+
+        const chatAgentId = activeChatData?.addressee_agent_id;
+        if (chatAgentId) {
+            setActiveAgent(chatAgentId);
+        }
     }, [messages]);
 
     useEffect(() => {
         window.addEventListener('resize', debounceHandleWindowResize);
         messageMaxMidthUpdate ();
         return () => {
-        window.removeEventListener('resize', debounceHandleWindowResize);
+            window.removeEventListener('resize', debounceHandleWindowResize);
         };
     }, []);
 
@@ -278,6 +286,7 @@ const mapStateToProps = (state) => {
         fetchMessagesLoading,
         fetchMessagesErrors,
         activeChatId,
+        activeChatData,
         chatWindow,
         addChatRequestMessage
     } = state.Chat;
@@ -289,15 +298,17 @@ const mapStateToProps = (state) => {
         fetchMessagesLoading,
         fetchMessagesErrors,
         activeChatId,
+        activeChatData,
         chatWindow,
         addChatRequestMessage,
         authorizedUser: state.User.authorizedUser,
-        userAgent: state.Agents.userAgent
+        userAgent: state.Agents.userAgent,
     }
 };
 
 const mapDispatchToProps = {
-    fetchMessages
+    fetchMessages,
+    setActiveAgent
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));

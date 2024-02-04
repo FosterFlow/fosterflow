@@ -28,9 +28,6 @@ class RequestHandler:
         elif agent.ai_model.title == 'GPT-4-8k' and agent.is_active:
             adapter = GptAdapter(Gpt48KInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif agent.ai_model.title == 'GPT-4-32k' and agent.is_active:
-            adapter = GptAdapter(Gpt432KInterface, ResponseWebsocketInterface)
-            adapter.generate_response(sent_message)
 
 
 class ResponseWebsocketInterface:
@@ -142,16 +139,6 @@ class Gpt48KInterface:
     def create_generator(self, messages):
         response = openai.ChatCompletion.create(
             model="gpt-4",
-            messages=messages,
-            stream=True
-        )
-        return response
-
-
-class Gpt432KInterface:
-    def create_generator(self, messages):
-        response = openai.ChatCompletion.create(
-            model="gpt-4-32k",
             messages=messages,
             stream=True
         )

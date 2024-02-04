@@ -14,7 +14,7 @@ function UserHead(props) {
     const {
         activeChatId,
         agents,
-        activeChatData,
+        activeAgent,
         actionDeleteChat,
         router
     } = props;
@@ -23,10 +23,6 @@ function UserHead(props) {
         event.preventDefault();
         actionDeleteChat(activeChatId);
         router.navigate("/chats/");
-    }
-
-    function getChatAdresseeAgent (){
-        return agents.find(agent => agent.id === activeChatData?.addressee_agent_id);
     }
 
     return (
@@ -39,7 +35,7 @@ function UserHead(props) {
                         </Link>
                         {
                         (!isNewChat && agents.length > 0) && (
-                            <span className="user-chat-agent pt-2 ps-2">Agent: {getChatAdresseeAgent()?.name}</span>
+                            <span className="user-chat-agent pt-2 ps-2">Agent: {activeAgent?.name}</span>
                         )}
                     </Col>
                     {/* TODO: don't show on intial "/chats" page */}
@@ -62,7 +58,7 @@ const mapStateToProps = (state) => {
     return { 
         activeChatId: state.Chat.activeChatId,
         agents: state.Agents.agents,
-        activeChatData: state.Chat.activeChatData
+        activeAgent: state.Agents.activeAgent
     };
 };
 
