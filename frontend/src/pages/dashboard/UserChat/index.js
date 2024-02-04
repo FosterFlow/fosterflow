@@ -141,23 +141,18 @@ function UserChat(props) {
     useEffect(() => {
         if (Array.isArray(messages) && messages.length > 0){
             
-            if (userWasAtBottomRef.current){
+                        if (userWasAtBottomRef.current){
                 const scrollHeight = chatWindowRef.current.scrollHeight;
                 chatWindowRef.current.scrollTop = scrollHeight;
             }
         }
-
-        const chatAgentId = activeChatData?.addressee_agent_id;
-        if (chatAgentId) {
-            setActiveAgent(chatAgentId);
-        }
     }, [messages]);
 
     useEffect(() => {
-        window.addEventListener('resize', debounceHandleWindowResize);
-        messageMaxMidthUpdate ();
-        return () => {
-            window.removeEventListener('resize', debounceHandleWindowResize);
+                window.addEventListener('resize', debounceHandleWindowResize);
+    messageMaxMidthUpdate ();
+            return () => {
+                        window.removeEventListener('resize', debounceHandleWindowResize);
         };
     }, []);
 
@@ -170,6 +165,11 @@ function UserChat(props) {
             return; 
         }
 
+        const chatAgentId = activeChatData?.addressee_agent_id;
+        if (chatAgentId) {
+            setActiveAgent(chatAgentId);
+        }
+
         fetchMessages(activeChatId);
     }, [authorizedUser, activeChatId]);
 
@@ -180,7 +180,7 @@ function UserChat(props) {
                     <UserHead />
                     <div
                         ref={chatWindowRef}
-                        onScroll={debouncedHandleChatScroll} 
+onScroll={debouncedHandleChatScroll} 
                         className="user-chat-conversation"
                         id="messages">
                             {  fetchMessagesLoading &&
