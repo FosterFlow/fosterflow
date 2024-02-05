@@ -32,8 +32,6 @@ import {
   fetchMessagesSuccess,
   fetchMessagesFailed,
 
-  setSkipFetchMessages,
-
   sendMessage,
   sendMessageInitState,
   sendMessageSuccess,
@@ -100,13 +98,6 @@ function* deleteChatSaga(action) {
 
 function* fetchMessagesSaga(action) {
   try {
-    const messagesFetchingSkipped = yield select(state => state.Chat.skipMessagesFetching);
-
-    if (messagesFetchingSkipped) {
-      setSkipFetchMessages(false);
-      return;
-    }
-    
     const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
     yield put(fetchMessagesSuccess(messages));
     yield delay(5000);

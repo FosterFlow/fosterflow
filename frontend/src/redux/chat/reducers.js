@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import {
     CHAT_INIT,
+
+    SET_ACTIVE_CHAT,
+    SET_SKIP_FETCH_MESSAGES,
     
     FETCH_CHATS,
     FETCH_CHATS_INIT_STATE,
@@ -34,8 +37,6 @@ import {
 
     RECEIVE_MESSAGE_CHUNK,
     RECEIVE_MESSAGE_CHUNK_FAILED,
-    
-    SET_ACTIVE_CHAT,
 } from './constants';
 
 const INIT_STATE = {
@@ -98,6 +99,12 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsLoading: true,
                 fetchChatsSuccess: false,
                 fetchChatsErrors: null,
+            };
+
+        case SET_SKIP_FETCH_MESSAGES:
+            return {
+                ...state,
+                skipMessagesFetching: action.payload,
             };
 
         case FETCH_CHATS_INIT_STATE:

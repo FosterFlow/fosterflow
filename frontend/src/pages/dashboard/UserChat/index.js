@@ -17,7 +17,8 @@ import ChatInput from "./ChatInput";
 import config from '../../../config';
 import { 
     fetchMessages,
-    setActiveAgent
+    setActiveAgent,
+    setSkipFetchMessages
 } from "../../../redux/actions";
 
 function UserChat(props) {
@@ -36,7 +37,9 @@ function UserChat(props) {
         userAgent,
         addChatRequestMessage,
         fetchMessages,
-        chatWindow
+        chatWindow,
+        skipMessagesFetching,
+        setSkipFetchMessages
     } = props;
     const { t } = useTranslation();
     //TODO: review if it's neccesary to store all messages into store
@@ -130,9 +133,13 @@ function UserChat(props) {
      * param rerender {boolean}
      */
     function messageMaxMidthUpdate (rerender) {
-        if (rerender || (messageMaxWidth === 0 && chatWindowRef.current)) {
-        const width = chatWindowRef.current.clientWidth - 32;
-        setMessageMaxWidth(width);
+        if (chatWindowRef.current === null){
+            return;
+        }
+
+        if (rerender || messageMaxWidth === 0) {
+            const width = chatWindowRef.current.clientWidth - 32;
+            setMessageMaxWidth(width);
         }
     }
 
@@ -141,7 +148,8 @@ function UserChat(props) {
     useEffect(() => {
         if (Array.isArray(messages) && messages.length > 0){
             
-                        if (userWasAtBottomRef.current){
+            console.log ("userWasAtBottomRef.current", userWasAtBottomRef.current);
+            if (userWasAtBottomRef.current){
                 const scrollHeight = chatWindowRef.current.scrollHeight;
                 chatWindowRef.current.scrollTop = scrollHeight;
             }
@@ -149,10 +157,22 @@ function UserChat(props) {
     }, [messages]);
 
     useEffect(() => {
-                window.addEventListener('resize', debounceHandleWindowResize);
-    messageMaxMidthUpdate ();
-            return () => {
-                        window.removeEventListener('resize', debounceHandleWindowResize);
+        // Add scroll event listener on chat window
+        chatWindowRef.current.addEventListener('scroll', debouncedHandleChatScroll);
+    
+        // Add resize event listener on window
+        window.addEventListener('resize', debounceHandleWindowResize);
+    
+        // Call messageMaxMidthUpdate initially
+        messageMaxMidthUpdate();
+    
+        // Return cleanup function
+        return () => {
+            // Clean up both event listeners
+            if (chatWindowRef.current !== null) {
+                chatWindowRef.current.removeEventListener('scroll', debouncedHandleChatScroll);
+            }
+            window.removeEventListener('resize', debounceHandleWindowResize);
         };
     }, []);
 
@@ -170,6 +190,11 @@ function UserChat(props) {
             setActiveAgent(chatAgentId);
         }
 
+        if (skipMessagesFetching) {
+          setSkipFetchMessages(false);
+          return;
+        }
+
         fetchMessages(activeChatId);
     }, [authorizedUser, activeChatId]);
 
@@ -180,7 +205,6 @@ function UserChat(props) {
                     <UserHead />
                     <div
                         ref={chatWindowRef}
-onScroll={debouncedHandleChatScroll} 
                         className="user-chat-conversation"
                         id="messages">
                             {  fetchMessagesLoading &&
@@ -288,7 +312,8 @@ const mapStateToProps = (state) => {
         activeChatId,
         activeChatData,
         chatWindow,
-        addChatRequestMessage
+        addChatRequestMessage,
+        skipMessagesFetching
     } = state.Chat;
 
     return {
@@ -301,6 +326,7 @@ const mapStateToProps = (state) => {
         activeChatData,
         chatWindow,
         addChatRequestMessage,
+        skipMessagesFetching,
         authorizedUser: state.User.authorizedUser,
         userAgent: state.Agents.userAgent,
     }
@@ -308,7 +334,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     fetchMessages,
-    setActiveAgent
+    setActiveAgent,
+    setSkipFetchMessages
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));
