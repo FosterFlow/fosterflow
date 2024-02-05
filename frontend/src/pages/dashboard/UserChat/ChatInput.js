@@ -20,7 +20,7 @@ function ChatInput(props) {
     const { t } = useTranslation();
     const {
         activeAgentId,
-        activeChatData,
+        activeChat,
         authorizedUser,
         userAgent,
         fetchMessagesLoading,
@@ -39,7 +39,7 @@ function ChatInput(props) {
     const handleChange = event => {
         settextMessage(event.target.value);
     }
-    const [currentActiveChatId] = useState(activeChatData?.id || 0);
+    const [currentActiveChatId] = useState(activeChat?.id || 0);
     const formSubmit = (event, textMessage) => {
         if (isMobileDevice()) {
             //Form submit happen when user clicks to Enter button.
@@ -86,8 +86,8 @@ function ChatInput(props) {
         }
         
         sendMessage({
-            "addressee_agent_id": activeChatData.addressee_agent_id,
-            "chat_id": activeChatData.id,
+            "addressee_agent_id": activeChat.addressee_agent_id,
+            "chat_id": activeChat.id,
             "message_text": trimmedText,
             "owner_agent_id": userAgent.id
         });
@@ -96,7 +96,7 @@ function ChatInput(props) {
 
     useEffect(() => {
         if (isAgentsPage || isNewChat) {
-            const activeChatDataId = activeChatData?.id || 0;
+            const activeChatDataId = activeChat?.id || 0;
             
             if (activeChatDataId === 0) {
                 return;
@@ -108,7 +108,7 @@ function ChatInput(props) {
                 props.router.navigate(`/chats/${activeChatDataId}`);
             }
         }
-    }, [activeChatData]);
+    }, [activeChat]);
 
     //function for handling 'Enter' key press
     const handleKeyDown = (event) => {
@@ -163,13 +163,13 @@ function ChatInput(props) {
 
 const mapStateToProps = (state) => {
     const {
-        activeChatData,
+        activeChat,
         fetchMessagesLoading
     } = state.Chat;
 
     return {
         activeAgentId: state.Agents.activeAgentId, 
-        activeChatData,
+        activeChat,
         fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
         userAgent: state.Agents.userAgent,

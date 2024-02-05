@@ -2,11 +2,11 @@ import {
   call, 
   put, 
   takeEvery,
-  delay,
-  select
+  delay
 } from 'redux-saga/effects';
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import {
+  SET_ACTIVE_CHAT,
   FETCH_CHATS,
   ADD_CHAT,
   ADD_CHAT_SUCCESS,
@@ -40,6 +40,10 @@ import {
   deleteMessageInitState,
   deleteMessageSuccess,
   deleteMessageFailed,
+
+  setActiveChatInitState,
+  setActiveChatSuccess,
+  setActiveChatFailed
 } from './actions';
 
 const api = apiAuthorizedClient;
@@ -53,6 +57,18 @@ function* fetchChatsSaga(action) {
     yield put(fetchChatsInitState());
   } catch (errors) {
     yield put(fetchChatsFailed(errors));
+  }
+}
+
+function* setActiveChatSaga(action) {
+  try {
+    const activeChatId = action.payload;
+    const activeChat = yield call(api.get, `/chats/${activeChatId}/`);
+    yield put(setActiveChatSuccess(activeChat));
+    yield delay(5000);
+    yield put(setActiveChatInitState());
+  } catch (errors) {
+    yield put(setActiveChatFailed(errors));
   }
 }
 
@@ -139,6 +155,7 @@ function* deleteMessageSaga(action) {
 
 
 export default function* chatSaga() {
+  yield takeEvery(SET_ACTIVE_CHAT, setActiveChatSaga);
   yield takeEvery(FETCH_CHATS, fetchChatsSaga);
   yield takeEvery(ADD_CHAT, addChatSaga);
   yield takeEvery(ADD_CHAT_SUCCESS, addChatSuccessSaga); 

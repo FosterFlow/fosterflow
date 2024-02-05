@@ -31,7 +31,7 @@ function UserChat(props) {
         fetchMessagesLoading,
         fetchMessagesErrors, 
         activeChatId,
-        activeChatData, 
+        activeChat, 
         setActiveAgent,
         authorizedUser,
         userAgent,
@@ -176,18 +176,16 @@ function UserChat(props) {
         };
     }, []);
 
-    useEffect(() => {
-        if (activeChatId === 0 ||
-            authorizedUser === null ||
-            authorizedUser.is_email_confirmed === false ||
-            addChatRequestMessage !== undefined
-        ) { 
-            return; 
-        }
+    function isChatDisabled(){
+        return activeChatId === 0 ||
+        authorizedUser === null ||
+        authorizedUser.is_email_confirmed === false ||
+        addChatRequestMessage !== undefined;
+    }
 
-        const chatAgentId = activeChatData?.addressee_agent_id;
-        if (chatAgentId) {
-            setActiveAgent(chatAgentId);
+    useEffect(() => {
+        if (isChatDisabled()) { 
+            return; 
         }
 
         if (skipMessagesFetching) {
@@ -196,7 +194,18 @@ function UserChat(props) {
         }
 
         fetchMessages(activeChatId);
-    }, [authorizedUser, activeChatId]);
+    }, [activeChatId, authorizedUser]);
+
+    useEffect(() => {
+        if (isChatDisabled()) { 
+            return; 
+        }
+        
+        const chatAgentId = activeChat?.addressee_agent_id;
+        if (chatAgentId) {
+            setActiveAgent(chatAgentId);
+        }
+    }, [activeChat]);
 
     return (
         <React.Fragment>
@@ -310,7 +319,7 @@ const mapStateToProps = (state) => {
         fetchMessagesLoading,
         fetchMessagesErrors,
         activeChatId,
-        activeChatData,
+        activeChat,
         chatWindow,
         addChatRequestMessage,
         skipMessagesFetching
@@ -323,7 +332,7 @@ const mapStateToProps = (state) => {
         fetchMessagesLoading,
         fetchMessagesErrors,
         activeChatId,
-        activeChatData,
+        activeChat,
         chatWindow,
         addChatRequestMessage,
         skipMessagesFetching,

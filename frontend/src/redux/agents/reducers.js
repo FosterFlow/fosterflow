@@ -31,7 +31,7 @@ import config from '../../config';
 
 const INIT_STATE = {
     //current ML model
-    activeAgentId: Number(config.BASE_MODEL_AGENT_ID),
+    activeAgentId: 0,
     activeAgent: null,
 
     agents: [],

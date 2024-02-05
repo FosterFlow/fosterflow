@@ -11,8 +11,6 @@ from .permissions import IsChatOwner
 from auth_app.permissions import IsEmailConfirmed
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
-from agent_app.models import Agent
 
 User = get_user_model()
 

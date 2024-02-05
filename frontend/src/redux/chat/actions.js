@@ -38,6 +38,9 @@ import {
   DELETE_MESSAGE_FAILED,
     
   SET_ACTIVE_CHAT,
+  SET_ACTIVE_CHAT_INIT_STATE,
+  SET_ACTIVE_CHAT_SUCCESS,
+  SET_ACTIVE_CHAT_FAILED
 } from './constants';
 
 export const chatInit = () => ({
@@ -54,6 +57,20 @@ export const chatInit = () => ({
   export const setActiveChat = (chatId) => ({
     type: SET_ACTIVE_CHAT,
     payload: chatId
+  });
+
+  export const setActiveChatInitState = () => ({
+    type: SET_ACTIVE_CHAT_INIT_STATE
+  });
+
+  export const setActiveChatSuccess = (chat) => ({
+    type: SET_ACTIVE_CHAT_SUCCESS,
+    payload: chat
+  });
+
+  export const setActiveChatFailed = (errors) => ({
+    type: SET_ACTIVE_CHAT_FAILED,
+    payload: errors
   });
 
   export const fetchChats = (chatsOwnerAgent) => ({

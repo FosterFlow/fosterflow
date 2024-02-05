@@ -3,6 +3,10 @@ import {
     CHAT_INIT,
 
     SET_ACTIVE_CHAT,
+    SET_ACTIVE_CHAT_INIT_STATE,
+    SET_ACTIVE_CHAT_SUCCESS,
+    SET_ACTIVE_CHAT_FAILED,
+
     SET_SKIP_FETCH_MESSAGES,
     
     FETCH_CHATS,
@@ -41,8 +45,12 @@ import {
 
 const INIT_STATE = {
     chats: [],
+    
     activeChatId: 0,
-    activeChatData: null, 
+    activeChat: null, 
+    activeChatLoading: false,
+    activeChatSuccess: false,
+    activeChatErrors: null,    
 
     //Actual if we came to the chat page from New Chat page.
     //Allows to prevent double request to API
@@ -81,17 +89,41 @@ const Chat = (state = INIT_STATE, action) => {
             return INIT_STATE;
 
         case SET_ACTIVE_CHAT: {
-            let activeChat = state.activeChatData;
-            if (state.chats.length > 0) {
-                activeChat = state.chats.find(chat => chat.id === Number(action.payload));
-            }
-
             return { 
                 ...state,
                 activeChatId: Number(action.payload),
-                activeChatData: activeChat
+                activeChat: null,
+                activeChatLoading: true,
+                activeChatSuccess: false,
+                activeChatSuccess: null, 
             };
         }
+
+        case SET_ACTIVE_CHAT_INIT_STATE:
+            return {
+                ...state,
+                activeChatLoading: false,
+                activeChatSuccess: false,
+                activeChatErrors: null, 
+            };
+
+        case SET_ACTIVE_CHAT_SUCCESS: {
+            return {
+                ...state,
+                activeChat: action.payload, 
+                activeChatLoading: false,
+                activeChatSuccess: true,
+                activeChatErrors: null, 
+            };
+        }
+            
+        case SET_ACTIVE_CHAT_FAILED:
+            return {
+                ...state,
+                activeChatLoading: false,
+                activeChatSuccess: false,
+                activeChatErrors: action.payload, 
+            };
 
         case FETCH_CHATS:
             return {
@@ -99,12 +131,6 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsLoading: true,
                 fetchChatsSuccess: false,
                 fetchChatsErrors: null,
-            };
-
-        case SET_SKIP_FETCH_MESSAGES:
-            return {
-                ...state,
-                skipMessagesFetching: action.payload,
             };
 
         case FETCH_CHATS_INIT_STATE:
@@ -117,23 +143,16 @@ const Chat = (state = INIT_STATE, action) => {
 
         case FETCH_CHATS_SUCCESS: {
             const chats = action.payload;
-            const activeChatId = state.activeChatId;
-            let activeChat = state.activeChatData;
             let filteredChats = (Array.isArray(chats) && chats) || [];
 
             filteredChats = filteredChats.reverse();
             
-            if (activeChatId > 0) {
-                activeChat = chats.find(chat => chat.id === Number(activeChatId));
-            }
-
             return {
                 ...state,
                 chats: filteredChats,
                 fetchChatsLoading: false,
                 fetchChatsSuccess: true,
                 fetchChatsErrors: null,
-                activeChatData: activeChat
             };
         }
             
@@ -143,6 +162,12 @@ const Chat = (state = INIT_STATE, action) => {
                 fetchChatsLoading: false,
                 fetchChatsSuccess: false,
                 fetchChatsErrors: action.payload,
+            };
+    
+        case SET_SKIP_FETCH_MESSAGES:
+            return {
+                ...state,
+                skipMessagesFetching: action.payload,
             };
 
         case ADD_CHAT: {
@@ -175,7 +200,7 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatErrors: null,
                 chats: [action.payload, ...state.chats],
                 activeChatId: Number(action.payload.id),
-                activeChatData: action.payload,
+                activeChat: action.payload,
                 chatWindow: true,
                 newChat: false
             };
@@ -222,18 +247,11 @@ const Chat = (state = INIT_STATE, action) => {
             };
             
         case FETCH_MESSAGES: {
-            let activeChat = state.activeChatData;
-            if (state.chats.length > 0) {
-                activeChat = state.chats.find(chat => chat.id === Number(action.payload));
-            }
-             
             return {
                 ...state,
                 fetchMessagesLoading: true,
                 fetchMessagesSuccess: false,
                 fetchMessagesErrors: null,
-                activeChatId: Number(action.payload),
-                activeChatData: activeChat
             };
         }
 
