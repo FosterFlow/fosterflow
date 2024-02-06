@@ -28,7 +28,8 @@
     "remark-gfm": "^3.0.1",
     "simplebar-react": "^3.2.4",
     "yup": "^1.1.1",
-    "react-avatar-editor": "13.0.0"
+    "react-avatar-editor": "13.0.0",
+    "react-scroll-to-bottom": "4.2.0"
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false && WATCHPACK_POLLING=true react-scripts start",

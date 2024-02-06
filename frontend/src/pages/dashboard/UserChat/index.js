@@ -12,6 +12,7 @@ import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import gfm from 'remark-gfm';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
+import ScrollToBottom from 'react-scroll-to-bottom';
 import UserHead from "./UserHead";
 import ChatInput from "./ChatInput";
 import config from '../../../config';
@@ -23,7 +24,6 @@ import {
 
 function UserChat(props) {
     const chatWindowRef = useRef();
-    const userWasAtBottomRef = useRef(true);
     const {
         sendMessageErrors,
         sendingMessagesQueue, 
@@ -45,7 +45,6 @@ function UserChat(props) {
     //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
     const relevantSendingMessages = sendingMessagesQueue.filter(message => message.chat_id === activeChatId);
-    const debouncedHandleChatScroll = _.debounce(handleChatScroll, 300);
     const debounceHandleWindowResize = _.debounce(handleWindowResize, 300);
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
     const supportEmail =  config.SUPPORT_EMAIL;
@@ -110,18 +109,6 @@ function UserChat(props) {
         );
       }
 
-    function handleChatScroll() {
-        if (chatWindowRef.current !== null &&
-            userWasAtBottomRef.current !== null){
-                const { scrollHeight, scrollTop, clientHeight } = chatWindowRef.current;
-        
-                // Determine if the user is at the bottom of the chat window
-                // The sum of scrollTop and clientHeight should be equal to scrollHeight when at the bottom
-                // Using Math.abs to account for fractional differences in measurements
-                userWasAtBottomRef.current = Math.abs(scrollTop + clientHeight - scrollHeight) < 1;
-        }
-    };
-
     function handleWindowResize () {
         messageMaxMidthUpdate(true);
     }
@@ -143,23 +130,7 @@ function UserChat(props) {
         }
     }
 
-    // Add useEffect to auto scroll to bottom when messages update
-    //TODO: handles for every chunk of the message. We can add debounce method here or optimize it another way
     useEffect(() => {
-        if (Array.isArray(messages) && messages.length > 0){
-            
-            console.log ("userWasAtBottomRef.current", userWasAtBottomRef.current);
-            if (userWasAtBottomRef.current){
-                const scrollHeight = chatWindowRef.current.scrollHeight;
-                chatWindowRef.current.scrollTop = scrollHeight;
-            }
-        }
-    }, [messages]);
-
-    useEffect(() => {
-        // Add scroll event listener on chat window
-        chatWindowRef.current.addEventListener('scroll', debouncedHandleChatScroll);
-    
         // Add resize event listener on window
         window.addEventListener('resize', debounceHandleWindowResize);
     
@@ -168,10 +139,6 @@ function UserChat(props) {
     
         // Return cleanup function
         return () => {
-            // Clean up both event listeners
-            if (chatWindowRef.current !== null) {
-                chatWindowRef.current.removeEventListener('scroll', debouncedHandleChatScroll);
-            }
             window.removeEventListener('resize', debounceHandleWindowResize);
         };
     }, []);
@@ -212,9 +179,9 @@ function UserChat(props) {
             <div className={`user-chat ${chatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <UserHead />
+                    <ScrollToBottom behavior="auto" className="user-chat-conversation">
                     <div
                         ref={chatWindowRef}
-                        className="user-chat-conversation"
                         id="messages">
                             {  fetchMessagesLoading &&
                                 <div className="d-flex justify-content-center">
@@ -304,6 +271,7 @@ function UserChat(props) {
                                 </Alert>
                             )}
                     </div>
+                    </ScrollToBottom>
                 </div>
                 <ChatInput/>
             </div>
