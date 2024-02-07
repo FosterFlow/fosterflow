@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { memo, useState, useEffect, useRef } from 'react';
 import { Button, Form } from "reactstrap";
 import { connect } from "react-redux";
 import { 
@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import withRouter from "../../../components/withRouter";
 
-function ChatInput(props) {
+const ChatInput = memo(function ChatInput(props) {
     const [textMessage, settextMessage] = useState("");
     const textAreaRef = useRef(null);
     const { t } = useTranslation();
@@ -159,7 +159,7 @@ function ChatInput(props) {
             </div>
         </React.Fragment>
     );
-}
+});
 
 const mapStateToProps = (state) => {
     const {

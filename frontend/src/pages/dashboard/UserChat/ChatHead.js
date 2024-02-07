@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import { Row, Col } from "reactstrap";
 import { 
     Link, 
@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import { deleteChat as actionDeleteChat} from "../../../redux/chat/actions";
 
-function UserHead(props) {
+const ChatHead = memo(function ChatHead(props) {
     const location = useLocation();
     const isNewChat = location.pathname.startsWith('/chats/new_chat');
     const {
@@ -49,12 +49,11 @@ function UserHead(props) {
 
         </React.Fragment>
     );
-}
-
+});
 
 const mapStateToProps = (state) => {
 
-    console.log("Dashabord Tabs UserHead mapStateToProps state", state);
+    console.log("Dashabord Tabs ChatHead mapStateToProps state", state);
     return { 
         activeChatId: state.Chat.activeChatId,
         agents: state.Agents.agents,
@@ -66,4 +65,4 @@ const mapDispatchToProps = {
     actionDeleteChat,
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserHead));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatHead));
