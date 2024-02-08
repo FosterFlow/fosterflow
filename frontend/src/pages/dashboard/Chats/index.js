@@ -10,7 +10,8 @@ import {
     setActiveAgent,
 } from "../../../redux/actions";
 
-function UserChat(props) {
+function Chat(props) {
+    console.log ('Chats Chat component rendering');
     const {
         activeChatId,
         activeChat, 
@@ -75,4 +76,4 @@ const mapDispatchToProps = {
     setActiveAgent
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UserChat));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Chat));

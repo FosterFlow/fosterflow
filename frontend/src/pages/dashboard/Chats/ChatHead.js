@@ -9,6 +9,7 @@ import withRouter from "../../../components/withRouter";
 import { deleteChat as actionDeleteChat} from "../../../redux/chat/actions";
 
 const ChatHead = memo(function ChatHead(props) {
+    console.log ('Chats ChatHead component rendering');
     const location = useLocation();
     const isNewChat = location.pathname.startsWith('/chats/new_chat');
     const {
@@ -52,8 +53,6 @@ const ChatHead = memo(function ChatHead(props) {
 });
 
 const mapStateToProps = (state) => {
-
-    console.log("Dashabord Tabs ChatHead mapStateToProps state", state);
     return { 
         activeChatId: state.Chat.activeChatId,
         agents: state.Agents.agents,

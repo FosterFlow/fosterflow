@@ -22,6 +22,7 @@ import {
 
 
 function ChatBody(props) {
+    console.log ('Chats ChatBody component rendering');
     const chatWindowRef = useRef();
     const {
         sendMessageErrors,

@@ -18,9 +18,11 @@ import {
 import config from '../../config';
 import { useTranslation } from 'react-i18next';
 import SidebarMenuDesktop from "./SidebarMenuDesktop";
+import SidebarMenuMobile from "./SidebarMenuDesktop";
 import { useParams } from 'react-router-dom';
 
 const Index = (props) => {
+    console.log ('Layouts Authout Layout index rendering');
     const { t } = useTranslation();
     const supportEmail =  config.SUPPORT_EMAIL;
     const { emailVerifyToken } = useParams();
@@ -185,6 +187,7 @@ const Index = (props) => {
                 <div className="auth-layout-content">
                     {/* left sidebar menu */}
                         <SidebarMenuDesktop />
+                        {/* <SidebarMenuMobile /> */}
                     {/* render page content */}
                     {children}
                 </div>
