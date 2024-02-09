@@ -16,7 +16,6 @@ import {
     showNewAgentChat 
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
-import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import { isMobileDevice } from '../../../helpers/mobileDevices';
 
 const Agents = (props) => {
@@ -152,7 +151,6 @@ const Agents = (props) => {
                             }
                         </ul>
                 </div>
-                <SideBarMenuMobile />
             </div>
             <NewAgentChat />
         </React.Fragment>

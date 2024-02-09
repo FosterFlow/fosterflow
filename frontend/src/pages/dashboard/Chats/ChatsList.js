@@ -18,7 +18,6 @@ import {
     getAgents
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
-import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 
 const ChatsList = (props) => {
     const id = Number(props.router.params.id) || 0;
@@ -154,7 +153,6 @@ const ChatsList = (props) => {
                         }
                     </ul>
                 </div>
-                <SideBarMenuMobile />
             </div>
         </React.Fragment>
     );

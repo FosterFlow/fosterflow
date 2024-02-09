@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import { useTranslation } from "react-i18next";
 
 const Profile = (props) => {
@@ -53,7 +52,6 @@ const Profile = (props) => {
           </div>
           {/* end user-profile-scroll-area  */}
         </div>
-        <SideBarMenuMobile />
       </div>
     </React.Fragment>
   );

@@ -14,6 +14,8 @@ import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import config from '../../../config';
+import SendingMessages from "./SendingMessages";
+import SendingMessageError from "./SendingMessageError";
 import { 
     fetchMessages,
     setActiveAgent,
@@ -25,8 +27,6 @@ function ChatBody(props) {
     console.log ('Chats ChatBody component rendering');
     const chatWindowRef = useRef();
     const {
-        sendMessageErrors,
-        sendingMessagesQueue, 
         messages,
         fetchMessagesLoading,
         fetchMessagesErrors, 
@@ -41,7 +41,6 @@ function ChatBody(props) {
     const { t } = useTranslation();
     //TODO: review if it's neccesary to store all messages into store
     const relevantMessages = messages.filter(message => message.chat_id === activeChatId);
-    const relevantSendingMessages = sendingMessagesQueue.filter(message => message.chat_id === activeChatId);
     const debounceHandleWindowResize = _.debounce(handleWindowResize, 100);
     const [messageMaxWidth, setMessageMaxWidth] = useState(0);
     const supportEmail =  config.SUPPORT_EMAIL;
@@ -220,43 +219,10 @@ function ChatBody(props) {
                                     )
                                 }
                                 {/* List of missages that we are sending to the server, we show loader for them */}
-                                {
-                                    relevantSendingMessages.map((message, key) =>
-                                        <React.Fragment key={key}>
-                                            {
-                                                <li className="user-chat-conversation-list-item right">
-                                                    <div className="user-chat-message user-chat-message-formatting">
-                                                        <Spinner size="sm"/>&nbsp;&nbsp;
-                                                        {message.message_text}
-                                                    </div>
-                                                </li>
-                                            }
-                                        </React.Fragment>
-                                    )
-                                }
+                                <SendingMessages/>
                             </ul>
                             {/* TODO: add an ability to re-send failed messages */}
-                            { sendMessageErrors && (
-                                <Alert color="danger">
-                                    {t("The message wasn't delivered to the server. Errors details")}:
-                                    {sendMessageErrors.details && 
-                                        (<ul className='ps-4'>
-                                            {sendMessageErrors.details.map((error, index) => (
-                                                <li key={index} className="p-0">
-                                                {error}
-                                                </li>
-                                            ))}
-                                        </ul>)
-                                    }
-                                    {sendMessageErrors.details === undefined && 
-                                        (<pre>
-                                            {JSON.stringify(sendMessageErrors)}
-                                        </pre>)
-                                    }
-                                    <hr/>
-                                    {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
-                                </Alert>
-                            )}
+                            <SendingMessageError/>
                     </div>
                 </ScrollToBottom>
 
@@ -267,8 +233,6 @@ function ChatBody(props) {
 
 const mapStateToProps = (state) => {
     const {
-        sendMessageErrors,
-        sendingMessagesQueue,
         messages,
         fetchMessagesLoading,
         fetchMessagesErrors,
@@ -280,8 +244,6 @@ const mapStateToProps = (state) => {
     } = state.Chat;
 
     return {
-        sendMessageErrors,
-        sendingMessagesQueue,
         messages,
         fetchMessagesLoading,
         fetchMessagesErrors,

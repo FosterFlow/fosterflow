@@ -22,7 +22,6 @@ import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import _ from 'lodash';
 import withRouter from "../../../components/withRouter";
-import SideBarMenuMobile from '../../../layouts/AuthLayout/SideBarMenuMobile';
 import {
     updateUserAgentProfileData,
     updateUserAgentProfileDataInitState,
@@ -496,7 +495,6 @@ function Settings(props) {
                     {/* End User profile description */}   
                 </div>
                 {/* End scroll areaa */} 
-                <SideBarMenuMobile /> 
             </div>
         </React.Fragment>
     );

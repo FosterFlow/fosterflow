@@ -12,7 +12,7 @@ import germany from "../../assets/images/flags/germany.jpg";
 import italy from "../../assets/images/flags/italy.jpg";
 import russia from "../../assets/images/flags/russia.jpg";
 
-function LeftSidebarMenu(props) {
+function SidebarMenuDesktop(props) {
     const {
         layoutMode,
         language, 
@@ -132,4 +132,4 @@ const mapDispatchToProps = {
     setLanguage
   };
 
-export default connect(mapStatetoProps, mapDispatchToProps)(LeftSidebarMenu);
+export default connect(mapStatetoProps, mapDispatchToProps)(SidebarMenuDesktop);
