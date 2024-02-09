@@ -1,4 +1,4 @@
-/* TODO: add an ability to re-send failed messages */
+/* List of missages that we are sending to the server, we show loader for them */
 import React from 'react';
 import { 
     Spinner,

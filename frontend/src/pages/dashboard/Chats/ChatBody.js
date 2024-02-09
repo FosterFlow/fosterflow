@@ -14,6 +14,7 @@ import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import config from '../../../config';
+import ReceivingMessages from "./receivingMessages";
 import SendingMessages from "./sendingMessages";
 import SendingMessageError from "./sendingMessageError";
 import { 
@@ -218,6 +219,8 @@ function ChatBody(props) {
                                         </React.Fragment>
                                     )
                                 }
+                                {/* List of missages that we are receiving from the server by web socket. I use separate component to do not overload common state */}
+                                <ReceivingMessages/>
                                 {/* List of missages that we are sending to the server, we show loader for them */}
                                 <SendingMessages/>
                             </ul>

@@ -29,6 +29,8 @@ const INIT_STATE = {
     sendMessageErrors: null,
     //messages, that not accepted by the server yet. We show them with clocks into chat
     sendingMessagesQueue: [],
+    //messages that we receive through the web socket
+    receivingMessagesQueue: [],
     messages: [],
 
     fetchMessagesLoading: false,
@@ -195,26 +197,38 @@ const Message = (state = INIT_STATE, action) => {
             {
                 const receivedMessage = action.payload;
                 const messagesList = [...state.messages];
+                const receivingMessagesQueue = [...state.receivingMessagesQueue];
+                
+                if (receivedMessage.status === 'done') {
+                    const newMessage = receivingMessagesQueue.find(message => message.id === receivedMessage.id);
+                    const updatedReceivingMessagesQueue = receivingMessagesQueue.filter(message => message.id !== receivedMessage.id);
+                    messagesList.push(newMessage);
+                    return {
+                        ...state,
+                        messages: messagesList,
+                        receivingMessagesQueue: updatedReceivingMessagesQueue
+                    };
+                }
                 
                 // Find the message by its id
-                const messageIndex = messagesList.findIndex(message => message.id === receivedMessage.id);
+                const messageIndex = receivingMessagesQueue.findIndex(message => message.id === receivedMessage.id);
                 
                 // If the message already exists, update its content
                 if (messageIndex !== -1) {
-                    const existingMessage = messagesList[messageIndex];
+                    const existingMessage = receivingMessagesQueue[messageIndex];
                     existingMessage.message_text += receivedMessage.message_chunk;
-                    messagesList[messageIndex] = existingMessage;
+                    receivingMessagesQueue[messageIndex] = existingMessage;
                 } else {
                     // If the message doesn't exist, simply add it to the list
                     if (receivedMessage.message_chunk !== undefined) {
                         receivedMessage.message_text = receivedMessage.message_chunk;
                     }
-                    messagesList.push(receivedMessage);
+                    receivingMessagesQueue.push(receivedMessage);
                 }
                 
                 return {
                     ...state,
-                    messages: messagesList
+                    receivingMessagesQueue: receivingMessagesQueue
                 };
             }
 
