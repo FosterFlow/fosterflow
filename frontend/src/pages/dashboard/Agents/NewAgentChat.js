@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import ChatInput from "../Chats/ChatInput";
-import AgentHead from "./AgentHead";
+import ChatInput from "../chats/chatInput";
+import AgentHead from "./agentHead";
 import { useTranslation } from 'react-i18next';
 import { 
     useLocation 

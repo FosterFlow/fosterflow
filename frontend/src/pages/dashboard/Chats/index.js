@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import _ from 'lodash';
-import ChatHead from "./ChatHead";
-import ChatBody from "./ChatBody";
-import ChatInput from "./ChatInput";
+import ChatHead from "./chatHead";
+import ChatBody from "./chatBody";
+import ChatInput from "./chatInput";
 import { 
     setActiveAgent,
 } from "../../../redux/actions";

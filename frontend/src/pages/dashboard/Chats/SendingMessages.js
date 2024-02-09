@@ -1,4 +1,4 @@
-//TODO: it renders 8 times, figure it out
+{/* TODO: add an ability to re-send failed messages */}
 import React from 'react';
 import { 
     Spinner,

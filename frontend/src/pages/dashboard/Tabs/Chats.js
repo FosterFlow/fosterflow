@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import ChatsList from "../Chats/ChatsList";
-import Chat from "../Chats/";
-import NewChat from "../Chats/NewChat";
+import ChatsList from "../chats/chatsList";
+import Chat from "../chats";
+import NewChat from "../chats/newChat";
 
 const Chats = (props) => {
     console.log ('Tabs Chats rendering');

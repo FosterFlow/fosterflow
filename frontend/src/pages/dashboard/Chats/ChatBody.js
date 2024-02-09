@@ -14,8 +14,8 @@ import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import config from '../../../config';
-import SendingMessages from "./SendingMessages";
-import SendingMessageError from "./SendingMessageError";
+import SendingMessages from "./sendingMessages";
+import SendingMessageError from "./sendingMessageError";
 import { 
     fetchMessages,
     setActiveAgent,
@@ -221,7 +221,6 @@ function ChatBody(props) {
                                 {/* List of missages that we are sending to the server, we show loader for them */}
                                 <SendingMessages/>
                             </ul>
-                            {/* TODO: add an ability to re-send failed messages */}
                             <SendingMessageError/>
                     </div>
                 </ScrollToBottom>
