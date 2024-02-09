@@ -57,9 +57,12 @@ const mapStateToProps = (state) => {
         activeChatId,
         activeChat,
         chatWindow,
+    } = state.Chat;
+
+    const {
         addChatRequestMessage,
         skipMessagesFetching
-    } = state.Chat;
+    } = state.Message;
 
     return {
         activeChatId,

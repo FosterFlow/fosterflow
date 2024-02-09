@@ -18,7 +18,7 @@ import {
 import {
     receiveMessageChunk,
     receiveMessageChunkFailed
-  } from '../chat/actions';
+  } from '../message/actions';
 
 const INIT_STATE = {
     webSocketsRequestsQueue: [],

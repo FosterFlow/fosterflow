@@ -5,7 +5,7 @@ import {
     addChat, 
     sendMessage,
     setSkipFetchMessages
-} from "../../../redux/chat/actions";
+} from "../../../redux/actions";
 import { 
     useLocation 
 } from "react-router-dom";
@@ -162,15 +162,10 @@ const ChatInput = memo(function ChatInput(props) {
 });
 
 const mapStateToProps = (state) => {
-    const {
-        activeChat,
-        fetchMessagesLoading
-    } = state.Chat;
-
     return {
         activeAgentId: state.Agents.activeAgentId, 
-        activeChat,
-        fetchMessagesLoading,
+        activeChat: state.Chat.activeChat,
+        fetchMessagesLoading:state.Message.fetchMessagesLoading,
         authorizedUser: state.User.authorizedUser,
         userAgent: state.Agents.userAgent,
     }

@@ -105,7 +105,7 @@ function UserChat(props) {
 
 const mapStateToProps = (state) => {
     return { 
-        messages: state.Chat.messages,
+        messages: state.Message.messages,
         addChatErrors: state.Chat.addChatErrors,
         authorizedUser: state.User.authorizedUser,
         agents: state.Agents.agents,

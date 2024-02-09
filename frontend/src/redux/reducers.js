@@ -7,6 +7,7 @@ import Agents from './agent/reducers';
 import AiAgentProfile from './aiAgentProfile/reducers';
 import UserAgentProfile from './userAgentProfile/reducers';
 import Chat from './chat/reducers';
+import Message from './message/reducers';
 import Layout from './layout/reducer';
 
 export default combineReducers({
@@ -17,5 +18,6 @@ export default combineReducers({
     AiAgentProfile,
     UserAgentProfile,
     Chat,
+    Message,
     Layout
 });

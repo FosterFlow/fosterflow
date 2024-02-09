@@ -5,4 +5,5 @@ export * from './agent/actions';
 export * from './aiAgentProfile/actions';
 export * from './userAgentProfile/actions';
 export * from './chat/actions';
+export * from './message/actions';
 export * from './layout/actions';

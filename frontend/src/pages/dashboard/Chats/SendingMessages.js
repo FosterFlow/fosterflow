@@ -1,4 +1,4 @@
-{/* TODO: add an ability to re-send failed messages */}
+/* TODO: add an ability to re-send failed messages */
 import React from 'react';
 import { 
     Spinner,
@@ -39,13 +39,12 @@ function SendingMessages(props) {
 
 const mapStateToProps = (state) => {
     const {
-        sendingMessagesQueue,
         activeChatId,
         activeChat,
     } = state.Chat;
 
     return {
-        sendingMessagesQueue,
+        sendingMessagesQueue: state.Message.sendingMessagesQueue,
         activeChatId,
         activeChat,
     }

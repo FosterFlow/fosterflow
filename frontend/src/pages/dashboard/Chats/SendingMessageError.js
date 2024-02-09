@@ -45,7 +45,7 @@ function SendingMessageError(props) {
 
 const mapStateToProps = (state) => {
     return {
-        sendMessageErrors: state.Chat.sendMessageErrors,
+        sendMessageErrors: state.Message.sendMessageErrors,
     }
 };
 

@@ -232,15 +232,18 @@ function ChatBody(props) {
 
 const mapStateToProps = (state) => {
     const {
-        messages,
-        fetchMessagesLoading,
-        fetchMessagesErrors,
         activeChatId,
         activeChat,
         chatWindow,
+    } = state.Chat;
+
+    const {
+        messages,
+        fetchMessagesLoading,
+        fetchMessagesErrors,
         addChatRequestMessage,
         skipMessagesFetching
-    } = state.Chat;
+    } = state.Message;
 
     return {
         messages,
