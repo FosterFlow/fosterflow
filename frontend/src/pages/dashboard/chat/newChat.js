@@ -11,6 +11,8 @@ import {
     Card, 
     CardBody, 
     CardHeader,
+    Row,
+    Col
 } from "reactstrap";
 import { useTranslation } from 'react-i18next';
 import {
@@ -57,8 +59,17 @@ function UserChat(props) {
                         
                         <Card className="border">
                             <CardHeader>
-                                {agentId === 0 && `${t('Choose agent for the new chat')}:`} 
-                                {activeAgent !== null && `${t('Agent')}: ${activeAgent.name}`}
+                                <Row>
+                                    <Col sm={1} xs={1} className="d-lg-none">
+                                        <Link to="/chats" className="user-chat-back text-muted p-2">
+                                            <i className="ri-arrow-left-s-line"></i>
+                                        </Link>
+                                    </Col>
+                                    <Col>
+                                        {agentId === 0 && `${t('Choose agent for the new chat')}:`} 
+                                        {activeAgent !== null && `${t('Agent')}: ${activeAgent.name}`}
+                                    </Col>
+                                </Row>
                             </CardHeader>
                             <CardBody>
                                 <div className="agent-tiles-container">
