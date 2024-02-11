@@ -1,5 +1,4 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
 
 // lazy load all the views
 const Chats = React.lazy(() => import("../pages/dashboard/tabs/chats"));
@@ -8,11 +7,11 @@ const Profile = React.lazy(() => import("../pages/dashboard/tabs/profile"));
 const Settings = React.lazy(() => import("../pages/dashboard/tabs/settings"));
 
 // auth
-const Login = React.lazy(() => import("../pages/auth/login"));
-const Logout = React.lazy(() => import("../pages/auth/logout"));
-const ForgetPassword = React.lazy(() => import("../pages/auth/forgetPassword"));
-const Register = React.lazy(() => import("../pages/auth/register"));
-const PasswordReset = React.lazy(() => import("../pages/auth/passwordReset"));
+const Login = React.lazy(() => import("../pages/authorization/login"));
+const Logout = React.lazy(() => import("../pages/authorization/logout"));
+const ForgetPassword = React.lazy(() => import("../pages/authorization/forgetPassword"));
+const Register = React.lazy(() => import("../pages/authorization/register"));
+const PasswordReset = React.lazy(() => import("../pages/authorization/passwordReset"));
 
 // declare all routes
 const authProtectedRoutes = [

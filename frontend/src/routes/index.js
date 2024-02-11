@@ -12,8 +12,8 @@ import {
     publicRoutes 
 } from './routes';
 import { connect } from "react-redux";
-import NonAuthLayout from "../layouts/NonAuth";
-import AuthLayout from "../layouts/AuthLayout/";
+import NonAuthLayout from "../layouts/nonAuth";
+import AuthLayout from "../layouts/authLayout/";
 
 /**
  * Main Route component
