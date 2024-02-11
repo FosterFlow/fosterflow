@@ -39,7 +39,7 @@ const ChatHead = memo(function ChatHead(props) {
                         </Col>
                         <Col>
                             {(!isNewChat && agents.length > 0) && (
-                            <span className="user-chat-agent pt-2 ps-2">Agent: {activeAgent?.name}</span>
+                            <span className="user-chat-agent pt-2 ps-2">{activeAgent?.name}</span>
                             )}
                         </Col>
                         </Row>

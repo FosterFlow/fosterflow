@@ -146,7 +146,7 @@ const ChatsList = (props) => {
                                                 ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
                                                 : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
                                             }
-                                            <p>Agent: {agent ? agent.name : 'Unknown'}</p>
+                                            <p>{agent ? agent.name : 'Unknown agent'}</p>
                                         </Link>
                                 </li>
                             })

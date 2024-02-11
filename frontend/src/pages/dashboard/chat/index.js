@@ -19,7 +19,6 @@ function Chat(props) {
         setActiveAgent,
         authorizedUser,
         addChatRequestMessage,
-        showChatWindow,
     } = props;
 
     function isChatDisabled(){
@@ -42,7 +41,7 @@ function Chat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat ${showChatWindow ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat ${activeChatId > 0 ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <ChatHead />
                     <ChatBody/>
@@ -57,7 +56,6 @@ const mapStateToProps = (state) => {
     const {
         activeChatId,
         activeChat,
-        showChatWindow,
     } = state.Chat;
 
     const {
@@ -68,7 +66,6 @@ const mapStateToProps = (state) => {
     return {
         activeChatId,
         activeChat,
-        showChatWindow,
         addChatRequestMessage,
         skipMessagesFetching,
         authorizedUser: state.User.authorizedUser,

@@ -25,8 +25,7 @@ import {
 
 const INIT_STATE = {
     chats: [],
-    showChatWindow: true,
-    
+
     activeChatId: 0,
     activeChat: null, 
     activeChatLoading: false,
@@ -57,7 +56,6 @@ const Chat = (state = INIT_STATE, action) => {
                 ...state,
                 activeChatId: Number(action.payload),
                 activeChat: null,
-                showChatWindow: true,
                 activeChatLoading: true,
                 activeChatSuccess: false,
                 activeChatSuccess: null, 
@@ -160,7 +158,6 @@ const Chat = (state = INIT_STATE, action) => {
                 chats: [action.payload, ...state.chats],
                 activeChatId: Number(action.payload.id),
                 activeChat: action.payload,
-                showChatWindow: true,
                 newChat: false
             };
 
