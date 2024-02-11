@@ -51,9 +51,11 @@ function* fetchChatsSaga(action) {
 function* setActiveChatSaga(action) {
   try {
     const activeChatId = action.payload;
-    const activeChat = yield call(api.get, `/chats/${activeChatId}/`);
-    yield put(setActiveChatSuccess(activeChat));
-    yield delay(5000);
+    if (activeChatId > 0) {
+      const activeChat = yield call(api.get, `/chats/${activeChatId}/`);
+      yield put(setActiveChatSuccess(activeChat));
+      yield delay(1000);
+    }
     yield put(setActiveChatInitState());
   } catch (errors) {
     yield put(setActiveChatFailed(errors));
