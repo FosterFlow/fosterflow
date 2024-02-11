@@ -30,14 +30,19 @@ const ChatHead = memo(function ChatHead(props) {
         <React.Fragment>
             <div className="container-fluid user-chat-header">
                 <Row className="m-0">
-                    <Col sm={3} xs={3} >
-                        <Link to="/chats" className="user-chat-back text-muted p-2 d-lg-none">
-                            <i className="ri-arrow-left-s-line"></i>
-                        </Link>
-                        {
-                        (!isNewChat && agents.length > 0) && (
+                    <Col sm={6} xs={10} >
+                        <Row>
+                        <Col sm={1} xs={1}>
+                            <Link to="/chats" className="user-chat-back text-muted p-2 d-lg-none">
+                                <i className="ri-arrow-left-s-line"></i>
+                            </Link>
+                        </Col>
+                        <Col>
+                            {(!isNewChat && agents.length > 0) && (
                             <span className="user-chat-agent pt-2 ps-2">Agent: {activeAgent?.name}</span>
-                        )}
+                            )}
+                        </Col>
+                        </Row>
                     </Col>
                     {/* TODO: don't show on intial "/chats" page */}
                     <Col className="text-end">
