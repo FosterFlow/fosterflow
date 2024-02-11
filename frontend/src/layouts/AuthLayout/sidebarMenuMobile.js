@@ -120,7 +120,6 @@ const mapStatetoProps = state => {
     return {
         layoutMode: state.Layout.layoutMode,
         language: state.Layout.language,
-        agents: state.Agents,
         avatar: state.UserAgentProfile.avatar,
     };
 };

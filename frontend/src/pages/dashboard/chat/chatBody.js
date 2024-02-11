@@ -167,64 +167,63 @@ function ChatBody(props) {
                 className="user-chat-conversation"
             >
                 <div
-                        
-                        ref={chatWindowRef}
-                        id="messages">
-                            {  fetchMessagesLoading &&
-                                <div className="d-flex justify-content-center">
-                                    <Spinner size="sm"/>
-                                </div>
-                            }
-                            { fetchMessagesErrors && (
-                                <Alert color="danger">
-                                    {t('Errors details')}:
-                                    <ul>
-                                        {fetchMessagesErrors.details.map((error, index) => (
-                                            <li key={index}>{error}</li>
-                                        ))}
-                                    </ul>
-                                    <hr/>
-                                    {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
-                                </Alert>
-                            )}
-                            <ul className="user-chat-conversation-list">
-                                {
-                                    relevantMessages.map((message, key) =>
-                                        <React.Fragment key={key}>
-                                            {
-                                                userAgent.id === message.owner_agent_id ? (
-                                                    <li className="user-chat-conversation-list-item right">
-                                                        <div className="user-chat-message user-chat-message-formatting">
+                    ref={chatWindowRef}
+                    id="messages">
+                        {  fetchMessagesLoading &&
+                            <div className="d-flex justify-content-center">
+                                <Spinner size="sm"/>
+                            </div>
+                        }
+                        { fetchMessagesErrors && (
+                            <Alert color="danger">
+                                {t('Errors details')}:
+                                <ul>
+                                    {fetchMessagesErrors.details.map((error, index) => (
+                                        <li key={index}>{error}</li>
+                                    ))}
+                                </ul>
+                                <hr/>
+                                {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+                            </Alert>
+                        )}
+                        <ul className="user-chat-conversation-list">
+                            {
+                                relevantMessages.map((message, key) =>
+                                    <React.Fragment key={key}>
+                                        {
+                                            userAgent.id === message.owner_agent_id ? (
+                                                <li className="user-chat-conversation-list-item right">
+                                                    <div className="user-chat-message user-chat-message-formatting">
+                                                        {message.message_text}
+                                                    </div>
+                                                </li>
+                                            ) : (
+                                                <li className="user-chat-conversation-list-item"> 
+                                                    <div 
+                                                        className="user-chat-message" 
+                                                        style={{maxWidth: `1200px`}}
+                                                    >
+                                                        <ReactMarkdown 
+                                                            remarkPlugins={[gfm]}
+                                                            components={{
+                                                                code: CodeBlock,
+                                                                table: TableWrapper 
+                                                                }}>
                                                             {message.message_text}
-                                                        </div>
-                                                    </li>
-                                                ) : (
-                                                    <li className="user-chat-conversation-list-item"> 
-                                                        <div 
-                                                            className="user-chat-message" 
-                                                            style={{maxWidth: `1200px`}}
-                                                        >
-                                                            <ReactMarkdown 
-                                                                remarkPlugins={[gfm]}
-                                                                components={{
-                                                                    code: CodeBlock,
-                                                                    table: TableWrapper 
-                                                                    }}>
-                                                                {message.message_text}
-                                                            </ReactMarkdown>
-                                                        </div>
-                                                    </li>
-                                                )
-                                            }
-                                        </React.Fragment>
-                                    )
-                                }
-                                {/* List of missages that we are receiving from the server by web socket. I use separate component to do not overload common state */}
-                                <ReceivingMessages/>
-                                {/* List of missages that we are sending to the server, we show loader for them */}
-                                <SendingMessages/>
-                            </ul>
-                            <SendingMessageError/>
+                                                        </ReactMarkdown>
+                                                    </div>
+                                                </li>
+                                            )
+                                        }
+                                    </React.Fragment>
+                                )
+                            }
+                            {/* List of missages that we are receiving from the server by web socket. I use separate component to do not overload common state */}
+                            <ReceivingMessages/>
+                            {/* List of missages that we are sending to the server, we show loader for them */}
+                            <SendingMessages/>
+                        </ul>
+                        <SendingMessageError/>
                     </div>
                 </ScrollToBottom>
 
@@ -237,7 +236,6 @@ const mapStateToProps = (state) => {
     const {
         activeChatId,
         activeChat,
-        chatWindow,
     } = state.Chat;
 
     const {
@@ -254,7 +252,6 @@ const mapStateToProps = (state) => {
         fetchMessagesErrors,
         activeChatId,
         activeChat,
-        chatWindow,
         addChatRequestMessage,
         skipMessagesFetching,
         authorizedUser: state.User.authorizedUser,

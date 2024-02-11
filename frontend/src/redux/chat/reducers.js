@@ -7,8 +7,6 @@ import {
     SET_ACTIVE_CHAT_SUCCESS,
     SET_ACTIVE_CHAT_FAILED,
 
-    SET_SKIP_FETCH_MESSAGES,
-    
     FETCH_CHATS,
     FETCH_CHATS_INIT_STATE,
     FETCH_CHATS_SUCCESS,
@@ -27,6 +25,7 @@ import {
 
 const INIT_STATE = {
     chats: [],
+    showChatWindow: true,
     
     activeChatId: 0,
     activeChat: null, 
@@ -58,6 +57,7 @@ const Chat = (state = INIT_STATE, action) => {
                 ...state,
                 activeChatId: Number(action.payload),
                 activeChat: null,
+                showChatWindow: true,
                 activeChatLoading: true,
                 activeChatSuccess: false,
                 activeChatSuccess: null, 
@@ -160,7 +160,7 @@ const Chat = (state = INIT_STATE, action) => {
                 chats: [action.payload, ...state.chats],
                 activeChatId: Number(action.payload.id),
                 activeChat: action.payload,
-                chatWindow: true,
+                showChatWindow: true,
                 newChat: false
             };
 

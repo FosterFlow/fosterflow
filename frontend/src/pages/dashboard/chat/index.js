@@ -1,4 +1,5 @@
 //TODO: it renders 8 times, figure it out
+//Move all params to internal components
 import React, { useEffect } from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
@@ -18,7 +19,7 @@ function Chat(props) {
         setActiveAgent,
         authorizedUser,
         addChatRequestMessage,
-        chatWindow,
+        showChatWindow,
     } = props;
 
     function isChatDisabled(){
@@ -41,7 +42,7 @@ function Chat(props) {
 
     return (
         <React.Fragment>
-            <div className={`user-chat ${chatWindow ? 'user-chat-show' : ''}`}>
+            <div className={`user-chat ${showChatWindow ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
                     <ChatHead />
                     <ChatBody/>
@@ -56,7 +57,7 @@ const mapStateToProps = (state) => {
     const {
         activeChatId,
         activeChat,
-        chatWindow,
+        showChatWindow,
     } = state.Chat;
 
     const {
@@ -67,7 +68,7 @@ const mapStateToProps = (state) => {
     return {
         activeChatId,
         activeChat,
-        chatWindow,
+        showChatWindow,
         addChatRequestMessage,
         skipMessagesFetching,
         authorizedUser: state.User.authorizedUser,
