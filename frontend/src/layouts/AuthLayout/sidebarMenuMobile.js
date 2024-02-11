@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { Nav, NavItem, NavLink, Dropdown, DropdownItem, DropdownToggle, DropdownMenu } from "reactstrap";
 import { connect } from "react-redux";
@@ -35,6 +35,10 @@ function SidebarMenuMobile(props) {
 
     const toggleProfile = () => setDropdownProfile(!dropdownProfile);
     const toggleChangeLanguge = () => setDropdownChangeLanguge(!dropdownChangeLanguge);
+
+    useEffect(() => {
+        document.body.setAttribute("data-bs-theme", layoutMode);
+    }, [layoutMode]);
 
     return (
         <React.Fragment>
