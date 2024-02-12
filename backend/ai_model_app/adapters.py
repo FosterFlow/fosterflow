@@ -19,14 +19,11 @@ class RequestHandler:
         agent_id = sent_message.addressee_agent_id
         agent = Agent.objects.get(pk=agent_id)
         
-        if agent.ai_model.title == 'GPT-3.5-turbo-4k' and agent.is_active:
-            adapter = GptAdapter(Gpt35Turbo4KInterface, ResponseWebsocketInterface)
+        if agent.ai_model.title == 'GPT-3.5-turbo' and agent.is_active:
+            adapter = GptAdapter(Gpt35TurboInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
-        elif agent.ai_model.title == 'GPT-3.5-turbo-16k' and agent.is_active:
-            adapter = GptAdapter(Gpt35Turbo16KInterface, ResponseWebsocketInterface)
-            adapter.generate_response(sent_message)
-        elif agent.ai_model.title == 'GPT-4-8k' and agent.is_active:
-            adapter = GptAdapter(Gpt48KInterface, ResponseWebsocketInterface)
+        elif agent.ai_model.title == 'gpt-4-turbo-preview' and agent.is_active:
+            adapter = GptAdapter(Gpt4TurboInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
 
 
@@ -115,7 +112,7 @@ class GptAdapter(Adapter):
         nlp_message.save()
 
 
-class Gpt35Turbo4KInterface:
+class Gpt35TurboInterface:
     def create_generator(self, messages):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -124,21 +121,10 @@ class Gpt35Turbo4KInterface:
         )
         return response
 
-
-class Gpt35Turbo16KInterface:
+class Gpt4TurboInterface:
     def create_generator(self, messages):
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-16k",
-            messages=messages,
-            stream=True
-        )
-        return response
-
-
-class Gpt48KInterface:
-    def create_generator(self, messages):
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4-turbo-preview",
             messages=messages,
             stream=True
         )

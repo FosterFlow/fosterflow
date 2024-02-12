@@ -21,16 +21,4 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
         ),
-        #Create Agent???
-        
-        # migrations.CreateModel(
-        #     name='ProfileModel',
-        #     fields=[
-        #         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-        #         ('price_per_token', models.DecimalField(decimal_places=5, max_digits=10)),
-        #         ('description', models.TextField(max_length=2000)),
-        #         ('avatar', models.ImageField(blank=True, upload_to=ai_model_app.models.get_image_filename)),
-        #         ('ai_model', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ai_model_app.AiModel')),
-        #     ],
-        # ),
     ]

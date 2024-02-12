@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chat_app', '0009_add_Gpts_models'),
+        ('ai_model_app', '0002_add_Gpts_models'),
     ]
 
     operations = [

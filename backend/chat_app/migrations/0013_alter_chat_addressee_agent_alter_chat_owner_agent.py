@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('agent_app', '0002_alter_agent_id'),
+        ('chat_app', '0008_alter_chat_addressee_id_alter_chat_owner_id_and_more'),
         ('chat_app', '0012_chat_addressee_agent'),
     ]
 

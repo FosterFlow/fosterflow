@@ -38,8 +38,8 @@ const Index = (props) => {
     return (
         <React.Fragment>
             <div className="auth-layout">
+                <Alerts/>
                 <div className="auth-layout-content">
-                    <Alerts/>
                     {/* left sidebar menu */}
                     <SidebarMenuDesktop />
                     
