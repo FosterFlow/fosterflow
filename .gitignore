@@ -18,3 +18,6 @@ yarn.lock
 #Django
 backend/static_django/
 venv/
+
+#Database
+db.sqlite3

@@ -30,10 +30,12 @@ function Chat(props) {
 
     useEffect(() => {
         if (isChatDisabled()) { 
+            console.log ("Chat Index.js is chat disabled");
             return; 
         }
         
         const chatAgentId = activeChat?.addressee_agent_id;
+        console.log ("Chat Index.js chatAgentId", chatAgentId);
         if (chatAgentId) {
             setActiveAgent(chatAgentId);
         }

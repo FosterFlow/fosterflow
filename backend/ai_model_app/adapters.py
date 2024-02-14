@@ -32,7 +32,7 @@ class ResponseWebsocketInterface:
         self.channel_layer = get_channel_layer()
 
     def send_chunk(self, chunk, group):
-        print(f"ResponseWebsocketInterface send_chunk {chunk} , group {group}")
+        # print(f"ResponseWebsocketInterface send_chunk {chunk} , group {group}")
         async_to_sync(self.channel_layer.group_send)(group, {"type": "chat.message", "text": chunk})
 
 

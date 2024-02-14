@@ -19,7 +19,6 @@ import SendingMessages from "./sendingMessages";
 import SendingMessageError from "./sendingMessageError";
 import { 
     fetchMessages,
-    setActiveAgent,
     setSkipFetchMessages
 } from "../../../redux/actions";
 
@@ -261,7 +260,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
     fetchMessages,
-    setActiveAgent,
     setSkipFetchMessages
 }
 
