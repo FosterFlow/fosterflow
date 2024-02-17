@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
             name='Agent',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('avatar', models.ImageField(blank=True, upload_to=user_app.models.get_image_filename)),
+                ('avatar', models.ImageField(blank=True)),
                 ('first_name', models.TextField(max_length=32)),
                 ('last_name', models.TextField(max_length=32)),
                 ('user_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),

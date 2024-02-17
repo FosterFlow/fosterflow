@@ -17,32 +17,10 @@ import {
   DELETE_CHAT_SUCCESS,
   DELETE_CHAT_FAILED,
   
-  FETCH_MESSAGES,
-  FETCH_MESSAGES_INIT_STATE,
-  FETCH_MESSAGES_SUCCESS,
-  FETCH_MESSAGES_FAILED, 
-  
-  DELETE_MESSAGE,
-  DELETE_MESSAGE_INIT_STATE,
-  DELETE_MESSAGE_SUCCESS,
-  DELETE_MESSAGE_FAILED,
-    
   SET_ACTIVE_CHAT,
-  SHOW_CHAT_WINDOW,
-  SET_ACTIVE_NEW_CHAT,
-
-  WS_CONNECTION_START,
-  WS_CONNECTION_KILL,
-  WS_CONNECTION_SUCCESS,
-  WS_CONNECTION_FAILED,
-  WS_CONNECTION_CLOSED,
-
-  WS_MESSAGE_SEND,
-  WS_MESSAGE_SEND_INIT_STATE,
-  WS_MESSAGE_SEND_SUCCESS,
-  WS_MESSAGE_SEND_FAILED,
-
-  WS_RECEIVE_MESSAGE_CHUNK,
+  SET_ACTIVE_CHAT_INIT_STATE,
+  SET_ACTIVE_CHAT_SUCCESS,
+  SET_ACTIVE_CHAT_FAILED
 } from './constants';
 
 export const chatInit = () => ({
@@ -61,29 +39,23 @@ export const chatInit = () => ({
     payload: chatId
   });
 
-  /**
-   * Window that shows list of messages. That action is actula for mobile version
-   * @param {boolean} show - show chat window or not. 
-   * 
-   *  */ 
-  export const showChatWindow = (show) => ({
-    type: SHOW_CHAT_WINDOW,
-    payload: show
+  export const setActiveChatInitState = () => ({
+    type: SET_ACTIVE_CHAT_INIT_STATE
   });
 
-  /**
-   * New chat by /chats url
-   * 
-   * @param {boolean} set - show window of a new chat or not 
-   * @returns 
-   */
-  export const setActiveNewChat = (set) => ({
-    type: SET_ACTIVE_NEW_CHAT,
-    payload: set
+  export const setActiveChatSuccess = (chat) => ({
+    type: SET_ACTIVE_CHAT_SUCCESS,
+    payload: chat
   });
 
-  export const fetchChats = () => ({
-    type: FETCH_CHATS
+  export const setActiveChatFailed = (errors) => ({
+    type: SET_ACTIVE_CHAT_FAILED,
+    payload: errors
+  });
+
+  export const fetchChats = (chatsOwnerAgent) => ({
+    type: FETCH_CHATS,
+    payload: chatsOwnerAgent
   });
 
   export const fetchChatsInitState = () => ({
@@ -154,86 +126,3 @@ export const chatInit = () => ({
       payload: errors
     }
   };
-  
-  export const fetchMessages = (chatId) => ({
-    type: FETCH_MESSAGES,
-    payload: chatId
-  });
-
-  export const fetchMessagesInitState = () => ({
-    type: FETCH_MESSAGES_INIT_STATE,
-  });
-
-  export const fetchMessagesSuccess = (messages) => ({
-    type: FETCH_MESSAGES_SUCCESS,
-    payload: messages
-  });
-
-  export const fetchMessagesFailed = (errors) => ({
-    type: FETCH_MESSAGES_FAILED,
-    payload: errors
-  });
-  
-  export const deleteMessage = (messageId) => ({
-    type: DELETE_MESSAGE,
-    payload: messageId
-  });
-
-  export const deleteMessageInitState = () => ({
-    type: DELETE_MESSAGE_INIT_STATE,
-  });
-
-  export const deleteMessageSuccess = (messageId) => ({
-    type: DELETE_MESSAGE_SUCCESS,
-    payload: messageId
-  });
-
-  export const deleteMessageFailed = (errors) => ({
-    type: DELETE_MESSAGE_FAILED,
-    payload: errors
-  });
-
-  export const startWsConnection = (chatId) => ({
-    type: WS_CONNECTION_START,
-    payload: chatId
-  });
-
-  export const killWsConnection = () => ({
-    type: WS_CONNECTION_KILL,
-  });
-  
-  export const wsConnectionSuccess = (socket) => ({
-    type: WS_CONNECTION_SUCCESS,
-    payload: socket
-  });
-  
-  export const wsConnectionFailed = (errors) => ({
-    type: WS_CONNECTION_FAILED,
-    payload: errors
-  });
-  
-  export const wsConnectionClosed = () => ({
-    type: WS_CONNECTION_CLOSED
-  });
-
-  export const wsMessageSend = () => ({
-    type: WS_MESSAGE_SEND
-  });
-
-  export const wsMessageSendInitState = () => ({
-    type: WS_MESSAGE_SEND_INIT_STATE
-  });
-
-  export const wsMessageSendSuccess = () => ({
-    type: WS_MESSAGE_SEND_SUCCESS
-  });
-  
-  export const wsMessageSendFailed = (errors) => ({
-    type: WS_MESSAGE_SEND_FAILED,
-    payload: errors
-  });
-  
-  export const wsReceiveMessage = (messageChunk) => ({
-    type: WS_RECEIVE_MESSAGE_CHUNK,
-    payload: messageChunk
-  });

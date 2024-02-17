@@ -159,5 +159,16 @@
     "We have sent you an email to confirm your account. Please check your inbox": "Wir haben Ihnen eine E-Mail gesendet, um Ihr Konto zu bestätigen. Bitte überprüfen Sie Ihren Posteingang",
     "Click here": "Klicken Sie hier",
     "to send again": "um erneut zu senden",
-    "Sending email confirmation": "E-Mail-Bestätigung wird gesendet" 
+    "Sending email confirmation": "E-Mail-Bestätigung wird gesendet",
+    "Please enter your first name": "Bitte geben Sie Ihren Vornamen ein",
+    "Please enter your last name": "Bitte geben Sie Ihren Nachnamen ein",
+    "The message wasn't delivered to the server. Errors details": "Die Nachricht wurde nicht an den Server übermittelt. Fehlerdetails",
+    "Agents": "Agenten",
+    "Find agent": "Agent finden",
+    "Click to open agent's profile": "Klicken Sie, um das Profil des Agenten zu öffnen",
+    "Choose agent for the new chat": "Wählen Sie einen Agenten für den neuen Chat",
+    "Start chatting with": "Chatten Sie mit",
+    "No name": "Kein Name",
+    "No surname": "Kein Nachname",
+    "Select an agent to chat with": "Wählen Sie einen Agenten zum Chatten aus"
 }

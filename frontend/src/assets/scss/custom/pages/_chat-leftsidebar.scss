@@ -82,6 +82,11 @@
             &:hover {
                 background-color: var(--#{$prefix}light);
             }
+
+            p:last-child, 
+            p:last-of-type {
+                margin-bottom: 0;
+            }
         }
 
         .chat-user-message {

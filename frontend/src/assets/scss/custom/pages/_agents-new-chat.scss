@@ -1,0 +1,25 @@
+.agent-tiles-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .agent-tile {
+    width: 130px;
+    height: 130px;
+    border: 1px solid $secondary-border-subtle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    padding: 10px;
+    color: var(--#{$prefix}secondary-color);
+    
+    &.active {
+      background-color: var(--#{$prefix}light);
+  }
+
+    &:hover {
+      background-color: var(--#{$prefix}light);
+    }
+  }

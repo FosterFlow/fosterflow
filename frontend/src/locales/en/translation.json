@@ -158,5 +158,16 @@
     "We have sent you an email to confirm your account. Please check your inbox": "We have sent you an email to confirm your account. Please check your inbox",
     "Click here": "Click here",
     "to send again": "to send again",
-    "Sending email confirmation": "Sending email confirmation"
+    "Sending email confirmation": "Sending email confirmation",
+    "Please enter your first name": "Please enter your first name",
+    "Please enter your last name": "Please enter your last name",
+    "The message wasn't delivered to the server. Errors details": "The message wasn't delivered to the server. Errors details",
+    "Agents": "Agents",
+    "Find agent": "Find agent",
+    "Click to open agent's profile": "Click to open agent's profile",
+    "Choose agent for the new chat": "Choose agent for the new chat",
+    "Start chatting with": "Start chatting with",
+    "No name": "No name",
+    "No surname": "No surname",
+    "Select an agent to chat with": "Select an agent to chat with"
 }

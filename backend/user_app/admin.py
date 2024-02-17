@@ -1,6 +1,7 @@
 from django.contrib import admin
+from .models import User
 
-from .models import User, Agent
+class UserAdmin(admin.ModelAdmin):
+    readonly_fields = ('id','updated_at','created_at')
 
-admin.site.register(User)
-admin.site.register(Agent)
+admin.site.register(User, UserAdmin)

@@ -12,9 +12,12 @@ yarn-debug.log*
 yarn-error.log*
 yarn.lock
 
-# idea
+# IDE
 /.idea/
 
 #Django
 backend/static_django/
 venv/
+
+#Database
+db.sqlite3

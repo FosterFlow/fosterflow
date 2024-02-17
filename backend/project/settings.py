@@ -17,10 +17,11 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-secretkey")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "True") == 'True'
 
-ALLOWED_HOSTS = env.list("BASE_HOST")
+# ALLOWED_HOSTS = env.list("BASE_HOST")
+ALLOWED_HOSTS = ['*']
 ASGI_APPLICATION = "project.asgi.application"
 
-REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
+REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
 REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', 'password')
 
@@ -32,7 +33,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-# Application definition
 
 INSTALLED_APPS = [
     'daphne',
@@ -51,8 +51,13 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     'chat_app',
+    'message_app',
     'auth_app',
     'user_app',
+    'user_agent_profile_app',
+    'ai_model_app',
+    'ai_agent_profile_app',
+    'agent_app',
 ]
 
 MIDDLEWARE = [
@@ -63,8 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -93,11 +97,11 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.postgresql"),
+        "NAME": os.environ.get("POSTGRES_DB", "fosterflow"),
+        "USER": os.environ.get("POSTGRES_USER", "user"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "postgres"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
@@ -127,11 +131,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
@@ -148,10 +149,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-#        'rest_framework.authentication.SessionAuthentication',
-#        'rest_framework.authentication.BasicAuthentication',
         'auth_app.authenticate.CustomAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
@@ -206,9 +205,7 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
-
 CORS_ALLOW_CREDENTIALS = True
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS') == 'True'
@@ -216,9 +213,10 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_SSL = env('EMAIL_USE_SSL') == 'True'
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-
 AUTH_USER_MODEL = "user_app.User"
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Celery settings
+CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_RESULT_BACKEND = "redis://redis:6379/0"

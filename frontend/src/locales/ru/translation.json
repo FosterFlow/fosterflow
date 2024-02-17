@@ -159,5 +159,16 @@
     "We have sent you an email to confirm your account. Please check your inbox": "Мы отправили вам электронное письмо для подтверждения вашего аккаунта. Пожалуйста, проверьте вашу почту",
     "Click here": "Нажмите здесь,",
     "to send again": "чтобы отправить снова",
-    "Sending email confirmation": "Отправка подтверждения по электронной почте" 
+    "Sending email confirmation": "Отправка подтверждения по электронной почте",
+    "Please enter your first name": "Пожалуйста, введите ваше имя",
+    "Please enter your last name": "Пожалуйста, введите вашу фамилию",
+    "The message wasn't delivered to the server. Errors details": "Сообщение не было доставлено на сервер. Подробности об ошибках",
+    "Agents": "Агенты",
+    "Find agent": "Найти агента",
+    "Click to open agent's profile": "Нажмите, чтобы открыть профиль агента",
+    "Choose agent for the new chat": "Выберите агента для нового чата",
+    "Start chatting with": "Начать чат с",
+    "No name": "Без имени",
+    "No surname": "Без фамилии",
+    "Select an agent to chat with": "Выберите агента для общения в чате" 
 }

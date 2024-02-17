@@ -1,0 +1,24 @@
+# Ignore development databases
+*.sqlite3
+
+# Ignore Python compiled files and cache
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+*.cache
+*.log
+*.swp
+*.bak
+*.tmp
+
+# Ignore Git related files
+.git/
+.gitignore
+
+# Ignore virtual environments and package related files
+venv/
+*.egg-info/
+
+# Ignore other unnecessary files
+README.md

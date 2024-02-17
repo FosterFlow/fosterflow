@@ -20,15 +20,14 @@ from .serializers import ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics, status
 from rest_framework.response import Response
-from django.dispatch import receiver
-from django_rest_passwordreset.signals import reset_password_token_created
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 
 env = environ.Env()
 environ.Env.read_env()
 FRONTEND_URL = env('FRONTEND_URL')
 
 User = get_user_model()
+EMAIL_TOKEN_LIFETIME_HOURS = os.environ.get('EMAIL_TOKEN_LIFETIME_HOURS', 24)
 
 
 class UserLoginAPIView(GenericAPIView):
@@ -67,8 +66,6 @@ class UserLoginAPIView(GenericAPIView):
 
         serializer = self.get_serializer(data=request.data)
         response = Response()
-        ACCESS_TOKEN_LIFETIME_MINUTES = os.environ.get('ACCESS_TOKEN_LIFETIME_MINUTES')
-        print(ACCESS_TOKEN_LIFETIME_MINUTES)
         if serializer.is_valid():
             user = serializer.validated_data
             token = RefreshToken.for_user(user)
@@ -200,7 +197,7 @@ class RegisterApi(generics.GenericAPIView):
             response.status_code = status.HTTP_200_OK
 
             token = get_token_generator().generate_token()
-            EmailConfirmationToken.objects.create(user=user, key=token)
+            EmailConfirmationToken.objects.create(user=user, key=token, expires_at=(timezone.now() + timezone.timedelta(hours=int(EMAIL_TOKEN_LIFETIME_HOURS))))
             send_confirmation_email(email=user.email, token=token)
         else:
             data = {'errors': serializer.errors}
@@ -276,7 +273,8 @@ class SendEmailConfirmationTokenAPIView(APIView):
 
         user = request.user
         token = get_token_generator().generate_token()
-        EmailConfirmationToken.objects.create(user=user, key=token)
+        EmailConfirmationToken.objects.create(user=user, key=token, expires_at=(
+                    timezone.now() + timezone.timedelta(hours=int(EMAIL_TOKEN_LIFETIME_HOURS))))
         send_confirmation_email(email=user.email, token=token)
         data = {
             "message": "Sending was successful"
@@ -326,7 +324,11 @@ class ConfirmEmailGenericAPIView(GenericAPIView):
         try:
             if timezone.now() > email_token.expires_at:
                 return Response({
-                    "message": "Token is expired"
+                    "errors": {
+                        "details": [
+                            "Token is invalid or expired"
+                        ]
+                    }
                 }, status=status.HTTP_400_BAD_REQUEST)
             user = email_token.user
             user.is_email_confirmed = True
@@ -338,7 +340,12 @@ class ConfirmEmailGenericAPIView(GenericAPIView):
             email_token.delete()
             return Response(data, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            data = {'errors': {
+                "details": [
+                    "Token is invalid or expired"
+                ]
+            }}
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ChangePasswordView(generics.UpdateAPIView):
@@ -416,44 +423,6 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@receiver(reset_password_token_created)
-def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
-    """
-    Signal receiver function for password reset token creation.
-
-    This function is triggered when a password reset token is created.
-    It sends an email to the user with the password reset link and token.
-
-    Args:
-        sender: The sender of the signal.
-        instance: The instance that triggered the signal.
-        reset_password_token (ResetPasswordToken): The created reset password token.
-        *args: Variable-length argument list.
-        **kwargs: Arbitrary keyword arguments.
-    """
-
-    verify_link = FRONTEND_URL + '/password-reset/' + reset_password_token.key
-
-    context = {
-        'verify_link': verify_link
-    }
-
-    html_message = render_to_string('password_reset_email.html', context)
-    plain_message = strip_tags(html_message)
-
-    email = EmailMultiAlternatives(
-        subject="Password Reset",
-        body=plain_message,
-        from_email=env('EMAIL_HOST_USER'),
-        to=[reset_password_token.user.email],
-        reply_to=[env('EMAIL_HOST_USER')],
-    )
-
-    email.attach_alternative(html_message, "text/html")
-
-    email.send(fail_silently=True)
 
 
 class CustomTokenRefreshView(TokenRefreshView):

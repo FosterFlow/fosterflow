@@ -19,14 +19,22 @@ securityDefinitions:
     description: >-
       Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
 tags:
+  - name: websocket
+    description: Instruction to connect websocket
   - name: chats
     description: The chat is needed for grouping messages
   - name: messages
     description: This is what the user sends and receives a response
   - name: users
     description: The model for User
+  - name: profiles_user
+    description: The Profile for User
   - name: agents
     description: Information containing user data
+  - name: nlp_models
+    description: Information containing NLP Models data
+  - name: profiles_nlp_models
+    description: Information containing NLP Model Profiles data
   - name: register
     description: Registering a new user
   - name: token
@@ -40,6 +48,83 @@ tags:
   - name: confirmation-email
     description: An Api View which provides send and confirm email
 paths:
+  /websocket/:
+    options:
+      security:
+        - Bearer: [ ]
+      summary: Instruction to connect websocket
+      description: >-
+        For connect to the websocket, you should make the following request: <br>
+        ws://localhost:8000/ws/login/?access=**{access_token}** <br>
+      responses:
+        101:
+          description: Switching Protocols
+        111:
+          schema:
+            type: array
+          description: 'Receiving messages have 2 stages: <br> You are receiving generations chunks:'
+          examples:
+            application/json:
+              [
+                {
+                  "type": "chat_message_chunk",
+                  "chat_id": 1,
+                  "created_at": "2023-08-15 12:00:10.00000+00:00",
+                  "request_id": 2,
+                  "id": 3,
+                  "message_chunk": "",
+                  "owner_agent_id": 100,
+                  "status": "start"
+                },
+                {
+                  "type": "chat_message_chunk",
+                  "chat_id": 1,
+                  "created_at": "2023-08-15 12:00:10.00000+00:00",
+                  "request_id": 2,
+                  "id": 3,
+                  "message_chunk": "",
+                  "owner_agent_id": 100,
+                  "status": "progress"
+                }
+              ]
+        112:
+          schema:
+            type: array
+          description: 'When generations is stop, you will take last message:'
+          examples:
+            application/json:
+              [
+                {
+                  "type": "chat_message_chunk",
+                  "chat_id": 19,
+                  "created_at": "2023-08-15 12:00:10.00000+00:00",
+                  "request_id": 340,
+                  "id": 341,
+                  "message_chunk": ".",
+                  "owner_agent_id": 100,
+                  "status": "done"
+                }
+              ]
+        '400':
+          description: 'Possible errors in response'
+          examples:
+            application/json:
+              {
+                "errors": {
+                  "details": [
+                    "Not request method.",
+                    "Prompt is empty.",
+                    "This field is required.",
+                    "Chat is not available",
+                    "Agent is not exists",
+                    "send_type is not correct"
+                  ]
+                }
+              }
+        '403':
+          description: '403 Access denied'
+      tags:
+        - websocket
   /chats/:
     get:
       summary: Get all the chats
@@ -60,8 +145,8 @@ paths:
                   "name": "ChatName1",
                   "created_at": "2023-06-19T16:28:47.904000Z",
                   "updated_at": "2023-06-19T16:32:33.773000Z",
-                  "owner_id": 1,
-                  "addressee_id": 2
+                  "owner_agent_id": 1,
+                  "addressee_agent_id": 2
                 },
                 {
                   "id": 2,
@@ -69,8 +154,8 @@ paths:
                   "name": "ChatName2",
                   "created_at": "2023-06-19T16:28:47.904000Z",
                   "updated_at": "2023-06-19T16:28:47.955000Z",
-                  "owner_id": 1,
-                  "addressee_id": 2
+                  "owner_agent_id": 1,
+                  "addressee_agent_id": 2
                 },
                 {
                   "id": 3,
@@ -78,8 +163,8 @@ paths:
                   "name": "ChatName3",
                   "created_at": "2023-06-19T16:28:47.904000Z",
                   "updated_at": "2023-06-19T16:28:47.955000Z",
-                  "owner_id": 1,
-                  "addressee_id": 2
+                  "owner_agent_id": 1,
+                  "addressee_agent_id": 2
                 }
               ]
         401:
@@ -100,8 +185,8 @@ paths:
           description: 'Chats object that needs to be added:'
           type: object
           properties:
-            owner_id:
-              title: owner_id
+            owner_agent_id:
+              title: owner_agent_id
               type: integer
               example: 1
             name:
@@ -110,8 +195,8 @@ paths:
               maxLength: 200
               minLength: 1
               example: 'ChatName'
-            addressee_id:
-              title: addressee_id
+            addressee_agent_id:
+              title: addressee_agent_id
               type: integer
               example: 1
       responses:
@@ -127,13 +212,13 @@ paths:
             application/json:
               {
                 "errors": {
-                  "owner_id": [
+                  "owner_agent_id": [
                     "This field is required."
                   ],
                   "name": [
                     "This field is required."
                   ],
-                  "addressee_id": [
+                  "addressee_agent_id": [
                     "This field is required."
                   ]
                 }
@@ -150,6 +235,45 @@ paths:
         - chats
     parameters: [ ]
   /chats/{id}/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: chats_delete
+      summary: 'Get a chat by ID'
+      parameters:
+        - name: id
+          in: path
+          description: A unique integer value identifying this chat.
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: 'successful operation'
+          examples:
+            application/json:
+              {
+                "id": 1,
+                "latest_message": "Message",
+                "name": "Hello",
+                "created_at": "2023-07-18T10:07:37.075051Z",
+                "updated_at": "2023-07-18T10:07:37.075097Z",
+                "owner_agent_id": 1,
+                "addressee_agent_id": 2
+              }
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+      tags:
+        - chats
     delete:
       security:
         - Bearer: [ ]
@@ -183,56 +307,6 @@ paths:
           type: integer
       tags:
         - chats
-    options:
-      security:
-        - Bearer: [ ]
-      summary: Instruction to connect websocket
-      description: >-
-        To connect to the chat websocket, you should make the following request: <br>
-        ws://localhost:8000/ws/chats/**{chat_id}**/** <br>
-        In headers you must provide access token like this: <br>
-        key: "access", value: "**{access_token}**" <br>
-        Where **{chat_id}** - ID Chat, **{access_token}** - token for auth <br>
-        <br>
-        After connection you can write message to chat. You should use this structure: <br>
-        {"message": "**{your message}**"} <br>
-        Where **{your message}** - message to sent <br>
-        <br>
-        Receiving messages looks like this: <br>
-        {"message": "", "finish_reason": ""} <br>
-        Where **message** - text message and **finish_reason** - an attribute that makes it clear whether the response has ended. There can only be a **null** or **stop** value<br>
-        <br>
-        <br>
-        Example cod on JavaScript: <br>
-        
-        **Connect to WebSocket:** <br>
-        const chatSocket = new WebSocket( 
-            &nbsp; &nbsp; 'ws://' 
-            &nbsp; &nbsp; + window.location.host 
-            &nbsp; &nbsp; + '/ws/chats/' 
-            &nbsp; &nbsp; + chat_id/
-        );<br>
-        
-        **Send message to WebSocket:** <br>
-        chatSocket.send(JSON.stringify({ <br>
-        &nbsp; &nbsp; 'message': message <br>
-        });<br>
-        
-        **Take message from WebSocket:** <br>
-        chatSocket.onmessage = function(e) {
-            &nbsp; &nbsp; const data = JSON.parse(e.data);
-            &nbsp; &nbsp; document.querySelector('#chat-log').value += (data.message);
-            &nbsp; &nbsp; if(data.finish_reason === "stop"){
-            &nbsp; &nbsp; &nbsp; &nbsp; document.querySelector('#chat-log').value += "END" ;
-            &nbsp; &nbsp; }
-        }; <br>
-      responses:
-        101:
-          description: Switching Protocols
-        '403':
-          description: '403 Access denied'
-      tags:
-        - chats
   /messages/:
     get:
       security:
@@ -258,31 +332,21 @@ paths:
               [
                 {
                   "id": 1,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "message_text": "Hello",
                   "created_at": "2023-06-19T12:51:26.301069Z",
                   "chat_id": 1,
-                  "owner_id": 1
+                  "owner_agent_id": 1,
+                  "request_id": null,
+                  "addressee_agent_id": 105
                 },
                 {
                   "id": 2,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                  "message_text": "Hello. Can I help you?",
                   "created_at": "2023-06-19T12:51:26.301069Z",
                   "chat_id": 1,
-                  "owner_id": 2
-                },
-                {
-                  "id": 3,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
-                  "created_at": "2023-06-19T12:51:26.301069Z",
-                  "chat_id": 1,
-                  "owner_id": 1
-                },
-                {
-                  "id": 4,
-                  "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
-                  "created_at": "2023-06-19T12:51:26.301069Z",
-                  "chat_id": 1,
-                  "owner_id": 2
+                  "owner_agent_id": 2,
+                  "request_id": 2,
+                  "addressee_agent_id": null
                 }
               ]
         400:
@@ -323,8 +387,12 @@ paths:
                 title: chat_id
                 type: integer
                 example: 1
-              owner_id:
-                title: owner_id
+              owner_agent_id:
+                title: owner_agent_id
+                type: integer
+                example: 1
+              addressee_agent_id:
+                title: addressee_agent_id
                 type: integer
                 example: 1
       responses:
@@ -335,11 +403,13 @@ paths:
           examples:
             application/json:
               {
-                "id": 1,
-                "message_text": "Hello, how are you?",
-                "created_at": "2023-06-18T13:22:32.194640Z",
+                "id": 2,
+                "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                "created_at": "2023-09-25T12:07:09.647553Z",
                 "chat_id": 1,
-                "owner_id": 1
+                "owner_agent_id": 101,
+                "request_id": null,
+                "addressee_agent_id": 105
               }
         400:
           description: Bad request.
@@ -352,7 +422,7 @@ paths:
                   "chat_id": [
                     "This field is required."
                   ],
-                  "owner_id": [
+                  "owner_agent_id": [
                     "This field is required."
                   ],
                   "message_text": [
@@ -386,10 +456,13 @@ paths:
           examples:
             application/json:
               {
-                "id": 5,
-                "message_text": "Hello, how are you?",
-                "answer_text": "I'm doing well, thank you. How about you?",
-                "chat_id": 1
+                "id": 2,
+                "message_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
+                "created_at": "2023-09-25T12:07:09.647553Z",
+                "chat_id": 1,
+                "owner_agent_id": 101,
+                "request_id": null,
+                "addressee_agent_id": 105
               }
         400:
           description: Bad request.
@@ -560,13 +633,153 @@ paths:
       tags:
         - token
     parameters: [ ]
+
   /agents/:
     get:
-      summary: Get all the agents
       security:
         - Bearer: [ ]
       operationId: agents_list
-      description: Get, Update user agent
+      summary: Get all the agents
+      parameters:
+        - in: query
+          name: is_user
+          type: boolean
+          description: Filter by User Agent
+        - in: query
+          name: is_nlp_model
+          type: boolean
+          description: Filter by NLP Model Agent
+      description: 'Get all the agents'
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              [
+                {
+                  "id": 113,
+                  "name": "GPT-4-8k",
+                  "created_at": "2023-09-01T10:48:03.037402Z",
+                  "updated_at": "2023-09-01T10:48:03.037402Z",
+                  "is_active": true,
+                  "user": null,
+                  "nlp_model": 3
+                },
+                {
+                  "id": 114,
+                  "name": "GPT-4-32k",
+                  "created_at": "2023-09-01T10:48:03.050403Z",
+                  "updated_at": "2023-09-01T10:48:03.050403Z",
+                  "is_active": true,
+                  "user": null,
+                  "nlp_model": 4
+                }
+              ]
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - agents
+
+  /profiles-model/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: profiles-model_list
+      summary: Get all the nlp_models profiles
+      description: 'Get all the nlp_models profiles'
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              [
+                {
+                  "id": 2,
+                  "price_per_token": "0.00000",
+                  "description": "string",
+                  "avatar": null,
+                  "nlp_model": 2
+                },
+                {
+                  "id": 1,
+                  "price_per_token": "0.00000",
+                  "description": "string",
+                  "avatar": null,
+                  "nlp_model": 2
+                },
+              ]
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - profiles_nlp_models
+
+  /nlp-models/:
+    get:
+      security:
+        - Bearer: [ ]
+      operationId: nlp_models_list
+      summary: Get all the nlp_models
+      description: 'Get all the nlp_models'
+      responses:
+        '200':
+          description: ''
+          examples:
+            application/json:
+              [
+                {
+                  "id": 1,
+                  "title": "GPT-3.5-turbo-4k",
+                  "created_at": "2023-09-29T10:48:03.011402Z",
+                  "updated_at": "2023-09-29T10:48:03.012403Z"
+                },
+                {
+                  "id": 2,
+                  "title": "GPT-3.5-turbo-16k",
+                  "created_at": "2023-09-29T10:48:03.024403Z",
+                  "updated_at": "2023-09-29T10:48:03.025401Z"
+                },
+              ]
+        400:
+          description: Bad request.
+          schema:
+            $ref: '#/definitions/BadRequest'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/TokenNotValid'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Forbidden'
+      tags:
+        - nlp_models
+
+  /profiles_user/:
+    get:
+      summary: Get all the profiles user
+      security:
+        - Bearer: [ ]
+      description: Get, Update user profile
       parameters: [ ]
       responses:
         '200':
@@ -574,7 +787,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Agent'
+              $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -584,11 +797,11 @@ paths:
           schema:
             $ref: '#/definitions/TokenNotValid'
       tags:
-        - agents
+        - profiles_user
     parameters: [ ]
-  /agent/:
+  /profile_user/:
     get:
-      summary: Get user agents
+      summary: Get user profile
       security:
         - Bearer: [ ]
       description: Get user agents
@@ -598,7 +811,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Agent'
+              $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -612,21 +825,20 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters: [ ]
-  /agents/{id}/:
+  /profiles_user/{id}/:
     get:
-      summary: Get agent by ID
+      summary: Get user profile by ID
       security:
         - Bearer: [ ]
-      operationId: agents_read
-      description: Get, Update user agent
+      description: Get, Update user profile
       parameters: [ ]
       responses:
         '200':
           description: ''
           schema:
-            $ref: '#/definitions/Agent'
+            $ref: '#/definitions/ProfileUser'
         400:
           description: Bad request.
           schema:
@@ -640,13 +852,12 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit agent by ID
-      operationId: agents_update
-      description: Get, Update user agent
+      summary: Edit user profile by ID
+      description: Get, Update user profile
       parameters:
         - name: data
           in: body
@@ -665,8 +876,14 @@ paths:
       responses:
         '200':
           description: ''
-          schema:
-            $ref: '#/definitions/Agent'
+          examples:
+            application/json:
+              {
+                "user_id": 1,
+                "first_name": "first_name",
+                "last_name": "last_name",
+                "avatar": "/media/avatars/1.jpg"
+              }
         400:
           description: Bad request.
           schema:
@@ -674,12 +891,14 @@ paths:
           examples:
             application/json:
               {
-                "first_name": [
-                  "Ensure this field has no more than 32 characters."
-                ],
-                "last_name": [
-                  "Ensure this field has no more than 32 characters."
-                ]
+                "errors": {
+                  "first_name": [
+                    "This field may not be blank."
+                  ],
+                  "last_name": [
+                    "Ensure this field has no more than 32 characters."
+                  ]
+                }
               }
         401:
           description: Unauthorized
@@ -690,21 +909,19 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters:
       - name: id
         in: path
-        description: A unique integer value identifying this agent.
+        description: A unique integer value identifying this profile.
         required: true
         type: integer
-
-  /agents/{id}/avatar/:
+  /profiles_user/{id}/avatar/:
     patch:
       security:
         - Bearer: [ ]
-      summary: Edit agent by ID
-      operationId: agents_avatar_update
-      description: Update Agent avatar
+      summary: Edit user profile by ID
+      description: Update user profile avatar
       parameters:
         - in: formData
           name: avatar
@@ -724,13 +941,15 @@ paths:
           schema:
             $ref: '#/definitions/NotFound'
       tags:
-        - agents
+        - profiles_user
     parameters:
       - name: id
         in: path
-        description: A unique integer value identifying this agent.
+        description: A unique integer value identifying this profile.
         required: true
         type: integer
+
+
 
   /users/:
     get:
@@ -1161,12 +1380,12 @@ definitions:
         title: Created at
         type: date
         example: "2023-06-23T09:15:34.562981Z"
-      owner_id:
-        title: owner_id
+      owner_agent_id:
+        title: owner_agent_id
         type: integer
         example: 1
-      addressee_id:
-        title: addressee_id
+      addressee_agent_id:
+        title: addressee_agent_id
         type: integer
         example: 1
   MessageModel:
@@ -1331,7 +1550,7 @@ definitions:
         minLength: 1
         example: 'user'
         pattern: '^(?!_$)(?![-.])(?!.*[_.-]{2})[a-zA-Z0-9_.-]+(?<![.-])$'
-  Profile:
+  ProfileUser:
     type: object
     properties:
       user_id:

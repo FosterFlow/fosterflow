@@ -1,150 +1,69 @@
+# backend/chat_app/views.py
 import environ
-import rest_framework.exceptions
 from django.contrib.auth import get_user_model
-from .filters import MessageFilter
-from .models import Chat, Message
-from .permissions import IsOwnerChat, IsOwnerMessage
-from .serializers import ChatModelSerializer, MessageModelSerializer
-from rest_framework.viewsets import ModelViewSet
+from .models import Chat
+from .serializers import ChatModelSerializer
+from rest_framework.generics import (
+    ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+)
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsChatOwner
+from auth_app.permissions import IsEmailConfirmed
 from rest_framework import status
 from rest_framework.response import Response
-from auth_app.permissions import IsEmailConfirm
-from django.db.models import Q
 
 User = get_user_model()
 
 env = environ.Env()
 environ.Env.read_env()
-FRONTEND_URL = env('FRONTEND_URL')
 
-
-class ChatModelViewSet(ModelViewSet):
+class ChatListView(ListAPIView):
     """
-    ViewSet class for the Chats model.
-
-    This ViewSet provides CRUD functionality for Chats objects.
-
-    Attributes:
-        queryset (QuerySet): The queryset of Chats objects.
-        serializer_class (Serializer): The serializer class for Chats objects.
-        permission_classes (list): The list of permission classes.
-        http_method_names (list): The list of allowed HTTP methods.
+    View class for listing Chats.
     """
-
     queryset = Chat.objects.all()
     serializer_class = ChatModelSerializer
-    permission_classes = [IsOwnerChat, IsEmailConfirm]
-    http_method_names = ['get', 'post', 'delete']
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
     def get_queryset(self):
-        """
-        Get the queryset of Chats objects.
+        chat_owner_agent_id = self.request.query_params.get('owner_agent_id')
+        if chat_owner_agent_id is not None:
+            return self.queryset.filter(owner_agent=chat_owner_agent_id)
+        return Chat.objects.none()
 
-        This method filters the queryset based on the user's ownership.
+class ChatCreateView(CreateAPIView):
+    """
+    View class for creating a new Chat.
+    """
+    queryset = Chat.objects.all()
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
-        Returns:
-            QuerySet: The filtered queryset of Chats objects.
-        """
+class ChatDetailView(RetrieveAPIView):
+    """
+    View class for retrieving a Chat detail.
+    """
+    queryset = Chat.objects.all()
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
-        owner_queryset = self.queryset.filter(
-            Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
-        return owner_queryset
+class ChatUpdateView(UpdateAPIView):
+    """
+    View class for updating a Chat.
+    """
+    queryset = Chat.objects.all()
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
+
+class ChatDeleteView(DestroyAPIView):
+    """
+    View class for deleting a Chat.
+    """
+    queryset = Chat.objects.all()
+    serializer_class = ChatModelSerializer
+    permission_classes = [IsAuthenticated, IsChatOwner, IsEmailConfirmed]
 
     def destroy(self, request, *args, **kwargs):
-        """
-        Destroy a Chats object.
-
-        This method deletes the specified Chats object and returns a success message.
-
-        Args:
-            request (HttpRequest): The HTTP request object.
-
-        Returns:
-            Response: The HTTP response containing the success message.
-        """
-
         item = self.get_object()
         item.delete()
-        response = {
-            'message': 'Chats deletes successfully',
-        }
-
-        return Response(response, status=status.HTTP_200_OK)
-
-
-class MessageModelViewSet(ModelViewSet):
-    """
-    ViewSet class for the Message model.
-
-    This ViewSet provides CRUD functionality for Message objects.
-
-    Attributes:
-        queryset (QuerySet): The queryset of Message objects.
-        serializer_class (Serializer): The serializer class for Message objects.
-        filterset_class (FilterSet): The filterset class for Message objects.
-        permission_classes (list): The list of permission classes.
-        http_method_names (list): The list of allowed HTTP methods.
-    """
-
-    queryset = Message.objects.all()
-    serializer_class = MessageModelSerializer
-    filterset_class = MessageFilter
-    permission_classes = [IsOwnerMessage, IsEmailConfirm]
-    http_method_names = ['get', 'post', 'delete']
-
-    def get_queryset(self):
-        """
-        Get the queryset of Message objects.
-
-        This method filters the queryset based on the user's ownership and chat ID.
-
-        Returns:
-            QuerySet: The filtered queryset of Message objects.
-        """
-
-        user_chats = Chat.objects.filter(
-            Q(owner_id_id=self.request.user.id) | Q(addressee_id_id=self.request.user.id))
-        owner_queryset = self.queryset.filter(chat_id__in=user_chats)
-
-        chat_id = self.request.query_params.get('chat_id')
-        if not user_chats.filter(id=chat_id).exists() and chat_id:
-            raise rest_framework.exceptions.PermissionDenied(
-                {
-                    "errors": {
-                        "details": ["Available only for the owner"]
-                    }
-                }
-            )
-        return owner_queryset
-
-    def destroy(self, request, *args, **kwargs):
-        """
-        Destroy a Message object.
-
-        This method deletes the specified Message object and returns a success message.
-
-        Args:
-            request (HttpRequest): The HTTP request object.
-
-        Returns:
-            Response: The HTTP response containing the success message.
-        """
-
-        item = self.get_object()
-        item.delete()
-        response = {
-            'message': 'Message deletes successfully',
-        }
-
-        return Response(response, status=status.HTTP_200_OK)
-
-
-from django.shortcuts import render
-
-
-def index(request):
-    return render(request, "chat/index.html")
-
-
-def room(request, room_name):
-    return render(request, "chat/room.html", {"room_name": room_name})
+        return Response({'message': 'Chat deleted successfully'}, status=status.HTTP_200_OK)

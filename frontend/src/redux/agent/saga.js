@@ -1,40 +1,84 @@
-import { all, call, fork, put, takeEvery, delay } from 'redux-saga/effects';
-import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
-import { GET_AGENT, UPDATE_AGENT_DATA, UPDATE_AGENT_AVATAR } from './constants';
 import { 
-    getAgentSuccess,
+    call, 
+    put, 
+    takeEvery, 
+    delay 
+} from 'redux-saga/effects';
+import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
+import {
+    SET_ACTIVE_AGENT,
+    GET_AGENTS,
+    GET_USER_AGENTS,   
+    UPDATE_AGENT_DATA, 
+    UPDATE_AGENT_AVATAR 
+} from './constants';
+import {
+    setActiveAgentinitState,
+    setActiveAgentSuccess,
+    setActiveAgentFailed,
+
+    getAgentsSuccess,
+    getAgentsFailed,
+    
+    getUserAgentsSuccess,
+    getUserAgentsFailed,
+
+    updateAgentDataInitState,
     updateAgentDataSuccess,
-    hideAgentDataSuccessMessage,
-    getAgentFailed,
     updateAgentDataFailed,
+    
+    updateAgentAvatarInitState,
     updateAgentAvatarSuccess,
-    updateAgentAvatarFailed,
-    hideAgentAvatarSuccessMessage
+    updateAgentAvatarFailed
  } from './actions';
 const api = apiAuthorizedClient;
 
-//TODO does saga reach API by each user request?
-function* getAgent({ payload: { id } }) {
+function* setActiveAgentSaga(action) {
+    const agentId = action.payload;
+
+    if (agentId === 0) {
+        yield put(setActiveAgentinitState());
+        return; 
+    }
+
     try {
-        const response = yield call(api.get, `/agents/${id}/`);
-        yield put(getAgentSuccess(response));
+        const response = yield call(api.get, `/agents/${agentId}/`);
+        yield put(setActiveAgentSuccess(response));
     } catch (error) {
-        yield put(getAgentFailed(error));
+        yield put(setActiveAgentFailed(error));
     }
 }
 
-function* updateAgentData({ payload: { id, data } }) {
+function* getAgentsSaga() {
+    try {
+        const response = yield call(api.get, `/agents/`);
+        yield put(getAgentsSuccess(response));
+    } catch (errors) {
+        yield put(getAgentsFailed(errors));
+    }
+}
+
+function* getUserAgentsSaga() {
+    try {
+        const response = yield call(api.get, `/agents/self/`);
+        yield put(getUserAgentsSuccess(response));
+    } catch (errors) {
+        yield put(getUserAgentsFailed(errors));
+    }
+}
+
+function* updateAgentDataSaga({ payload: { id, data } }) {
     try {
         const response = yield call(api.patch, `/agents/${id}/`, data);
         yield put(updateAgentDataSuccess(response));
         yield delay(10000);
-        yield put(hideAgentDataSuccessMessage());
-    } catch (error) {
-        yield put(updateAgentDataFailed(error));
+        yield put(updateAgentDataInitState());
+    } catch (errors) {
+        yield put(updateAgentDataFailed(errors));
     }
 }
 
-function* updateAgentAvatar({ payload: { id, avatar } }) {
+function* updateAgentAvatarSaga({ payload: { id, avatar } }) {
     try {
         let avatarData = new FormData();
         
@@ -47,30 +91,16 @@ function* updateAgentAvatar({ payload: { id, avatar } }) {
 
         yield put(updateAgentAvatarSuccess(response.avatar));
         yield delay(10000);
-        yield put(hideAgentAvatarSuccessMessage());
+        yield put(updateAgentAvatarInitState());
     } catch (error) {
         yield put(updateAgentAvatarFailed(error));
     }
 }
 
-export function* watchGetAgent() {
-    yield takeEvery(GET_AGENT, getAgent);
+export default function* agentSaga() {
+    yield takeEvery(SET_ACTIVE_AGENT, setActiveAgentSaga);
+    yield takeEvery(GET_AGENTS, getAgentsSaga);
+    yield takeEvery(GET_USER_AGENTS, getUserAgentsSaga);
+    yield takeEvery(UPDATE_AGENT_DATA, updateAgentDataSaga);
+    yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatarSaga);
 }
-
-export function* watchUpdateAgentData() {
-    yield takeEvery(UPDATE_AGENT_DATA, updateAgentData);
-}
-
-export function* watchUpdateAgentAvatar() {
-    yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatar);
-}
-
-function* agentSaga() {
-    yield all([
-        fork(watchGetAgent),
-        fork(watchUpdateAgentData),
-        fork(watchUpdateAgentAvatar),
-    ]);
-}
-
-export default agentSaga;

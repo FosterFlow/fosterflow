@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class IsEmailConfirm(permissions.BasePermission):
+class IsEmailConfirmed(permissions.BasePermission):
     message = {"errors": {"details": "Available only for confirm User"}}
 
     def has_permission(self, request, view):

@@ -1,8 +1,8 @@
-version: '3.1'
+version: '3.8'
 services:
   db:
     container_name: postgres
-    image: postgres:13.1
+    image: postgres:15.4-alpine
     privileged: true
     ports:
       - 5432:5432
@@ -10,7 +10,12 @@ services:
       - .env
     networks:
       - myNetwork
- 
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   redis:
     image: redis:6.2-alpine
     container_name: redis
@@ -18,17 +23,24 @@ services:
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
-    volumes: 
+    volumes:
       - redis:/data
     networks:
       - myNetwork
-       
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   backend:
     container_name: backend
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.prod
     ports:
-      - 8000:8000
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      - 8000:8000  # Django server port
+    entrypoint: sh ./django-entrypoint-prod.sh
     environment:
       - REDIS_HOST=redis
     restart: always
@@ -41,16 +53,40 @@ services:
       - .env
     networks:
       - myNetwork
-  
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  celery:
+    container_name: celery
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    command: celery -A project worker --loglevel=info
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    networks:
+      - myNetwork
+
   frontend:
     container_name: frontend
-    build: ./frontend
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.prod
     ports:
       - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./frontend:/frontend
       - '/frontend/node_modules'
-    command: bash -c "yarn start"
     networks:
       - myNetwork
     env_file:
@@ -58,10 +94,17 @@ services:
     depends_on:
       - db
       - backend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   swagger:
     container_name: swagger
-    build: ./swagger
+    build: 
+      context: ./swagger
+      dockerfile: Dockerfile.prod
     ports:
       - "8080:8080"
     volumes:
@@ -76,7 +119,7 @@ services:
 volumes:
   redis:
     driver: local
-    
+
 networks:
   myNetwork:
     driver: bridge
