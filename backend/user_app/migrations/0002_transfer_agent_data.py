@@ -5,15 +5,18 @@ from django.db import migrations
 def transfer_agents(apps, schema_editor):
     OldAgent = apps.get_model('user_app', 'Agent')
     NewAgent = apps.get_model('agent_app', 'Agent')
-    AiAgentProfile = apps.get_model('user_agent_profile_app', 'AiAgentProfile')
+    UserAgentProfile = apps.get_model('user_agent_profile_app', 'UserAgentProfile')
     
     for old_agent in OldAgent.objects.all():
-        new_agent = NewAgent.objects.create(
-            user_id = old_agent.user_id,
+        new_agent = NewAgent(
+            id = old_agent.id,  # Explicitly set the ID to match the old agent's ID
+            user_id = old_agent.user_id_id,
             name = old_agent.first_name + " " + old_agent.last_name
         )
+        # Manually save the instance to the database
+        new_agent.save(force_insert=True) 
 
-        AiAgentProfile.objects.create(
+        UserAgentProfile.objects.create(
             user_agent = new_agent,
             avatar = old_agent.avatar ,
             first_name = old_agent.first_name ,

@@ -8,11 +8,10 @@ def transfer_messages(apps, schema_editor):
     
     for old_message in OldMessage.objects.all():
         NewMessage.objects.create(
-            chat_id=old_message.chat_id,
+            chat_id=old_message.chat_id_id,
             message_text=old_message.message_text,
             owner_agent_id=old_message.owner_id_id,
             created_at=old_message.created_at,
-            updated_at=old_message.updated_at,
             #TODO: add addressee_agent field, we can fill this field once we will know GPT3.5 agent id
             # Map all necessary fields accordingly
         )
@@ -23,6 +22,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('message_app', '0001_initial'),
         ('chat_app', '0002_initial'),
+        ('user_app', '0002_transfer_agent_data'),
     ]
 
     operations = [
