@@ -13,11 +13,10 @@ def transfer_messages(apps, schema_editor):
             owner_agent_id=old_message.owner_id_id,
             created_at=old_message.created_at,
             updated_at=old_message.updated_at,
-            #TODO: add addressee_agent field
+            #TODO: add addressee_agent field, we can fill this field once we will know GPT3.5 agent id
             # Map all necessary fields accordingly
         )
-    # After successfully transferring, delete the old messages
-    OldMessage.objects.all().delete()
+    
 
 class Migration(migrations.Migration):
 
