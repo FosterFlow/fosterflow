@@ -65,7 +65,7 @@ const ChatsList = (props) => {
         }
 
         setRecentChatList(chats);
-    }, [chats, agents]);
+    }, [chats]);
 
     useEffect(() => {
         if (isNewChat || id === 0) {
