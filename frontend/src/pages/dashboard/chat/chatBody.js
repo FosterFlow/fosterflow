@@ -14,9 +14,9 @@ import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import ScrollToBottom from 'react-scroll-to-bottom';
 import config from '../../../config';
-import ReceivingMessages from "./receivingMessages";
-import SendingMessages from "./sendingMessages";
-import SendingMessageError from "./sendingMessageError";
+import ReceivingMessages from "./ReceivingMessages";
+import SendingMessages from "./SendingMessages";
+import SendingMessageError from "./SendingMessageError";
 import { 
     fetchMessages,
     setSkipFetchMessages

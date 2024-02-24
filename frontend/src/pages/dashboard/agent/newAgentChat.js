@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import ChatInput from "../chat/chatInput";
-import AgentHead from "./agentHead";
+import ChatInput from "../Chat/ChatInput";
+import AgentHead from "./AgentHead";
 
 function UserChat(props) {
     const {

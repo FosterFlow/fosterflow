@@ -13,6 +13,7 @@
 /user_app/migrations/__pycache__
 .idea
 /db.sqlite3
+/backup230224.sql
 .env
 /media
 /ai_model_app/migrations/__pycache__

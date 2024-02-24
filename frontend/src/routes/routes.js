@@ -1,17 +1,17 @@
 import React from "react";
 
 // lazy load all the views
-const Chats = React.lazy(() => import("../pages/dashboard/tabs/chats"));
-const Agents = React.lazy(() => import("../pages/dashboard/tabs/agents"));
-const Profile = React.lazy(() => import("../pages/dashboard/tabs/profile"));
-const Settings = React.lazy(() => import("../pages/dashboard/tabs/settings"));
+const Chats = React.lazy(() => import("../pages/dashboard/Tabs/Chats"));
+const Agents = React.lazy(() => import("../pages/dashboard/Tabs/Agents"));
+const Profile = React.lazy(() => import("../pages/dashboard/Tabs/Profile"));
+const Settings = React.lazy(() => import("../pages/dashboard/Tabs/Settings"));
 
 // auth
-const Login = React.lazy(() => import("../pages/authorization/login"));
-const Logout = React.lazy(() => import("../pages/authorization/logout"));
-const ForgetPassword = React.lazy(() => import("../pages/authorization/forgetPassword"));
-const Register = React.lazy(() => import("../pages/authorization/register"));
-const PasswordReset = React.lazy(() => import("../pages/authorization/passwordReset"));
+const Login = React.lazy(() => import("../pages/authorization/Login"));
+const Logout = React.lazy(() => import("../pages/authorization/Logout"));
+const ForgetPassword = React.lazy(() => import("../pages/authorization/ForgetPassword"));
+const Register = React.lazy(() => import("../pages/authorization/Register"));
+const PasswordReset = React.lazy(() => import("../pages/authorization/PasswordReset"));
 
 // declare all routes
 const authProtectedRoutes = [

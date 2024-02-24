@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import ChatInput from "./chatInput";
+import ChatInput from "./ChatInput";
 import {
     Alert, 
     Card, 

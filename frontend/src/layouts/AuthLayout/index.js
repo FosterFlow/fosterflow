@@ -8,9 +8,9 @@ import {
     getAuthorizedUser, 
     getUserAgents,
 } from '../../redux/actions';
-import Alerts from "./alerts";
-import SidebarMenuDesktop from "./sidebarMenuDesktop";
-import SidebarMenuMobile from "./sidebarMenuMobile";
+import Alerts from "./Alerts";
+import SidebarMenuDesktop from "./SidebarMenuDesktop";
+import SidebarMenuMobile from "./SidebarMenuMobile";
 
 const Index = (props) => {
     console.log ('Layouts Authout Layout index rendering');

@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import NewAgentChat from "../agent/newAgentChat";
+import NewAgentChat from "../Agent/NewAgentChat";
 import config from '../../../config';
 import {
     getAgents, 
