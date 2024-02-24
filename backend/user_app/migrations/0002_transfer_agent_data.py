@@ -13,15 +13,13 @@ def transfer_agents(apps, schema_editor):
         # Fill the gap with empty instances if necessary
         while last_id + 1 < old_agent.id:
             last_id += 1
-            NewAgent.objects.create(id=last_id)  # Create an empty instance with the missing ID
+            NewAgent.objects.create()  # Create an empty instance with the missing ID
         
         # Create a new agent matching the old agent's ID
-        new_agent = NewAgent(
-            id=old_agent.id,  # Explicitly set the ID to match the old agent's ID
+        new_agent = NewAgent.objects.create(
             user_id=old_agent.user_id_id,
             name=old_agent.first_name + " " + old_agent.last_name
         )
-        new_agent.save(force_insert=True)
         
         UserAgentProfile.objects.create(
             user_agent=new_agent,
