@@ -9,7 +9,7 @@ def set_addressee_agent(apps, schema_editor):
     
     if addressee_agent:
         # If the Agent exists, update all Message instances
-        Message.objects.all().update(addressee_agent=addressee_agent)
+        Message.objects.filter(addressee_agent_id=100).update(addressee_agent=addressee_agent)
     else:
         # Log a warning or take other actions if the Agent does not exist
         print("Agent with name='GPT 3.5 Turbo' does not exist. No updates made to Message instances.")
