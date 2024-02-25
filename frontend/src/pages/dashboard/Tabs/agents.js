@@ -11,7 +11,7 @@ import withRouter from "../../../components/withRouter";
 import NewAgentChat from "../Agent/NewAgentChat";
 import config from '../../../config';
 import {
-    getAgents, 
+    getAiAgents, 
     setActiveAgent,
     showNewAgentChat 
 } from "../../../redux/actions";
@@ -26,10 +26,10 @@ const Agents = (props) => {
     const { t } = useTranslation();
     const {
         router,
-        agents,
+        aiAgents,
         activeAgentId,
         setActiveAgent,
-        getAgents,
+        getAiAgents,
         getAgentsLoading,
         getAgentsErrors,
         authorizedUser,
@@ -42,32 +42,32 @@ const Agents = (props) => {
             return;
         }
 
-        getAgents();
+        getAiAgents();
     }, [authorizedUser]);
 
     useEffect(() => {
-        if (agents && agents.length === 0) {
+        if (aiAgents && aiAgents.length === 0) {
             return;
         }
 
-        setRecentAgentsList(agents);
+        setRecentAgentsList(aiAgents);
         
         if (id === 0 && activeAgentId > 0) {
             router.navigate(`/agents/${activeAgentId}`);
         }
-    }, [agents]);
+    }, [aiAgents]);
 
     const handleSearchChange = useCallback((event) => {
         const search = event.target.value.toLowerCase();
         setSearchAgent(search);
-        const filteredAgents = agents.filter(
+        const filteredAgents = aiAgents.filter(
             agent=> {
                 const agentName = agent.name  
                 return agentName.toString().toLowerCase().includes(search)
             }
         );
         setRecentAgentsList(filteredAgents);
-    }, [agents]);
+    }, [aiAgents]);
 
     useEffect(() => {
         if (isMobileDevice()){
@@ -160,14 +160,14 @@ const Agents = (props) => {
 //TODO: suscribe only to required fields. Prevent redundunt re-render 
 const mapStateToProps = state => {
     const {
-        agents,
+        aiAgents,
         activeAgentId,
         getAgentsLoading,
         getAgentsSucess,
         getAgentsErrors
     } = state.Agents;
     return {
-        agents,
+        aiAgents,
         activeAgentId,
         getAgentsLoading,
         getAgentsSucess,
@@ -178,7 +178,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    getAgents,
+    getAiAgents,
     setActiveAgent,
     showNewAgentChat
 }

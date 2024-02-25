@@ -3,10 +3,10 @@ import {
     SET_ACTIVE_AGENT,
     SHOW_NEW_AGENT_CHAT,
 
-    GET_AGENTS,
-    GET_AGENTS_INIT_STATE,
-    GET_AGENTS_SUCCESS,
-    GET_AGENTS_FAILED,
+    GET_AI_AGENTS,
+    GET_AI_AGENTS_INIT_STATE,
+    GET_AI_AGENTS_SUCCESS,
+    GET_AI_AGENTS_FAILED,
 
     GET_USER_AGENTS,
     GET_USER_AGENTS_INIT_STATE,
@@ -66,21 +66,24 @@ export const setActiveAgentFailed = (errors) => ({
     payload: errors
 });
 
-export const getAgents = () => ({
-    type: GET_AGENTS,
+export const getAiAgents = () => { 
+    
+    return {
+        type: GET_AI_AGENTS,
+    }
+};
+
+export const getAiAgentsInitState = () => ({
+    type: GET_AI_AGENTS_INIT_STATE,
 });
 
-export const getAgentsInitState = () => ({
-    type: GET_AGENTS_INIT_STATE,
-});
-
-export const getAgentsSuccess = (agents) => ({
-    type: GET_AGENTS_SUCCESS,
+export const getAiAgentsSuccess = (agents) => ({
+    type: GET_AI_AGENTS_SUCCESS,
     payload: agents
 });
 
-export const getAgentsFailed = (errors) => ({
-    type: GET_AGENTS_FAILED,
+export const getAiAgentsFailed = (errors) => ({
+    type: GET_AI_AGENTS_FAILED,
     payload: errors
 });
 

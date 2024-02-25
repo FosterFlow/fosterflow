@@ -13,6 +13,14 @@ class AgentListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     http_method_names = ['get']  
 
+class AiAgentListView(generics.ListAPIView):
+    queryset = Agent.objects.filter(is_active=True, ai_model__isnull=False)
+    serializer_class = AgentSerializer
+    filter_backends = (django_filters.DjangoFilterBackend,)
+    filterset_class = AgentFilter
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get'] 
+
 
 class AgentDetailsView(generics.RetrieveUpdateAPIView):
     queryset = Agent.objects.all()

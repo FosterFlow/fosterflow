@@ -6,10 +6,10 @@ import {
     SET_ACTIVE_AGENT_SUCCESS,
     SET_ACTIVE_AGENT_FAILED,
 
-    GET_AGENTS,
-    GET_AGENTS_INIT_STATE,
-    GET_AGENTS_SUCCESS,
-    GET_AGENTS_FAILED,
+    GET_AI_AGENTS,
+    GET_AI_AGENTS_INIT_STATE,
+    GET_AI_AGENTS_SUCCESS,
+    GET_AI_AGENTS_FAILED,
 
     GET_USER_AGENTS,
     GET_USER_AGENTS_INIT_STATE,
@@ -34,7 +34,7 @@ const INIT_STATE = {
     activeAgentId: 0,
     activeAgent: null,
 
-    agents: [],
+    aiAgents: [],
     //Agent, that represents authorized user, currently it's only one
     userAgent: null,
 
@@ -42,9 +42,9 @@ const INIT_STATE = {
     setActiveAgentSucess: false,
     setActiveAgentErrors: null,
 
-    getAgentsLoading: false,
-    getAgentsSucess: false,
-    getAgentsErrors: null,
+    getAiAgentsLoading: false,
+    getAiAgentsSucess: false,
+    getAiAgentsErrors: null,
 
     getUserAgentLoading: false,
     getUserAgentSucess: false,
@@ -70,24 +70,24 @@ const Agents = (state = INIT_STATE, action) => {
         case AGENT_INIT:
             return INIT_STATE;
 
-        case GET_AGENTS:
+        case GET_AI_AGENTS:
             return { 
                 ...state, 
-                getAgentsLoading: true,
-                getAgentsSucess: false,
-                getAgentsErrors: null, 
+                getAiAgentsLoading: true,
+                getAiAgentsSucess: false,
+                getAiAgentsErrors: null, 
         }
 
-        case GET_AGENTS_INIT_STATE:
+        case GET_AI_AGENTS_INIT_STATE:
             return { 
                 ...state,
-                agents: [], 
-                getAgentsLoading: false,
-                getAgentsSucess: false,
-                getAgentsErrors: null, 
+                aiAgents: [], 
+                getAiAgentsLoading: false,
+                getAiAgentsSucess: false,
+                getAiAgentsErrors: null, 
             }
         
-        case GET_AGENTS_SUCCESS: {
+        case GET_AI_AGENTS_SUCCESS: {
             //We take only NLP models
             const filteredAgents = action.payload.filter(agent => 
                 agent.is_active && agent.nlp_model !== null
@@ -95,19 +95,19 @@ const Agents = (state = INIT_STATE, action) => {
             
             return { 
                 ...state, 
-                agents: filteredAgents,
-                getAgentsLoading: false,
-                getAgentsSuccess: true, // Noticed a typo here (Sucess -> Success)
-                getAgentsErrors: null, 
+                aiAgents: filteredAgents,
+                getAiAgentsLoading: false,
+                getAiAgentsSuccess: true, // Noticed a typo here (Sucess -> Success)
+                getAiAgentsErrors: null, 
             };
         }
 
-        case GET_AGENTS_FAILED:
+        case GET_AI_AGENTS_FAILED:
             return { 
                 ...state,
-                getAgentsLoading: false,
-                getAgentsSucess: false,
-                getAgentsErrors: action.payload, 
+                getAiAgentsLoading: false,
+                getAiAgentsSucess: false,
+                getAiAgentsErrors: action.payload, 
             };
 
         //Setting default AI agent of the current chat, who will answer us

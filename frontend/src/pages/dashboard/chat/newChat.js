@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import { useTranslation } from 'react-i18next';
 import {
-    getAgents,
+    getAiAgents,
     setActiveAgent 
 } from "../../../redux/actions";
 import config from '../../../config';
@@ -24,9 +24,9 @@ import config from '../../../config';
 function UserChat(props) {
     const { t } = useTranslation();
     const {
-        getAgents,
+        getAiAgents,
         authorizedUser,
-        agents,
+        aiAgents,
         addChatErrors,
         setActiveAgent,
         activeAgent
@@ -42,8 +42,8 @@ function UserChat(props) {
             return;
         }
 
-        getAgents();
-    }, [authorizedUser, getAgents]);
+        getAiAgents();
+    }, [authorizedUser]);
 
     useEffect(() => {
         setActiveAgent(agentId);
@@ -73,7 +73,7 @@ function UserChat(props) {
                             </CardHeader>
                             <CardBody>
                                 <div className="agent-tiles-container">
-                                    {agents && agents.map((agent, index) => (
+                                    {aiAgents && aiAgents.map((agent, index) => (
                                         <Link 
                                             to={`/chats/new_chat/${agent.id}`} 
                                             key={index} 
@@ -119,13 +119,13 @@ const mapStateToProps = (state) => {
         messages: state.Message.messages,
         addChatErrors: state.Chat.addChatErrors,
         authorizedUser: state.User.authorizedUser,
-        agents: state.Agents.agents,
+        aiAgents: state.Agents.aiAgents,
         activeAgent: state.Agents.activeAgent,
     }
 };
 
 const mapDispatchToProps = {
-    getAgents,
+    getAiAgents,
     setActiveAgent
 }
 

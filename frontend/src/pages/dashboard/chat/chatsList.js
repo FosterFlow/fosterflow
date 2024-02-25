@@ -15,7 +15,7 @@ import config from '../../../config';
 import { 
     fetchChats,
     setActiveChat,
-    getAgents
+    getAiAgents
 } from "../../../redux/actions";
 import { useTranslation } from 'react-i18next';
 
@@ -39,8 +39,9 @@ const ChatsList = (props) => {
 
         authorizedUser,
         userAgent,
-        agents,
-        getAgents
+
+        aiAgents,
+        getAiAgents
     } = props;
 
     useEffect(() => {
@@ -59,8 +60,8 @@ const ChatsList = (props) => {
             return;
         }
 
-        if (agents && agents.length === 0) {
-            getAgents();
+        if (aiAgents && aiAgents.length === 0) {
+            getAiAgents();
             return;
         }
 
@@ -134,7 +135,7 @@ const ChatsList = (props) => {
                     <ul className="list-unstyled chats-list" id="chat-list">
                         {
                             recentChatList.map((chat, key) => {
-                                const agent = agents.find(agent => agent.id === chat.addressee_agent_id);
+                                const agent = aiAgents.find(agent => agent.id === chat.addressee_agent_id);
 
                                 return <li 
                                     key={key} 
@@ -174,14 +175,14 @@ const mapStateToProps = state => {
         //TODO: cause redundun re-render
         authorizedUser: state.User.authorizedUser,
         userAgent: state.Agents.userAgent,
-        agents: state.Agents.agents,
+        aiAgents: state.Agents.aiAgents,
     };
 };
 
 const mapDispatchToProps = {
     fetchChats,
     setActiveChat,
-    getAgents
+    getAiAgents
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatsList));

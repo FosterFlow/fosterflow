@@ -9,7 +9,7 @@ from auth_app.views import UserLogoutAPIView, UserLoginAPIView, RegisterApi, \
 from user_app.views import SelfUserAPIView
 from user_agent_profile_app.views import UserAgentProfileDetailsView, UserAgentProfileByAgentIdView, UserAgentProfileAvatarView
 from auth_app.views import CustomTokenRefreshView
-from agent_app.views import AgentListView, AgentDetailsView, AgentSelfView
+from agent_app.views import AiAgentListView, AgentDetailsView, AgentSelfView
 from ai_agent_profile_app.views import AiAgentProfileDetailsView
 from chat_app.views import (
     ChatListView, ChatCreateView, ChatDetailView, ChatUpdateView, ChatDeleteView
@@ -34,7 +34,8 @@ urlpatterns = [
     path('api/user-agent-profiles/<int:pk>/', UserAgentProfileDetailsView.as_view(), name='user_agent_profile_details'),
     path('api/user-agent-profiles/<int:pk>/avatar/', UserAgentProfileAvatarView.as_view(), name='user_agent_profile_avatar'),
 
-    path('api/agents/', AgentListView.as_view(), name='agent-list'),
+    # path('api/agents/', AgentListView.as_view(), name='agent-list'),
+    path('api/ai-agents/', AiAgentListView.as_view(), name='agent-list'),
     path('api/agents/self/', AgentSelfView.as_view(), name='agent-self'),
     path('api/agents/<int:pk>/', AgentDetailsView.as_view(), name='agent-detail'),
 

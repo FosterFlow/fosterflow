@@ -14,7 +14,7 @@ const ChatHead = memo(function ChatHead(props) {
     const isNewChat = location.pathname.startsWith('/chats/new_chat');
     const {
         activeChatId,
-        agents,
+        aiAgents,
         activeAgent,
         actionDeleteChat,
         router
@@ -38,7 +38,7 @@ const ChatHead = memo(function ChatHead(props) {
                                 </Link>
                             </Col>
                             <Col>
-                                {(!isNewChat && agents.length > 0) && (
+                                {(!isNewChat && aiAgents.length > 0) && (
                                 <span className="user-chat-agent pt-2 ps-2">{activeAgent?.name}</span>
                                 )}
                             </Col>
@@ -59,7 +59,7 @@ const ChatHead = memo(function ChatHead(props) {
 const mapStateToProps = (state) => {
     return { 
         activeChatId: state.Chat.activeChatId,
-        agents: state.Agents.agents,
+        aiAgents: state.Agents.aiAgents,
         activeAgent: state.Agents.activeAgent
     };
 };

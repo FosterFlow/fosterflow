@@ -7,7 +7,7 @@ import {
 import apiAuthorizedClient from '../../helpers/apiAuthorizedClient';
 import {
     SET_ACTIVE_AGENT,
-    GET_AGENTS,
+    GET_AI_AGENTS,
     GET_USER_AGENTS,   
     UPDATE_AGENT_DATA, 
     UPDATE_AGENT_AVATAR 
@@ -17,8 +17,8 @@ import {
     setActiveAgentSuccess,
     setActiveAgentFailed,
 
-    getAgentsSuccess,
-    getAgentsFailed,
+    getAiAgentsSuccess,
+    getAiAgentsFailed,
     
     getUserAgentsSuccess,
     getUserAgentsFailed,
@@ -49,12 +49,12 @@ function* setActiveAgentSaga(action) {
     }
 }
 
-function* getAgentsSaga() {
+function* getAiAgentsSaga() {
     try {
-        const response = yield call(api.get, `/agents/`);
-        yield put(getAgentsSuccess(response));
+        const response = yield call(api.get, `/ai-agents/`);
+        yield put(getAiAgentsSuccess(response));
     } catch (errors) {
-        yield put(getAgentsFailed(errors));
+        yield put(getAiAgentsFailed(errors));
     }
 }
 
@@ -99,7 +99,7 @@ function* updateAgentAvatarSaga({ payload: { id, avatar } }) {
 
 export default function* agentSaga() {
     yield takeEvery(SET_ACTIVE_AGENT, setActiveAgentSaga);
-    yield takeEvery(GET_AGENTS, getAgentsSaga);
+    yield takeEvery(GET_AI_AGENTS, getAiAgentsSaga);
     yield takeEvery(GET_USER_AGENTS, getUserAgentsSaga);
     yield takeEvery(UPDATE_AGENT_DATA, updateAgentDataSaga);
     yield takeEvery(UPDATE_AGENT_AVATAR, updateAgentAvatarSaga);
