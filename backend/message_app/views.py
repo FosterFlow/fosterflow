@@ -26,29 +26,36 @@ class MessageListView(ListAPIView):
     permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
     def get_queryset(self):
-        user_agent = Agent.objects.get(user=self.request.user)
         chat_id = self.request.query_params.get('chat_id')
         if chat_id:
             agent_messages = self.queryset.filter(
                 Q(chat=chat_id),
-                Q(owner_agent=user_agent) | Q(addressee_agent=user_agent)
             )
             if not agent_messages.exists():
-                raise NotFound({"errors": {"details": ["No messages found for the given chat_id and agent."]}})
+                raise NotFound({"errors": {"details": ["No messages found for the given chat_id."]}})
             return agent_messages
 
 class MessageCreateView(CreateAPIView):
-    queryset = Message.objects.all()
+    queryset = Message.objects.filter()
     serializer_class = MessageModelSerializer
     permission_classes = [IsMessageOwner, IsEmailConfirmed]
 
     def perform_create(self, serializer):
         user_agent = Agent.objects.get(user=self.request.user)
         instance = serializer.save(owner_agent=user_agent)
-
-        instance = serializer.save()
         send_feedback_ai_task.delay({'message_id': instance.id, })
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def get_queryset(self):
+        chat_id = self.request.query_params.get('chat_id')
+        if chat_id:
+            messages = self.queryset.filter(
+                Q(chat=chat_id),
+            )
+            if not messages.exists():
+                raise NotFound({"errors": {"details": ["No messages found for the given chat_id."]}})
+            return messages
 
 class MessageDetailView(RetrieveAPIView):
     queryset = Message.objects.all()

@@ -22,6 +22,7 @@ class RequestHandler:
         if agent.ai_model.title == 'GPT-3.5-turbo' and agent.is_active:
             adapter = GptAdapter(Gpt35TurboInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
+
         elif agent.ai_model.title == 'gpt-4-turbo-preview' and agent.is_active:
             adapter = GptAdapter(Gpt4TurboInterface, ResponseWebsocketInterface)
             adapter.generate_response(sent_message)
@@ -42,16 +43,19 @@ class Adapter:
         self.to_interface = to_interface
 
     def get_messages(self, sent_message):
-        previous_messages = Message.objects.filter(chat_id=sent_message.chat_id).order_by('id')[:10]
-
+        previous_messages = list(Message.objects.filter(chat_id=sent_message.chat_id).order_by('-created_at')[:10])
+        # Reverse the list to get messages from oldest to newest
+        previous_messages = previous_messages[::-1]
         messages = [{"role": "system", "content": "You are a helpful assistant."}]
+        
         for message in previous_messages:
             if message.owner_agent_id == sent_message.owner_agent_id:
-                mes = {"role": "user", "content": message.message_text}
+                messsege_object = {"role": "user", "content": message.message_text}
             else:
-                mes = {"role": "assistant", "content": message.message_text}
-            messages.append(mes)
-
+                messsege_object = {"role": "assistant", "content": message.message_text}
+            messages.append(messsege_object)
+        
+        # print(f"Adapter get_messages messages {messages}")
         return messages
 
     def create_nlp_message(self, chat_id, owner_agent_id, addressee_agent_id, request_id):
