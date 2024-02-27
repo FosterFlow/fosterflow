@@ -13,7 +13,7 @@ import {
 } from './routes';
 import { connect } from "react-redux";
 import NonAuthLayout from "../layouts/NonAuth";
-import AuthLayout from "../layouts/AuthLayout/";
+import AuthLayout from "../layouts/AuthLayout";
 
 /**
  * Main Route component
