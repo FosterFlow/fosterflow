@@ -36,29 +36,35 @@
 }
 
 .user-chat-conversation {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
-    overflow-y: auto;
-    height: 1px;
+}
 
+.user-chat-messages {
+    overflow-y: auto;
+    flex-grow: 1;
+    height: 1px;
+    
     #messages {
         padding: 1rem 1rem 0 1rem;
     }
 }
 
-.user-chat-conversation-list {
+.user-chat-messages-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.user-chat-conversation-list-item {
+.user-chat-messages-list-item {
     padding: 0 0 24px 0;
     margin: 0;
     display: flex;
     flex-direction: row;
 }
 
-.user-chat-conversation-list-item.right{
+.user-chat-messages-list-item.right{
     justify-content: flex-end;
 }
 
