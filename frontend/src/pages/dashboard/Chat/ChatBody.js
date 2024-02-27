@@ -74,7 +74,8 @@ function ChatBody(props) {
                 </div>
             }
             { fetchMessagesErrors && (
-                <Alert color="danger">
+                <div className="p-3">
+                    <Alert color="danger">
                     {t('Errors details')}:
                         <ul>
                         {fetchMessagesErrors.details.map((error, index) => (
@@ -84,7 +85,8 @@ function ChatBody(props) {
                         <hr/>
                         {t("If you do not know what to do with the error, write to us by mail")}: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
                     </Alert>
-                )}
+                </div>
+            )}
             { showMessagesList &&
                 <MessagesList/>
             }
