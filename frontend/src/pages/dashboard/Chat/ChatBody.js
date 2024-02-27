@@ -1,5 +1,5 @@
 //TODO: it renders 8 times, figure it out
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Spinner,
     Alert 
