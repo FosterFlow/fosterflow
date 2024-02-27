@@ -18,13 +18,13 @@ import {
 
 function ChatBody(props) {
     console.log ('Chats ChatBody component rendering');
+    //Hook to prevent showing scroll animation when page is loading
     const [showMessagesList, setShowMessagesList] = useState(false);
     const {
         fetchMessagesLoading,
         fetchMessagesErrors,
         fetchMessagesSuccess, 
         activeChatId,
-        addChatSuccess,
         authorizedUser,
         addChatRequestMessage,
         fetchMessages,
@@ -103,7 +103,6 @@ const mapStateToProps = (state) => {
     const {
         activeChatId,
         activeChat,
-        addChatSuccess
     } = state.Chat;
 
     const {
@@ -120,7 +119,6 @@ const mapStateToProps = (state) => {
         fetchMessagesSuccess,
         activeChatId,
         activeChat,
-        addChatSuccess,
         addChatRequestMessage,
         skipMessagesFetching,
         authorizedUser: state.User.authorizedUser,

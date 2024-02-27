@@ -28,7 +28,7 @@ class ChatListView(ListAPIView):
     def get_queryset(self):
         chat_owner_agent_id = self.request.query_params.get('owner_agent_id')
         if chat_owner_agent_id is not None:
-            return self.queryset.filter(owner_agent=chat_owner_agent_id)
+            return self.queryset.filter(owner_agent=chat_owner_agent_id).order_by('updated_at')
         return Chat.objects.none()
 
 class ChatCreateView(CreateAPIView):
