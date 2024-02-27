@@ -127,8 +127,6 @@ function MessagesList(props) {
 
     return (
         <React.Fragment>
-      
-                //such condition prevents autscrolling during loading process
                 <ScrollToBottom 
                     className="user-chat-messages"
                     initialScrollBehavior="auto"

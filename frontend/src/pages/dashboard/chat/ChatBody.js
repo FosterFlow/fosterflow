@@ -18,7 +18,6 @@ import {
 
 function ChatBody(props) {
     console.log ('Chats ChatBody component rendering');
-    const chatWindowRef = useRef();
     const [showMessagesList, setShowMessagesList] = useState(false);
     const {
         fetchMessagesLoading,
@@ -33,39 +32,18 @@ function ChatBody(props) {
     } = props;
     const { t } = useTranslation();
     //TODO: review if it's neccesary to store all messages into store
-    const [messageMaxWidth, setMessageMaxWidth] = useState(0);
     const supportEmail =  config.SUPPORT_EMAIL;
 
-
-    function handleWindowResize () {
-        messageMaxMidthUpdate(true);
-    }
-
-    /**
-     * Hack, didn't find working CSS solution
-     * Need to specidy maximum width for the messages, because of possible long code blocks
-     * 
-     * param rerender {boolean}
-     */
-    function messageMaxMidthUpdate (rerender) {
-        if (chatWindowRef.current === null){
-            return;
-        }
-
-        if (rerender || messageMaxWidth === 0) {
-            const width = chatWindowRef.current.clientWidth - 32;
-            setMessageMaxWidth(width);
-        }
-    }
-
     useEffect(() => {
-        if (fetchMessagesSuccess === false) {
-            return;
+        if (fetchMessagesSuccess === true) {
+            setShowMessagesList(true);
         }
 
-        setShowMessagesList(true);
+        if (fetchMessagesLoading === true) {
+            setShowMessagesList(false);
+        }
 
-    }, [fetchMessagesSuccess]);
+    }, [fetchMessagesSuccess, fetchMessagesLoading]);
 
     function isChatDisabled(){
         return activeChatId === 0 ||
@@ -108,7 +86,6 @@ function ChatBody(props) {
                     </Alert>
                 )}
             { showMessagesList &&
-                //such condition prevents autoscrolling during loading process
                 <MessagesList/>
             }
             </div>
