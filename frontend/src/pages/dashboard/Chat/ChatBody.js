@@ -24,6 +24,7 @@ function ChatBody(props) {
         fetchMessagesErrors,
         fetchMessagesSuccess, 
         activeChatId,
+        addChatSuccess,
         authorizedUser,
         addChatRequestMessage,
         fetchMessages,
@@ -35,14 +36,15 @@ function ChatBody(props) {
     const supportEmail =  config.SUPPORT_EMAIL;
 
     useEffect(() => {
-        if (fetchMessagesSuccess === true) {
+        if (fetchMessagesSuccess) {
             setShowMessagesList(true);
+            return;
         }
 
-        if (fetchMessagesLoading === true) {
+        if (fetchMessagesLoading) {
             setShowMessagesList(false);
+            return;
         }
-
     }, [fetchMessagesSuccess, fetchMessagesLoading]);
 
     function isChatDisabled(){
@@ -59,6 +61,7 @@ function ChatBody(props) {
 
         if (skipMessagesFetching) {
           setSkipFetchMessages(false);
+          setShowMessagesList(true);
           return;
         }
 
@@ -100,6 +103,7 @@ const mapStateToProps = (state) => {
     const {
         activeChatId,
         activeChat,
+        addChatSuccess
     } = state.Chat;
 
     const {
@@ -116,6 +120,7 @@ const mapStateToProps = (state) => {
         fetchMessagesSuccess,
         activeChatId,
         activeChat,
+        addChatSuccess,
         addChatRequestMessage,
         skipMessagesFetching,
         authorizedUser: state.User.authorizedUser,
