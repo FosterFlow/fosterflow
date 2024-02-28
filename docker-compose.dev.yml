@@ -43,7 +43,7 @@ services:
       - myNetwork
     build: 
       context: ./backend
-      dockerfile: /Dockerfile.dev
+      dockerfile: Dockerfile.dev
     volumes:
       - ./backend:/backend
     entrypoint: sh ./django-entrypoint-dev.sh
