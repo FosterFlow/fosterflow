@@ -86,13 +86,13 @@ function ReceivingMessages(props) {
                     <React.Fragment key={key}>
                         {
                             userAgent.id === message.owner_agent_id ? (
-                                <li className="user-chat-conversation-list-item right">
+                                <li className="user-chat-messages-list-item right">
                                     <div className="user-chat-message user-chat-message-formatting">
                                         {message.message_text}
                                     </div>
                                 </li>
                             ) : (
-                                <li className="user-chat-conversation-list-item"> 
+                                <li className="user-chat-messages-list-item"> 
                                     <div 
                                         className="user-chat-message" 
                                         style={{maxWidth: `1200px`}}

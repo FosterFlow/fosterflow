@@ -22,7 +22,7 @@ function SendingMessages(props) {
                 relevantSendingMessages.map((message, key) =>
                     <React.Fragment key={key}>
                         {
-                            <li className="user-chat-conversation-list-item right">
+                            <li className="user-chat-messages-list-item right">
                                 <div className="user-chat-message user-chat-message-formatting">
                                     <Spinner size="sm"/>&nbsp;&nbsp;
                                     {message.message_text}
