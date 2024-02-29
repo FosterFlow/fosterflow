@@ -10,14 +10,14 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth_app', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('agent_app', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='emailconfirmationtoken',
+            model_name='agent',
             name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to=settings.AUTH_USER_MODEL),
         ),
     ]

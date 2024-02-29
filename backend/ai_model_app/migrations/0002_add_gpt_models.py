@@ -17,9 +17,8 @@ def create_gpt4_turbo(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('agent_app', '0001_initial'),
-        ('ai_model_app', '0001_initial'),
-        ('chat_app', '0005_alter_chat_addressee_agent_alter_chat_owner_agent'),
+        ('agent_app', '0002_initial'),
+        ('ai_model_app', '0001_initial'),        
     ]
 
     operations = [
