@@ -35,29 +35,25 @@ services:
 
   backend:
     container_name: backend
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile.prod
-    ports:
-      - 8000:8000  # Django server port
-    entrypoint: sh ./django-entrypoint-prod.sh
     environment:
       - REDIS_HOST=redis
-    restart: always
-    volumes:
-      - ./backend:/backend
-    depends_on:
-      - db
-      - redis
     env_file:
       - .env
     networks:
       - myNetwork
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./backend:/backend
+    entrypoint: sh ./django-entrypoint-prod.sh
+    restart: always  
+    ports:
+      - 8000:8000
+      - 5678:5678
+    depends_on:
+      - db
+      - redis
 
   celery:
     container_name: celery
@@ -99,22 +95,6 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-
-  swagger:
-    container_name: swagger
-    build: 
-      context: ./swagger
-      dockerfile: Dockerfile.prod
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./swagger:/swagger
-    command: bash -c "npm install && npm start"
-    networks:
-      - myNetwork
-    depends_on:
-      - db
-      - backend
 
 volumes:
   redis:
