@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y postgresql-client
 RUN pip install --upgrade pip
 
 # Create a non-root user `appuser` with no password
-# `appuser` will be the user name, feel free to choose a name that suits your application
-RUN addgroup --system appuser && adduser --system --group appuser
+# Specifying home directory explicitly
+RUN addgroup --system appuser && adduser --system --group --home /home/appuser appuser
 
 WORKDIR /backend
 
@@ -18,10 +18,13 @@ RUN chown -R appuser:appuser /backend
 
 # Switch to the non-root user
 USER appuser
+# Create a virtual environment and activate it
+RUN python -m venv /home/appuser/venv
 
 # Existing lines for setting environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV PATH="/home/appuser/venv/bin:$PATH"
 
 COPY . .
 RUN pip3 install -r requirements.txt
