@@ -1,15 +1,21 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.10.12
-
-WORKDIR /backend
-
+# Existing lines for installing dependencies
 RUN apt-get update && apt-get install -y postgresql-client
 RUN pip install --upgrade pip
 
-# Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
+# Create a non-root user `appuser` with no password
+# `appuser` will be the user name, feel free to choose a name that suits your application
+RUN addgroup --system appuser && adduser --system --group appuser
 
-# Turns off buffering for easier container logging
+WORKDIR /backend
+
+# Change ownership of the /backend directory to `appuser`
+RUN chown -R appuser:appuser /backend
+
+# Switch to the non-root user
+USER appuser
+
+# Existing lines for setting environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 COPY . .
