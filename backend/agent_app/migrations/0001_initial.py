@@ -3,13 +3,13 @@
 from django.db import migrations, models
 import django.db.models.deletion
 
-
 class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [ 
+    dependencies = [
         ('ai_model_app', '0001_initial'),
+        ('user_app', '0001_initial'), # Ensure this is the correct dependency for your User model
     ]
 
     operations = [
@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
                 ('is_active', models.BooleanField(default=True)),
                 ('thumbnail_url', models.CharField(blank=True, max_length=255)),
                 ('ai_model', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to='ai_model_app.aimodel')),
+                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='agents', to='user_app.user')), # Adjusted to link to the User model
             ],
         ),
     ]
