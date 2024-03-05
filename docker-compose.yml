@@ -68,6 +68,7 @@ services:
       - redis
     env_file:
       - .env
+    restart: always 
     networks:
       - myNetwork
 
@@ -90,6 +91,7 @@ services:
     depends_on:
       - db
       - backend
+    restart: always 
     logging:
       driver: json-file
       options:

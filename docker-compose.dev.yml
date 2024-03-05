@@ -19,7 +19,6 @@ services:
   redis:
     image: redis:6.2-alpine
     container_name: redis
-    restart: always
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
@@ -47,7 +46,6 @@ services:
     volumes:
       - ./backend:/backend
     entrypoint: sh ./django-entrypoint-dev.sh
-    restart: always  
     ports:
       - 8000:8000
       - 5678:5678
