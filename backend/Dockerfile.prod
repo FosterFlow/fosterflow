@@ -7,12 +7,16 @@ RUN pip install --upgrade pip
 
 WORKDIR /backend
 
+# Ensure the media directory exists
+RUN mkdir -p /backend/media
+
 # Create a non-root user `appuser` with no password
 # `appuser` will be the user name, feel free to choose a name that suits your application
 RUN addgroup --system appuser && adduser --system --group appuser
 
-# Change ownership of the /backend directory to `appuser`
+# Create the `media` directory and set proper permissions
 RUN chown -R appuser:appuser /backend
+RUN chmod -R 775 /backend/media
 
 COPY . .
 RUN pip3 install -r requirements.txt
