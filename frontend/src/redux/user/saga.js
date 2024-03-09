@@ -18,7 +18,6 @@ const api = apiAuthorizedClient;
 function* getAuthorizedUser() {
     try {
         const response = yield call(api.get, `/users/self/`);
-        console.log("After API call", response);
         yield put(getAuthorizedUserSuccess(response));
     } catch (error) {
         yield put(userError(error));

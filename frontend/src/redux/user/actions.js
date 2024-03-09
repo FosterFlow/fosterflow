@@ -22,7 +22,6 @@ export const getAuthorizedUser = (data) => ({
 });
 
 export const getAuthorizedUserSuccess = (authorizedUser) => {
-    console.log ("user -> actions getUserAuthorizedSuccess authorizedUser", authorizedUser);
 
     return {
         type: GET_AUTHORIZED_USER_SUCCESS,

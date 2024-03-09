@@ -89,7 +89,6 @@ function* addChatSuccessSaga(action) {
 }
 
 function* deleteChatSaga(action) {
-  console.log("chat saga deleteChat action ", action);
   try {
     yield call(api.delete, `/chats/${action.payload}/delete/`);
     yield put(deleteChatSuccess(action.payload));

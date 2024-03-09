@@ -121,7 +121,6 @@ export const logoutUserFailure = (errors) => {
 };
 
 export const registerUser = (email, password ) => {
-    console.log('Actions', 'registerUser', 'email, password ', email, password );
     return {
         type: REGISTER_USER,
         payload: { email, password }

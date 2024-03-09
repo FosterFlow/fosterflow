@@ -129,7 +129,6 @@ function Settings(props) {
                 .required(t('Please enter your last name')),
         }),
         onSubmit: values => {
-            console.log('Settings page personalInfoForm', 'onSubmit', values);
             if (profileId !== 0) {
                 updateUserAgentProfileData(profileId, values);
                 return;
@@ -189,7 +188,6 @@ function Settings(props) {
                 )
         }),
         onSubmit: values => {
-            console.log('Settings page securityForm', 'onSubmit', values);
             const oldPassword = values.old_password;
             const newPassword = values.new_password;
             changePassword(oldPassword, newPassword);

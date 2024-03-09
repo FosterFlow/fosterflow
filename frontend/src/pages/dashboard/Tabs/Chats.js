@@ -6,7 +6,7 @@ import Chat from "../Chat";
 import NewChat from "../Chat/NewChat";
 
 const Chats = (props) => {
-    console.log ('Tabs Chats rendering');
+console.log ('Tabs Chats rendering');
     const id = Number(props.router.params.id) || 0;
 
     return (

@@ -9,6 +9,7 @@ WORKDIR /backend
 
 # Ensure the media directory exists
 RUN mkdir -p /backend/media
+RUN mkdir -p /backend/media/avatars
 
 # Create a non-root user `appuser` with no password
 # `appuser` will be the user name, feel free to choose a name that suits your application
@@ -17,6 +18,7 @@ RUN addgroup --system appuser && adduser --system --group appuser
 # Create the `media` directory and set proper permissions
 RUN chown -R appuser:appuser /backend
 RUN chmod -R 775 /backend/media
+RUN chmod -R 775 /backend/media/avatars
 
 COPY . .
 RUN pip3 install -r requirements.txt
