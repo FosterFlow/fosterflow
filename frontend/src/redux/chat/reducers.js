@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
     CHAT_INIT,
 
@@ -57,8 +56,7 @@ const Chat = (state = INIT_STATE, action) => {
                 activeChatId: Number(action.payload),
                 activeChat: null,
                 activeChatLoading: true,
-                activeChatSuccess: false,
-                activeChatSuccess: null, 
+                activeChatSuccess: false
             };
         }
 

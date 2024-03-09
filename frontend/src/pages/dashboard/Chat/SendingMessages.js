@@ -5,7 +5,6 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import _ from 'lodash';
 
 function SendingMessages(props) {
     const {

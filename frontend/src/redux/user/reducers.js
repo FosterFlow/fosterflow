@@ -2,8 +2,6 @@ import {
     USER_INIT,
     GET_AUTHORIZED_USER,
     GET_AUTHORIZED_USER_SUCCESS,
-    GET_USER,
-    GET_USER_SUCCESS,
     UPDATE_USER,
     UPDATE_USER_SUCCESS,
     DELETE_USER,
@@ -53,8 +51,6 @@ const User = (state = INIT_STATE, action) => {
                 error: null 
             };
 
-        case GET_USER:
-
         case UPDATE_USER:
             return { 
                 ...state, 
@@ -62,8 +58,6 @@ const User = (state = INIT_STATE, action) => {
                 error: null 
             };
         
-        case GET_USER_SUCCESS:
-
         case UPDATE_USER_SUCCESS:
             return { 
                 ...state, 

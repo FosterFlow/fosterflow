@@ -21,7 +21,6 @@ import {
     loginUserSuccess,
     loginUserFailure,
     
-    logoutUser,
     logoutForce,
     logoutUserSuccess,
     logoutUserFailure,
@@ -45,7 +44,6 @@ import {
     validatePasswordResetTokenSuccess,
     validatePasswordResetTokenFailure,
     
-    resetPasswordInitState,
     resetPasswordSuccess,
     resetPasswordFailure,
     

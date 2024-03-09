@@ -17,7 +17,6 @@ import {
 } from './constants';
 import {
   wsConnectionSuccess,
-  wsConnectionError,
   wsConnectionClosed,
   wsReceiveMessage,
   wsReceiveMessageFailed

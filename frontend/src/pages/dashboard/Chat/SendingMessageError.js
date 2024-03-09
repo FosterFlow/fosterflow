@@ -4,7 +4,6 @@ import {
 } from "reactstrap";
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
-import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import config from '../../../config';
 

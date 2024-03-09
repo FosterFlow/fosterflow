@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
     SET_SKIP_FETCH_MESSAGES,
     

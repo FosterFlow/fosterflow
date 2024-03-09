@@ -66,7 +66,7 @@ const ChatInput = memo(function ChatInput(props) {
         const trimmedText = _.trim(textMessage);
 
         if (userAgent === null ||
-            authorizedUser === null,
+            authorizedUser === null ||
             authorizedUser.is_email_confirmed === false ||
             trimmedText === ""){
             return;

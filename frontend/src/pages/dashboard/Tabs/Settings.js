@@ -410,8 +410,8 @@ function Settings(props) {
                                             <Label>{t('Email')}:</Label>
                                             <div>
                                                 {
-                                                    user && user.authorizedUser 
-                                                    && user.authorizedUser.email ||
+                                                    (user && user.authorizedUser 
+                                                    && user.authorizedUser.email) || 
                                                     t('Email information not found')
                                                 }
                                             </div>

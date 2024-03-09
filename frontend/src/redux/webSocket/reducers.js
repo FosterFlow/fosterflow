@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
     ADD_WEB_SOCKET_REQUEST,
     CLEAR_WEB_SOCKET_REQUESTS_QUEUE,
