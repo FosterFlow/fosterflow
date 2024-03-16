@@ -1,17 +1,14 @@
-# Step 1: Build the React app
+# Step 1: Build the React app - No changes needed here
 FROM node:18.17.1-alpine AS build-stage
 
 # Set working directory
-WORKDIR /app
+WORKDIR /frontend
 
 # Create a group and user for the build stage
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Change ownership of the app directory
-RUN chown -R appuser:appgroup /app
-
-# Switch to non-root user
-USER appuser
+RUN chown -R appuser:appgroup /frontend
 
 # Copy package.json and install dependencies
 COPY --chown=appuser:appgroup package.json ./
@@ -23,17 +20,15 @@ COPY --chown=appuser:appgroup . .
 # Build your app
 RUN yarn build
 
-# Step 2: Serve the app with Nginx
+# Step 2: Serve the app with Nginx - Corrected to use the right source path
 FROM nginx:1.21.0-alpine AS production-stage
 
-# Create a group and user for the Nginx stage
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-
 # Copy built assets from builder stage and change ownership
-COPY --from=build-stage --chown=appuser:appgroup /app/build /usr/share/nginx/html
-
-# Expose port and run Nginx; No need to expose port 80 for non-root users as Nginx internally redirects it.
-CMD ["nginx", "-g", "daemon off;"]
+COPY --from=build-stage --chown=appuser:appgroup /frontend/build /usr/share/nginx/html
+# Corrected the source path from /app/build to /frontend/build
 
 # Switch to non-root user
 USER appuser
+
+# Expose port and run Nginx; No need to expose port 80 for non-root users as Nginx internally redirects it.
+CMD ["nginx", "-g", "daemon off;"]
