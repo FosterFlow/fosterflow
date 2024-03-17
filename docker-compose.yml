@@ -78,9 +78,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.prod
     ports:
-      - "3000:3000"
+      - "80:80"
     expose:
-      - "3000"
+      - "80"
     volumes:
       - ./frontend:/frontend
       - '/frontend/node_modules'

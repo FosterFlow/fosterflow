@@ -1,4 +1,4 @@
-# Step 1: Build the React app - No changes needed here
+# Step 1: Build the React app
 FROM node:18.17.1-alpine AS build-stage
 
 # Set working directory
@@ -23,12 +23,14 @@ COPY --chown=appuser:appgroup . .
 # Build your app
 RUN yarn build
 
-# Step 2: Serve the app with Nginx - Corrected to use the right source path
 FROM nginx:1.21.0-alpine AS production-stage
 
 # Copy built assets from builder stage and change ownership
 COPY --from=build-stage /frontend/build /usr/share/nginx/html
-# Corrected the source path from /app/build to /frontend/build
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Nginx listens on port 80 by default
+EXPOSE 80
 
 # Expose port and run Nginx; No need to expose port 80 for non-root users as Nginx internally redirects it.
 CMD ["nginx", "-g", "daemon off;"]
