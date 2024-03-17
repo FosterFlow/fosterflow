@@ -5,13 +5,16 @@ FROM node:18.17.1-alpine AS build-stage
 WORKDIR /frontend
 
 # Create a group and user for the build stage
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN addgroup -S appuser && adduser -S -G appuser appuser
 
 # Change ownership of the app directory
-RUN chown -R appuser:appgroup /frontend
+RUN chown -R appuser:appuser /frontend
 
 # Copy package.json and install dependencies
 COPY --chown=appuser:appgroup package.json ./
+# Switch to non-root user
+USER appuser
+
 RUN yarn install
 
 # Copy the rest of your app's source code
@@ -24,11 +27,8 @@ RUN yarn build
 FROM nginx:1.21.0-alpine AS production-stage
 
 # Copy built assets from builder stage and change ownership
-COPY --from=build-stage --chown=appuser:appgroup /frontend/build /usr/share/nginx/html
+COPY --from=build-stage /frontend/build /usr/share/nginx/html
 # Corrected the source path from /app/build to /frontend/build
-
-# Switch to non-root user
-USER appuser
 
 # Expose port and run Nginx; No need to expose port 80 for non-root users as Nginx internally redirects it.
 CMD ["nginx", "-g", "daemon off;"]

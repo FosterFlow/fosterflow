@@ -3,11 +3,11 @@ FROM node:18.17.1-alpine AS builder
 # Set working directory
 WORKDIR /frontend
 
-# Create a group and user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# Create a group and user for the build stage
+RUN addgroup -S appuser && adduser -S -G appuser appuser
 
-# Change ownership of the directory
-RUN chown -R appuser:appgroup /frontend
+# Change ownership of the app directory
+RUN chown -R appuser:appuser /frontend
 
 # Copy package files and install dependencies
 COPY --chown=appuser:appgroup . .

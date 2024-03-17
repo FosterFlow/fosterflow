@@ -17,10 +17,8 @@ RUN addgroup --system appuser && adduser --system --group appuser
 
 # Create the `media` directory and set proper permissions
 RUN chown -R appuser:appuser /backend
-RUN chmod -R 775 /backend/media
-RUN chmod -R 775 /backend/media/avatars
 
-COPY . .
+COPY --chown=appuser:appgroup . .
 RUN pip3 install -r requirements.txt
 
 # Switch to the non-root user
