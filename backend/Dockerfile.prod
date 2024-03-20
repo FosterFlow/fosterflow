@@ -11,15 +11,15 @@ WORKDIR /backend
 RUN mkdir -p /backend/media
 RUN mkdir -p /backend/media/avatars
 
-# Create a non-root user `appuser` with no password
-# `appuser` will be the user name, feel free to choose a name that suits your application
-RUN addgroup --system appuser && adduser --system --group appuser
+# Create a non-root user `fosterflow` with no password
+# `fosterflow` will be the user name, feel free to choose a name that suits your application
+RUN addgroup --system fosterflow && adduser --system --group fosterflow
 
 # Create the `media` directory and set proper permissions
-RUN chown -R appuser:appuser /backend
+RUN chown -R fosterflow:fosterflow /backend
 
-COPY --chown=appuser:appgroup . .
+COPY --chown=fosterflow:fosterflow . .
 RUN pip3 install -r requirements.txt
 
 # Switch to the non-root user
-USER appuser
+USER fosterflow

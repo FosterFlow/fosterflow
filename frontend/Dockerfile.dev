@@ -4,15 +4,15 @@ FROM node:18.17.1-alpine AS builder
 WORKDIR /frontend
 
 # Create a group and user for the build stage
-RUN addgroup -S appuser && adduser -S -G appuser appuser
+RUN addgroup -S fosterflow && adduser -S -G fosterflow fosterflow
 
 # Change ownership of the app directory
-RUN chown -R appuser:appuser /frontend
+RUN chown -R fosterflow:fosterflow /frontend
 
 # Copy package files and install dependencies
-COPY --chown=appuser:appgroup . .
+COPY --chown=fosterflow:fosterflow . .
 
-USER appuser
+USER fosterflow
 
 RUN yarn install
 
