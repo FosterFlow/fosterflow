@@ -77,6 +77,12 @@ services:
     build: 
       context: ./frontend
       dockerfile: Dockerfile.prod
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
+        REACT_APP_BACKEND_URL: ${REACT_APP_BACKEND_URL}
+        REACT_APP_WS_URL: ${REACT_APP_WS_URL}
+        REACT_APP_SUPPORT_EMAIL: ${REACT_APP_SUPPORT_EMAIL}
+        REACT_APP_BASE_MODEL_AGENT_ID: ${REACT_APP_BASE_MODEL_AGENT_ID}
     ports:
       - "80:80"
     expose:
