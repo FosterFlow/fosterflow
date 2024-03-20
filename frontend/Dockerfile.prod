@@ -29,7 +29,7 @@ ENV REACT_APP_BASE_MODEL_AGENT_ID=${REACT_APP_BASE_MODEL_AGENT_ID}
 RUN yarn install
 
 # Copy the rest of your app's source code
-COPY --chown=appuser:appgroup . .
+COPY --chown=fosterflow:fosterflow . .
 
 # Build your app
 RUN yarn build
