@@ -32,6 +32,7 @@ RUN yarn install
 COPY --chown=fosterflow:fosterflow . .
 
 # Build your app
+RUN yarn add react-app-rewired --dev
 RUN yarn build
 
 FROM nginx:1.21.0-alpine AS production-stage
