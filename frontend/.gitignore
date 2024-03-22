@@ -26,4 +26,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+nginx.conf
+
 git config core.ignorecase false

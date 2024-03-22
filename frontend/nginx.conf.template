@@ -1,5 +1,5 @@
 server {
-    server_name chat.fosterflow.com;
+    server_name localhost;
     listen  80;
 
     #FOR https host
