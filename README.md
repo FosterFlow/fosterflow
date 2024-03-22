@@ -33,6 +33,15 @@ There are the upcoming tasks and features on our todo list that we plan to imple
 * **Access to different types of LLM/ML models**: Allow users to smoothly switch to the best model for solving an exact
   task using model name @model_name like we do with real users into chats.
 
+## Instalation SSL certification for https connection
+
+1. Uncomment into frontend/nginx.conf lines for SSL certificate;
+2. Insatall cerbot:
+```
+apt install certbot python3-certbot-nginx
+certbot --nginx -d chat.fosterflow.com
+```
+
 ## Installation
 
 The project is launched via Docker-Compose. Docker works with [volumes](https://docs.docker.com/storage/volumes/), so
@@ -51,7 +60,9 @@ docker-compose build
 docker-compose up
 ```
 
-After following this instruction, the interaction is available at ```localhost:3000```
+After following this instruction, the interaction is available at ```localhost/chat```
+
+
 
 ## Contributing
 
