@@ -89,6 +89,7 @@ services:
     volumes:
       - ./frontend:/frontend
       - '/frontend/node_modules'
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - myNetwork
     env_file:
