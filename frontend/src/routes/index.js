@@ -70,7 +70,7 @@ const Routes = (props) => {
     };
 
     // Direct Redirection from Root based on Authentication Status
-    if (normalizedPathname === '/') {
+    if (normalizedPathname === '/' || normalizedPathname === '') {
         return <Navigate to={{ pathname:isAuthenticated ? '/chats' : '/login', state: { from: location }}} />;
     }
 
