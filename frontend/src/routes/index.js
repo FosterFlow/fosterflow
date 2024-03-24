@@ -69,6 +69,11 @@ const Routes = (props) => {
         return true;
     };
 
+    // Direct Redirection from Root based on Authentication Status
+    if (normalizedPathname === '/') {
+        return <Navigate to={{ pathname:isAuthenticated ? '/chats' : '/login', state: { from: location }}} />;
+    }
+
     //Email verification
     if (matchEmailVerifyPattern) {
         const token = matchEmailVerifyPattern[1];
