@@ -5,6 +5,13 @@ FROM python:3.10.12
 RUN apt-get update && apt-get install -y postgresql-client
 RUN pip install --upgrade pip
 
+# Keeps Python from generating .pyc files in the container
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED=1
+
+
 WORKDIR /backend
 
 # Ensure the media directory exists
