@@ -32,8 +32,8 @@
     "react-scroll-to-bottom": "4.2.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "GENERATE_SOURCEMAP=false && WATCHPACK_POLLING=true react-scripts start",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
