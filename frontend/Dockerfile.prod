@@ -4,6 +4,10 @@ FROM node:18.17.1-alpine AS build-stage
 # Set working directory
 WORKDIR /frontend
 
+# Ensure the media directory exists
+RUN mkdir -p /frontend/media
+RUN mkdir -p /frontend/media/avatars
+
 # Create a group and user for the build stage
 RUN addgroup -S fosterflow && adduser -S -G fosterflow fosterflow
 

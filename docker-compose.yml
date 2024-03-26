@@ -45,6 +45,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile.prod
     volumes:
+      - media_volume:/backend/media
       - ./backend:/backend
     entrypoint: sh ./django-entrypoint-prod.sh
     restart: always  
@@ -92,6 +93,7 @@ services:
       - ./frontend:/frontend
       - '/frontend/node_modules'
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - media_volume:/frontend/media
     networks:
       - myNetwork
     env_file:
@@ -108,6 +110,8 @@ services:
 
 volumes:
   redis:
+    driver: local
+  media_volume: 
     driver: local
 
 networks:
