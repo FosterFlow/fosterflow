@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Container,
     Row, 
@@ -39,6 +39,13 @@ const Login = (props) => {
         loginUserFailure 
     } = props;
     const { t } = useTranslation();
+    // State to manage password visibility
+    const [passwordShown, setPasswordShown] = useState(false);
+
+    // Toggle function
+    const togglePasswordVisibility = () => {
+        setPasswordShown(passwordShown => !passwordShown);
+    };
 
     // TODO: Formik cause redundant re-rendering
     const loginForm = useFormik({
@@ -166,7 +173,7 @@ const Login = (props) => {
                                                         <i className="ri-lock-2-line"></i>
                                                     </span>
                                                     <Input
-                                                        type="password"
+                                                        type={passwordShown ? "text" : "password"}
                                                         id="password"
                                                         name="password"
                                                         className="form-control form-control-lg border-light bg-soft-light"
@@ -180,6 +187,9 @@ const Login = (props) => {
                                                                     loginErrors &&
                                                                     loginErrors.password)}
                                                     />
+                                                    <span className="input-group-text border-light text-muted" onClick={togglePasswordVisibility} style={{cursor: 'pointer'}}>
+                                                        {passwordShown ? <i className="ri-eye-off-line"></i> : <i className="ri-eye-line"></i>}
+                                                    </span>
                                                     {loginForm.touched.password && loginErrors && loginErrors.password &&
                                                         (<FormFeedback>
                                                             <ul>

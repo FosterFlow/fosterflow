@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import withRouter from "../../components/withRouter";
@@ -43,6 +43,14 @@ const Register = (props) => {
         registerUserInitState,  
         registerUserFailure
     } = props;
+
+    // State to manage password visibility
+    const [passwordShown, setPasswordShown] = useState(false);
+
+    // Toggle function
+    const togglePasswordVisibility = () => {
+        setPasswordShown(passwordShown => !passwordShown);
+    };
 
     const registerForm = useFormik({
         validateOnChange: false,
@@ -178,7 +186,7 @@ const Register = (props) => {
                                                         <i className="ri-lock-2-line"></i>
                                                     </span>
                                                     <Input
-                                                        type="password"
+                                                        type={passwordShown ? "text" : "password"}
                                                         id="password"
                                                         name="password"
                                                         className="form-control form-control-lg bg-soft-light border-light"
@@ -191,10 +199,10 @@ const Register = (props) => {
                                                                     && registerErrors
                                                                     && registerErrors.password)}
                                                     />
-                                                    {registerForm.touched.password
-                                                    && registerErrors 
-                                                    && registerErrors.password
-                                                    &&(
+                                                    <span className="input-group-text border-light text-muted" onClick={togglePasswordVisibility} style={{cursor: 'pointer'}}>
+                                                        {passwordShown ? <i className="ri-eye-off-line"></i> : <i className="ri-eye-line"></i>}
+                                                    </span>
+                                                    {registerForm.touched.password && registerErrors && registerErrors.password &&(
                                                         <FormFeedback type="invalid">
                                                             <ul>
                                                                 {registerErrors.password.map((error, index) => (
