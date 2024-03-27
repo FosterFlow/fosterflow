@@ -1,4 +1,4 @@
-import React, {memo} from 'react';
+import React, {memo, useEffect} from 'react';
 import { Row, Col } from "reactstrap";
 import { 
     Link, 
@@ -7,8 +7,11 @@ import {
 import { connect } from "react-redux";
 import withRouter from "../../../components/withRouter";
 import { deleteChat as actionDeleteChat} from "../../../redux/chat/actions";
+import { 
+    setActiveAgent,
+} from "../../../redux/actions";
 
-const ChatHead = memo(function ChatHead(props) {
+const ChatHead = function ChatHead(props) {
     console.log ('Chats ChatHead component rendering');
     const location = useLocation();
     const isNewChat = location.pathname.startsWith('/chats/new_chat');
@@ -17,7 +20,11 @@ const ChatHead = memo(function ChatHead(props) {
         aiAgents,
         activeAgent,
         actionDeleteChat,
-        router
+        router,
+        activeChat, 
+        setActiveAgent,
+        authorizedUser,
+        addChatRequestMessage,
     } = props;
 
     function deleteChat(event) {
@@ -25,6 +32,27 @@ const ChatHead = memo(function ChatHead(props) {
         actionDeleteChat(activeChatId);
         router.navigate("/chats/");
     }
+
+    function isChatDisabled(){
+        return activeChat === null ||
+        authorizedUser === null ||
+        authorizedUser.is_email_confirmed === false ||
+        //To prevent double requesting chat infromation for recently created chat
+        addChatRequestMessage !== undefined;
+    }
+
+    useEffect(() => {
+        if (isChatDisabled()) { 
+            console.log ("Chat Index.js is chat disabled");
+            return; 
+        }
+        
+        const chatAgentId = activeChat?.addressee_agent_id;
+        console.log ("Chat Index.js chatAgentId", chatAgentId);
+        if (chatAgentId) {
+            setActiveAgent(chatAgentId);
+        }
+    }, [activeChat, authorizedUser]);
 
     return (
         <React.Fragment>
@@ -54,18 +82,22 @@ const ChatHead = memo(function ChatHead(props) {
 
         </React.Fragment>
     );
-});
+};
 
 const mapStateToProps = (state) => {
-    return { 
+    return {
+        activeChat: state.Chat.activeChat,
         activeChatId: state.Chat.activeChatId,
         aiAgents: state.Agents.aiAgents,
-        activeAgent: state.Agents.activeAgent
+        activeAgent: state.Agents.activeAgent,
+        addChatRequestMessage: state.Message.addChatRequestMessage,
+        authorizedUser: state.User.authorizedUser,
     };
 };
 
 const mapDispatchToProps = {
     actionDeleteChat,
+    setActiveAgent
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ChatHead));

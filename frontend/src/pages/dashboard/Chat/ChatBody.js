@@ -50,7 +50,8 @@ function ChatBody(props) {
         return activeChatId === 0 ||
         authorizedUser === null ||
         authorizedUser.is_email_confirmed === false ||
-        addChatRequestMessage !== undefined;
+        //To prevent double requesting chat infromation for recently created chat
+        addChatRequestMessage !== undefined; 
     }
 
     useEffect(() => {
