@@ -71,7 +71,7 @@ function ChatBody(props) {
         <React.Fragment>
             <div className="user-chat-conversation">
             {  fetchMessagesLoading &&
-                <div className="d-flex justify-content-center">
+                <div className="d-flex justify-content-center p-3">
                     <Spinner size="sm"/>
                 </div>
             }
