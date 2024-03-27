@@ -82,8 +82,8 @@ function* loginUserSaga({ payload: { email, password } }) {
     yield put(accessTokenUpdateInitState());
     try {
         const response = yield call(apiClient.post, '/token/', { email, password });
-        
-        yield put(loginUserSuccess(response.access));            
+        yield put(loginUserSuccess(response.access));
+        yield call(webSocketsAuthorizedClient.resolve);
     } catch (errors) {
         yield put(loginUserFailure(errors));
     }
