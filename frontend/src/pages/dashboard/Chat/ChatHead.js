@@ -28,18 +28,18 @@ const ChatHead = memo(function ChatHead(props) {
 
     return (
         <React.Fragment>
-            <div className="container-fluid user-chat-header">
+            <div className="user-chat-header">
                 <Row className="m-0">
                     <Col sm={6} xs={10} >
                         <Row>
-                            <Col sm={1} xs={1} className="d-lg-none">
-                                <Link to="/chats" className="user-chat-back text-muted p-2">
+                            <Col className="d-lg-none user-chat-back">
+                                <Link to="/chats" className="text-muted p-2">
                                     <i className="ri-arrow-left-s-line"></i>
                                 </Link>
                             </Col>
-                            <Col>
+                            <Col className="py-2">
                                 {(!isNewChat && aiAgents.length > 0) && (
-                                <span className="user-chat-agent pt-2 ps-2">{activeAgent?.name}</span>
+                                    <span className="user-chat-agent">{activeAgent?.name}</span>
                                 )}
                             </Col>
                         </Row>

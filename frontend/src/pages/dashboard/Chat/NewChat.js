@@ -54,23 +54,25 @@ function UserChat(props) {
             
             <div className={`user-chat user-chat-new ${isNewChat ? 'user-chat-show' : ''}`}>
                 <div className="user-chat-wrapper">
+                    <div className="user-chat-header">
+                        <Row>
+                            <Col className="user-chat-back d-lg-none">
+                                <Link to="/chats" className="text-muted p-2">
+                                    <i className="ri-arrow-left-s-line"></i>
+                                </Link>
+                            </Col>
+                            <Col className="py-2">
+                                <span className="user-chat-agent">
+                                    {agentId === 0 && `${t('Choose agent for the new chat')}`} 
+                                    {activeAgent !== null && `${activeAgent.name}`}
+                                </span>
+                            </Col>
+                        </Row>
+                    </div>
                     <div className="user-chat-conversation" id="messages">
                         {/* Styled Selector using Reactstrap */}
                         
                         <Card className="border">
-                            <CardHeader>
-                                <Row>
-                                    <Col sm={1} xs={1} className="d-lg-none">
-                                        <Link to="/chats" className="user-chat-back text-muted p-2">
-                                            <i className="ri-arrow-left-s-line"></i>
-                                        </Link>
-                                    </Col>
-                                    <Col>
-                                        {agentId === 0 && `${t('Choose agent for the new chat')}:`} 
-                                        {activeAgent !== null && `${t('Agent')}: ${activeAgent.name}`}
-                                    </Col>
-                                </Row>
-                            </CardHeader>
                             <CardBody>
                                 <div className="agent-tiles-container">
                                     {aiAgents && aiAgents.map((agent, index) => (

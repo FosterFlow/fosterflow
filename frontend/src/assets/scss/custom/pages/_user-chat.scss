@@ -169,13 +169,22 @@
 }
 
 .user-chat-agent {
-    display: flex;
     line-height: 32px;
+    display: flex;
+
+    @media (min-width: 992px) {
+        padding-left: 15px;
+    }
 }
 
 .user-chat-back {
-    display: flex;
-    font-size: 20px;
+    width: 36px;
+    flex: auto 0 0;
+    a {
+        display: flex;
+        font-size: 20px;
+    }
+    
 }
 
 .user-chat-delete {

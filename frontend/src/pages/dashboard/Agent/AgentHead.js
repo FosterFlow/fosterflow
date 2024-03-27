@@ -11,17 +11,17 @@ function UserHead(props) {
     console.log("Dashabord Agent Tab head render");
     return (
         <React.Fragment>
-            <div className="container-fluid user-chat-header">
+            <div className="user-chat-header">
                 <Row className="m-0">
-                    <Col sm={6} xs={10} >
+                    <Col>
                         <Row>
-                            <Col sm={1} xs={1} className="d-lg-none">
-                                <Link to="/agents" className="user-chat-back text-muted p-2">
+                            <Col className="user-chat-back d-lg-none">
+                                <Link to="/agents" className="text-muted p-2">
                                     <i className="ri-arrow-left-s-line"></i>
                                 </Link>
                             </Col>
-                            <Col>
-                                <span className="user-chat-agent pt-2 ps-2">{props.activeAgent?.name}</span>
+                            <Col className="py-2">
+                                <span className="user-chat-agent">{props.activeAgent?.name}</span>
                             </Col>
                         </Row>
                     </Col>
