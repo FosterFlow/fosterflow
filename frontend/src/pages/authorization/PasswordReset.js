@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Container, 
     Row, 
@@ -58,6 +58,17 @@ const ResetPassword = (props) => {
         resetPasswordInitState,
         resetPasswordFailure 
     } = props;
+
+    const [passwordShown, setPasswordShown] = useState(false);
+    const [passwordConfirmShown, setPasswordConfirmShown] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setPasswordShown(passwordShown => !passwordShown);
+    };
+
+    const togglePasswordConfirmVisibility = () => {
+        setPasswordConfirmShown(passwordConfirmShown => !passwordConfirmShown);
+    };
 
     useEffect(() => {
         validatePasswordResetToken(passwordResetToken);
@@ -192,7 +203,7 @@ const ResetPassword = (props) => {
                                                         <i className="ri-lock-2-line"></i>
                                                     </span>
                                                     <Input
-                                                        type="password"
+                                                        type={passwordShown ? "text" : "password"}
                                                         id="password"
                                                         name="password"
                                                         className="form-control form-control-lg border-light bg-soft-light"
@@ -208,6 +219,9 @@ const ResetPassword = (props) => {
                                                             resetPasswordErrors.password)
                                                         }
                                                     />
+                                                    <span className="input-group-text border-light text-muted" onClick={togglePasswordVisibility} style={{cursor: 'pointer'}}>
+                                                        {passwordShown ? <i className="ri-eye-off-line"></i> : <i className="ri-eye-line"></i>}
+                                                    </span>
                                                     {passwordResetForm.touched.password &&
                                                      resetPasswordErrors &&
                                                      resetPasswordErrors.password && (
@@ -237,7 +251,7 @@ const ResetPassword = (props) => {
                                                         <i className="ri-lock-2-line"></i>
                                                     </span>
                                                     <Input
-                                                        type="password"
+                                                        type={passwordConfirmShown ? "text" : "password"}
                                                         id="confirmPassword"
                                                         name="confirmPassword"
                                                         className="form-control form-control-lg border-light bg-soft-light"
@@ -251,6 +265,9 @@ const ResetPassword = (props) => {
                                                                 resetPasswordErrors &&
                                                                 resetPasswordErrors.confirmPassword)}
                                                     />
+                                                    <span className="input-group-text border-light text-muted" onClick={togglePasswordConfirmVisibility} style={{cursor: 'pointer'}}>
+                                                        {passwordConfirmShown ? <i className="ri-eye-off-line"></i> : <i className="ri-eye-line"></i>}
+                                                    </span>
                                                     {passwordResetForm.touched.confirmPassword &&
                                                      resetPasswordErrors &&
                                                      resetPasswordErrors.confirmPassword && (

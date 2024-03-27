@@ -14,7 +14,8 @@ import {
     FormFeedback, 
     Alert, 
     Label,
-    Spinner 
+    Spinner,
+    InputGroup 
 } from "reactstrap";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -68,6 +69,16 @@ function Settings(props) {
     } = props;
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const avatarEditorRef = useRef(null);
+    const [passwordShown, setPasswordShown] = useState(false);
+    const [passwordNewShown, setPasswordNewShown] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setPasswordShown(passwordShown => !passwordShown);
+    };
+
+    const togglePasswordNewVisibility = () => {
+        setPasswordNewShown(passwordNewShown => !passwordNewShown);
+    };
 
     function getAgentAvatar (){
         if (selectedAvatar !== null){
@@ -417,57 +428,68 @@ function Settings(props) {
 
                                         <FormGroup>
                                             <Label>{t('Reset password')}</Label>
-                                            <div className='pb-4'>
+                                                <div className='pb-4'>
+                                                    <InputGroup className="mb-3 bg-soft-light rounded-3">
+                                                        <span className="input-group-text text-muted">
+                                                            <i className="ri-lock-2-line"></i>
+                                                        </span>
+                                                        <Input 
+                                                            type={passwordShown ? "text" : "password"}
+                                                            name="old_password" 
+                                                            value={securityForm.values.old_password}
+                                                            onChange={securityForm.handleChange}
+                                                            onBlur={securityForm.handleBlur}
+                                                            placeholder={t('Enter current password')}
+                                                            invalid={!!(securityForm.touched.old_password 
+                                                                && auth.changePassswordErrors
+                                                                && auth.changePassswordErrors.old_password)}
+                                                            disabled={auth.changePasswordLoading}
+                                                        />
+                                                        <span className="input-group-text border-light text-muted" onClick={togglePasswordVisibility} style={{cursor: 'pointer'}}>
+                                                            {passwordShown ? <i className="ri-eye-off-line"></i> : <i className="ri-eye-line"></i>}
+                                                        </span>
+                                                        {securityForm.touched.old_password && auth.changePassswordErrors && auth.changePassswordErrors.old_password && (
+                                                            <FormFeedback type="invalid">
+                                                                <ul>
+                                                                    {auth.changePassswordErrors.old_password.map((error, index) => (
+                                                                        <li key={index}>{error}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </FormFeedback>
+                                                        )}
+                                                    </InputGroup>
+                                                </div>
+                                            
+                                            <InputGroup className="mb-3 bg-soft-light rounded-3">
+                                                <span className="input-group-text text-muted">
+                                                    <i className="ri-lock-2-line"></i>
+                                                </span>
                                                 <Input 
-                                                    type="password" 
-                                                    name="old_password" 
-                                                    value={securityForm.values.old_password}
+                                                    type={passwordNewShown ? "text" : "password"}
+                                                    name="new_password" 
+                                                    value={securityForm.values.new_password}
                                                     onChange={securityForm.handleChange}
                                                     onBlur={securityForm.handleBlur}
-                                                    placeholder={t('Enter current password')}
-                                                    invalid={!!(securityForm.touched.old_password 
+                                                    placeholder={t('Enter new password')}
+                                                    invalid={!!(securityForm.touched.new_password
                                                         && auth.changePassswordErrors
-                                                        && auth.changePassswordErrors.old_password)}
+                                                        && auth.changePassswordErrors.new_password)}
                                                     disabled={auth.changePasswordLoading}
                                                 />
-                                                {securityForm.touched.old_password 
-                                                    && auth.changePassswordErrors
-                                                    && auth.changePassswordErrors.old_password
+                                                <span className="input-group-text border-light text-muted" onClick={togglePasswordNewVisibility} style={{cursor: 'pointer'}}>
+                                                    {passwordNewShown ? <i className="ri-eye-off-line"></i> : <i className="ri-eye-line"></i>}
+                                                </span>
+                                                {securityForm.touched.new_password && auth.changePassswordErrors && auth.changePassswordErrors.new_password
                                                     && (
                                                         <FormFeedback type="invalid">
                                                             <ul>
-                                                                {auth.changePassswordErrors.old_password.map((error, index) => (
+                                                                {auth.changePassswordErrors.new_password.map((error, index) => (
                                                                     <li key={index}>{error}</li>
                                                                 ))}
                                                             </ul>
                                                         </FormFeedback>
-                                                )}
-                                            </div>
-                                            
-                                            <Input 
-                                                type="password" 
-                                                name="new_password" 
-                                                value={securityForm.values.new_password}
-                                                onChange={securityForm.handleChange}
-                                                onBlur={securityForm.handleBlur}
-                                                placeholder={t('Enter new password')}
-                                                invalid={!!(securityForm.touched.new_password
-                                                    && auth.changePassswordErrors
-                                                    && auth.changePassswordErrors.new_password)}
-                                                disabled={auth.changePasswordLoading}
-                                            />
-                                            {securityForm.touched.new_password
-                                                && auth.changePassswordErrors
-                                                && auth.changePassswordErrors.new_password
-                                                && (
-                                                    <FormFeedback type="invalid">
-                                                        <ul>
-                                                            {auth.changePassswordErrors.new_password.map((error, index) => (
-                                                                <li key={index}>{error}</li>
-                                                            ))}
-                                                        </ul>
-                                                    </FormFeedback>
-                                            )}   
+                                                    )}
+                                            </InputGroup>   
                                             <ul className='pt-3'>
                                                 <li>{t('At least one lowercase character')}.</li>
                                                 <li>{t('At least one uppercase character')}.</li>
