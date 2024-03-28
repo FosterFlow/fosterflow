@@ -105,7 +105,7 @@ const ChatInput = memo(function ChatInput(props) {
             //Redirect to specific chat page once message was sent
             if (currentActiveChatId !== activeChatDataId) {
                 setSkipFetchMessages(true);
-                props.router.navigate(`/${activeChatDataId}`);
+                props.router.navigate(`/chats/${activeChatDataId}`);
             }
         }
     }, [activeChat]);

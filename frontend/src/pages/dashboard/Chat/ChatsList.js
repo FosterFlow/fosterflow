@@ -142,7 +142,7 @@ const ChatsList = (props) => {
                                     id={"conversation"+ chat.id} 
                                     className={`px-2 pt-2 ${activeChatId === chat.id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/${chat.id}`}>
+                                        <Link to={`/chats/${chat.id}`}>
                                             {chat.latest_message 
                                                 ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
                                                 : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>
