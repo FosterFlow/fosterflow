@@ -30,7 +30,7 @@ const ChatInput = memo(function ChatInput(props) {
     } = props;
     const location = useLocation();
     const isAgentsPage = location.pathname.startsWith('/agents');
-    const isNewChat = location.pathname.startsWith('/chats/new_chat');
+    const isNewChat = location.pathname.startsWith('/new_chat');
     useEffect(() => {
         textAreaRef.current.style.height = "auto";
         textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 3}px`;
@@ -105,7 +105,7 @@ const ChatInput = memo(function ChatInput(props) {
             //Redirect to specific chat page once message was sent
             if (currentActiveChatId !== activeChatDataId) {
                 setSkipFetchMessages(true);
-                props.router.navigate(`/chats/${activeChatDataId}`);
+                props.router.navigate(`/${activeChatDataId}`);
             }
         }
     }, [activeChat]);

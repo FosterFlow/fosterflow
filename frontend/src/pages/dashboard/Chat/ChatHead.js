@@ -14,7 +14,7 @@ import {
 const ChatHead = function ChatHead(props) {
     console.log ('Chats ChatHead component rendering');
     const location = useLocation();
-    const isNewChat = location.pathname.startsWith('/chats/new_chat');
+    const isNewChat = location.pathname.startsWith('/new_chat');
     const {
         activeChatId,
         aiAgents,
@@ -30,7 +30,7 @@ const ChatHead = function ChatHead(props) {
     function deleteChat(event) {
         event.preventDefault();
         actionDeleteChat(activeChatId);
-        router.navigate("/chats/");
+        router.navigate("/");
     }
 
     function isChatDisabled(){
@@ -61,7 +61,7 @@ const ChatHead = function ChatHead(props) {
                     <Col sm={6} xs={10} >
                         <Row>
                             <Col className="d-lg-none user-chat-back">
-                                <Link to="/chats" className="text-muted p-2">
+                                <Link to="/" className="text-muted p-2">
                                     <i className="ri-arrow-left-s-line"></i>
                                 </Link>
                             </Col>

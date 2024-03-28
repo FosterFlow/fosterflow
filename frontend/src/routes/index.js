@@ -71,14 +71,14 @@ const Routes = (props) => {
 
     // Direct Redirection from Root based on Authentication Status
     if (normalizedPathname === '/' || normalizedPathname === '') {
-        return <Navigate to={{ pathname:isAuthenticated ? '/chats' : '/login', state: { from: location }}} />;
+        return <Navigate to={{ pathname:isAuthenticated ? '/' : '/login', state: { from: location }}} />;
     }
 
     //Email verification
     if (matchEmailVerifyPattern) {
         const token = matchEmailVerifyPattern[1];
         if (isAuthenticated) {
-            return <Navigate to={{ pathname: `/chats/email-verify-token/${token}`, state: { from: location } }} />;
+            return <Navigate to={{ pathname: `/email-verify-token/${token}`, state: { from: location } }} />;
         }
      
         return <Navigate to={{ pathname: `/login/email-verify-token/${token}`, state: { from: location } }} />;
@@ -87,7 +87,7 @@ const Routes = (props) => {
     //After successfull email validation
     if (matchEmailVerifyTokenPattern && confirmEmailSuccess) {
         if (isAuthenticated) {
-            return <Navigate to={{ pathname: `/chats`, state: { from: location } }} />;
+            return <Navigate to={{ pathname: `/`, state: { from: location } }} />;
         }
         return <Navigate to={{ pathname: `/login`, state: { from: location } }} />;
     }
@@ -99,7 +99,7 @@ const Routes = (props) => {
 
     //Redirect in case if user is authenticated and tried to reach auth route like login or register
     if (isAuthenticated && isAuthRoute) {
-        return <Navigate to={{ pathname: "/chats", state: { from: location } }} />;
+        return <Navigate to={{ pathname: "/", state: { from: location } }} />;
     }
 
     return (

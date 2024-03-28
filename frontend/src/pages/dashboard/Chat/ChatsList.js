@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 const ChatsList = (props) => {
     const id = Number(props.router.params.id) || 0;
     const location = useLocation();
-    const isNewChat = location.pathname.startsWith('/chats/new_chat');
+    const isNewChat = location.pathname.startsWith('/new_chat');
     const [searchChat, setSearchChat] = useState("");
     const [recentChatList, setRecentChatList] = useState([]);
     const supportEmail =  config.SUPPORT_EMAIL;
@@ -95,7 +95,7 @@ const ChatsList = (props) => {
         <React.Fragment>
             <div className="chat-leftsidebar me-lg-1">
                 <div className="px-2 pt-2">
-                    <Link to="/chats/new_chat" className="btn btn-primary w-100 text-start new-chat-button">{t('New Chat')}</Link>
+                    <Link to="/new_chat" className="btn btn-primary w-100 text-start new-chat-button">{t('New Chat')}</Link>
                 </div>
                 <div className="px-2 pt-2">
                     <div className="search-box chat-search-box">
@@ -142,7 +142,7 @@ const ChatsList = (props) => {
                                     id={"conversation"+ chat.id} 
                                     className={`px-2 pt-2 ${activeChatId === chat.id ? 'active' : ''}`}
                                     >
-                                        <Link to={`/chats/${chat.id}`}>
+                                        <Link to={`/${chat.id}`}>
                                             {chat.latest_message 
                                                 ? <h5 className="text-truncate font-size-15 mb-1">{chat.latest_message}</h5> 
                                                 : <h5 className="text-truncate font-size-15 mb-1">{chat.name} </h5>

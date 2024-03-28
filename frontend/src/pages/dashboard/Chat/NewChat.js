@@ -33,7 +33,7 @@ function UserChat(props) {
     } = props;
     const supportEmail =  config.SUPPORT_EMAIL;
     const location = useLocation();
-    const isNewChat = location.pathname.startsWith('/chats/new_chat');
+    const isNewChat = location.pathname.startsWith('/new_chat');
     const agentId = Number(props.router.params.agentId) || 0;
 
     useEffect(() => {
@@ -57,7 +57,7 @@ function UserChat(props) {
                     <div className="user-chat-header">
                         <Row>
                             <Col className="user-chat-back d-lg-none">
-                                <Link to="/chats" className="text-muted p-2">
+                                <Link to="/" className="text-muted p-2">
                                     <i className="ri-arrow-left-s-line"></i>
                                 </Link>
                             </Col>
@@ -77,7 +77,7 @@ function UserChat(props) {
                                 <div className="agent-tiles-container">
                                     {aiAgents && aiAgents.map((agent, index) => (
                                         <Link 
-                                            to={`/chats/new_chat/${agent.id}`} 
+                                            to={`/new_chat/${agent.id}`} 
                                             key={index} 
                                             className={`agent-tile ${agent.id === agentId ? 'active' : ''}`}
                                         >

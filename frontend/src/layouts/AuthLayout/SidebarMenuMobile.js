@@ -51,7 +51,7 @@ function SidebarMenuMobile(props) {
                         </RouterNavLink>
                     </NavItem>
                     <NavItem id="Chats" title={t('Chats')}>
-                        <RouterNavLink to="/chats" id="pills-chat-tab" className="nav-link" activeclassname="active">
+                        <RouterNavLink to="/" id="pills-chat-tab" className="nav-link" activeclassname="active">
                             <i className="ri-message-3-line"></i>
                         </RouterNavLink>
                     </NavItem>
