@@ -18,6 +18,10 @@ server {
         alias /frontend/media/;
     }
 
+    location /static_django/ {
+        alias /frontend/static_django/;
+    }
+
     location ~* ^/(api|ws)/ {
         proxy_pass http://backend:8000;
         proxy_http_version 1.1;

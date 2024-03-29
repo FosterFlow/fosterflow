@@ -3,6 +3,8 @@
 # Wait for the Postgres database to be ready
 sh ./wait-for-postgres.sh
 
+#create static files for django admin panel
+python manage.py collectstatic
 # Apply database migrations
 python manage.py migrate
 
