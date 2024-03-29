@@ -10,6 +10,7 @@ WORKDIR /backend
 # Ensure the media directory exists
 RUN mkdir -p /backend/media
 RUN mkdir -p /backend/media/avatars
+RUN mkdir -p /backend/static_django
 
 # Create a non-root user `fosterflow` with no password
 # `fosterflow` will be the user name, feel free to choose a name that suits your application

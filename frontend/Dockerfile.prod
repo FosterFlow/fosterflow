@@ -7,6 +7,7 @@ WORKDIR /frontend
 # Ensure the media directory exists
 RUN mkdir -p /frontend/media
 RUN mkdir -p /frontend/media/avatars
+RUN mkdir -p /backend/static_django
 
 # Create a group and user for the build stage
 RUN addgroup -S fosterflow && adduser -S -G fosterflow fosterflow
