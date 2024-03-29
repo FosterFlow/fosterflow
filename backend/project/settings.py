@@ -19,6 +19,11 @@ DEBUG = os.environ.get("DEBUG", "True") == 'True'
 
 # ALLOWED_HOSTS = env.list("BASE_HOST")
 ALLOWED_HOSTS = ['*']
+if DEBUG == "True":
+    INTERNAL_IPS = [
+        "127.0.0.1",
+        "172.17.0.1",
+    ]
 ASGI_APPLICATION = "project.asgi.application"
 
 REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
@@ -70,6 +75,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware'
 ]
+
+if DEBUG == "True":
+    INSTALLED_APPS += ['debug_toolbar']
+    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
 ROOT_URLCONF = 'project.urls'
 

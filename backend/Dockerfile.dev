@@ -11,7 +11,6 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
-
 WORKDIR /backend
 
 # Ensure the media directory exists
@@ -23,7 +22,7 @@ RUN mkdir -p /backend/static_django
 # `fosterflow` will be the user name, feel free to choose a name that suits your application
 RUN addgroup --system fosterflow && adduser --system --group fosterflow
 
-# Create the `media` directory and set proper permissions
+#TODO: doesn't change folder permissions for some reason
 RUN chown -R fosterflow:fosterflow /backend
 
 COPY --chown=fosterflow:fosterflow . .

@@ -23,6 +23,7 @@ router = DefaultRouter()
 urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
     path('api/', include(router.urls)),
 
     path('api/token/', UserLoginAPIView.as_view(), name='token_obtain_pair'),

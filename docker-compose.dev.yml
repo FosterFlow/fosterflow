@@ -45,6 +45,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./backend:/backend
+      - django_static_volume:/backend/static_django
     entrypoint: sh ./django-entrypoint-dev.sh
     ports:
       - 8000:8000
@@ -112,6 +113,8 @@ services:
 
 volumes:
   redis:
+    driver: local
+  django_static_volume: 
     driver: local
 
 networks:
