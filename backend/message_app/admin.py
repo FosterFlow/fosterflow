@@ -7,4 +7,7 @@ class MessageModelAdmin(admin.ModelAdmin):
         "chat_id",
     ]
 
+    # Using raw ID fields for foreign keys. Allows to optimize loading time in admin panel
+    raw_id_fields = ['chat', 'owner_agent', 'addressee_agent', 'request']  
+
 admin.site.register(Message, MessageModelAdmin)
