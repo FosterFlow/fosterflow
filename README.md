@@ -35,8 +35,9 @@ There are the upcoming tasks and features on our todo list that we plan to imple
 
 ## Instalation SSL certification for https connection
 
-1. Uncomment into frontend/nginx.conf lines for SSL certificate;
-2. Insatall cerbot:
+1. Make a copy of nginx.conf.template -> nginx.conf;
+2. Uncomment into frontend/nginx.conf lines for SSL certificate;
+3. Insatall cerbot:
 ```
 apt install certbot python3-certbot-nginx
 certbot --nginx -d chat.fosterflow.com
@@ -50,10 +51,10 @@ depending on your platform, [link](https://docs.docker.com/desktop/).
 
 The following are the steps to launch:
 
-1. Download the project
+1. Download the project;
 2. Go to the project directory
-3. Rename .env.template to .env (make changes if you need it)
-4. Run Docker Desktop application
+3. Rename .env.template to .env (make changes if you need it);
+4. Run Docker Desktop application;
 5. In the command line, write:
 ```
 docker-compose build
