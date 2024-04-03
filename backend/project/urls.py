@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.conf import settings
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 from django.conf import settings
@@ -17,15 +18,12 @@ from chat_app.views import (
 from message_app.views import (
     MessageListView, MessageCreateView, MessageDetailView, MessageUpdateView, MessageDeleteView
 )
+from django.urls import path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 router = DefaultRouter()
 
 urlpatterns = [
-    path('api/admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path("__debug__/", include("debug_toolbar.urls")),
-    path('api/', include(router.urls)),
-
     path('api/token/', UserLoginAPIView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterApi.as_view()),
@@ -64,4 +62,17 @@ urlpatterns = [
     path('api/messages/<int:pk>/update/', MessageUpdateView.as_view(), name='message-update'),
     path('api/messages/<int:pk>/delete/', MessageDeleteView.as_view(), name='message-delete'),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+#TODO: Open an access to specific IPs, specified into .env file
+if settings.DEBUG:
+    urlpatterns += [
+        path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+        path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+        path('api/admin/', admin.site.urls),
+        path('api-auth/', include('rest_framework.urls')),
+        path("__debug__/", include("debug_toolbar.urls")),
+        path('api/', include(router.urls)),
+    ]
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
