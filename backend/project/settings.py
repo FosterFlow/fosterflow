@@ -18,12 +18,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-secretkey")
 DEBUG = os.environ.get("DEBUG", "True") == 'True'
 
 ALLOWED_HOSTS = env.list("BASE_HOST")
-# ALLOWED_HOSTS = ['*']
-if DEBUG == "True":
-    INTERNAL_IPS = [
-        "127.0.0.1",
-        "172.17.0.1",
-    ]
+INTERNAL_IPS = os.environ.get('INTERNAL_IPS', '').split(',')
+ALLOWED_IPS = os.environ.get('ALLOWED_IPS', '').split(',')
 ASGI_APPLICATION = "project.asgi.application"
 
 REDIS_HOST = os.environ.get('REDIS_HOST', 'redis')
@@ -70,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'admin_app.middleware.RestrictIPMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

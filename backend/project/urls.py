@@ -24,6 +24,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 router = DefaultRouter()
 
 urlpatterns = [
+    path('api/admin/', admin.site.urls),
+
     path('api/token/', UserLoginAPIView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('api/register/', RegisterApi.as_view()),
@@ -70,7 +72,6 @@ if settings.DEBUG:
     urlpatterns += [
         path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
         path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-        path('api/admin/', admin.site.urls),
         path('api-auth/', include('rest_framework.urls')),
         path("__debug__/", include("debug_toolbar.urls")),
         path('api/', include(router.urls)),
