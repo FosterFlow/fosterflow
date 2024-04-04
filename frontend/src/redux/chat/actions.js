@@ -12,6 +12,8 @@ import {
   ADD_CHAT_SUCCESS,
   ADD_CHAT_FAILED,
 
+  UPDATE_CHAT_UPDATED_AT,
+
   DELETE_CHAT,
   DELETE_CHAT_INIT_STATE,
   DELETE_CHAT_SUCCESS,
@@ -96,6 +98,13 @@ export const chatInit = () => ({
     return {
       type: ADD_CHAT_FAILED,
       payload: errors
+    }
+  };
+
+  export const updateChatUpdatedAt = (chatId) => {
+    return {
+      type:   UPDATE_CHAT_UPDATED_AT,
+      payload: chatId
     }
   };
 

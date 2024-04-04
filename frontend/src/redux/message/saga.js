@@ -23,6 +23,11 @@ import {
     deleteMessageSuccess,
     deleteMessageFailed,
   } from './actions';
+
+
+  import {
+    updateChatUpdatedAt,
+  } from '../chat/actions';
   
   const api = apiAuthorizedClient;
   
@@ -30,6 +35,7 @@ import {
     try {
       const messages = yield api.get(`/messages/?chat_id=${action.payload}`)
       yield put(fetchMessagesSuccess(messages));
+      
       yield delay(5000);
       yield put(fetchMessagesInitState());
     } catch (errors) {
@@ -44,6 +50,7 @@ import {
     try {
       const message = yield call(api.post, '/messages/create/', newMessage);
       yield put(sendMessageSuccess({...message, messageHash}));
+      yield put(updateChatUpdatedAt(message.chat_id));
     } catch (errors) {
       yield put(sendMessageFailed({
         ...errors, 

@@ -16,6 +16,8 @@ import {
     ADD_CHAT_SUCCESS,
     ADD_CHAT_FAILED,
 
+    UPDATE_CHAT_UPDATED_AT,
+
     DELETE_CHAT,
     DELETE_CHAT_INIT_STATE,
     DELETE_CHAT_SUCCESS,
@@ -166,6 +168,25 @@ const Chat = (state = INIT_STATE, action) => {
                 addChatSuccess: false,
                 addChatErrors: action.payload,
             };
+
+        case UPDATE_CHAT_UPDATED_AT: {
+            const chatToUpdateId = action.payload;
+                
+            const newUpdatedAt = new Date().toISOString(); // Example: "2023-04-03T18:27:13.485Z"
+            
+            // Using map to update the specific chat's updated_at field
+            const updatedChats = state.chats.map(chat => {
+                if (chat.id === chatToUpdateId) {
+                    return { ...chat, updated_at: newUpdatedAt };
+                }
+                return chat; // Return chat unchanged if it's not the one to update
+            });
+            
+            return {
+                ...state,
+                chats: updatedChats,
+            };
+        }
         
         case DELETE_CHAT: 
             return {

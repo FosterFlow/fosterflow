@@ -65,7 +65,8 @@ const ChatsList = (props) => {
             return;
         }
 
-        setRecentChatList(chats);
+        const sortedChats = [...chats].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+        setRecentChatList(sortedChats);
     }, [chats, aiAgents]);
 
     useEffect(() => {
@@ -86,7 +87,7 @@ const ChatsList = (props) => {
         setSearchChat(search);
         const filteredChats = chats.filter(
             chat => chat.name && chat.name.toString().toLowerCase().includes(search)
-        );
+        ).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
         setRecentChatList(filteredChats);
     }, [chats]);
 

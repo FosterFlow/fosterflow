@@ -121,7 +121,7 @@ const Message = (state = INIT_STATE, action) => {
                 return map;
             }, {});
 
-            //I did to rewrite existing messages with same ids to do not duploicate them.
+            //I did to rewrite existing messages with same ids to do not duplicate them.
             //It's relevant when we create a new chat.
             //TODO: in case f the new chat we don't have to make an additional API request for messages list
             const newMessage = action.payload
