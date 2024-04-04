@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 from agent_app.models import Agent
 from chat_app.models import Chat
 
@@ -39,6 +40,11 @@ class Message(models.Model):
         on_delete=models.SET_NULL,
         related_name='addresse_agent_messages',
     )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Save the message first
+        self.chat.updated_at = now()   # Set the current time on the associated chat
+        self.chat.save() 
 
     def __str__(self):
         return f'{self.id} {self.owner_agent}'
