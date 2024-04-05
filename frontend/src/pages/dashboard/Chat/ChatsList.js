@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { 
     Input, 
     InputGroup,
@@ -27,6 +27,7 @@ const ChatsList = (props) => {
     const [recentChatList, setRecentChatList] = useState([]);
     const supportEmail =  config.SUPPORT_EMAIL;
     const { t } = useTranslation();
+    const chatListRef = useRef(null);
     const {
         fetchChats,
         setActiveChat,
@@ -91,6 +92,11 @@ const ChatsList = (props) => {
         setRecentChatList(filteredChats);
     }, [chats]);
 
+    useEffect(() => {
+        if (chatListRef && chatListRef.current) {
+            chatListRef.current.scrollTop = 0;
+        }
+    }, [recentChatList]);
 
     return (
         <React.Fragment>
@@ -115,7 +121,7 @@ const ChatsList = (props) => {
                         </InputGroup>
                     </div>
                 </div>
-                <div className="chats-list-wrapper">
+                <div className="chats-list-wrapper" ref={chatListRef}>
                     {  fetchChatsLoading &&
                         <div className="d-flex justify-content-center">
                             <Spinner size="sm"/>
