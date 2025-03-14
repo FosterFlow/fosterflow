@@ -1,2 +1,0 @@
-export const SET_LAYOUT_MODE = "SET_LAYOUT_MODE";
-export const SET_LANGUAGE = "SET_LANGUAGE";
