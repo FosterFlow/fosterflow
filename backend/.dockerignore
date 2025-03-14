@@ -1,24 +1,14 @@
-# Ignore development databases
-*.sqlite3
+__pycache__
+.env
+_old
+uploads
+.ipynb_checkpoints
+*.db
+_test
+!/data
+/data/*
+!/data/litellm
+/data/litellm/*
+!data/litellm/config.yaml
 
-# Ignore Python compiled files and cache
-__pycache__/
-*.pyc
-*.pyo
-*.egg-info/
-*.cache
-*.log
-*.swp
-*.bak
-*.tmp
-
-# Ignore Git related files
-.git/
-.gitignore
-
-# Ignore virtual environments and package related files
-venv/
-*.egg-info/
-
-# Ignore other unnecessary files
-README.md
+!data/config.json
