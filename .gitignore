@@ -21,3 +21,7 @@ venv/
 
 #Database
 db.sqlite3
+
+backend/data/
+backend/open_webui/data
+kubernetes/
