@@ -1,6 +1,6 @@
 # [FosterFlow.com](https://fosterflow.com)
 
-FosterFlow is an open-source project aimed at creating a high-quality alternative to autonomous agent systems like Manus.im. Our goal is to reverse engineer and implement similar capabilities using entirely open-source solutions. Manus.im has demonstrated significant interest among users for its autonomous agent capabilities, and we believe these powerful features should be available in an open, transparent, and community-driven platform.
+[FosterFlow](https://fosterflow.com) is an open-source project aimed at creating a high-quality alternative to autonomous agent systems like Manus.im. Our goal is to reverse engineer and implement similar capabilities using entirely open-source solutions. [Manus.im](https://manus.im/) has demonstrated significant interest among users for its autonomous agent capabilities, and we believe these powerful features should be available in an open, transparent, and community-driven platform.
 
 ## Technical Stack
 
