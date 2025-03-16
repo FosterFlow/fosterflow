@@ -1,3 +1,11 @@
+# AMD GPU Support Overlay for Docker Compose
+# This overlay file provides AMD GPU support for the Ollama service by:
+# - Mapping AMD GPU devices from the host to the container
+# - Using a specific Ollama image with ROCm support
+# - Setting the HSA_OVERRIDE_GFX_VERSION environment variable for AMD GPU compatibility
+#
+# Use with: docker compose -f docker-compose.yaml -f docker-compose.amdgpu.yaml up
+
 services:
   ollama:
     devices:

@@ -1,3 +1,11 @@
+# NVIDIA GPU Support Overlay for Docker Compose
+# This overlay file adds NVIDIA GPU support to the Ollama service by:
+# - Configuring deployment resources to reserve GPU devices
+# - Using NVIDIA as the default GPU driver (configurable via OLLAMA_GPU_DRIVER)
+# - Allowing specification of GPU count (default: 1, configurable via OLLAMA_GPU_COUNT)
+#
+# Use with: docker compose -f docker-compose.yaml -f docker-compose.gpu.yaml up
+
 services:
   ollama:
     # GPU support

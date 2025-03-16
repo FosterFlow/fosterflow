@@ -1,3 +1,10 @@
+# Main Docker Compose configuration file for FosterFlow
+# This file defines the core services of the application:
+# - ollama: Service for running large language models locally
+# - open-webui: Web interface for interacting with Ollama models
+#
+# The file also defines two named volumes for data persistence.
+
 services:
   ollama:
     volumes:

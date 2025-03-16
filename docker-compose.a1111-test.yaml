@@ -1,3 +1,14 @@
+# Stable Diffusion Integration Testing Overlay for Docker Compose
+# This overlay file is specifically for integration testing with Stable Diffusion by:
+# - Adding a stable-diffusion-webui service using the AUTOMATIC1111 implementation
+# - Configuring it to run in CPU mode for testing purposes
+# - Including special handling for Apple Silicon compatibility
+# - Modifying the open-webui service to enable image generation features
+#
+# NOT INTENDED FOR PRODUCTION USE
+#
+# Use with: docker compose -f docker-compose.yaml -f docker-compose.a1111-test.yaml up
+
 # This is an overlay that spins up stable-diffusion-webui for integration testing
 # This is not designed to be used in production
 services:
