@@ -16,6 +16,8 @@ services:
     image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
     env_file:
       - .env
+    networks:
+      - fosterflow-network
 
   open-webui:
     build:
@@ -36,6 +38,11 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     restart: unless-stopped
+    networks:
+      - fosterflow-network
+
+networks:
+  fosterflow-network:
 
 volumes:
   ollama: {}
