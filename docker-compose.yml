@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  # Development service with hot-reload
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    env_file:
+      - .env.local
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
