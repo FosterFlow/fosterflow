@@ -3,8 +3,6 @@ node_modules
 /build
 /.svelte-kit
 /package
-.env
-.env.*
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
@@ -133,7 +131,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
@@ -247,11 +244,9 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
 .env.development.local
 .env.test.local
 .env.production.local
-.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
@@ -307,3 +302,4 @@ dist
 cypress/videos
 cypress/screenshots
 .vscode/settings.json
+config.bat
