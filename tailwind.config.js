@@ -1,5 +1,8 @@
 import typography from '@tailwindcss/typography';
 import containerQuries from '@tailwindcss/container-queries';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 /** @type {import('tailwindcss').Config} */
 export default {
